@@ -1,0 +1,100 @@
+***************************************************************************
+*                          M-SPARC (Dec 15, 2019)                         *
+*   Copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech   *
+*           Distributed under GNU General Public License 3 (GPL)          *
+*                Date: 16-Dec-2019  Start time: 23:59:13                  *
+***************************************************************************
+                           Input parameters                                
+***************************************************************************
+CELL: 7.500000 7.500000 7.500000 
+FD_GRID: 25 25 25
+FD_ORDER: 12
+BOUNDARY_CONDITION: 2
+KPOINT_GRID: 7 7 7
+KPOINT_SHIFT: 0 0 0
+ELEC_TEMP_TYPE: fermi-dirac
+SMEARING: 0.001000000
+CHEB_DEGREE: 25
+NSTATES: 50
+EXCHANGE_CORRELATION: LDA_PZ
+CALC_STRESS: 1
+MAXIT_SCF: 100
+TOL_SCF: 1.00E-06
+TOL_POISSON: 1.00E-08
+TOL_LANCZOS: 1.00E-02
+TOL_PSEUDOCHARGE: 1.00E-08
+MIXING_VARIABLE: potential
+MIXING_PRECOND: none
+MIXING_PARAMETER: 0.30
+MIXING_HISTORY: 7
+PULAY_FREQUENCY: 1
+PULAY_RESTART_FREQ: 0
+REFERENCE_CUTOFF: 0.50
+RHO_TRIGGER: 4
+FIX_RAND: 0
+PRINT_FORCES: 1
+PRINT_ATOMS: 1
+PRINT_EIGEN: 0
+PRINT_DENSITY: 0
+OUTPUT_FILE: lat7.50/Au_fcc.out
+***************************************************************************
+                             Initialization                                
+***************************************************************************
+Mesh spacing                       :  0.300000 (Bohr)
+Number of symmetry adapted k-points:  172
+Output printed to                  :  lat7.50/Au_fcc.out
+Total number of atom types         :  1
+Total number of atoms              :  4
+Total number of electrons          :  76
+Atom type 1  (valence electrons)   :  Au 19
+Pseudopotential                    :  ../psp/Au.psp8
+lloc                               :  4
+Pseudocharge radii of atom type 1  :  7.50 7.50 7.50
+Number of atoms of type 1          :  4
+Estimated total memory usage       :  8.05 GB
+=====================================================================
+                    Self Consistent Field (SCF#1)                     
+=====================================================================
+Iteration     Free Energy (Ha/atom)   SCF Error        Timing (sec)
+1            -1.3747599802E+02        1.029E-03        217.947
+2            -1.3747614110E+02        6.605E-04        82.096
+3            -1.3747614844E+02        1.655E-04        80.866
+4            -1.3747614867E+02        7.456E-05        81.130
+5            -1.3747614867E+02        2.633E-05        80.174
+6            -1.3747614867E+02        1.246E-05        80.107
+7            -1.3747614865E+02        1.351E-06        79.108
+8            -1.3747614862E+02        5.514E-07        81.007
+Total number of SCF: 8     
+====================================================================
+                                Energy                              
+====================================================================
+Free energy per atom               : -1.3747614862E+02 (Ha/atom)
+Total free energy                  : -5.4990459448E+02 (Ha)
+Band structure energy              : -4.8530239423E+01 (Ha)
+Exchange correlation energy        : -5.0410143518E+01 (Ha)
+Self and correction energy         : -7.6153566187E+02 (Ha)
+Entropy*kb*T                       : -1.7976367275E-04 (Ha)
+Fermi level                        :  5.3200471894E-01 (Ha)
+Average force                      :  4.2233333533E-06 (Ha/Bohr)
+Maximum force                      :  4.3309692962E-06 (Ha/Bohr)
+Time for force calculation         :  34.000 (sec)
+Stress (GPa):
+    -12.7630905810      -0.0000215191      -0.0000250168
+     -0.0000215190     -12.7630974782       0.0000390759
+     -0.0000250166       0.0000390758     -12.7630932279
+Pressure                           :  1.2763093762E+01 (GPa)
+Maximum stress                     :  1.2763097478E+01 (GPa)
+Time for stress calculation        :  82.297 (sec)
+***************************************************************************
+                               Timing info                                 
+***************************************************************************
+Total walltime                     :  997.801 sec
+___________________________________________________________________________
+
+***************************************************************************
+*             Material Physics & Mechanics Group, Georgia Tech            *
+*                       PI: Phanish Suryanarayana                         *
+*                Main Developers: Qimen Xu, Abhiraj Sharma                *
+*     Acknowledgements: U.S. DOE (DE-SC0019410); NSF (1333500,1553212)    *
+***************************************************************************
+                                                                           

@@ -1,0 +1,125 @@
+***************************************************************************
+*                          M-SPARC (Dec 15, 2019)                         *
+*   Copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech   *
+*           Distributed under GNU General Public License 3 (GPL)          *
+*                Date: 16-Dec-2019  Start time: 22:00:07                  *
+***************************************************************************
+                           Input parameters                                
+***************************************************************************
+CELL: 10.220000 10.220000 24.000000 
+LATVEC:
+0.500000000000000 0.866025403800000 0.000000000000000 
+-0.500000000000000 0.866025403800000 0.000000000000000 
+0.000000000000000 0.000000000000000 1.000000000000000 
+FD_GRID: 51 51 120
+FD_ORDER: 12
+BOUNDARY_CONDITION: 2
+KPOINT_GRID: 2 2 1
+KPOINT_SHIFT: 0 0 0
+ELEC_TEMP_TYPE: gaussian
+SMEARING: 0.007349864
+CHEB_DEGREE: 35
+NSTATES: 35
+EXCHANGE_CORRELATION: LDA_PZ
+CALC_STRESS: 1
+MAXIT_SCF: 100
+TOL_SCF: 1.00E-06
+TOL_POISSON: 1.00E-08
+TOL_LANCZOS: 1.00E-02
+TOL_PSEUDOCHARGE: 1.00E-08
+MIXING_VARIABLE: density
+MIXING_PRECOND: none
+MIXING_PARAMETER: 0.30
+MIXING_HISTORY: 7
+PULAY_FREQUENCY: 1
+PULAY_RESTART_FREQ: 0
+REFERENCE_CUTOFF: 0.50
+RHO_TRIGGER: 4
+FIX_RAND: 0
+PRINT_FORCES: 1
+PRINT_ATOMS: 1
+PRINT_EIGEN: 0
+PRINT_DENSITY: 0
+OUTPUT_FILE: MoS2.out
+***************************************************************************
+                             Initialization                                
+***************************************************************************
+Mesh spacing in x-direction        :  0.200392 (Bohr)
+Mesh spacing in y-direction        :  0.200392 (Bohr)
+Mesh spacing in z direction        :  0.200000 (Bohr)
+Number of symmetry adapted k-points:  2
+Output printed to                  :  MoS2.out
+Total number of atom types         :  2
+Total number of atoms              :  3
+Total number of electrons          :  26
+Atom type 1  (valence electrons)   :  Mo 14
+Pseudopotential                    :  Mo.psp8
+lloc                               :  4
+Pseudocharge radii of atom type 1  :  7.82 7.82 7.80
+Number of atoms of type 1          :  1
+Atom type 2  (valence electrons)   :  S 6
+Pseudopotential                    :  S.psp8
+lloc                               :  4
+Pseudocharge radii of atom type 2  :  7.82 7.82 7.80
+Number of atoms of type 2          :  2
+Estimated total memory usage       :  2.15 GB
+=====================================================================
+                    Self Consistent Field (SCF#1)                     
+=====================================================================
+Iteration     Free Energy (Ha/atom)   SCF Error        Timing (sec)
+1            -2.9575925241E+01        1.284E-01        695.594
+2            -2.9854708899E+01        3.302E-01        256.310
+3            -2.9583746548E+01        1.203E-01        253.874
+4            -2.9576270671E+01        7.772E-02        252.480
+5            -2.9576289350E+01        8.039E-02        252.894
+6            -2.9573067054E+01        3.082E-02        253.975
+7            -2.9572684458E+01        3.853E-02        252.584
+8            -2.9572247344E+01        2.950E-02        251.227
+9            -2.9572171358E+01        2.679E-02        246.426
+10           -2.9571847538E+01        1.510E-02        253.240
+11           -2.9571822971E+01        1.200E-02        250.801
+12           -2.9571747198E+01        2.753E-03        250.884
+13           -2.9571744053E+01        4.338E-04        244.344
+14           -2.9571744093E+01        3.335E-04        238.698
+15           -2.9571744077E+01        1.776E-04        238.746
+16           -2.9571744068E+01        8.232E-05        235.724
+17           -2.9571744031E+01        2.872E-05        234.951
+18           -2.9571744034E+01        8.787E-06        233.757
+19           -2.9571744046E+01        7.403E-06        232.466
+20           -2.9571743971E+01        1.479E-06        228.673
+21           -2.9571743955E+01        1.930E-06        217.265
+22           -2.9571744020E+01        4.671E-07        212.046
+Total number of SCF: 22    
+====================================================================
+                                Energy                              
+====================================================================
+Free energy per atom               : -2.9571744020E+01 (Ha/atom)
+Total free energy                  : -8.8715232061E+01 (Ha)
+Band structure energy              : -1.7821037540E+01 (Ha)
+Exchange correlation energy        : -1.1589060963E+01 (Ha)
+Self and correction energy         : -1.8067570912E+02 (Ha)
+Entropy*kb*T                       : -1.1401927884E-02 (Ha)
+Fermi level                        : -1.2688290914E-01 (Ha)
+Average force                      :  2.9355423507E-02 (Ha/Bohr)
+Maximum force                      :  4.3340690239E-02 (Ha/Bohr)
+Time for force calculation         :  8.179 (sec)
+Stress (GPa):
+      5.8681487730       0.0001021222      -0.0000011448
+      0.0000997765       6.2952003775       0.0000026070
+     -0.0000011448       0.0000026070       3.4692902676
+Pressure                           : -5.2108798061E+00 (GPa)
+Maximum stress                     :  6.2952003775E+00 (GPa)
+Time for stress calculation        :  22.348 (sec)
+***************************************************************************
+                               Timing info                                 
+***************************************************************************
+Total walltime                     :  6077.586 sec
+___________________________________________________________________________
+
+***************************************************************************
+*             Material Physics & Mechanics Group, Georgia Tech            *
+*                       PI: Phanish Suryanarayana                         *
+*                Main Developers: Qimen Xu, Abhiraj Sharma                *
+*     Acknowledgements: U.S. DOE (DE-SC0019410); NSF (1333500,1553212)    *
+***************************************************************************
+                                                                           

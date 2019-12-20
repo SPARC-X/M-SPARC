@@ -1,0 +1,113 @@
+***************************************************************************
+*                          M-SPARC (Dec 15, 2019)                         *
+*   Copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech   *
+*           Distributed under GNU General Public License 3 (GPL)          *
+*                Date: 16-Dec-2019  Start time: 21:35:10                  *
+***************************************************************************
+                           Input parameters                                
+***************************************************************************
+CELL: 38.246968 38.246968 20.000000 
+LATVEC:
+0.866025403784439 -0.500000000000000 0.000000000000000 
+0.866025403784439 0.500000000000000 0.000000000000000 
+0.000000000000000 0.000000000000000 1.000000000000000 
+FD_GRID: 128 128 67
+FD_ORDER: 12
+BOUNDARY_CONDITION: 3
+KPOINT_GRID: 2 2 1
+KPOINT_SHIFT: 0 0 0
+ELEC_TEMP_TYPE: gaussian
+SMEARING: 0.007349864
+CHEB_DEGREE: 26
+NSTATES: 390
+EXCHANGE_CORRELATION: GGA_PBE
+CALC_STRESS: 0
+CALC_PRES: 0
+MAXIT_SCF: 100
+TOL_SCF: 1.00E-05
+TOL_POISSON: 1.00E-07
+TOL_LANCZOS: 1.00E-02
+TOL_PSEUDOCHARGE: 1.00E-06
+MIXING_VARIABLE: density
+MIXING_PRECOND: kerker
+TOL_PRECOND: 8.92E-05
+PRECOND_KERKER_KTF: 1.00
+MIXING_PARAMETER: 0.30
+MIXING_HISTORY: 7
+PULAY_FREQUENCY: 1
+PULAY_RESTART_FREQ: 0
+REFERENCE_CUTOFF: 0.50
+RHO_TRIGGER: 4
+FIX_RAND: 0
+PRINT_FORCES: 1
+PRINT_ATOMS: 1
+PRINT_EIGEN: 0
+PRINT_DENSITY: 0
+OUTPUT_FILE: Germanene.out
+***************************************************************************
+                             Initialization                                
+***************************************************************************
+Mesh spacing in x-direction        :  0.298804 (Bohr)
+Mesh spacing in y-direction        :  0.298804 (Bohr)
+Mesh spacing in z direction        :  0.298507 (Bohr)
+Number of symmetry adapted k-points:  2
+Output printed to                  :  Germanene.out
+Total number of atom types         :  1
+Total number of atoms              :  50
+Total number of electrons          :  700
+Atom type 1  (valence electrons)   :  Ge 14
+Pseudopotential                    :  Ge.psp8
+lloc                               :  4
+Pseudocharge radii of atom type 1  :  6.87 6.87 6.87
+Number of atoms of type 1          :  50
+Estimated total memory usage       :  54.83 GB
+=====================================================================
+                    Self Consistent Field (SCF#1)                     
+=====================================================================
+Iteration     Free Energy (Ha/atom)   SCF Error        Timing (sec)
+1            -7.0731158228E+01        2.027E-02        14799.127
+2            -7.0761226323E+01        1.596E-02        5072.101
+3            -7.0766569131E+01        4.769E-03        5036.576
+4            -7.0767860348E+01        3.086E-03        5037.960
+5            -7.0768119765E+01        1.065E-03        5020.083
+6            -7.0768186252E+01        7.974E-04        5035.542
+7            -7.0768188656E+01        4.251E-04        4993.125
+8            -7.0768187632E+01        3.093E-04        5001.535
+9            -7.0768182909E+01        2.236E-04        4946.997
+10           -7.0768180767E+01        1.212E-04        4906.655
+11           -7.0768180943E+01        1.037E-04        4859.280
+12           -7.0768182141E+01        5.353E-05        4876.638
+13           -7.0768182539E+01        4.534E-05        4898.071
+14           -7.0768182685E+01        2.860E-05        4954.783
+15           -7.0768182624E+01        2.454E-05        4853.562
+16           -7.0768182914E+01        2.215E-05        4785.814
+17           -7.0768183140E+01        1.327E-05        4847.419
+18           -7.0768183413E+01        1.031E-05        4849.405
+19           -7.0768183204E+01        8.830E-06        4792.402
+Total number of SCF: 19    
+====================================================================
+                                Energy                              
+====================================================================
+Free energy per atom               : -7.0768183204E+01 (Ha/atom)
+Total free energy                  : -3.5384091602E+03 (Ha)
+Band structure energy              : -6.0013676847E+02 (Ha)
+Exchange correlation energy        : -4.3434966685E+02 (Ha)
+Self and correction energy         : -3.6985994875E+03 (Ha)
+Entropy*kb*T                       : -2.1292867548E-03 (Ha)
+Fermi level                        : -1.6410688390E-01 (Ha)
+Average force                      :  2.2332498200E-03 (Ha/Bohr)
+Maximum force                      :  4.0122180329E-03 (Ha/Bohr)
+Time for force calculation         :  144.930 (sec)
+***************************************************************************
+                               Timing info                                 
+***************************************************************************
+Total walltime                     :  108455.768 sec
+___________________________________________________________________________
+
+***************************************************************************
+*             Material Physics & Mechanics Group, Georgia Tech            *
+*                       PI: Phanish Suryanarayana                         *
+*                Main Developers: Qimen Xu, Abhiraj Sharma                *
+*     Acknowledgements: U.S. DOE (DE-SC0019410); NSF (1333500,1553212)    *
+***************************************************************************
+                                                                           

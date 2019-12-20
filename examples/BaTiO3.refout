@@ -1,0 +1,108 @@
+***************************************************************************
+*                          M-SPARC (Dec 17, 2019)                         *
+*   Copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech   *
+*           Distributed under GNU General Public License 3 (GPL)          *
+*                Date: 20-Dec-2019  Start time: 13:53:33                  *
+***************************************************************************
+                           Input parameters                                
+***************************************************************************
+CELL: 7.630000 7.630000 7.630000 
+FD_GRID: 15 15 15
+FD_ORDER: 12
+BOUNDARY_CONDITION: 2
+KPOINT_GRID: 1 1 1
+KPOINT_SHIFT: 0 0 0
+ELEC_TEMP_TYPE: gaussian
+SMEARING: 0.007349864
+CHEB_DEGREE: 17
+NSTATES: 29
+EXCHANGE_CORRELATION: LDA_PZ
+CALC_STRESS: 0
+CALC_PRES: 0
+MAXIT_SCF: 100
+TOL_SCF: 1.00E-05
+TOL_POISSON: 1.00E-07
+TOL_LANCZOS: 1.00E-02
+TOL_PSEUDOCHARGE: 1.00E-05
+MIXING_VARIABLE: potential
+MIXING_PRECOND: none
+MIXING_PARAMETER: 0.30
+MIXING_HISTORY: 7
+PULAY_FREQUENCY: 1
+PULAY_RESTART_FREQ: 0
+REFERENCE_CUTOFF: 0.50
+RHO_TRIGGER: 4
+FIX_RAND: 0
+PRINT_FORCES: 1
+PRINT_ATOMS: 1
+PRINT_EIGEN: 0
+PRINT_DENSITY: 0
+OUTPUT_FILE: BaTiO3.out
+***************************************************************************
+                             Initialization                                
+***************************************************************************
+Mesh spacing                       :  0.508667 (Bohr)
+Number of symmetry adapted k-points:  1
+Output printed to                  :  BaTiO3.out
+Total number of atom types         :  3
+Total number of atoms              :  5
+Total number of electrons          :  40
+Atom type 1  (valence electrons)   :  Ba 10
+Pseudopotential                    :  ../Pseudopotentials/Ba.psp8
+lloc                               :  4
+Pseudocharge radii of atom type 1  :  6.10 6.10 6.10
+Number of atoms of type 1          :  1
+Atom type 2  (valence electrons)   :  Ti 12
+Pseudopotential                    :  ../Pseudopotentials/Ti.psp8
+lloc                               :  4
+Pseudocharge radii of atom type 2  :  3.05 3.05 3.05
+Number of atoms of type 2          :  1
+Atom type 3  (valence electrons)   :  O 6
+Pseudopotential                    :  ../Pseudopotentials/O.psp8
+lloc                               :  4
+Pseudocharge radii of atom type 3  :  6.10 6.10 6.10
+Number of atoms of type 3          :  3
+Estimated total memory usage       :  12.41 MB
+=====================================================================
+                    Self Consistent Field (SCF#1)                     
+=====================================================================
+Iteration     Free Energy (Ha/atom)   SCF Error        Timing (sec)
+1            -2.6178333067E+01        2.166E-01        0.479
+2            -2.6369809283E+01        4.891E-02        0.157
+3            -2.6375065674E+01        2.493E-02        0.127
+4            -2.6376271190E+01        1.627E-02        0.131
+5            -2.6377286838E+01        3.072E-03        0.139
+6            -2.6377311458E+01        1.170E-03        0.145
+7            -2.6377313890E+01        4.396E-04        0.127
+8            -2.6377314220E+01        2.297E-04        0.128
+9            -2.6377314472E+01        1.321E-04        0.123
+10           -2.6377314413E+01        3.417E-05        0.124
+11           -2.6377314500E+01        1.322E-05        0.124
+12           -2.6377314469E+01        1.271E-06        0.124
+Total number of SCF: 12    
+====================================================================
+                                Energy                              
+====================================================================
+Free energy per atom               : -2.6377314469E+01 (Ha/atom)
+Total free energy                  : -1.3188657235E+02 (Ha)
+Band structure energy              : -1.1200032124E+01 (Ha)
+Exchange correlation energy        : -2.1484725013E+01 (Ha)
+Self and correction energy         : -2.0340707365E+02 (Ha)
+Entropy*kb*T                       : -1.2911789235E-05 (Ha)
+Fermi level                        :  2.2939659731E-01 (Ha)
+Average force                      :  4.7671471023E-01 (Ha/Bohr)
+Maximum force                      :  8.6116803317E-01 (Ha/Bohr)
+Time for force calculation         :  0.165 (sec)
+***************************************************************************
+                               Timing info                                 
+***************************************************************************
+Total walltime                     :  2.848 sec
+___________________________________________________________________________
+
+***************************************************************************
+*             Material Physics & Mechanics Group, Georgia Tech            *
+*                       PI: Phanish Suryanarayana                         *
+*                Main Developers: Qimen Xu, Abhiraj Sharma                *
+*     Acknowledgements: U.S. DOE (DE-SC0019410); NSF (1333500,1553212)    *
+***************************************************************************
+                                                                           

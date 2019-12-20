@@ -1,0 +1,109 @@
+***************************************************************************
+*                          M-SPARC (Dec 17, 2019)                         *
+*   Copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech   *
+*           Distributed under GNU General Public License 3 (GPL)          *
+*                Date: 17-Dec-2019  Start time: 16:53:29                  *
+***************************************************************************
+                           Input parameters                                
+***************************************************************************
+CELL: 5.420000 5.420000 5.420000 
+FD_GRID: 30 30 30
+FD_ORDER: 12
+BOUNDARY_CONDITION: 2
+KPOINT_GRID: 1 1 1
+KPOINT_SHIFT: 0 0 0
+SPIN_TYP: 1
+ELEC_TEMP_TYPE: fermi-dirac
+SMEARING: 0.009999933
+CHEB_DEGREE: 37
+NSTATES: 35
+EXCHANGE_CORRELATION: GGA
+CALC_STRESS: 1
+MAXIT_SCF: 100
+TOL_SCF: 1.00E-06
+TOL_POISSON: 1.00E-08
+TOL_LANCZOS: 1.00E-02
+TOL_PSEUDOCHARGE: 1.00E-08
+MIXING_VARIABLE: potential
+MIXING_PRECOND: none
+MIXING_PARAMETER: 0.30
+MIXING_HISTORY: 7
+PULAY_FREQUENCY: 1
+PULAY_RESTART_FREQ: 0
+REFERENCE_CUTOFF: 0.50
+RHO_TRIGGER: 6
+FIX_RAND: 0
+PRINT_FORCES: 1
+PRINT_ATOMS: 0
+PRINT_EIGEN: 0
+PRINT_DENSITY: 0
+OUTPUT_FILE: ../tests/Spin/Fe/Fe.out
+***************************************************************************
+                             Initialization                                
+***************************************************************************
+Mesh spacing                       :  0.180667 (Bohr)
+Number of symmetry adapted k-points:  1
+Output printed to                  :  ../tests/Spin/Fe/Fe.out
+Total number of atom types         :  1
+Total number of atoms              :  2
+Total number of electrons          :  32
+Atom type 1  (valence electrons)   :  Fe 16
+Pseudopotential                    :  Fe.psp8
+lloc                               :  4
+Pseudocharge radii of atom type 1  :  6.87 6.87 6.87
+Number of atoms of type 1          :  2
+Estimated total memory usage       :  133.07 MB
+========================================================================================
+                            Self Consistent Field (SCF#1)                     
+========================================================================================
+Iteration     Free Energy (Ha/atom)    Magnetization     SCF Error        Timing (sec)
+1            -1.1846228759E+02         5.3764E+00        5.345E-02        14.294
+2            -1.1846914141E+02         5.2882E+00        2.387E-02        2.885
+3            -1.1847019779E+02         5.2568E+00        1.118E-02        2.962
+4            -1.1847046663E+02         5.3082E+00        1.277E-03        2.954
+5            -1.1847049081E+02         5.3561E+00        7.224E-04        2.957
+6            -1.1847049926E+02         5.3873E+00        1.351E-03        2.904
+7            -1.1847051587E+02         5.4277E+00        9.180E-04        2.922
+8            -1.1847053818E+02         5.5015E+00        4.822E-04        2.907
+9            -1.1847055014E+02         5.5853E+00        1.244E-04        2.907
+10           -1.1847055035E+02         5.6019E+00        3.029E-05        2.939
+11           -1.1847055028E+02         5.5898E+00        4.358E-05        2.925
+12           -1.1847055037E+02         5.6008E+00        2.000E-05        2.925
+13           -1.1847055038E+02         5.5970E+00        5.611E-06        2.940
+14           -1.1847055038E+02         5.5980E+00        1.668E-06        2.955
+15           -1.1847055038E+02         5.5977E+00        2.637E-07        3.025
+Total number of SCF: 15    
+====================================================================
+                                Energy                              
+====================================================================
+Free energy per atom               : -1.1847055038E+02 (Ha/atom)
+Total free energy                  : -2.3694110075E+02 (Ha)
+Band structure energy              : -2.8179671501E+01 (Ha)
+Exchange correlation energy        : -2.5406584166E+01 (Ha)
+Self and correction energy         : -2.4215506791E+02 (Ha)
+Entropy*kb*T                       : -2.6210966381E-02 (Ha)
+Fermi level                        :  2.9733319409E-01 (Ha)
+Net Magnetization                  :  5.5977370058E+00 
+Average force                      :  9.0211773366E-08 (Ha/Bohr)
+Maximum force                      :  9.0211773366E-08 (Ha/Bohr)
+Time for force calculation         :  0.741 (sec)
+Stress (GPa):
+     12.3538608212      -0.0000153352       0.0000039110
+     -0.0000153352      12.3539331306       0.0000142743
+      0.0000039110       0.0000142743      12.3539118574
+Pressure                           : -1.2353901936E+01 (GPa)
+Maximum stress                     :  1.2353933131E+01 (GPa)
+Time for stress calculation        :  2.838 (sec)
+***************************************************************************
+                               Timing info                                 
+***************************************************************************
+Total walltime                     :  62.940 sec
+___________________________________________________________________________
+
+***************************************************************************
+*             Material Physics & Mechanics Group, Georgia Tech            *
+*                       PI: Phanish Suryanarayana                         *
+*                Main Developers: Qimen Xu, Abhiraj Sharma                *
+*     Acknowledgements: U.S. DOE (DE-SC0019410); NSF (1333500,1553212)    *
+***************************************************************************
+                                                                           

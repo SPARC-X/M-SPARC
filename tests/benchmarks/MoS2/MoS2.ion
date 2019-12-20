@@ -1,0 +1,29 @@
+#=========================
+# format of ion file
+#=========================
+# ATOM_TYPE: <atom type name> 
+# PSEUDO_POT: <path/to/pseudopotential/file>
+# N_TYPE_ATOM: <num of atoms of this type>
+# COORD:
+# <xcoord> <ycoord> <zcoord>
+# ...
+# RELAX:
+# <xrelax> <yrelax> <zrelax>
+# ...
+
+# Reminder: when changing number of atoms, change the RELAX flags accordingly
+#           as well.
+
+ATOM_TYPE: Mo                 # atom type
+N_TYPE_ATOM: 1               # number of atoms of this type
+PSEUDO_POT: Mo.psp8          #pseudopotential
+COORD_FRAC:                       # coordinates follows
+0.3333333333  0.33333333333   0.500000   
+
+ATOM_TYPE: S               # atom type
+N_TYPE_ATOM: 2               # number of atoms of this type
+PSEUDO_POT: S.psp8          # pseudopotnetial
+COORD_FRAC:                       # coordinates follows
+0.66666666667  0.666666666667  0.623    # Triplet giving the REDUCED coordinate of atom 2.
+0.66666666667  0.666666666667  0.377   
+

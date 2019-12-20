@@ -1,0 +1,24 @@
+#=========================
+# format of ion file
+#=========================
+# ATOM_TYPE: <atom type name> 
+# PSEUDO_POT: <path/to/pseudopotential/file>
+# N_TYPE_ATOM: <num of atoms of this type>
+# COORD:
+# <xcoord> <ycoord> <zcoord>
+# ...
+# RELAX:
+# <xrelax> <yrelax> <zrelax>
+# ...
+
+# Reminder: when changing number of atoms, change the RELAX flags accordingly
+#           as well.
+
+ATOM_TYPE: Na                # atom type
+PSEUDO_POT: Na.psp8
+N_TYPE_ATOM: 2               # number of atoms of this type
+COORD:                       # coordinates follows
+   7.875166039091483   7.298203986669037   7.501142441081245
+   4.299908960218161   3.721446348264736   3.430833877349852
+
+

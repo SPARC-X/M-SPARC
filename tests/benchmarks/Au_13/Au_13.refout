@@ -1,0 +1,105 @@
+***************************************************************************
+*                          M-SPARC (Dec 15, 2019)                         *
+*   Copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech   *
+*           Distributed under GNU General Public License 3 (GPL)          *
+*                Date: 16-Dec-2019  Start time: 22:00:25                  *
+***************************************************************************
+                           Input parameters                                
+***************************************************************************
+CELL: 40.200000 40.200000 40.200000 
+FD_GRID: 134 134 134
+FD_ORDER: 12
+BOUNDARY_CONDITION: 1
+ELEC_TEMP_TYPE: fermi-dirac
+SMEARING: 0.003674932
+CHEB_DEGREE: 25
+NSTATES: 145
+EXCHANGE_CORRELATION: LDA_PZ
+CALC_STRESS: 0
+CALC_PRES: 0
+MAXIT_SCF: 100
+TOL_SCF: 1.00E-05
+TOL_POISSON: 1.00E-07
+TOL_LANCZOS: 1.00E-02
+TOL_PSEUDOCHARGE: 1.00E-07
+MIXING_VARIABLE: potential
+MIXING_PRECOND: none
+MIXING_PARAMETER: 0.30
+MIXING_HISTORY: 7
+PULAY_FREQUENCY: 1
+PULAY_RESTART_FREQ: 0
+REFERENCE_CUTOFF: 0.50
+RHO_TRIGGER: 4
+FIX_RAND: 0
+PRINT_FORCES: 1
+PRINT_ATOMS: 1
+PRINT_EIGEN: 0
+PRINT_DENSITY: 0
+OUTPUT_FILE: Au_13.out
+***************************************************************************
+                             Initialization                                
+***************************************************************************
+Mesh spacing                       :  0.300000 (Bohr)
+Output printed to                  :  Au_13.out
+Total number of atom types         :  1
+Total number of atoms              :  13
+Total number of electrons          :  247
+Atom type 1  (valence electrons)   :  Au 19
+Pseudopotential                    :  Au.psp8
+lloc                               :  4
+Pseudocharge radii of atom type 1  :  7.20 7.20 7.20
+Number of atoms of type 1          :  13
+Estimated total memory usage       :  19.31 GB
+=====================================================================
+                    Self Consistent Field (SCF#1)                     
+=====================================================================
+Iteration     Free Energy (Ha/atom)   SCF Error        Timing (sec)
+1            -1.3735169659E+02        1.588E-01        1847.692
+2            -1.3740145871E+02        6.636E-02        738.469
+3            -1.3740918986E+02        3.844E-02        746.878
+4            -1.3741034241E+02        3.763E-02        724.800
+5            -1.3741090957E+02        3.028E-02        720.302
+6            -1.3741095571E+02        2.806E-02        705.001
+7            -1.3741093626E+02        1.352E-02        686.109
+8            -1.3741106740E+02        7.996E-03        695.666
+9            -1.3741108676E+02        7.615E-03        715.399
+10           -1.3741108877E+02        4.994E-03        714.886
+11           -1.3741108999E+02        2.074E-03        684.903
+12           -1.3741108979E+02        2.054E-03        684.194
+13           -1.3741108968E+02        1.897E-03        684.297
+14           -1.3741108973E+02        1.305E-03        664.459
+15           -1.3741108995E+02        1.219E-03        670.773
+16           -1.3741108990E+02        7.288E-04        654.726
+17           -1.3741108961E+02        3.433E-04        669.106
+18           -1.3741109058E+02        1.074E-04        680.863
+19           -1.3741109048E+02        6.566E-05        663.923
+20           -1.3741109007E+02        3.381E-05        639.957
+21           -1.3741109032E+02        1.024E-05        639.085
+22           -1.3741109031E+02        6.601E-06        633.023
+Total number of SCF: 22    
+====================================================================
+                                Energy                              
+====================================================================
+Free energy per atom               : -1.3741109031E+02 (Ha/atom)
+Total free energy                  : -1.7863441740E+03 (Ha)
+Band structure energy              : -3.2238512120E+02 (Ha)
+Exchange correlation energy        : -1.6205039169E+02 (Ha)
+Self and correction energy         : -2.4749888898E+03 (Ha)
+Entropy*kb*T                       : -2.5477216926E-02 (Ha)
+Fermi level                        : -1.9742097170E-01 (Ha)
+Average force                      :  3.5538279639E-02 (Ha/Bohr)
+Maximum force                      :  3.8521470592E-02 (Ha/Bohr)
+Time for force calculation         :  30.746 (sec)
+***************************************************************************
+                               Timing info                                 
+***************************************************************************
+Total walltime                     :  17143.271 sec
+___________________________________________________________________________
+
+***************************************************************************
+*             Material Physics & Mechanics Group, Georgia Tech            *
+*                       PI: Phanish Suryanarayana                         *
+*                Main Developers: Qimen Xu, Abhiraj Sharma                *
+*     Acknowledgements: U.S. DOE (DE-SC0019410); NSF (1333500,1553212)    *
+***************************************************************************
+                                                                           

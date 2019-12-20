@@ -1,0 +1,10 @@
+ATOM_TYPE: Cu   
+PSEUDO_POT: Cu_GGA.psp8 # this has 19 valence electrons
+N_TYPE_ATOM: 4
+COORD:
+    6.7202    6.4603    6.7007
+    3.6119    6.4080    3.4373
+    6.3193    3.0983    3.3223
+    3.2099    3.2515    0.1781
+
+
