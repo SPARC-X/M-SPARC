@@ -1,8 +1,8 @@
 ***************************************************************************
-*                          M-SPARC (Dec 15, 2019)                         *
+*                      M-SPARC v1.0.0 (Feb 03, 2020)                      *
 *   Copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech   *
 *           Distributed under GNU General Public License 3 (GPL)          *
-*                Date: 16-Dec-2019  Start time: 21:59:43                  *
+*                Date: 01-Feb-2020  Start time: 07:57:02                  *
 ***************************************************************************
                            Input parameters                                
 ***************************************************************************
@@ -13,7 +13,7 @@ LATVEC:
 0.707106781186547 0.000000000000000 0.707106781186547 
 FD_GRID: 40 40 40
 FD_ORDER: 12
-BOUNDARY_CONDITION: 2
+BC: P P P
 KPOINT_GRID: 1 1 1
 KPOINT_SHIFT: 0 0 0
 ELEC_TEMP_TYPE: gaussian
@@ -41,13 +41,13 @@ PRINT_FORCES: 1
 PRINT_ATOMS: 1
 PRINT_EIGEN: 0
 PRINT_DENSITY: 0
-OUTPUT_FILE: Au.out
+OUTPUT_FILE: Au_FCC/Au.out
 ***************************************************************************
                              Initialization                                
 ***************************************************************************
 Mesh spacing                       :  0.136000 (Bohr)
 Number of symmetry adapted k-points:  1
-Output printed to                  :  Au.out
+Output printed to                  :  Au_FCC/Au.out
 Total number of atom types         :  1
 Total number of atoms              :  1
 Total number of electrons          :  19
@@ -61,14 +61,14 @@ Estimated total memory usage       :  256.84 MB
                     Self Consistent Field (SCF#1)                     
 =====================================================================
 Iteration     Free Energy (Ha/atom)   SCF Error        Timing (sec)
-1            -1.3787971246E+02        2.590E-02        52.608
-2            -1.3787861556E+02        1.714E-02        22.905
-3            -1.3787827004E+02        3.651E-03        22.502
-4            -1.3787821721E+02        3.245E-04        21.403
-5            -1.3787821742E+02        1.675E-04        19.958
-6            -1.3787821748E+02        9.530E-06        19.897
-7            -1.3787821748E+02        2.442E-06        19.152
-8            -1.3787821746E+02        1.945E-07        19.113
+1            -1.3787971246E+02        2.590E-02        38.145
+2            -1.3787861556E+02        1.714E-02        16.369
+3            -1.3787827004E+02        3.651E-03        16.386
+4            -1.3787821721E+02        3.245E-04        15.945
+5            -1.3787821742E+02        1.675E-04        15.020
+6            -1.3787821748E+02        9.530E-06        14.918
+7            -1.3787821748E+02        2.442E-06        14.367
+8            -1.3787821746E+02        1.945E-07        14.309
 Total number of SCF: 8     
 ====================================================================
                                 Energy                              
@@ -82,11 +82,11 @@ Entropy*kb*T                       : -1.7079611122E-02 (Ha)
 Fermi level                        :  3.5520295167E-01 (Ha)
 Average force                      :  0.0000000000E+00 (Ha/Bohr)
 Maximum force                      :  0.0000000000E+00 (Ha/Bohr)
-Time for force calculation         :  4.686 (sec)
+Time for force calculation         :  3.913 (sec)
 ***************************************************************************
                                Timing info                                 
 ***************************************************************************
-Total walltime                     :  253.443 sec
+Total walltime                     :  186.575 sec
 ___________________________________________________________________________
 
 ***************************************************************************
