@@ -3,7 +3,7 @@
 % Author: Qimen Xu
 
 % add src/ folder to path
-% addpath(genpath('../src'));
+% addpath(genpath('../../src'));
 addpath(genpath(fullfile('..','src'))); % this works for all OSs
 
 fnames = {'BaTiO3', 'H2O_sheet', 'H2O_wire', 'SiH4'};

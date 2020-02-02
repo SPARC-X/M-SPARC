@@ -1,25 +1,27 @@
 ***************************************************************************
-*                          M-SPARC (Dec 17, 2019)                         *
+*                      M-SPARC v1.0.0 (Feb 03, 2020)                      *
 *   Copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech   *
 *           Distributed under GNU General Public License 3 (GPL)          *
-*                Date: 20-Dec-2019  Start time: 13:53:38                  *
+*                Date: 02-Feb-2020  Start time: 17:12:46                  *
 ***************************************************************************
                            Input parameters                                
 ***************************************************************************
-CELL: 13.000000 13.000000 13.000000 
-FD_GRID: 26 26 26
+CELL: 5.670000 5.670000 18.900000 
+FD_GRID: 12 12 38
 FD_ORDER: 12
-BOUNDARY_CONDITION: 1
-ELEC_TEMP_TYPE: gaussian
-SMEARING: 0.007349864
-CHEB_DEGREE: 17
-NSTATES: 10
-EXCHANGE_CORRELATION: LDA_PW
+BC: P P D
+KPOINT_GRID: 1 1 1
+KPOINT_SHIFT: 0 0 0
+ELEC_TEMP_TYPE: fermi-dirac
+SMEARING: 0.003674932
+CHEB_DEGREE: 18
+NSTATES: 8
+EXCHANGE_CORRELATION: GGA_PBE
 CALC_STRESS: 0
 CALC_PRES: 0
-MAXIT_SCF: 30
-TOL_SCF: 1.00E-05
-TOL_POISSON: 1.00E-07
+MAXIT_SCF: 100
+TOL_SCF: 1.00E-04
+TOL_POISSON: 1.00E-06
 TOL_LANCZOS: 1.00E-02
 TOL_PSEUDOCHARGE: 1.00E-05
 MIXING_VARIABLE: potential
@@ -35,57 +37,60 @@ PRINT_FORCES: 1
 PRINT_ATOMS: 1
 PRINT_EIGEN: 0
 PRINT_DENSITY: 0
-OUTPUT_FILE: SiH4.out
+OUTPUT_FILE: H2O_sheet.out
 ***************************************************************************
                              Initialization                                
 ***************************************************************************
-Mesh spacing                       :  0.500000 (Bohr)
-Output printed to                  :  SiH4.out
+Mesh spacing in x-direction        :  0.472500 (Bohr)
+Mesh spacing in y-direction        :  0.472500 (Bohr)
+Mesh spacing in z direction        :  0.497368 (Bohr)
+Number of symmetry adapted k-points:  1
+Output printed to                  :  H2O_sheet.out
 Total number of atom types         :  2
-Total number of atoms              :  5
+Total number of atoms              :  3
 Total number of electrons          :  8
-Atom type 1  (valence electrons)   :  Si 4
-Pseudopotential                    :  ../Pseudopotentials/Si.psp8
+Atom type 1  (valence electrons)   :  H 1
+Pseudopotential                    :  ../../Pseudopotentials/H_GGA.psp8
 lloc                               :  4
-Pseudocharge radii of atom type 1  :  6.00 6.00 6.00
-Number of atoms of type 1          :  1
-Atom type 2  (valence electrons)   :  H 1
-Pseudopotential                    :  ../Pseudopotentials/H.psp8
+Pseudocharge radii of atom type 1  :  2.83 2.98 2.98
+Number of atoms of type 1          :  2
+Atom type 2  (valence electrons)   :  O 6
+Pseudopotential                    :  ../../Pseudopotentials/O_GGA.psp8
 lloc                               :  4
-Pseudocharge radii of atom type 2  :  3.00 3.00 3.00
-Number of atoms of type 2          :  4
-Estimated total memory usage       :  90.51 MB
+Pseudocharge radii of atom type 2  :  6.14 6.14 5.97
+Number of atoms of type 2          :  1
+Estimated total memory usage       :  17.05 MB
 =====================================================================
                     Self Consistent Field (SCF#1)                     
 =====================================================================
 Iteration     Free Energy (Ha/atom)   SCF Error        Timing (sec)
-1            -1.2451754296E+00        1.355E-01        0.503
-2            -1.2469418431E+00        8.642E-02        0.260
-3            -1.2479826042E+00        2.075E-02        0.246
-4            -1.2479881823E+00        2.750E-03        0.245
-5            -1.2479895103E+00        8.436E-04        0.239
-6            -1.2479899127E+00        2.653E-04        0.225
-7            -1.2479899216E+00        3.035E-04        0.218
-8            -1.2479899207E+00        2.164E-05        0.246
-9            -1.2479897227E+00        9.404E-06        0.254
+1            -5.6553802020E+00        4.639E-01        0.203
+2            -5.6995368544E+00        8.492E-02        0.100
+3            -5.7004831313E+00        2.919E-02        0.099
+4            -5.7004676000E+00        3.610E-02        0.092
+5            -5.7005777281E+00        1.269E-02        0.082
+6            -5.7005842098E+00        6.174E-03        0.085
+7            -5.7005851410E+00        2.821E-03        0.092
+8            -5.7005850544E+00        2.005E-04        0.072
+9            -5.7005852138E+00        7.183E-05        0.076
 Total number of SCF: 9     
 ====================================================================
                                 Energy                              
 ====================================================================
-Free energy per atom               : -1.2479897227E+00 (Ha/atom)
-Total free energy                  : -6.2399486133E+00 (Ha)
-Band structure energy              : -2.8546194064E+00 (Ha)
-Exchange correlation energy        : -2.4796327871E+00 (Ha)
-Self and correction energy         : -1.9078384259E+01 (Ha)
-Entropy*kb*T                       : -1.0838164359E-06 (Ha)
-Fermi level                        : -1.4858196822E-02 (Ha)
-Average force                      :  6.8375825236E-03 (Ha/Bohr)
-Maximum force                      :  8.5478677336E-03 (Ha/Bohr)
-Time for force calculation         :  0.093 (sec)
+Free energy per atom               : -5.7005852138E+00 (Ha/atom)
+Total free energy                  : -1.7101755641E+01 (Ha)
+Band structure energy              : -4.0196453479E+00 (Ha)
+Exchange correlation energy        : -4.3051177228E+00 (Ha)
+Self and correction energy         : -3.6101055082E+01 (Ha)
+Entropy*kb*T                       : -1.6062354104E-06 (Ha)
+Fermi level                        : -1.7865360781E-01 (Ha)
+Average force                      :  3.4504618039E-02 (Ha/Bohr)
+Maximum force                      :  3.6217789797E-02 (Ha/Bohr)
+Time for force calculation         :  0.081 (sec)
 ***************************************************************************
                                Timing info                                 
 ***************************************************************************
-Total walltime                     :  3.195 sec
+Total walltime                     :  1.245 sec
 ___________________________________________________________________________
 
 ***************************************************************************

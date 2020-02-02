@@ -1,15 +1,15 @@
 ***************************************************************************
-*                          M-SPARC (Dec 17, 2019)                         *
+*                      M-SPARC v1.0.0 (Feb 03, 2020)                      *
 *   Copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech   *
 *           Distributed under GNU General Public License 3 (GPL)          *
-*                Date: 20-Dec-2019  Start time: 13:53:37                  *
+*                Date: 02-Feb-2020  Start time: 17:12:47                  *
 ***************************************************************************
                            Input parameters                                
 ***************************************************************************
 CELL: 14.000000 14.000000 6.000000 
 FD_GRID: 28 28 12
 FD_ORDER: 12
-BOUNDARY_CONDITION: 4
+BC: D D P
 KPOINT_GRID: 1 1 1
 KPOINT_SHIFT: 0 0 0
 ELEC_TEMP_TYPE: fermi-dirac
@@ -48,12 +48,12 @@ Total number of atom types         :  2
 Total number of atoms              :  3
 Total number of electrons          :  8
 Atom type 1  (valence electrons)   :  H 1
-Pseudopotential                    :  ../Pseudopotentials/H.psp8
+Pseudopotential                    :  ../../Pseudopotentials/H.psp8
 lloc                               :  4
 Pseudocharge radii of atom type 1  :  2.50 2.50 2.50
 Number of atoms of type 1          :  2
 Atom type 2  (valence electrons)   :  O 6
-Pseudopotential                    :  ../Pseudopotentials/O.psp8
+Pseudopotential                    :  ../../Pseudopotentials/O.psp8
 lloc                               :  4
 Pseudocharge radii of atom type 2  :  3.00 3.00 3.00
 Number of atoms of type 2          :  1
@@ -62,17 +62,17 @@ Estimated total memory usage       :  30.64 MB
                     Self Consistent Field (SCF#1)                     
 =====================================================================
 Iteration     Free Energy (Ha/atom)   SCF Error        Timing (sec)
-1            -5.7011348215E+00        2.210E-01        0.217
-2            -5.7246947321E+00        1.079E-01        0.120
-3            -5.7253819617E+00        6.525E-02        0.109
-4            -5.7254471913E+00        4.368E-03        0.112
-5            -5.7254872203E+00        5.121E-03        0.113
-6            -5.7254896243E+00        2.877E-03        0.106
-7            -5.7254946829E+00        2.350E-04        0.105
-8            -5.7254944818E+00        1.283E-04        0.099
-9            -5.7254946540E+00        3.345E-05        0.095
-10           -5.7254947566E+00        1.678E-05        0.089
-11           -5.7254946759E+00        2.781E-06        0.078
+1            -5.7011348215E+00        2.210E-01        0.277
+2            -5.7246947321E+00        1.079E-01        0.143
+3            -5.7253819617E+00        6.525E-02        0.126
+4            -5.7254471913E+00        4.368E-03        0.117
+5            -5.7254872203E+00        5.121E-03        0.109
+6            -5.7254896243E+00        2.877E-03        0.107
+7            -5.7254946829E+00        2.350E-04        0.128
+8            -5.7254944818E+00        1.283E-04        0.116
+9            -5.7254946540E+00        3.345E-05        0.119
+10           -5.7254947566E+00        1.678E-05        0.108
+11           -5.7254946759E+00        2.781E-06        0.084
 Total number of SCF: 11    
 ====================================================================
                                 Energy                              
@@ -84,13 +84,13 @@ Exchange correlation energy        : -4.1452177335E+00 (Ha)
 Self and correction energy         : -3.5516529308E+01 (Ha)
 Entropy*kb*T                       : -5.9531339030E-06 (Ha)
 Fermi level                        : -1.4155811721E-01 (Ha)
-Average force                      :  4.9083404640E-02 (Ha/Bohr)
-Maximum force                      :  4.9652385277E-02 (Ha/Bohr)
-Time for force calculation         :  0.062 (sec)
+Average force                      :  4.9083404646E-02 (Ha/Bohr)
+Maximum force                      :  4.9652385278E-02 (Ha/Bohr)
+Time for force calculation         :  0.069 (sec)
 ***************************************************************************
                                Timing info                                 
 ***************************************************************************
-Total walltime                     :  1.606 sec
+Total walltime                     :  1.844 sec
 ___________________________________________________________________________
 
 ***************************************************************************

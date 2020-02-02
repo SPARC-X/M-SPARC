@@ -8,7 +8,7 @@
 CELL: 5.67 5.67 18.90
 FD_GRID: 12 12 38
 FD_ORDER: 12
-BOUNDARY_CONDITION: 3
+BC: P P D
 EXCHANGE_CORRELATION: GGA_PBE
 ELEC_TEMP_TYPE: fd
 SMEARING: 0.003674932
@@ -23,14 +23,13 @@ PRINT_ATOMS: 1
 
 <\INPT>
 
-Warning: "BOUNDARY_CONDITION" is obsolete, use "BC" instead!
  Reading .ion file ...
  Number of atom types : 2
  Total number of atoms: 3
  Default atomic mass for H is 1.007975
  Default atomic mass for O is 15.999400
- pseudo_dir # 1 = ../Pseudopotentials/H_GGA.psp8
- pseudo_dir # 2 = ../Pseudopotentials/O_GGA.psp8
+ pseudo_dir # 1 = ../../Pseudopotentials/H_GGA.psp8
+ pseudo_dir # 2 = ../../Pseudopotentials/O_GGA.psp8
 
  COORD:
    4.265111864110533   2.834589187490385  10.556010134214192
@@ -48,7 +47,7 @@ Warning: "BOUNDARY_CONDITION" is obsolete, use "BC" instead!
 ## Poisson tolerance not provided, choosing poisson_tol ...
 ## poisson_tol is set to: 1.000e-06
  Creating differentiation matrices ...
- Done. (0.027 sec)
+ Done. (0.024 sec)
 
  Estimated memory usage:
  Total:   17.05 MB
@@ -85,36 +84,36 @@ Warning: "BOUNDARY_CONDITION" is obsolete, use "BC" instead!
  ****************************************
  *          Eself_ref = 83.273893       *
  ****************************************
- Done. (0.042385 s)
- Time for b calculation: 0.042 seconds.
+ Done. (0.050077 s)
+ Time for b calculation: 0.050 seconds.
 
  Starting calculating nonlocal projectors ...
- Done. (0.016983 s)
+ Done. (0.003991 s)
 
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
  Starting SCF iteration...
  AAR converged to a relative residual of 8.60911e-07 in 67 iterations.
- Poisson problem took 0.106965s
+ Poisson problem took 0.043143s
  ============================================= 
  Relaxation iteration:  1
  SCF iteration number:  1, Chebyshev cycle: 1 
  ============================================= 
  Fermi energy = 1.031388
- This SCF iteration took 0.113 s.
+ This SCF iteration took 0.091 s.
 
  ============================================= 
  Relaxation iteration:  1
  SCF iteration number:  1, Chebyshev cycle: 2 
  ============================================= 
  Fermi energy = -0.119891
- This SCF iteration took 0.052 s.
+ This SCF iteration took 0.054 s.
 
  ============================================= 
  Relaxation iteration:  1
  SCF iteration number:  1, Chebyshev cycle: 3 
  ============================================= 
  Fermi energy = -0.180751
- This SCF iteration took 0.051 s.
+ This SCF iteration took 0.058 s.
 
  ============================================= 
  Relaxation iteration:  1
@@ -122,12 +121,12 @@ Warning: "BOUNDARY_CONDITION" is obsolete, use "BC" instead!
  ============================================= 
  Fermi energy = -0.182187
  AAR converged to a relative residual of 4.99747e-07 in 61 iterations.
- Poisson problem took 0.036048s
+ Poisson problem took 0.041681s
  Escc = 3.01822684
  Etot = -16.96614061
  Eatom = -5.65538020
  Error in SCF iteration: 4.6391e-01 
- This SCF iteration took 0.094 s.
+ This SCF iteration took 0.100 s.
 
  ========================= 
  Relaxation iteration:  1 
@@ -135,25 +134,25 @@ Warning: "BOUNDARY_CONDITION" is obsolete, use "BC" instead!
  ========================= 
  Fermi energy = -0.173805
  AAR converged to a relative residual of 3.03865e-07 in 61 iterations.
- Poisson problem took 0.036303s
+ Poisson problem took 0.037284s
  Escc = 0.52165662
  Etot = -17.09861056
  Eatom = -5.69953685
  Error in SCF iteration: 8.4916e-02 
- This SCF iteration took 0.096 s.
+ This SCF iteration took 0.099 s.
 
  ========================= 
  Relaxation iteration:  1 
  SCF iteration number:  3 
  ========================= 
  Fermi energy = -0.172765
- AAR converged to a relative residual of 5.54952e-07 in 49 iterations.
- Poisson problem took 0.029013s
+ AAR converged to a relative residual of 5.54953e-07 in 49 iterations.
+ Poisson problem took 0.034055s
  Escc = 0.03948861
  Etot = -17.10144939
  Eatom = -5.70048313
  Error in SCF iteration: 2.9190e-02 
- This SCF iteration took 0.086 s.
+ This SCF iteration took 0.092 s.
 
  ========================= 
  Relaxation iteration:  1 
@@ -161,12 +160,12 @@ Warning: "BOUNDARY_CONDITION" is obsolete, use "BC" instead!
  ========================= 
  Fermi energy = -0.173366
  AAR converged to a relative residual of 7.60036e-07 in 43 iterations.
- Poisson problem took 0.035120s
+ Poisson problem took 0.027822s
  Escc = 0.08628931
  Etot = -17.10140280
  Eatom = -5.70046760
  Error in SCF iteration: 3.6104e-02 
- This SCF iteration took 0.101 s.
+ This SCF iteration took 0.082 s.
 
  ========================= 
  Relaxation iteration:  1 
@@ -174,12 +173,12 @@ Warning: "BOUNDARY_CONDITION" is obsolete, use "BC" instead!
  ========================= 
  Fermi energy = -0.175128
  AAR converged to a relative residual of 4.27273e-07 in 43 iterations.
- Poisson problem took 0.022818s
+ Poisson problem took 0.027775s
  Escc = -0.00689903
  Etot = -17.10173318
  Eatom = -5.70057773
  Error in SCF iteration: 1.2689e-02 
- This SCF iteration took 0.080 s.
+ This SCF iteration took 0.085 s.
 
  ========================= 
  Relaxation iteration:  1 
@@ -187,12 +186,12 @@ Warning: "BOUNDARY_CONDITION" is obsolete, use "BC" instead!
  ========================= 
  Fermi energy = -0.179039
  AAR converged to a relative residual of 1.39952e-07 in 43 iterations.
- Poisson problem took 0.024749s
+ Poisson problem took 0.030564s
  Escc = -0.01374837
  Etot = -17.10175263
  Eatom = -5.70058421
  Error in SCF iteration: 6.1743e-03 
- This SCF iteration took 0.080 s.
+ This SCF iteration took 0.092 s.
 
  ========================= 
  Relaxation iteration:  1 
@@ -200,12 +199,12 @@ Warning: "BOUNDARY_CONDITION" is obsolete, use "BC" instead!
  ========================= 
  Fermi energy = -0.178701
  AAR converged to a relative residual of 7.94664e-07 in 25 iterations.
- Poisson problem took 0.015546s
+ Poisson problem took 0.014061s
  Escc = -0.00902935
  Etot = -17.10175542
  Eatom = -5.70058514
  Error in SCF iteration: 2.8208e-03 
- This SCF iteration took 0.071 s.
+ This SCF iteration took 0.072 s.
 
  ========================= 
  Relaxation iteration:  1 
@@ -213,12 +212,12 @@ Warning: "BOUNDARY_CONDITION" is obsolete, use "BC" instead!
  ========================= 
  Fermi energy = -0.178725
  AAR converged to a relative residual of 9.97799e-07 in 29 iterations.
- Poisson problem took 0.015206s
+ Poisson problem took 0.018333s
  Escc = -0.00000460
  Etot = -17.10175516
  Eatom = -5.70058505
  Error in SCF iteration: 2.0049e-04 
- This SCF iteration took 0.070 s.
+ This SCF iteration took 0.076 s.
 
  ========================= 
  Relaxation iteration:  1 
@@ -226,12 +225,12 @@ Warning: "BOUNDARY_CONDITION" is obsolete, use "BC" instead!
  ========================= 
  Fermi energy = -0.178654
  AAR converged to a relative residual of 8.24044e-07 in 13 iterations.
- Poisson problem took 0.008210s
+ Poisson problem took 0.010480s
  Escc = -0.00017173
  Etot = -17.10175564
  Eatom = -5.70058521
  Error in SCF iteration: 7.1829e-05 
- This SCF iteration took 0.061 s.
+ This SCF iteration took 0.067 s.
 
 
  Finished SCF iteration in 9 steps!
@@ -243,23 +242,23 @@ Warning: "BOUNDARY_CONDITION" is obsolete, use "BC" instead!
  **********************************************************
 
  Starting atomic force calculation ... 
- local force calculation: 0.054 s
+ local force calculation: 0.060 s
  ***********************************************************
  *                      Atomic Force                       *
  ***********************************************************
  Drift free forces (Ha/Bohr):
-  -0.031040528694906   0.001290039333674   0.016116671183374
-   0.032443316980656   0.001297175279174   0.016046084191571
-  -0.001402788285750  -0.002587214612848  -0.032162755374946
+  -0.031040528698812   0.001290039332022   0.016116671134951
+   0.032443316994449   0.001297175276097   0.016046084147401
+  -0.001402788295637  -0.002587214608119  -0.032162755282353
 
- Max magnitude of forces (Ha/Bohr):   0.036217789804117
+ Max magnitude of forces (Ha/Bohr):   0.036217789796793
 
 
- Time for calculating forces: 0.072760 s.
+ Time for calculating forces: 0.080678 s.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
  Final atomic positions (Cartesian) are as follows:
   4.265112 	  2.834589 	 10.556010 
   1.404067 	  2.834589 	 10.556010 
   2.834589 	  2.834589 	  9.448631 
 
- Run-time of the program: 1.323179 seconds
+ Run-time of the program: 1.244549 seconds

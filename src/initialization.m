@@ -1083,7 +1083,7 @@ end
 
 start_time = fix(clock);
 fprintf(fileID,'***************************************************************************\n');
-fprintf(fileID,'*                          M-SPARC (Dec 17, 2019)                         *\n');
+fprintf(fileID,'*                      M-SPARC v1.0.0 (Feb 03, 2020)                      *\n');
 fprintf(fileID,'*   Copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech   *\n');
 fprintf(fileID,'*           Distributed under GNU General Public License 3 (GPL)          *\n');
 fprintf(fileID,'*                Date: %s  Start time: %02d:%02d:%02d                  *\n',date,start_time(4),start_time(5),start_time(6));
@@ -1100,7 +1100,13 @@ if max(max(abs(S.lat_vec - eye(3)))) > 1e-14
 end
 fprintf(fileID,'FD_GRID: %d %d %d\n',S.Nx-S.BCx,S.Ny-S.BCy,S.Nz-S.BCz);
 fprintf(fileID,'FD_ORDER: %d\n',S.FDn*2);
-fprintf(fileID,'BOUNDARY_CONDITION: %d\n',S.BC);
+%fprintf(fileID,'BOUNDARY_CONDITION: %d\n',S.BC);
+str_BC = ['P', 'D'];
+fprintf(fileID,'BC:');
+fprintf(fileID,' %s',str_BC(S.BCx+1));
+fprintf(fileID,' %s',str_BC(S.BCy+1));
+fprintf(fileID,' %s',str_BC(S.BCz+1));
+fprintf(fileID,'\n');
 if (S.BC==2 || S.BC==3 || S.BC==4)
 	fprintf(fileID,'KPOINT_GRID: %d %d %d\n',S.nkpt);
 	fprintf(fileID,'KPOINT_SHIFT: %d %d %d\n',S.kptshift);
