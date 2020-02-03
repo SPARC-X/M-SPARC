@@ -1,0 +1,9 @@
+----------------
+Feb 03, 2020
+Name: Qimen Xu
+* Update documentation and README.md, add link to SG15 ONCV potentials.
+* Move examples/ directory to under tests/.
+* Add M-SPARC version to .out file.
+* Print boundary conditions in the form of `BC: P P D` in .out file.
+* Rerun tests and update the reference output files.
+

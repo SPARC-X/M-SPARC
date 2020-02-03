@@ -1,15 +1,15 @@
 ***************************************************************************
-*                          M-SPARC (Dec 15, 2019)                         *
+*                      M-SPARC v1.0.0 (Feb 03, 2020)                      *
 *   Copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech   *
 *           Distributed under GNU General Public License 3 (GPL)          *
-*                Date: 16-Dec-2019  Start time: 21:59:55                  *
+*                Date: 01-Feb-2020  Start time: 07:18:32                  *
 ***************************************************************************
                            Input parameters                                
 ***************************************************************************
 CELL: 5.669178 5.669178 18.897261 
 FD_GRID: 28 28 100
 FD_ORDER: 12
-BOUNDARY_CONDITION: 3
+BC: P P D
 KPOINT_GRID: 2 2 1
 KPOINT_SHIFT: 0 0 0
 ELEC_TEMP_TYPE: fermi-dirac
@@ -37,7 +37,7 @@ PRINT_FORCES: 1
 PRINT_ATOMS: 1
 PRINT_EIGEN: 0
 PRINT_DENSITY: 0
-OUTPUT_FILE: H2O_sheet.out
+OUTPUT_FILE: H2O_sheet/H2O_sheet.out
 ***************************************************************************
                              Initialization                                
 ***************************************************************************
@@ -45,7 +45,7 @@ Mesh spacing in x-direction        :  0.202471 (Bohr)
 Mesh spacing in y-direction        :  0.202471 (Bohr)
 Mesh spacing in z direction        :  0.188973 (Bohr)
 Number of symmetry adapted k-points:  2
-Output printed to                  :  H2O_sheet.out
+Output printed to                  :  H2O_sheet/H2O_sheet.out
 Total number of atom types         :  2
 Total number of atoms              :  3
 Total number of electrons          :  8
@@ -64,36 +64,36 @@ Estimated total memory usage       :  298.44 MB
                     Self Consistent Field (SCF#1)                     
 =====================================================================
 Iteration     Free Energy (Ha/atom)   SCF Error        Timing (sec)
-1            -5.6942881670E+00        3.233E-01        19.377
-2            -5.7149135137E+00        6.738E-02        8.517
-3            -5.7150445929E+00        4.539E-02        8.575
-4            -5.7150925294E+00        1.634E-02        7.453
-5            -5.7151119488E+00        3.995E-03        7.705
-6            -5.7151129383E+00        6.736E-04        7.365
-7            -5.7151129491E+00        6.363E-04        6.837
-8            -5.7151130016E+00        7.221E-05        7.160
-9            -5.7151130038E+00        2.419E-05        7.131
-10           -5.7151130033E+00        3.353E-06        6.308
-11           -5.7151129996E+00        2.138E-06        5.949
-12           -5.7151130025E+00        3.747E-07        5.662
+1            -5.6942881670E+00        3.233E-01        17.701
+2            -5.7149135137E+00        6.738E-02        7.862
+3            -5.7150445929E+00        4.539E-02        7.938
+4            -5.7150925294E+00        1.634E-02        6.898
+5            -5.7151119488E+00        3.995E-03        7.194
+6            -5.7151129383E+00        6.736E-04        6.899
+7            -5.7151129491E+00        6.363E-04        6.468
+8            -5.7151130016E+00        7.221E-05        6.599
+9            -5.7151130038E+00        2.419E-05        6.612
+10           -5.7151130033E+00        3.353E-06        5.852
+11           -5.7151129996E+00        2.138E-06        5.662
+12           -5.7151130025E+00        3.747E-07        5.212
 Total number of SCF: 12    
 ====================================================================
                                 Energy                              
 ====================================================================
 Free energy per atom               : -5.7151130025E+00 (Ha/atom)
 Total free energy                  : -1.7145339007E+01 (Ha)
-Band structure energy              : -4.2314629320E+00 (Ha)
+Band structure energy              : -4.2314629324E+00 (Ha)
 Exchange correlation energy        : -4.2225053630E+00 (Ha)
 Self and correction energy         : -3.5815871121E+01 (Ha)
 Entropy*kb*T                       : -1.6280116866E-06 (Ha)
-Fermi level                        : -1.0131803171E-01 (Ha)
-Average force                      :  9.6124091430E-03 (Ha/Bohr)
-Maximum force                      :  1.3401087348E-02 (Ha/Bohr)
-Time for force calculation         :  0.919 (sec)
+Fermi level                        : -1.0131803175E-01 (Ha)
+Average force                      :  9.6124091621E-03 (Ha/Bohr)
+Maximum force                      :  1.3401087377E-02 (Ha/Bohr)
+Time for force calculation         :  0.796 (sec)
 ***************************************************************************
                                Timing info                                 
 ***************************************************************************
-Total walltime                     :  134.361 sec
+Total walltime                     :  115.279 sec
 ___________________________________________________________________________
 
 ***************************************************************************

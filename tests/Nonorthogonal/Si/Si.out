@@ -2,21 +2,25 @@
 *                      M-SPARC v1.0.0 (Feb 03, 2020)                      *
 *   Copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech   *
 *           Distributed under GNU General Public License 3 (GPL)          *
-*                Date: 01-Feb-2020  Start time: 22:48:50                  *
+*                Date: 01-Feb-2020  Start time: 23:53:05                  *
 ***************************************************************************
                            Input parameters                                
 ***************************************************************************
-CELL: 10.260000 10.260000 10.260000 
+CELL: 10.200000 10.200000 10.200000 
+LATVEC:
+0.500000000000000 0.500000000000000 0.000000000000000 
+0.000000000000000 0.500000000000000 0.500000000000000 
+0.500000000000000 0.000000000000000 0.500000000000000 
 FD_GRID: 20 20 20
 FD_ORDER: 12
 BC: P P P
-KPOINT_GRID: 1 1 1
+KPOINT_GRID: 2 2 2
 KPOINT_SHIFT: 0 0 0
 ELEC_TEMP_TYPE: fermi-dirac
-SMEARING: 0.001000000
+SMEARING: 0.000999993
 CHEB_DEGREE: 17
-NSTATES: 24
-EXCHANGE_CORRELATION: LDA_PZ
+NSTATES: 25
+EXCHANGE_CORRELATION: LDA_PW
 CALC_STRESS: 0
 CALC_PRES: 0
 MAXIT_SCF: 100
@@ -37,61 +41,60 @@ PRINT_FORCES: 1
 PRINT_ATOMS: 1
 PRINT_EIGEN: 0
 PRINT_DENSITY: 0
-OUTPUT_FILE: MeshConvergence/Si8-ONCV-0.5.out
+OUTPUT_FILE: Nonorthogonal/Si/Si.out
 ***************************************************************************
                              Initialization                                
 ***************************************************************************
-Mesh spacing                       :  0.513000 (Bohr)
-Number of symmetry adapted k-points:  1
-Output printed to                  :  MeshConvergence/Si8-ONCV-0.5.out
+Mesh spacing                       :  0.510000 (Bohr)
+Number of symmetry adapted k-points:  4
+Output printed to                  :  Nonorthogonal/Si/Si.out
 Total number of atom types         :  1
 Total number of atoms              :  8
 Total number of electrons          :  32
 Atom type 1  (valence electrons)   :  Si 4
-Pseudopotential                    :  Si.psp8
+Pseudopotential                    :  Si_old.psp
 lloc                               :  4
-Pseudocharge radii of atom type 1  :  8.21 8.21 8.21
+Pseudocharge radii of atom type 1  :  9.69 9.69 9.69
 Number of atoms of type 1          :  8
-Estimated total memory usage       :  28.20 MB
+Estimated total memory usage       :  71.17 MB
 =====================================================================
                     Self Consistent Field (SCF#1)                     
 =====================================================================
 Iteration     Free Energy (Ha/atom)   SCF Error        Timing (sec)
-1            -3.8367564551E+00        1.308E-01        1.137
-2            -3.8610221768E+00        6.619E-02        0.216
-3            -3.8662674503E+00        3.171E-02        0.221
-4            -3.8678346905E+00        1.325E-02        0.220
-5            -3.8681113772E+00        4.105E-03        0.217
-6            -3.8681407048E+00        2.577E-03        0.215
-7            -3.8681497144E+00        1.018E-03        0.215
-8            -3.8681511884E+00        5.466E-04        0.215
-9            -3.8681515935E+00        2.024E-04        0.215
-10           -3.8681516499E+00        7.417E-05        0.214
-11           -3.8681516535E+00        5.688E-05        0.205
-12           -3.8681516589E+00        1.915E-05        0.207
-13           -3.8681516596E+00        8.770E-06        0.207
-14           -3.8681516625E+00        4.553E-06        0.207
-15           -3.8681516579E+00        1.954E-06        0.203
-16           -3.8681516657E+00        1.398E-06        0.202
-17           -3.8681516580E+00        4.666E-07        0.202
-Total number of SCF: 17    
+1            -3.8230799833E+00        1.478E-01        25.095
+2            -3.8477254460E+00        5.432E-02        7.324
+3            -3.8514445937E+00        1.685E-02        7.239
+4            -3.8519526052E+00        3.715E-03        7.269
+5            -3.8519755737E+00        1.994E-03        7.184
+6            -3.8519831056E+00        1.655E-03        7.259
+7            -3.8519829754E+00        1.536E-03        7.135
+8            -3.8519753225E+00        2.552E-03        7.195
+9            -3.8519683611E+00        3.325E-03        7.176
+10           -3.8519873404E+00        3.287E-04        7.143
+11           -3.8519874893E+00        4.185E-05        7.097
+12           -3.8519874894E+00        3.297E-05        7.464
+13           -3.8519874913E+00        3.810E-06        7.102
+14           -3.8519874804E+00        7.280E-06        6.975
+15           -3.8519874988E+00        3.167E-06        6.991
+16           -3.8519874866E+00        3.404E-07        6.838
+Total number of SCF: 16    
 ====================================================================
                                 Energy                              
 ====================================================================
-Free energy per atom               : -3.8681516580E+00 (Ha/atom)
-Total free energy                  : -3.0945213264E+01 (Ha)
-Band structure energy              :  8.6373210897E-01 (Ha)
-Exchange correlation energy        : -9.6732977954E+00 (Ha)
-Self and correction energy         : -1.0216573889E+02 (Ha)
-Entropy*kb*T                       : -2.6442475599E-03 (Ha)
-Fermi level                        :  2.0580775991E-01 (Ha)
-Average force                      :  2.6756769432E-01 (Ha/Bohr)
-Maximum force                      :  6.0742915366E-01 (Ha/Bohr)
-Time for force calculation         :  0.402 (sec)
+Free energy per atom               : -3.8519874866E+00 (Ha/atom)
+Total free energy                  : -3.0815899893E+01 (Ha)
+Band structure energy              :  3.8212168927E+00 (Ha)
+Exchange correlation energy        : -1.0622388960E+01 (Ha)
+Self and correction energy         : -1.0227200710E+02 (Ha)
+Entropy*kb*T                       : -1.4839235247E-03 (Ha)
+Fermi level                        :  4.0726126009E-01 (Ha)
+Average force                      :  2.8310905449E-01 (Ha/Bohr)
+Maximum force                      :  2.8310936389E-01 (Ha/Bohr)
+Time for force calculation         :  1.706 (sec)
 ***************************************************************************
                                Timing info                                 
 ***************************************************************************
-Total walltime                     :  5.941 sec
+Total walltime                     :  143.896 sec
 ___________________________________________________________________________
 
 ***************************************************************************
