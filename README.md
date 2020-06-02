@@ -1,6 +1,6 @@
 ## M-SPARC Usage  
 ### (1) Brief:  
-Matlab-Simulation Package for Ab-initio Real-space Calculations (M-SPARC) is a real-space code for performing electronic structure calculations based on Kohn-Sham Density Functional Theory (DFT). Its primary purpose is the rapid development and testing of new algorithms and methods within DFT. The main features of M-SPARC v1.0.0 include  
+Matlab-Simulation Package for Ab-initio Real-space Calculations (M-SPARC) is a real-space code for performing electronic structure calculations based on Kohn-Sham Density Functional Theory (DFT). Its primary purpose is the rapid development and testing of new algorithms and methods within DFT. The main features of the current version of M-SPARC include  
 
 * Boundary conditions for crystals, surfaces, wires, and molecules.  
 * Calculation of ground state energy, atomic forces, and stress tensor.  
@@ -8,6 +8,8 @@ Matlab-Simulation Package for Ab-initio Real-space Calculations (M-SPARC) is a r
 * Structural relaxation and molecular dynamics (MD).  
 * LDA and GGA exchange correlation functionals.  
 * ONCV and TM pseudopotentials in psp8 (ABINIT) format.  
+
+**Users of M-SPARC are expected to cite the following publication: Xu, Q., Sharma, A. and Suryanarayana, P., 2020. M-SPARC: Matlab-Simulation Package for Ab-initio Real-space Calculations. SoftwareX, 11, p.100423.**
 
 ### (2) Input files:  
 The required input files to run a simulation with M-SPARC are (with shared names)  
