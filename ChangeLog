@@ -1,4 +1,10 @@
 ----------------
+Jun 20, 2020
+Name: Qimen Xu
+* Use max and min of S.EigVal instead of assuming it's ordered ascendingly.
+
+
+----------------
 Jun 01, 2020
 Name: Qimen Xu
 * Correct the relative src/ path run_examples.m in tests/examples.
