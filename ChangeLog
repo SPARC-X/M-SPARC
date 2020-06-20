@@ -1,4 +1,17 @@
 ----------------
+Jun 20, 2020
+Name: Qimen Xu
+* Use max and min of S.EigVal instead of assuming it's ordered ascendingly.
+
+
+----------------
+Jun 01, 2020
+Name: Qimen Xu
+* Correct the relative src/ path run_examples.m in tests/examples.
+* Modify readPseudopot.m to be consistent with SPARC, so that it can handle special psp8 pseudopotentials (e.g., He with lloc = 0).
+
+
+----------------
 Feb 03, 2020
 Name: Qimen Xu
 * Update documentation and README.md, add link to SG15 ONCV potentials.

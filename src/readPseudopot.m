@@ -26,7 +26,8 @@ textscan(fid,'%s',1,'delimiter','\n');
 A = textscan(fid,'%f %f %f %f %f %f') ;
 
 lmax = A{1,3};
-lloc = A{1,4}; lloc = 4; % forcing nonlocal component to 4!
+lloc = A{1,4}; 
+% lloc = 4; % forcing nonlocal component to 4!
 mmax = A{1,5};
 
 textscan(fid,'%s',2,'delimiter','\n') ;
@@ -58,7 +59,7 @@ while l<=lmax
 	l = l+1;
 end
 
-if lloc > lmax
+if lloc > lmax || l == 4
 	fscanf(fid,'%f',1) ;
 	A = fscanf(fid,'%g',[3,mmax]) ;
 	r = A(2,:)';
