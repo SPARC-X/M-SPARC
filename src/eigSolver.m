@@ -63,7 +63,7 @@ if S.parallel ~= 1
 				a0(ks) = real(eigs(Hfun,S.N,1,'sr',opts)) - 0.1;
 			else
 				% For subsequent relaxation steps use lowest eigenvalue
-				a0(ks) = S.EigVal(1,ks);
+				a0(ks) = min(S.EigVal(:,ks));
 			end
 			% Always use this on every first SCF of relaxation
 			%lambda_cutoff(ks) = 0.5 * (bup(ks) + a0(ks));
@@ -78,11 +78,11 @@ if S.parallel ~= 1
 					bup(ks) = real(bup(ks)) * 1.01;
 				end
 				% Lower bound
-				a0(ks) = S.EigVal(1,ks);
+				a0(ks) = min(S.EigVal(:,ks));
 			end
 			% Set the filter cut off
 			%S.lambda_f + log10(1e6-1)/S.bet + 0.5; 
-			%lambda_cutoff(ks) = S.EigVal(S.Nev,ks) + 0.10; 
+			%lambda_cutoff(ks) = max(S.EigVal(:,ks)) + 0.10; 
 		end
 
 		if count == 1 && S.ForceCount == 1
@@ -90,7 +90,7 @@ if S.parallel ~= 1
 		else
 			% Set the filter cut off
 			%S.lambda_f + log10(1e6-1)/S.bet + 0.5; 
-			lambda_cutoff(ks) = S.EigVal(S.Nev,ks) + 0.10; 
+			lambda_cutoff(ks) = max(S.EigVal(:,ks)) + 0.10; 
 		end
 		
 		% fprintf('filter cutoff = %f, lower bound = %f, upper bound = %f\n',lambda_cutoff(ks),a0(ks),bup(ks));
@@ -161,7 +161,7 @@ else
 				a0(ks) = real(eigs(Hfun,S.N,1,'sr',opts)) - 0.1;
 			else
 				% For subsequent relaxation steps use lowest eigenvalue
-				a0(ks) = S.EigVal(1,ks);
+				a0(ks) = min(S.EigVal(:,ks));
 			end
 			% Always use this on every first SCF of relaxation
 			%lambda_cutoff(ks) = 0.5 * (bup(ks) + a0(ks));
@@ -176,11 +176,11 @@ else
 					bup(ks) = real(bup(ks)) * 1.01;
 				end
 				% Lower bound
-				a0(ks) = S.EigVal(1,ks);
+				a0(ks) = min(S.EigVal(:,ks));
 			end
 			% Set the filter cut off
 			%S.lambda_f + log10(1e6-1)/S.bet + 0.5; 
-			%lambda_cutoff(ks) = S.EigVal(S.Nev,ks) + 0.10; 
+			%lambda_cutoff(ks) = max(S.EigVal(:,ks)) + 0.10; 
 		end
 		
 		if count == 1 && S.ForceCount == 1
@@ -188,7 +188,7 @@ else
 		else
 			% Set the filter cut off
 			%S.lambda_f + log10(1e6-1)/S.bet + 0.5; 
-			lambda_cutoff(ks) = S.EigVal(S.Nev,ks) + 0.10; 
+			lambda_cutoff(ks) = max(S.EigVal(:,ks)) + 0.10; 
 		end
 		
 		% fprintf('filter cutoff = %f, lower bound = %f, upper bound = %f\n',lambda_cutoff(ks),a0(ks),bup(ks));
