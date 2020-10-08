@@ -1,4 +1,10 @@
 ----------------
+Oct 07, 2020
+Name: Qimen Xu
+* Modify pseudopotential reading to support TM potentials.
+
+
+----------------
 Jul 27, 2020
 Name: Qimen Xu
 * Fix the atom type in the cnt.ion file at tests/IllustrativeExamples/CNT/, the answer of this test is not changed.

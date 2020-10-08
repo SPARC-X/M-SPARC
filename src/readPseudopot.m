@@ -39,9 +39,9 @@ end
 textscan(fid,'%s',2,'delimiter','\n') ;
 
 Pot = repmat(struct([]), lmax+1, 1);
-l = 0;
-while l<=lmax
-	fscanf(fid,'%f',1) ;
+
+l_read = fscanf(fid,'%f',1);
+for l = 0:lmax
 	if l ~= lloc
 		A = fscanf(fid,'%f',nproj(l+1)) ;
 		Pot(l+1).gamma_Jl = A(:); 
@@ -52,18 +52,21 @@ while l<=lmax
 		Pot(l+1).proj(2:end,:) = Pot(l+1).proj(2:end,:)./repmat(r(2:end),1,nproj(l+1));
 		Pot(l+1).proj(1,:) = Pot(l+1).proj(2,:);
 	else
+		textscan(fid,'%s',1,'delimiter','\n','MultipleDelimsAsOne',0); % skip current line  
 		A = fscanf(fid,'%g',[3,mmax]);
 		r = A(2,:)' ;
 		Vloc = A(3,:)';
 	end
-	l = l+1;
+	l_read = fscanf(fid,'%f',1);
 end
 
-if lloc > lmax || l == 4
-	fscanf(fid,'%f',1) ;
+if lloc > lmax || l_read == 4
 	A = fscanf(fid,'%g',[3,mmax]) ;
 	r = A(2,:)';
 	Vloc = A(3,:)';
+else
+	% move back file pointer 4 columns
+	fseek(fid, -4, 'cof');
 end
 
 uu = zeros(mmax,1);
@@ -96,4 +99,5 @@ S.Atm(ityp).nproj = nproj;
 S.Atm(ityp).r_grid_rho = r_grid_rho;
 S.Atm(ityp).rho_isolated_guess = rho_isolated_guess;
 
+fclose(fid);
 end
