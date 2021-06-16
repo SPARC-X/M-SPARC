@@ -1,4 +1,10 @@
 ----------------
+June 16, 2021
+Name: Shashikant Kumar
+* Added the testing suite and the python framework
+* Deleted the old "tests" folder
+
+----------------
 Oct 07, 2020
 Name: Qimen Xu
 * Modify pseudopotential reading to support TM potentials.

@@ -1,0 +1,113 @@
+***************************************************************************
+*                          M-SPARC (Feb 20, 2020)                         *
+*   Copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech   *
+*           Distributed under GNU General Public License 3 (GPL)          *
+*                Date: 11-May-2021  Start time: 21:08:41                  *
+***************************************************************************
+                           Input parameters                                
+***************************************************************************
+CELL: 10.260000 10.260000 10.260000 
+FD_GRID: 51 51 51
+FD_ORDER: 12
+BC: P P P
+KPOINT_GRID: 1 1 1
+KPOINT_SHIFT: 0 0 0
+ELEC_TEMP_TYPE: gaussian
+SMEARING: 0.007349864
+CHEB_DEGREE: 35
+NSTATES: 30
+EXCHANGE_CORRELATION: LDA_PZ
+CALC_STRESS: 1
+MAXIT_SCF: 100
+TOL_SCF: 1.00E-06
+TOL_POISSON: 1.00E-08
+TOL_LANCZOS: 1.00E-02
+TOL_PSEUDOCHARGE: 1.00E-08
+MIXING_VARIABLE: potential
+MIXING_PRECOND: none
+MIXING_PARAMETER: 0.30
+MIXING_HISTORY: 7
+PULAY_FREQUENCY: 1
+PULAY_RESTART_FREQ: 0
+REFERENCE_CUTOFF: 0.50
+RHO_TRIGGER: 4
+FIX_RAND: 0
+PRINT_FORCES: 1
+PRINT_ATOMS: 1
+PRINT_EIGEN: 0
+PRINT_DENSITY: 0
+OUTPUT_FILE: CuSi7.out
+***************************************************************************
+                             Initialization                                
+***************************************************************************
+Mesh spacing                       :  0.201176 (Bohr)
+Number of symmetry adapted k-points:  1
+Output printed to                  :  CuSi7.out
+Total number of atom types         :  2
+Total number of atoms              :  8
+Total number of electrons          :  47
+Atom type 1  (valence electrons)   :  Cu 19
+Pseudopotential                    :  Cu.psp8
+lloc                               :  4
+Pseudocharge radii of atom type 1  :  6.64 6.64 6.64
+Number of atoms of type 1          :  1
+Atom type 2  (valence electrons)   :  Si 4
+Pseudopotential                    :  Si.psp8
+lloc                               :  4
+Pseudocharge radii of atom type 2  :  6.64 6.64 6.64
+Number of atoms of type 2          :  7
+Estimated total memory usage       :  491.85 MB
+=====================================================================
+                    Self Consistent Field (SCF#1)                     
+=====================================================================
+Iteration     Free Energy (Ha/atom)   SCF Error        Timing (sec)
+1            -2.6071564384E+01        2.146E-01        47.955
+2            -2.6140898084E+01        1.588E-01        12.603
+3            -2.6181326428E+01        5.799E-02        12.578
+4            -2.6188004209E+01        2.368E-02        12.434
+5            -2.6189013409E+01        1.508E-02        12.503
+6            -2.6189636630E+01        5.139E-03        12.225
+7            -2.6189726095E+01        3.678E-03        11.945
+8            -2.6189788929E+01        1.686E-03        12.113
+9            -2.6189804269E+01        1.152E-03        11.825
+10           -2.6189810726E+01        6.045E-04        11.838
+11           -2.6189813096E+01        3.094E-04        11.802
+12           -2.6189814024E+01        1.048E-04        11.632
+13           -2.6189814320E+01        5.048E-05        11.883
+14           -2.6189814419E+01        2.089E-05        11.326
+15           -2.6189814459E+01        9.127E-06        11.975
+16           -2.6189814474E+01        3.901E-06        12.185
+17           -2.6189814473E+01        4.582E-06        12.053
+18           -2.6189814479E+01        3.464E-06        10.996
+19           -2.6189814480E+01        1.278E-06        11.027
+20           -2.6189814485E+01        6.225E-07        10.883
+Total number of SCF: 20    
+====================================================================
+                                Energy                              
+====================================================================
+Free energy per atom               : -2.6189814485E+01 (Ha/atom)
+Total free energy                  : -2.0951851588E+02 (Ha)
+Band structure energy              : -2.1531648518E+01 (Ha)
+Exchange correlation energy        : -2.5488427339E+01 (Ha)
+Self and correction energy         : -2.7815191058E+02 (Ha)
+Entropy*kb*T                       : -1.0645662335E-02 (Ha)
+Fermi level                        :  1.9352291241E-01 (Ha)
+Average force                      :  2.6734961203E-01 (Ha/Bohr)
+Maximum force                      :  5.9348686756E-01 (Ha/Bohr)
+Time for force calculation         :  3.493 (sec)
+Pressure                           :  2.5289155906E+01 (GPa)
+Max stress                         :  4.1574566967E+01 (GPa)
+Time for stress calculation        :  9.284 (sec)
+***************************************************************************
+                               Timing info                                 
+***************************************************************************
+Total walltime                     :  297.150 sec
+___________________________________________________________________________
+
+***************************************************************************
+*             Material Physics & Mechanics Group, Georgia Tech            *
+*                       PI: Phanish Suryanarayana                         *
+*                Main Developers: Qimen Xu, Abhiraj Sharma                *
+*     Acknowledgements: U.S. DOE (DE-SC0019410); NSF (1333500,1553212)    *
+***************************************************************************
+                                                                           

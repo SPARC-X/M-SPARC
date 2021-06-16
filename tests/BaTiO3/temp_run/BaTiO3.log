@@ -1,0 +1,630 @@
+
+                            < M A T L A B (R) >
+                  Copyright 1984-2019 The MathWorks, Inc.
+                  R2019a (9.6.0.1072779) 64-bit (glnxa64)
+                               March 8, 2019
+
+ 
+To get started, type doc.
+For product information, visit www.mathworks.com.
+ 
+
+ Reading .inpt file ...
+
+
+<INPT>
+# $ cat BaTiO3.inpt
+# nprocs: 1
+# Test: BaTiO3 #
+CELL: 7.63 7.63 7.63
+MESH_SPACING: 0.20
+BC: P P P
+EXCHANGE_CORRELATION: LDA_PZ
+TOL_SCF: 1e-6
+PRINT_FORCES: 1
+PRINT_ATOMS: 1
+CALC_STRESS: 1
+
+<\INPT>
+
+ Reading .ion file ...
+ Number of atom types : 3
+ Total number of atoms: 5
+ Default atomic mass for Ba is 137.327000
+ Default atomic mass for Ti is 47.867000
+ Default atomic mass for O is 15.999400
+ pseudo_dir # 1 = Ba.psp8
+ pseudo_dir # 2 = Ti.psp8
+ pseudo_dir # 3 = O.psp8
+
+ COORD:
+   7.540463013371621   7.248833728543416   7.518607464589964
+   3.725768164762889   3.878328962888697   3.426961342823767
+   4.052740031589397   7.190115020153727   3.856885000727702
+   7.090600941523509   3.476460666072041   3.727807248988862
+   3.601707961096307   3.648353082729004   0.199860166191001
+
+   0.734582359528700
+
+   7.902488320214100
+
+   2.428066230336400
+
+ kpoint grid before symmetry:
+     0     0     0
+
+ kpoint grid after symmetry:
+     0     0     0
+
+## Chebyshev polynomial degree not provided, finding npl ...
+## Based on the mesh size, npl is set to: 35
+## Number of states not provided, finding Nev ...
+## Based on the number of electrons, Nev is set to: 29
+## Poisson tolerance not provided, choosing poisson_tol ...
+## poisson_tol is set to: 1.000e-08
+## Pseudocharge tolerance not provided, choosing pseudocharge_tol ...
+## pseudocharge_tol is set to: 1.000e-08
+ Creating differentiation matrices ...
+ Done. (1.462 sec)
+
+ Estimated memory usage:
+ Total:  201.78 MB
+ orbitals            :   48.56 MB
+ sparse matrices     :  141.50 MB
+ global-size vectors :    5.86 MB
+ mixing histories    :    5.86 MB
+
+ Finding rb for Ba ...
+ rb = {3.213 3.213 3.213}, int_b = -10.000207928053673, err_rb = 2.079e-04
+ rb = {3.413 3.413 3.413}, int_b = -10.000115109433649, err_rb = 1.151e-04
+ rb = {3.614 3.614 3.614}, int_b = -10.000071410284116, err_rb = 7.141e-05
+ rb = {3.815 3.815 3.815}, int_b = -10.000049792255947, err_rb = 4.979e-05
+ rb = {4.016 4.016 4.016}, int_b = -10.000049792255947, err_rb = 4.979e-05
+ rb = {4.217 4.217 4.217}, int_b = -10.000040337578838, err_rb = 4.034e-05
+ rb = {4.417 4.417 4.417}, int_b = -10.000033731599146, err_rb = 3.373e-05
+ rb = {4.618 4.618 4.618}, int_b = -10.000030377823068, err_rb = 3.038e-05
+ rb = {4.819 4.819 4.819}, int_b = -10.000024223718695, err_rb = 2.422e-05
+ rb = {5.020 5.020 5.020}, int_b = -10.000021432293092, err_rb = 2.143e-05
+ rb = {5.221 5.221 5.221}, int_b = -10.000018461517143, err_rb = 1.846e-05
+ rb = {5.421 5.421 5.421}, int_b = -10.000016932716798, err_rb = 1.693e-05
+ rb = {5.622 5.622 5.622}, int_b = -10.000014738200258, err_rb = 1.474e-05
+ rb = {5.823 5.823 5.823}, int_b = -10.000014338261050, err_rb = 1.434e-05
+ rb = {6.024 6.024 6.024}, int_b = -10.000010534376059, err_rb = 1.053e-05
+ rb = {6.224 6.224 6.224}, int_b = -9.999998648616318, err_rb = 1.351e-06
+ rb = {6.425 6.425 6.425}, int_b = -10.000000281741000, err_rb = 2.817e-07
+ rb = {6.626 6.626 6.626}, int_b = -9.999999943831892, err_rb = 5.617e-08
+ rb = {6.827 6.827 6.827}, int_b = -10.000000008073657, err_rb = 8.074e-09
+ rb = {6.827 6.827 6.827}
+ Finding rb for Ti ...
+ rb = {2.811 2.811 2.811}, int_b = -12.000052450320558, err_rb = 5.245e-05
+ rb = {3.012 3.012 3.012}, int_b = -12.000041245969680, err_rb = 4.125e-05
+ rb = {3.213 3.213 3.213}, int_b = -12.000032496428641, err_rb = 3.250e-05
+ rb = {3.413 3.413 3.413}, int_b = -12.000026235252305, err_rb = 2.624e-05
+ rb = {3.614 3.614 3.614}, int_b = -12.000021781405104, err_rb = 2.178e-05
+ rb = {3.815 3.815 3.815}, int_b = -12.000018697196280, err_rb = 1.870e-05
+ rb = {4.016 4.016 4.016}, int_b = -12.000016579941548, err_rb = 1.658e-05
+ rb = {4.217 4.217 4.217}, int_b = -12.000016549038314, err_rb = 1.655e-05
+ rb = {4.417 4.417 4.417}, int_b = -12.000015667688107, err_rb = 1.567e-05
+ rb = {4.618 4.618 4.618}, int_b = -12.000015642751585, err_rb = 1.564e-05
+ rb = {4.819 4.819 4.819}, int_b = -12.000012907427879, err_rb = 1.291e-05
+ rb = {5.020 5.020 5.020}, int_b = -12.000012063332919, err_rb = 1.206e-05
+ rb = {5.221 5.221 5.221}, int_b = -12.000010825315593, err_rb = 1.083e-05
+ rb = {5.421 5.421 5.421}, int_b = -12.000010397803615, err_rb = 1.040e-05
+ rb = {5.622 5.622 5.622}, int_b = -12.000009383527098, err_rb = 9.384e-06
+ rb = {5.823 5.823 5.823}, int_b = -12.000009518177169, err_rb = 9.518e-06
+ rb = {6.024 6.024 6.024}, int_b = -12.000007241669071, err_rb = 7.242e-06
+ rb = {6.224 6.224 6.224}, int_b = -11.999999068239596, err_rb = 9.318e-07
+ rb = {6.425 6.425 6.425}, int_b = -12.000000194253087, err_rb = 1.943e-07
+ rb = {6.626 6.626 6.626}, int_b = -11.999999961348781, err_rb = 3.865e-08
+ rb = {6.827 6.827 6.827}, int_b = -12.000000005545369, err_rb = 5.545e-09
+ rb = {6.827 6.827 6.827}
+ Finding rb for O ...
+ rb = {1.807 1.807 1.807}, int_b = -6.000058339349729, err_rb = 5.834e-05
+ rb = {2.008 2.008 2.008}, int_b = -6.000058339349729, err_rb = 5.834e-05
+ rb = {2.209 2.209 2.209}, int_b = -6.000048458269158, err_rb = 4.846e-05
+ rb = {2.409 2.409 2.409}, int_b = -6.000039616613607, err_rb = 3.962e-05
+ rb = {2.610 2.610 2.610}, int_b = -6.000033394464825, err_rb = 3.339e-05
+ rb = {2.811 2.811 2.811}, int_b = -6.000028874552454, err_rb = 2.887e-05
+ rb = {3.012 3.012 3.012}, int_b = -6.000025513589451, err_rb = 2.551e-05
+ rb = {3.213 3.213 3.213}, int_b = -6.000022957814942, err_rb = 2.296e-05
+ rb = {3.413 3.413 3.413}, int_b = -6.000020967530467, err_rb = 2.097e-05
+ rb = {3.614 3.614 3.614}, int_b = -6.000019660972169, err_rb = 1.966e-05
+ rb = {3.815 3.815 3.815}, int_b = -6.000019042149966, err_rb = 1.904e-05
+ rb = {4.016 4.016 4.016}, int_b = -6.000018895726344, err_rb = 1.890e-05
+ rb = {4.217 4.217 4.217}, int_b = -6.000021317766272, err_rb = 2.132e-05
+ rb = {4.417 4.417 4.417}, int_b = -6.000021707741581, err_rb = 2.171e-05
+ rb = {4.618 4.618 4.618}, int_b = -6.000022987396200, err_rb = 2.299e-05
+ rb = {4.819 4.819 4.819}, int_b = -6.000019497282093, err_rb = 1.950e-05
+ rb = {5.020 5.020 5.020}, int_b = -6.000018790493403, err_rb = 1.879e-05
+ rb = {5.221 5.221 5.221}, int_b = -6.000017219730370, err_rb = 1.722e-05
+ rb = {5.421 5.421 5.421}, int_b = -6.000016793353034, err_rb = 1.679e-05
+ rb = {5.622 5.622 5.622}, int_b = -6.000015278942370, err_rb = 1.528e-05
+ rb = {5.823 5.823 5.823}, int_b = -6.000015527112404, err_rb = 1.553e-05
+ rb = {6.024 6.024 6.024}, int_b = -6.000011774675237, err_rb = 1.177e-05
+ rb = {6.224 6.224 6.224}, int_b = -5.999998485462069, err_rb = 1.515e-06
+ rb = {6.425 6.425 6.425}, int_b = -6.000000315754949, err_rb = 3.158e-07
+ rb = {6.626 6.626 6.626}, int_b = -5.999999937145611, err_rb = 6.285e-08
+ rb = {6.827 6.827 6.827}, int_b = -6.000000009007773, err_rb = 9.008e-09
+ rb = {6.827 6.827 6.827}
+
+ ###############################################################
+ Relaxation step number: 1 
+
+ Starting pseudocharge generation and self energy calculation...
+ Integration b = 40.000000015727
+
+ Integration b_ref = 40.000000000034
+
+ ****************************************
+ *          Eself_ref = 628.514645       *
+ ****************************************
+ Done. (1.139059 s)
+ Time for b calculation: 1.154 seconds.
+
+ Starting calculating nonlocal projectors ...
+ Done. (0.557869 s)
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+ Starting SCF iteration...
+ AAR converged to a relative residual of 3.06664e-09 in 73 iterations.
+ Poisson problem took 1.731526s
+ ============================================= 
+ Relaxation iteration:  1
+ SCF iteration number:  1, Chebyshev cycle: 1 
+ ============================================= 
+ Fermi energy = 3.682046
+ This SCF iteration took 5.249 s.
+
+ ============================================= 
+ Relaxation iteration:  1
+ SCF iteration number:  1, Chebyshev cycle: 2 
+ ============================================= 
+ Fermi energy = 0.530606
+ This SCF iteration took 3.539 s.
+
+ ============================================= 
+ Relaxation iteration:  1
+ SCF iteration number:  1, Chebyshev cycle: 3 
+ ============================================= 
+ Fermi energy = 0.325456
+ This SCF iteration took 3.447 s.
+
+ ============================================= 
+ Relaxation iteration:  1
+ SCF iteration number:  1, Chebyshev cycle: 4 
+ ============================================= 
+ Fermi energy = 0.311077
+ AAR converged to a relative residual of 3.632e-09 in 67 iterations.
+ Poisson problem took 0.660608s
+ Escc = 4.09294228
+ Etot = -130.69471431
+ Eatom = -26.13894286
+ Error in SCF iteration: 1.6864e-01 
+ This SCF iteration took 4.561 s.
+
+ ========================= 
+ Relaxation iteration:  1 
+ SCF iteration number:  2 
+ ========================= 
+ Fermi energy = 0.274433
+ AAR converged to a relative residual of 3.93092e-09 in 67 iterations.
+ Poisson problem took 0.725653s
+ Escc = 1.13245764
+ Etot = -131.25798831
+ Eatom = -26.25159766
+ Error in SCF iteration: 6.7076e-02 
+ This SCF iteration took 4.270 s.
+
+ ========================= 
+ Relaxation iteration:  1 
+ SCF iteration number:  3 
+ ========================= 
+ Fermi energy = 0.288453
+ AAR converged to a relative residual of 9.53873e-09 in 62 iterations.
+ Poisson problem took 0.671433s
+ Escc = 0.26454133
+ Etot = -131.30258630
+ Eatom = -26.26051726
+ Error in SCF iteration: 2.6468e-02 
+ This SCF iteration took 4.181 s.
+
+ ========================= 
+ Relaxation iteration:  1 
+ SCF iteration number:  4 
+ ========================= 
+ Fermi energy = 0.283636
+ AAR converged to a relative residual of 5.12517e-09 in 61 iterations.
+ Poisson problem took 0.666403s
+ Escc = 0.00684613
+ Etot = -131.30986019
+ Eatom = -26.26197204
+ Error in SCF iteration: 1.4362e-02 
+ This SCF iteration took 4.342 s.
+
+ ========================= 
+ Relaxation iteration:  1 
+ SCF iteration number:  5 
+ ========================= 
+ Fermi energy = 0.286694
+ AAR converged to a relative residual of 3.34536e-09 in 61 iterations.
+ Poisson problem took 0.597359s
+ Escc = -0.03761954
+ Etot = -131.31357573
+ Eatom = -26.26271515
+ Error in SCF iteration: 6.4380e-03 
+ This SCF iteration took 4.117 s.
+
+ ========================= 
+ Relaxation iteration:  1 
+ SCF iteration number:  6 
+ ========================= 
+ Fermi energy = 0.285674
+ AAR converged to a relative residual of 3.43408e-09 in 55 iterations.
+ Poisson problem took 0.563515s
+ Escc = -0.02663144
+ Etot = -131.31432085
+ Eatom = -26.26286417
+ Error in SCF iteration: 1.8072e-03 
+ This SCF iteration took 4.002 s.
+
+ ========================= 
+ Relaxation iteration:  1 
+ SCF iteration number:  7 
+ ========================= 
+ Fermi energy = 0.284702
+ AAR converged to a relative residual of 6.39292e-09 in 49 iterations.
+ Poisson problem took 0.515442s
+ Escc = 0.00968365
+ Etot = -131.31436485
+ Eatom = -26.26287297
+ Error in SCF iteration: 6.9051e-04 
+ This SCF iteration took 4.057 s.
+
+ ========================= 
+ Relaxation iteration:  1 
+ SCF iteration number:  8 
+ ========================= 
+ Fermi energy = 0.284904
+ AAR converged to a relative residual of 4.88436e-09 in 43 iterations.
+ Poisson problem took 0.454772s
+ Escc = -0.00134128
+ Etot = -131.31437326
+ Eatom = -26.26287465
+ Error in SCF iteration: 1.0513e-04 
+ This SCF iteration took 4.011 s.
+
+ ========================= 
+ Relaxation iteration:  1 
+ SCF iteration number:  9 
+ ========================= 
+ Fermi energy = 0.284898
+ AAR converged to a relative residual of 2.46425e-09 in 37 iterations.
+ Poisson problem took 0.363575s
+ Escc = 0.00010683
+ Etot = -131.31437323
+ Eatom = -26.26287465
+ Error in SCF iteration: 6.8969e-05 
+ This SCF iteration took 3.898 s.
+
+ ========================= 
+ Relaxation iteration:  1 
+ SCF iteration number: 10 
+ ========================= 
+ Fermi energy = 0.284892
+ AAR converged to a relative residual of 9.14767e-09 in 34 iterations.
+ Poisson problem took 0.337155s
+ Escc = -0.00011958
+ Etot = -131.31437324
+ Eatom = -26.26287465
+ Error in SCF iteration: 1.3694e-05 
+ This SCF iteration took 3.766 s.
+
+ ========================= 
+ Relaxation iteration:  1 
+ SCF iteration number: 11 
+ ========================= 
+ Fermi energy = 0.284889
+ AAR converged to a relative residual of 2.11994e-09 in 31 iterations.
+ Poisson problem took 0.325067s
+ Escc = -0.00003856
+ Etot = -131.31437332
+ Eatom = -26.26287466
+ Error in SCF iteration: 6.5201e-06 
+ This SCF iteration took 3.816 s.
+
+ ========================= 
+ Relaxation iteration:  1 
+ SCF iteration number: 12 
+ ========================= 
+ Fermi energy = 0.284890
+ AAR converged to a relative residual of 5.86249e-09 in 25 iterations.
+ Poisson problem took 0.264263s
+ Escc = -0.00004974
+ Etot = -131.31437324
+ Eatom = -26.26287465
+ Error in SCF iteration: 2.7424e-06 
+ This SCF iteration took 3.822 s.
+
+ ========================= 
+ Relaxation iteration:  1 
+ SCF iteration number: 13 
+ ========================= 
+ Fermi energy = 0.284889
+ AAR converged to a relative residual of 3.24618e-09 in 25 iterations.
+ Poisson problem took 0.263602s
+ Escc = -0.00000470
+ Etot = -131.31437330
+ Eatom = -26.26287466
+ Error in SCF iteration: 6.3658e-07 
+ This SCF iteration took 3.803 s.
+
+
+ Finished SCF iteration in 13 steps!
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+
+ **********************************************************
+ *          Energy per unit cell = -131.314373298 Ha.       *
+ *          Energy per atom = -26.262874660 Ha.            *
+ **********************************************************
+
+ Starting atomic force calculation ... 
+ local force calculation: 1.780 s
+ ***********************************************************
+ *                      Atomic Force                       *
+ ***********************************************************
+ Drift free forces (Ha/Bohr):
+  -0.003986846917572   0.001418387674320  -0.026090256253881
+   0.092583840795575   0.184238953949265  -0.177398062316037
+   0.012673608361208  -0.073429542332974   0.080560501114696
+  -0.034009912488633  -0.082205288003443   0.058526796039896
+  -0.067260689750578  -0.030022511287168   0.064401021415326
+
+ Max magnitude of forces (Ha/Bohr):   0.272003368071545
+
+
+ Time for calculating forces: 2.257881 s.
+
+["Stress in GPa"
+
+
+] -25.959785392465211   5.759465610720095  -3.052351865311383
+   5.759465610720095 -28.054665354433919   2.112450344188641
+  -3.052351865311383   2.112450344188641 -39.303963582377733
+
+
+ Time for calculating stress: 6.011846 s.
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+ Final atomic positions (Cartesian) are as follows:
+  7.540463 	  7.248834 	  7.518607 
+  3.725768 	  3.878329 	  3.426961 
+  4.052740 	  7.190115 	  3.856885 
+  7.090601 	  3.476461 	  3.727807 
+  3.601708 	  3.648353 	  0.199860 
+
+ Run-time of the program: 79.895820 seconds
+
+ans = 
+
+  struct with fields:
+
+                  cell_typ: 1
+                   lat_vec: [3x3 double]
+                  metric_T: [3x3 double]
+                    grad_T: [3x3 double]
+                    lapc_T: [3x3 double]
+                      Jacb: 1
+                        L1: 7.630000000000000
+                        L2: 7.630000000000000
+                        L3: 7.630000000000000
+                        Nx: 38
+                        Ny: 38
+                        Nz: 38
+                         N: 54872
+                      ecut: -1
+              mesh_spacing: 0.200000000000000
+                   kptgrid: [0 0 0]
+                  kptshift: [0 0 0]
+                      nkpt: [1 1 1]
+                     tnkpt: 1
+                      wkpt: 1
+                        BC: 2
+                       BCx: 0
+                       BCy: 0
+                       BCz: 0
+                      isBS: 0
+                   lattice: 'undefined'
+                   SCF_tol: 1.000000000000000e-06
+                       Nev: 29
+               poisson_tol: 1.000000000000000e-08
+          pseudocharge_tol: 1.000000000000000e-08
+                       Cst: 27.211386245987999
+              Ha_Bohr3_GPa: 2.942101569650548e+04
+                        kB: 3.166811563455600e-06
+               elec_T_type: 1
+                      Temp: 2.320903624310025e+03
+                       bet: 1.360569312299400e+02
+                       npl: 35
+                       FDn: 6
+                    rc_ref: 0.500000000000000
+              max_relax_it: 100
+                dbg_switch: 0
+                        xc: 1
+                 Nelectron: 40
+                     n_typ: 3
+                TimeRevSym: 1
+                  spin_typ: 0
+                     nspin: 1
+              CheFSI_Optmz: 0
+          chefsibound_flag: 0
+               FixRandSeed: 0
+                rhoTrigger: 4
+                 NetCharge: 0
+                 MAXIT_SCF: 100
+                 MINIT_SCF: 3
+             MAXIT_POISSON: 1000
+            accuracy_level: -1
+     target_force_accuracy: -1
+    target_energy_accuracy: -1
+                 TOL_RELAX: 5.000000000000000e-04
+               TOL_LANCZOS: 0.010000000000000
+               precond_tol: 4.031641274238227e-05
+               precond_kTF: 1
+            precond_thresh: 0.250000000000000
+            precond_fitpow: 2
+          precond_resta_q0: 1.360000000000000
+          precond_resta_Rs: 2.760000000000000
+            MixingVariable: 1
+             MixingPrecond: 0
+                  Pf_guess: []
+             MixingHistory: 7
+           MixingParameter: 0.300000000000000
+     MixingParameterSimple: 0.300000000000000
+            PulayFrequency: 1
+          PulayRestartFreq: 0
+                    TWtime: 1.000000000000000e+09
+                 RelaxFlag: 0
+                 RelaxMeth: 'LBFGS'
+            max_dilatation: 1.200000000000000
+            TOL_RELAX_CELL: 0.010000000000000
+                    MDFlag: 0
+               RestartFlag: 0
+                    MDMeth: 'NVE'
+                     MD_dt: 1
+                  MD_Nstep: 0
+                     ion_T: -1
+                thermos_TF: -1
+              ion_elec_eqT: 1
+              ion_vel_dstr: 2
+                NLCG_sigma: 0.500000000000000
+                     qmass: 1
+                 L_history: 20
+               L_finit_stp: 0.005000000000000
+                  L_maxmov: 0.200000000000000
+               L_autoscale: 1
+                 L_lineopt: 1
+                   L_icurv: 1
+                   FIRE_dt: 1
+                 FIRE_mass: 1
+               FIRE_maxmov: 0.200000000000000
+               Calc_stress: 1
+                 Calc_pres: 0
+            PrintForceFlag: 1
+          PrintAtomPosFlag: 1
+          PrintAtomVelFlag: 1
+         PrintElecDensFlag: 0
+            PrintEigenFlag: 0
+                PrintMDout: 1
+             PrintRelaxout: 1
+              Printrestart: 1
+           Printrestart_fq: 1
+                       xin: 0
+                       yin: 0
+                       zin: 0
+                     twist: 0
+                  filename: 'BaTiO3'
+            inputfile_path: '.'
+                        XC: 'LDA_PZ'
+                       Atm: [1x3 struct]
+                     n_atm: 5
+                     Atoms: [5x3 double]
+           mvAtmConstraint: [5x3 double]
+                    IsFrac: [3x1 double]
+                    IsSpin: [3x1 double]
+            is_default_psd: 0
+                  temp_tol: 1.000000000000000e-12
+                 xc_rhotol: 1.000000000000000e-14
+                Atoms_init: [5x3 double]
+                  lat_uvec: [3x3 double]
+                        dx: 0.200789473684211
+                        dy: 0.200789473684211
+                        dz: 0.200789473684211
+                        dV: 0.008095111295378
+                        w2: [1x7 double]
+                        w1: [1x7 double]
+                         W: [54872x1 double]
+                    occfac: 2
+                Relax_iter: 1
+              elecgs_Count: 1
+               StressCount: 1
+                    amu2au: 1.822888485332371e+03
+                    fs2atu: 41.341373336493000
+                 isOutl_11: [494x1 logical]
+                 isOutr_11: [494x1 logical]
+                      I_11: [494x1 double]
+                     II_11: [494x1 double]
+                      V_11: [494x1 double]
+                 isOutl_22: [494x1 logical]
+                 isOutr_22: [494x1 logical]
+                      I_22: [494x1 double]
+                     II_22: [494x1 double]
+                      V_22: [494x1 double]
+                 isOutl_33: [494x1 logical]
+                 isOutr_33: [494x1 logical]
+                      I_33: [494x1 double]
+                     II_33: [494x1 double]
+                      V_33: [494x1 double]
+                 G_JOutl_1: [658464x1 logical]
+                 G_JOutr_1: [658464x1 logical]
+                     G_J_1: [658464x1 double]
+                     G_I_1: [658464x1 double]
+                     G_V_1: [658464x1 double]
+                 G_JOutl_2: [658464x1 logical]
+                 G_JOutr_2: [658464x1 logical]
+                     G_J_2: [658464x1 double]
+                     G_I_2: [658464x1 double]
+                     G_V_2: [658464x1 double]
+                 G_JOutl_3: [658464x1 logical]
+                 G_JOutr_3: [658464x1 logical]
+                     G_J_3: [658464x1 double]
+                     G_I_3: [658464x1 double]
+                     G_V_3: [658464x1 double]
+                   Lap_std: [54872x54872 double]
+                    grad_1: [54872x54872 double]
+                    grad_2: [54872x54872 double]
+                    grad_3: [54872x54872 double]
+                LapPreconL: [54872x54872 double]
+                LapPreconU: [54872x54872 double]
+              memory_usage: 211586440
+               staticfname: 'BaTiO3.static'
+                 suffixNum: 0
+                  outfname: 'BaTiO3.out'
+                  parallel: 0
+                         b: [54872x1 double]
+                     b_ref: [54872x1 double]
+                    rho_at: [54872x1 double]
+                     Eself: 2.035571755931947e+02
+                 Eself_ref: 6.285146446703037e+02
+                       V_c: [54872x1 double]
+                 PosCharge: 40.000000015727146
+                 NegCharge: -40.000000015727146
+                    E_corr: -6.071943478218600e-04
+                       rho: [54872x1 double]
+                      Atom: [1x5 struct]
+                       phi: [54872x1 double]
+                       Vxc: [54872x1 double]
+                 dvxcdgrho: [54872x1 double]
+                      Veff: [54872x1 double]
+                         X: [54872x7 double]
+                         F: [54872x7 double]
+          mixing_hist_fkm1: [54872x1 double]
+          mixing_hist_xkm1: [54872x1 double]
+                       psi: [54872x29 double]
+    upper_bound_guess_vecs: [54872x1 double]
+                    EigVal: [29x1 double]
+                  lambda_f: 0.284889484424528
+                       occ: [29x1 double]
+                    Etotal: -1.313143732977042e+02
+                     Eband: -11.107913142841213
+                       Exc: -21.381045800473352
+                    Exc_dc: -28.016715336168964
+                  Eelec_dc: 76.715657797078251
+                      Eent: -4.757593754681591e-10
+                      Escc: -4.699618590508700e-06
+                   S_Debug: [1x1 struct]
+                     force: [5x3 double]
+                 abs_force: [5x1 double]
+                    Stress: [3x3 double]
+                  Pressure: 31.106138109758955
+             stress_dimred: [3x3 double]
+

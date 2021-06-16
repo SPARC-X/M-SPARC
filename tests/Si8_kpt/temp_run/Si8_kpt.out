@@ -1,0 +1,103 @@
+***************************************************************************
+*                          M-SPARC (Feb 20, 2020)                         *
+*   Copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech   *
+*           Distributed under GNU General Public License 3 (GPL)          *
+*                Date: 11-May-2021  Start time: 21:09:21                  *
+***************************************************************************
+                           Input parameters                                
+***************************************************************************
+CELL: 7.297342 7.297342 7.297342 
+LATVEC:
+0.500000000000000 0.500000000000000 0.000000000000000 
+0.000000000000000 0.500000000000000 0.500000000000000 
+0.500000000000000 0.000000000000000 0.500000000000000 
+FD_GRID: 36 36 36
+FD_ORDER: 12
+BC: P P P
+KPOINT_GRID: 2 2 2
+KPOINT_SHIFT: 5.000000e-01 5.000000e-01 5.000000e-01
+ELEC_TEMP_TYPE: fermi-dirac
+SMEARING: 0.001000000
+CHEB_DEGREE: 35
+NSTATES: 10
+EXCHANGE_CORRELATION: LDA_PW
+CALC_STRESS: 1
+MAXIT_SCF: 100
+TOL_SCF: 1.00E-06
+TOL_POISSON: 1.00E-08
+TOL_LANCZOS: 1.00E-02
+TOL_PSEUDOCHARGE: 1.00E-08
+MIXING_VARIABLE: potential
+MIXING_PRECOND: none
+MIXING_PARAMETER: 0.30
+MIXING_HISTORY: 7
+PULAY_FREQUENCY: 1
+PULAY_RESTART_FREQ: 0
+REFERENCE_CUTOFF: 0.50
+RHO_TRIGGER: 4
+FIX_RAND: 0
+PRINT_FORCES: 1
+PRINT_ATOMS: 0
+PRINT_EIGEN: 0
+PRINT_DENSITY: 0
+OUTPUT_FILE: Si8_kpt.out
+***************************************************************************
+                             Initialization                                
+***************************************************************************
+Mesh spacing                       :  0.202704 (Bohr)
+Number of symmetry adapted k-points:  4
+Output printed to                  :  Si8_kpt.out
+Total number of atom types         :  1
+Total number of atoms              :  2
+Total number of electrons          :  8
+Atom type 1  (valence electrons)   :  Si 4
+Pseudopotential                    :  Si.psp8
+lloc                               :  4
+Pseudocharge radii of atom type 1  :  8.11 8.11 8.11
+Number of atoms of type 1          :  2
+Estimated total memory usage       :  244.19 MB
+=====================================================================
+                    Self Consistent Field (SCF#1)                     
+=====================================================================
+Iteration     Free Energy (Ha/atom)   SCF Error        Timing (sec)
+1            -3.9504637472E+00        2.673E-02        210.766
+2            -3.9619226725E+00        1.587E-02        44.540
+3            -3.9629677506E+00        5.025E-03        45.189
+4            -3.9630782135E+00        9.386E-04        46.424
+5            -3.9630868784E+00        2.333E-04        44.556
+6            -3.9630877160E+00        1.026E-04        43.971
+7            -3.9630877982E+00        2.076E-05        42.722
+8            -3.9630877987E+00        1.103E-05        43.105
+9            -3.9630877713E+00        3.306E-06        42.907
+10           -3.9630878070E+00        1.046E-06        42.580
+11           -3.9630877987E+00        4.132E-07        42.865
+Total number of SCF: 11    
+====================================================================
+                                Energy                              
+====================================================================
+Free energy per atom               : -3.9630877987E+00 (Ha/atom)
+Total free energy                  : -7.9261755973E+00 (Ha)
+Band structure energy              :  1.8188789597E-01 (Ha)
+Exchange correlation energy        : -2.3890984620E+00 (Ha)
+Self and correction energy         : -2.5549036524E+01 (Ha)
+Entropy*kb*T                       : -6.2472596461E-12 (Ha)
+Fermi level                        :  2.0690436113E-01 (Ha)
+Average force                      :  2.1058949202E-02 (Ha/Bohr)
+Maximum force                      :  2.1058949202E-02 (Ha/Bohr)
+Time for force calculation         :  5.417 (sec)
+Pressure                           : -1.6162554938E+00 (GPa)
+Max stress                         :  5.2468307616E+00 (GPa)
+Time for stress calculation        :  16.952 (sec)
+***************************************************************************
+                               Timing info                                 
+***************************************************************************
+Total walltime                     :  693.903 sec
+___________________________________________________________________________
+
+***************************************************************************
+*             Material Physics & Mechanics Group, Georgia Tech            *
+*                       PI: Phanish Suryanarayana                         *
+*                Main Developers: Qimen Xu, Abhiraj Sharma                *
+*     Acknowledgements: U.S. DOE (DE-SC0019410); NSF (1333500,1553212)    *
+***************************************************************************
+                                                                           

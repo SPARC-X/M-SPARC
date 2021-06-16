@@ -1,0 +1,694 @@
+
+                            < M A T L A B (R) >
+                  Copyright 1984-2019 The MathWorks, Inc.
+                  R2019a (9.6.0.1072779) 64-bit (glnxa64)
+                               March 8, 2019
+
+ 
+To get started, type doc.
+For product information, visit www.mathworks.com.
+ 
+
+ Reading .inpt file ...
+
+
+<INPT>
+# $ cat CuSi7.inpt
+# nprocs: 8
+
+# Test: CuSi7 #
+CELL:    10.26 10.26 10.26
+FD_GRID: 51 51 51
+FD_ORDER: 12
+BC: P P P
+EXCHANGE_CORRELATION: LDA_PZ
+TOL_SCF: 1e-6
+TOL_POISSON: 1e-8
+TOL_PSEUDOCHARGE: 1e-8
+NSTATES: 30
+PRINT_FORCES: 1
+PRINT_ATOMS: 1
+CALC_STRESS: 1
+<\INPT>
+
+ Reading .ion file ...
+ Number of atom types : 2
+ Total number of atoms: 8
+ Default atomic mass for Cu is 63.546000
+ Default atomic mass for Si is 28.085000
+ pseudo_dir # 1 = Cu.psp8
+ pseudo_dir # 2 = Si.psp8
+
+ COORD:
+  10.112541121536699  10.076547116903599  10.113043676778000
+   2.956535160430330   2.633980601920120   2.669296762639190
+   9.371661189389780   4.986401854045050   4.490937336152680
+   2.213728352089640   8.024150634455941   7.158500947815130
+   4.502255500061770   9.734786783764591   5.664448399745620
+   6.970551386934850   3.236946494944290   8.527140214228091
+   4.572458001139710   4.290127992908810   9.928439068232700
+   7.420548419200980   7.997935106774150   2.906773467870170
+
+  23.842394259112002
+
+   0.030168927102176
+
+ kpoint grid before symmetry:
+     0     0     0
+
+ kpoint grid after symmetry:
+     0     0     0
+
+## Chebyshev polynomial degree not provided, finding npl ...
+## Based on the mesh size, npl is set to: 35
+ Creating differentiation matrices ...
+ Done. (2.610 sec)
+
+ Estimated memory usage:
+ Total:  491.85 MB
+ orbitals            :  121.45 MB
+ sparse matrices     :  342.07 MB
+ global-size vectors :   14.17 MB
+ mixing histories    :   14.17 MB
+
+ Finding rb for Cu ...
+ rb = {2.213 2.213 2.213}, int_b = -19.000097387571305, err_rb = 9.739e-05
+ rb = {2.414 2.414 2.414}, int_b = -19.000081519599973, err_rb = 8.152e-05
+ rb = {2.615 2.615 2.615}, int_b = -19.000060427411018, err_rb = 6.043e-05
+ rb = {2.816 2.816 2.816}, int_b = -19.000046554993776, err_rb = 4.655e-05
+ rb = {3.018 3.018 3.018}, int_b = -19.000036407624535, err_rb = 3.641e-05
+ rb = {3.219 3.219 3.219}, int_b = -19.000028845831515, err_rb = 2.885e-05
+ rb = {3.420 3.420 3.420}, int_b = -19.000023284429748, err_rb = 2.328e-05
+ rb = {3.621 3.621 3.621}, int_b = -19.000019289073037, err_rb = 1.929e-05
+ rb = {3.822 3.822 3.822}, int_b = -19.000016464563679, err_rb = 1.646e-05
+ rb = {4.024 4.024 4.024}, int_b = -19.000015529956372, err_rb = 1.553e-05
+ rb = {4.225 4.225 4.225}, int_b = -19.000015182211225, err_rb = 1.518e-05
+ rb = {4.426 4.426 4.426}, int_b = -19.000013402215941, err_rb = 1.340e-05
+ rb = {4.627 4.627 4.627}, int_b = -19.000011487823304, err_rb = 1.149e-05
+ rb = {4.828 4.828 4.828}, int_b = -19.000009983417907, err_rb = 9.983e-06
+ rb = {5.029 5.029 5.029}, int_b = -19.000009728930607, err_rb = 9.729e-06
+ rb = {5.231 5.231 5.231}, int_b = -19.000008768768488, err_rb = 8.769e-06
+ rb = {5.432 5.432 5.432}, int_b = -19.000008021935624, err_rb = 8.022e-06
+ rb = {5.633 5.633 5.633}, int_b = -19.000007660555664, err_rb = 7.661e-06
+ rb = {5.834 5.834 5.834}, int_b = -19.000006183249710, err_rb = 6.183e-06
+ rb = {6.035 6.035 6.035}, int_b = -18.999999200199749, err_rb = 7.998e-07
+ rb = {6.236 6.236 6.236}, int_b = -19.000000166468588, err_rb = 1.665e-07
+ rb = {6.438 6.438 6.438}, int_b = -18.999999967015658, err_rb = 3.298e-08
+ rb = {6.639 6.639 6.639}, int_b = -19.000000004704884, err_rb = 4.705e-09
+ rb = {6.639 6.639 6.639}
+ Finding rb for Si ...
+ rb = {3.822 3.822 3.822}, int_b = -4.000017347966575, err_rb = 1.735e-05
+ rb = {4.024 4.024 4.024}, int_b = -4.000017105823260, err_rb = 1.711e-05
+ rb = {4.225 4.225 4.225}, int_b = -4.000017501963313, err_rb = 1.750e-05
+ rb = {4.426 4.426 4.426}, int_b = -4.000015907960910, err_rb = 1.591e-05
+ rb = {4.627 4.627 4.627}, int_b = -4.000013959501988, err_rb = 1.396e-05
+ rb = {4.828 4.828 4.828}, int_b = -4.000012368223739, err_rb = 1.237e-05
+ rb = {5.029 5.029 5.029}, int_b = -4.000012218233784, err_rb = 1.222e-05
+ rb = {5.231 5.231 5.231}, int_b = -4.000011094140635, err_rb = 1.109e-05
+ rb = {5.432 5.432 5.432}, int_b = -4.000010170616395, err_rb = 1.017e-05
+ rb = {5.633 5.633 5.633}, int_b = -4.000009685663358, err_rb = 9.686e-06
+ rb = {5.834 5.834 5.834}, int_b = -4.000007766491690, err_rb = 7.766e-06
+ rb = {6.035 6.035 6.035}, int_b = -3.999998995957734, err_rb = 1.004e-06
+ rb = {6.236 6.236 6.236}, int_b = -4.000000208984386, err_rb = 2.090e-07
+ rb = {6.438 6.438 6.438}, int_b = -3.999999958572442, err_rb = 4.143e-08
+ rb = {6.639 6.639 6.639}, int_b = -4.000000005908455, err_rb = 5.908e-09
+ rb = {6.639 6.639 6.639}
+
+ ###############################################################
+ Relaxation step number: 1 
+
+ Starting pseudocharge generation and self energy calculation...
+ Integration b = 46.999999915987
+
+ Integration b_ref = 47.000000000008
+
+ ****************************************
+ *          Eself_ref = 844.516176       *
+ ****************************************
+ Done. (1.482085 s)
+ Time for b calculation: 1.496 seconds.
+
+ Starting calculating nonlocal projectors ...
+ Done. (1.278592 s)
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+ Starting SCF iteration...
+ AAR converged to a relative residual of 4.59467e-09 in 97 iterations.
+ Poisson problem took 3.539340s
+ ============================================= 
+ Relaxation iteration:  1
+ SCF iteration number:  1, Chebyshev cycle: 1 
+ ============================================= 
+ Fermi energy = 4.002017
+ This SCF iteration took 14.461 s.
+
+ ============================================= 
+ Relaxation iteration:  1
+ SCF iteration number:  1, Chebyshev cycle: 2 
+ ============================================= 
+ Fermi energy = 0.648541
+ This SCF iteration took 10.655 s.
+
+ ============================================= 
+ Relaxation iteration:  1
+ SCF iteration number:  1, Chebyshev cycle: 3 
+ ============================================= 
+ Fermi energy = 0.262477
+ This SCF iteration took 10.084 s.
+
+ ============================================= 
+ Relaxation iteration:  1
+ SCF iteration number:  1, Chebyshev cycle: 4 
+ ============================================= 
+ Fermi energy = 0.201607
+ AAR converged to a relative residual of 9.98471e-09 in 92 iterations.
+ Poisson problem took 2.348741s
+ Escc = -10.01447179
+ Etot = -208.57251507
+ Eatom = -26.07156438
+ Error in SCF iteration: 2.1457e-01 
+ This SCF iteration took 12.757 s.
+
+ ========================= 
+ Relaxation iteration:  1 
+ SCF iteration number:  2 
+ ========================= 
+ Fermi energy = 0.198000
+ AAR converged to a relative residual of 8.51136e-09 in 97 iterations.
+ Poisson problem took 2.459039s
+ Escc = 13.71969375
+ Etot = -209.12718467
+ Eatom = -26.14089808
+ Error in SCF iteration: 1.5884e-01 
+ This SCF iteration took 12.605 s.
+
+ ========================= 
+ Relaxation iteration:  1 
+ SCF iteration number:  3 
+ ========================= 
+ Fermi energy = 0.199193
+ AAR converged to a relative residual of 8.70419e-09 in 85 iterations.
+ Poisson problem took 2.156538s
+ Escc = 4.61439972
+ Etot = -209.45061142
+ Eatom = -26.18132643
+ Error in SCF iteration: 5.7991e-02 
+ This SCF iteration took 12.581 s.
+
+ ========================= 
+ Relaxation iteration:  1 
+ SCF iteration number:  4 
+ ========================= 
+ Fermi energy = 0.196899
+ AAR converged to a relative residual of 7.06984e-09 in 85 iterations.
+ Poisson problem took 2.171048s
+ Escc = -1.17648820
+ Etot = -209.50403367
+ Eatom = -26.18800421
+ Error in SCF iteration: 2.3681e-02 
+ This SCF iteration took 12.436 s.
+
+ ========================= 
+ Relaxation iteration:  1 
+ SCF iteration number:  5 
+ ========================= 
+ Fermi energy = 0.194415
+ AAR converged to a relative residual of 9.8356e-09 in 76 iterations.
+ Poisson problem took 1.931664s
+ Escc = -0.92077426
+ Etot = -209.51210727
+ Eatom = -26.18901341
+ Error in SCF iteration: 1.5083e-02 
+ This SCF iteration took 12.506 s.
+
+ ========================= 
+ Relaxation iteration:  1 
+ SCF iteration number:  6 
+ ========================= 
+ Fermi energy = 0.193831
+ AAR converged to a relative residual of 3.00316e-09 in 79 iterations.
+ Poisson problem took 2.018380s
+ Escc = 0.27733654
+ Etot = -209.51709304
+ Eatom = -26.18963663
+ Error in SCF iteration: 5.1390e-03 
+ This SCF iteration took 12.227 s.
+
+ ========================= 
+ Relaxation iteration:  1 
+ SCF iteration number:  7 
+ ========================= 
+ Fermi energy = 0.193838
+ AAR converged to a relative residual of 7.59547e-09 in 73 iterations.
+ Poisson problem took 1.876055s
+ Escc = -0.26776954
+ Etot = -209.51780876
+ Eatom = -26.18972609
+ Error in SCF iteration: 3.6776e-03 
+ This SCF iteration took 11.947 s.
+
+ ========================= 
+ Relaxation iteration:  1 
+ SCF iteration number:  8 
+ ========================= 
+ Fermi energy = 0.193559
+ AAR converged to a relative residual of 5.11663e-09 in 73 iterations.
+ Poisson problem took 1.874045s
+ Escc = 0.10339708
+ Etot = -209.51831143
+ Eatom = -26.18978893
+ Error in SCF iteration: 1.6864e-03 
+ This SCF iteration took 12.115 s.
+
+ ========================= 
+ Relaxation iteration:  1 
+ SCF iteration number:  9 
+ ========================= 
+ Fermi energy = 0.193614
+ AAR converged to a relative residual of 9.57824e-09 in 63 iterations.
+ Poisson problem took 1.612206s
+ Escc = 0.06009548
+ Etot = -209.51843415
+ Eatom = -26.18980427
+ Error in SCF iteration: 1.1515e-03 
+ This SCF iteration took 11.827 s.
+
+ ========================= 
+ Relaxation iteration:  1 
+ SCF iteration number: 10 
+ ========================= 
+ Fermi energy = 0.193557
+ AAR converged to a relative residual of 9.29856e-09 in 61 iterations.
+ Poisson problem took 1.568547s
+ Escc = 0.02873142
+ Etot = -209.51848581
+ Eatom = -26.18981073
+ Error in SCF iteration: 6.0447e-04 
+ This SCF iteration took 11.841 s.
+
+ ========================= 
+ Relaxation iteration:  1 
+ SCF iteration number: 11 
+ ========================= 
+ Fermi energy = 0.193536
+ AAR converged to a relative residual of 7.94955e-09 in 61 iterations.
+ Poisson problem took 1.563944s
+ Escc = -0.01904660
+ Etot = -209.51850477
+ Eatom = -26.18981310
+ Error in SCF iteration: 3.0942e-04 
+ This SCF iteration took 11.804 s.
+
+ ========================= 
+ Relaxation iteration:  1 
+ SCF iteration number: 12 
+ ========================= 
+ Fermi energy = 0.193517
+ AAR converged to a relative residual of 7.13139e-09 in 55 iterations.
+ Poisson problem took 1.414748s
+ Escc = -0.00442397
+ Etot = -209.51851219
+ Eatom = -26.18981402
+ Error in SCF iteration: 1.0484e-04 
+ This SCF iteration took 11.634 s.
+
+ ========================= 
+ Relaxation iteration:  1 
+ SCF iteration number: 13 
+ ========================= 
+ Fermi energy = 0.193521
+ AAR converged to a relative residual of 6.22845e-09 in 49 iterations.
+ Poisson problem took 1.567669s
+ Escc = 0.00026734
+ Etot = -209.51851456
+ Eatom = -26.18981432
+ Error in SCF iteration: 5.0476e-05 
+ This SCF iteration took 11.885 s.
+
+ ========================= 
+ Relaxation iteration:  1 
+ SCF iteration number: 14 
+ ========================= 
+ Fermi energy = 0.193522
+ AAR converged to a relative residual of 6.28974e-09 in 43 iterations.
+ Poisson problem took 1.092526s
+ Escc = 0.00082467
+ Etot = -209.51851535
+ Eatom = -26.18981442
+ Error in SCF iteration: 2.0886e-05 
+ This SCF iteration took 11.329 s.
+
+ ========================= 
+ Relaxation iteration:  1 
+ SCF iteration number: 15 
+ ========================= 
+ Fermi energy = 0.193522
+ AAR converged to a relative residual of 9.54673e-09 in 40 iterations.
+ Poisson problem took 1.008985s
+ Escc = 0.00010010
+ Etot = -209.51851567
+ Eatom = -26.18981446
+ Error in SCF iteration: 9.1270e-06 
+ This SCF iteration took 11.977 s.
+
+ ========================= 
+ Relaxation iteration:  1 
+ SCF iteration number: 16 
+ ========================= 
+ Fermi energy = 0.193522
+ AAR converged to a relative residual of 5.1309e-09 in 37 iterations.
+ Poisson problem took 0.967636s
+ Escc = -0.00004443
+ Etot = -209.51851579
+ Eatom = -26.18981447
+ Error in SCF iteration: 3.9010e-06 
+ This SCF iteration took 12.187 s.
+
+ ========================= 
+ Relaxation iteration:  1 
+ SCF iteration number: 17 
+ ========================= 
+ Fermi energy = 0.193522
+ AAR converged to a relative residual of 4.2614e-09 in 37 iterations.
+ Poisson problem took 0.939669s
+ Escc = -0.00006032
+ Etot = -209.51851579
+ Eatom = -26.18981447
+ Error in SCF iteration: 4.5821e-06 
+ This SCF iteration took 12.055 s.
+
+ ========================= 
+ Relaxation iteration:  1 
+ SCF iteration number: 18 
+ ========================= 
+ Fermi energy = 0.193523
+ AAR converged to a relative residual of 5.45033e-09 in 31 iterations.
+ Poisson problem took 0.790084s
+ Escc = -0.00003676
+ Etot = -209.51851583
+ Eatom = -26.18981448
+ Error in SCF iteration: 3.4640e-06 
+ This SCF iteration took 10.998 s.
+
+ ========================= 
+ Relaxation iteration:  1 
+ SCF iteration number: 19 
+ ========================= 
+ Fermi energy = 0.193523
+ AAR converged to a relative residual of 4.9845e-09 in 31 iterations.
+ Poisson problem took 0.786446s
+ Escc = -0.00002064
+ Etot = -209.51851584
+ Eatom = -26.18981448
+ Error in SCF iteration: 1.2784e-06 
+ This SCF iteration took 11.029 s.
+
+ ========================= 
+ Relaxation iteration:  1 
+ SCF iteration number: 20 
+ ========================= 
+ Fermi energy = 0.193523
+ AAR converged to a relative residual of 7.50168e-09 in 25 iterations.
+ Poisson problem took 0.642026s
+ Escc = 0.00000425
+ Etot = -209.51851588
+ Eatom = -26.18981449
+ Error in SCF iteration: 6.2253e-07 
+ This SCF iteration took 10.885 s.
+
+
+ Finished SCF iteration in 20 steps!
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+
+ **********************************************************
+ *          Energy per unit cell = -209.518515884 Ha.       *
+ *          Energy per atom = -26.189814485 Ha.            *
+ **********************************************************
+
+ Starting atomic force calculation ... 
+ local force calculation: 2.431 s
+ ***********************************************************
+ *                      Atomic Force                       *
+ ***********************************************************
+ Drift free forces (Ha/Bohr):
+  -0.003796161795012   0.029277075143342   0.011517284491859
+  -0.049534049134562  -0.047044718629111   0.052457579110007
+   0.051521567783674  -0.031493964288339   0.041613626716481
+  -0.266304161053407  -0.218257055626580   0.137853529160589
+   0.263858374247461   0.225990889960551  -0.167252302588785
+   0.462303995954342  -0.229415371738126  -0.293036285292789
+  -0.431947095278408   0.235913341849206   0.240746269309516
+  -0.026102470724089   0.035029803329057  -0.023899700906879
+
+ Max magnitude of forces (Ha/Bohr):   0.593486867557566
+
+
+ Time for calculating forces: 3.492566 s.
+
+["Stress in GPa"
+
+
+] -41.574566967095933   5.115075388302658  35.386921985930236
+   5.115075388302658 -15.258427435589782   5.017342220030807
+  35.386921985930236   5.017342220030807 -19.034473316522718
+
+
+ Time for calculating stress: 9.281442 s.
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+ Final atomic positions (Cartesian) are as follows:
+ 10.112541 	 10.076547 	 10.113044 
+  2.956535 	  2.633981 	  2.669297 
+  9.371661 	  4.986402 	  4.490937 
+  2.213728 	  8.024151 	  7.158501 
+  4.502256 	  9.734787 	  5.664448 
+  6.970551 	  3.236946 	  8.527140 
+  4.572458 	  4.290128 	  9.928439 
+  7.420548 	  7.997935 	  2.906773 
+
+ Run-time of the program: 297.149749 seconds
+
+ans = 
+
+  struct with fields:
+
+                  cell_typ: 1
+                   lat_vec: [3x3 double]
+                  metric_T: [3x3 double]
+                    grad_T: [3x3 double]
+                    lapc_T: [3x3 double]
+                      Jacb: 1
+                        L1: 10.260000000000000
+                        L2: 10.260000000000000
+                        L3: 10.260000000000000
+                        Nx: 51
+                        Ny: 51
+                        Nz: 51
+                         N: 132651
+                      ecut: -1
+              mesh_spacing: -1
+                   kptgrid: [0 0 0]
+                  kptshift: [0 0 0]
+                      nkpt: [1 1 1]
+                     tnkpt: 1
+                      wkpt: 1
+                        BC: 2
+                       BCx: 0
+                       BCy: 0
+                       BCz: 0
+                      isBS: 0
+                   lattice: 'undefined'
+                   SCF_tol: 1.000000000000000e-06
+                       Nev: 30
+               poisson_tol: 1.000000000000000e-08
+          pseudocharge_tol: 1.000000000000000e-08
+                       Cst: 27.211386245987999
+              Ha_Bohr3_GPa: 2.942101569650548e+04
+                        kB: 3.166811563455600e-06
+               elec_T_type: 1
+                      Temp: 2.320903624310025e+03
+                       bet: 1.360569312299400e+02
+                       npl: 35
+                       FDn: 6
+                    rc_ref: 0.500000000000000
+              max_relax_it: 100
+                dbg_switch: 0
+                        xc: 1
+                 Nelectron: 47
+                     n_typ: 2
+                TimeRevSym: 1
+                  spin_typ: 0
+                     nspin: 1
+              CheFSI_Optmz: 0
+          chefsibound_flag: 0
+               FixRandSeed: 0
+                rhoTrigger: 4
+                 NetCharge: 0
+                 MAXIT_SCF: 100
+                 MINIT_SCF: 3
+             MAXIT_POISSON: 1000
+            accuracy_level: -1
+     target_force_accuracy: -1
+    target_energy_accuracy: -1
+                 TOL_RELAX: 5.000000000000000e-04
+               TOL_LANCZOS: 0.010000000000000
+               precond_tol: 4.047197231833910e-05
+               precond_kTF: 1
+            precond_thresh: 0.250000000000000
+            precond_fitpow: 2
+          precond_resta_q0: 1.360000000000000
+          precond_resta_Rs: 2.760000000000000
+            MixingVariable: 1
+             MixingPrecond: 0
+                  Pf_guess: []
+             MixingHistory: 7
+           MixingParameter: 0.300000000000000
+     MixingParameterSimple: 0.300000000000000
+            PulayFrequency: 1
+          PulayRestartFreq: 0
+                    TWtime: 1.000000000000000e+09
+                 RelaxFlag: 0
+                 RelaxMeth: 'LBFGS'
+            max_dilatation: 1.200000000000000
+            TOL_RELAX_CELL: 0.010000000000000
+                    MDFlag: 0
+               RestartFlag: 0
+                    MDMeth: 'NVE'
+                     MD_dt: 1
+                  MD_Nstep: 0
+                     ion_T: -1
+                thermos_TF: -1
+              ion_elec_eqT: 1
+              ion_vel_dstr: 2
+                NLCG_sigma: 0.500000000000000
+                     qmass: 1
+                 L_history: 20
+               L_finit_stp: 0.005000000000000
+                  L_maxmov: 0.200000000000000
+               L_autoscale: 1
+                 L_lineopt: 1
+                   L_icurv: 1
+                   FIRE_dt: 1
+                 FIRE_mass: 1
+               FIRE_maxmov: 0.200000000000000
+               Calc_stress: 1
+                 Calc_pres: 0
+            PrintForceFlag: 1
+          PrintAtomPosFlag: 1
+          PrintAtomVelFlag: 1
+         PrintElecDensFlag: 0
+            PrintEigenFlag: 0
+                PrintMDout: 1
+             PrintRelaxout: 1
+              Printrestart: 1
+           Printrestart_fq: 1
+                       xin: 0
+                       yin: 0
+                       zin: 0
+                     twist: 0
+                  filename: 'CuSi7'
+            inputfile_path: '.'
+                        XC: 'LDA_PZ'
+                       Atm: [1x2 struct]
+                     n_atm: 8
+                     Atoms: [8x3 double]
+           mvAtmConstraint: [8x3 double]
+                    IsFrac: [2x1 double]
+                    IsSpin: [2x1 double]
+            is_default_psd: 0
+                  temp_tol: 1.000000000000000e-12
+                 xc_rhotol: 1.000000000000000e-14
+                Atoms_init: [8x3 double]
+                  lat_uvec: [3x3 double]
+                        dx: 0.201176470588235
+                        dy: 0.201176470588235
+                        dz: 0.201176470588235
+                        dV: 0.008142008548748
+                        w2: [1x7 double]
+                        w1: [1x7 double]
+                         W: [132651x1 double]
+                    occfac: 2
+                Relax_iter: 1
+              elecgs_Count: 1
+               StressCount: 1
+                    amu2au: 1.822888485332371e+03
+                    fs2atu: 41.341373336493000
+                 isOutl_11: [663x1 logical]
+                 isOutr_11: [663x1 logical]
+                      I_11: [663x1 double]
+                     II_11: [663x1 double]
+                      V_11: [663x1 double]
+                 isOutl_22: [663x1 logical]
+                 isOutr_22: [663x1 logical]
+                      I_22: [663x1 double]
+                     II_22: [663x1 double]
+                      V_22: [663x1 double]
+                 isOutl_33: [663x1 logical]
+                 isOutr_33: [663x1 logical]
+                      I_33: [663x1 double]
+                     II_33: [663x1 double]
+                      V_33: [663x1 double]
+                 G_JOutl_1: [1591812x1 logical]
+                 G_JOutr_1: [1591812x1 logical]
+                     G_J_1: [1591812x1 double]
+                     G_I_1: [1591812x1 double]
+                     G_V_1: [1591812x1 double]
+                 G_JOutl_2: [1591812x1 logical]
+                 G_JOutr_2: [1591812x1 logical]
+                     G_J_2: [1591812x1 double]
+                     G_I_2: [1591812x1 double]
+                     G_V_2: [1591812x1 double]
+                 G_JOutl_3: [1591812x1 logical]
+                 G_JOutr_3: [1591812x1 logical]
+                     G_J_3: [1591812x1 double]
+                     G_I_3: [1591812x1 double]
+                     G_V_3: [1591812x1 double]
+                   Lap_std: [132651x132651 double]
+                    grad_1: [132651x132651 double]
+                    grad_2: [132651x132651 double]
+                    grad_3: [132651x132651 double]
+                LapPreconL: [132651x132651 double]
+                LapPreconU: [132651x132651 double]
+              memory_usage: 515747096
+               staticfname: 'CuSi7.static'
+                 suffixNum: 0
+                  outfname: 'CuSi7.out'
+                  parallel: 0
+                         b: [132651x1 double]
+                     b_ref: [132651x1 double]
+                    rho_at: [132651x1 double]
+                     Eself: 2.781532306449117e+02
+                 Eself_ref: 8.445161759481103e+02
+                       V_c: [132651x1 double]
+                 PosCharge: 46.999999915987473
+                 NegCharge: -46.999999915987473
+                    E_corr: 0.001320064438914
+                       rho: [132651x1 double]
+                      Atom: [1x8 struct]
+                       phi: [132651x1 double]
+                       Vxc: [132651x1 double]
+                 dvxcdgrho: [132651x1 double]
+                      Veff: [132651x1 double]
+                         X: [132651x7 double]
+                         F: [132651x7 double]
+          mixing_hist_fkm1: [132651x1 double]
+          mixing_hist_xkm1: [132651x1 double]
+                       psi: [132651x30 double]
+    upper_bound_guess_vecs: [132651x1 double]
+                    EigVal: [30x1 double]
+                  lambda_f: 0.193522912411722
+                       occ: [30x1 double]
+                    Etotal: -2.095185158837424e+02
+                     Eband: -21.531648518206442
+                       Exc: -25.488427338609881
+                    Exc_dc: -33.441840483894929
+                  Eelec_dc: 82.222271478539852
+                      Eent: -0.010645662335072
+                      Escc: 4.253446950643718e-06
+                   S_Debug: [1x1 struct]
+                     force: [8x3 double]
+                 abs_force: [8x1 double]
+                    Stress: [3x3 double]
+                  Pressure: 25.289155906402812
+             stress_dimred: [3x3 double]
+
