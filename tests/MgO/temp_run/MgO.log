@@ -1,0 +1,66 @@
+
+                            < M A T L A B (R) >
+                  Copyright 1984-2019 The MathWorks, Inc.
+                  R2019a (9.6.0.1072779) 64-bit (glnxa64)
+                               March 8, 2019
+
+ 
+To get started, type doc.
+For product information, visit www.mathworks.com.
+ 
+
+ Reading .inpt file ...
+
+
+<INPT>
+# $ cat MgO.inpt
+# nprocs: 24
+# Test: MgO #
+LATVEC:
+1 0 0
+-0.5 0.866 0
+0 0 1
+
+CELL: 6.3251 6.3251 9.46
+
+MESH_SPACING: 0.2
+FD_ORDER: 12
+BC: P P P
+EXCHANGE_CORRELATION: GGA_PBE
+ELEC_TEMP_TYPE: gaussian
+ELEC_TEMP: 315.773
+TOL_SCF: 1e-6
+#ELEC_TEMP: 
+CALC_PRES: 1
+CALC_STRESS: 1
+PRINT_FORCES: 1
+PRINT_ATOMS: 0
+MIXING_VARIABLE: potential
+MIXING_PRECOND: none
+
+# MD
+#MD_FLAG:  1
+#MD_METHOD: NVT_NH
+#MD_TIMESTEP: 1
+#MD_NSTEP: 10
+#PRINT_RESTART_FQ: 3
+#RESTART_FLAG: 0
+
+<\INPT>
+
+ Reading .ion file ...
+ Number of atom types : 2
+ Total number of atoms: 4
+ Default atomic mass for Mg is 24.305500
+ Default atomic mass for O is 15.999400
+ pseudo_dir # 1 = Mg.psp8
+ pseudo_dir # 2 = O.psp8
+
+ COORD:
+   4.090233441700000   1.981862558300000   4.735978720000000
+   1.918611558300000   4.026982441700000   0.005978720000000
+   4.153484441700000   2.171615558300000   8.551537280000002
+   1.981862558300000   3.900480441700000   3.821537280000000
+
+  25.827591155135998
+

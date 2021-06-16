@@ -1,0 +1,37 @@
+---------------------------------------
+Begin PBS Prologue Tue May 11 21:05:21 EDT 2021
+Job ID:     6746720.sched-hive.pace.gatech.edu
+User ID:    skumar416
+Job name:   testing_suite
+Queue:      hive
+End PBS Prologue Tue May 11 21:05:21 EDT 2021
+---------------------------------------
+/storage/hive/scratch/5/skumar416/devmsparc_05112021/tests_new/MgO/temp_run
+{Unable to perform assignment because the size of the left side is 400-by-1 and
+the size of the right side is 1-by-267.
+
+Error in readPseudopot (line 72)
+uu(1:end,1) = A(3,:)/(4*pi);
+
+Error in initialization (line 28)
+		S = readPseudopot(S, ityp, S.Atm(ityp).psdfname,
+                S.Atm(ityp).typ);
+
+Error in msparc (line 34)
+S = initialization(fname);
+
+Error in launch_MgO (line 4)
+ msparc('MgO')
+} 
+---------------------------------------
+Begin PBS Epilogue Tue May 11 21:05:30 EDT 2021
+Job ID:     6746720.sched-hive.pace.gatech.edu
+User ID:    skumar416
+Job name:   testing_suite
+Resources:  nodes=1:ppn=1,mem=10gb,walltime=04:00:00,neednodes=1:ppn=1
+Rsrc Used:  cput=00:00:07,vmem=3847172kb,walltime=00:00:09,mem=183452kb,energy_used=0
+Queue:      hive
+Nodes:     
+atl1-1-01-017-31-l.pace.gatech.edu
+End PBS Epilogue Tue May 11 21:05:30 EDT 2021
+---------------------------------------

@@ -1,0 +1,35 @@
+---------------------------------------
+Begin PBS Prologue Tue May 11 21:09:02 EDT 2021
+Job ID:     6746738.sched-hive.pace.gatech.edu
+User ID:    skumar416
+Job name:   testing_suite
+Queue:      hive
+End PBS Prologue Tue May 11 21:09:02 EDT 2021
+---------------------------------------
+/storage/hive/scratch/5/skumar416/devmsparc_05112021/tests_new/O2_spin/temp_run
+{Error using read_inpt (line 571)
+
+Cannot recognize input variable identifier: "MIXING_PARAMETER_MAG:"
+
+
+Error in initialization (line 17)
+S = read_inpt(S, filename);
+
+Error in msparc (line 34)
+S = initialization(fname);
+
+Error in launch_O2_spin (line 4)
+ msparc('O2_spin')
+} 
+---------------------------------------
+Begin PBS Epilogue Tue May 11 21:09:12 EDT 2021
+Job ID:     6746738.sched-hive.pace.gatech.edu
+User ID:    skumar416
+Job name:   testing_suite
+Resources:  nodes=1:ppn=1,mem=10gb,walltime=04:00:00,neednodes=1:ppn=1
+Rsrc Used:  cput=00:00:07,vmem=1165468kb,walltime=00:00:10,mem=125416kb,energy_used=0
+Queue:      hive
+Nodes:     
+atl1-1-01-017-19-l.pace.gatech.edu
+End PBS Epilogue Tue May 11 21:09:12 EDT 2021
+---------------------------------------

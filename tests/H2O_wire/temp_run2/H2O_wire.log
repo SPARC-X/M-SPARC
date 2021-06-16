@@ -1,0 +1,597 @@
+
+                            < M A T L A B (R) >
+                  Copyright 1984-2019 The MathWorks, Inc.
+                  R2019a (9.6.0.1072779) 64-bit (glnxa64)
+                               March 8, 2019
+
+ 
+To get started, type doc.
+For product information, visit www.mathworks.com.
+ 
+
+ Reading .inpt file ...
+
+
+<INPT>
+# $ cat H2O_wire.inpt
+# nprocs: 1
+# Test: H2O wire in z direction #
+CELL: 14.00 6.00 14.00
+MESH_SPACING: 0.2
+FD_ORDER: 12
+BC: D P D
+#BOUNDARY_CONDITION: 4
+EXCHANGE_CORRELATION: LDA_PZ
+ELEC_TEMP_TYPE: fd
+SMEARING: 0.003674932
+TOL_SCF: 1e-6
+NSTATES: 8
+#MIXING_VARIABLE: density
+PRINT_FORCES: 1
+PRINT_ATOMS: 1
+CALC_STRESS: 1
+
+<\INPT>
+
+ Reading .ion file ...
+ Number of atom types : 2
+ Total number of atoms: 3
+ Default atomic mass for H is 1.007975
+ Default atomic mass for O is 15.999400
+ pseudo_dir # 1 = H.psp8
+ pseudo_dir # 2 = O.psp8
+
+ COORD:
+   7.000000000000000   4.430522676620148   7.369126503082081
+   7.000000000000000   1.569477323379852   7.369126503082081
+   7.000000000000000   3.000000000000000   6.261746993835837
+
+   2.303934532781000
+
+   2.428066230336400
+
+ kpoint grid before symmetry:
+     0     0     0
+
+ kpoint grid after symmetry:
+     0     0     0
+
+## Chebyshev polynomial degree not provided, finding npl ...
+## Based on the mesh size, npl is set to: 35
+## Poisson tolerance not provided, choosing poisson_tol ...
+## poisson_tol is set to: 1.000e-08
+## Pseudocharge tolerance not provided, choosing pseudocharge_tol ...
+## pseudocharge_tol is set to: 1.000e-08
+ Creating differentiation matrices ...
+ Done. (2.551 sec)
+
+ Estimated memory usage:
+ Total:  459.21 MB
+ orbitals            :   36.92 MB
+ sparse matrices     :  389.98 MB
+ global-size vectors :   16.15 MB
+ mixing histories    :   16.15 MB
+
+ Finding rb for H ...
+ rb = {1.400 1.400 1.400}, int_b = -1.000009771274061, err_rb = 9.771e-06
+ rb = {1.600 1.600 1.600}, int_b = -1.000008430179809, err_rb = 8.430e-06
+ rb = {1.800 1.800 1.800}, int_b = -1.000007394467299, err_rb = 7.394e-06
+ rb = {2.000 2.000 2.000}, int_b = -1.000006445065718, err_rb = 6.445e-06
+ rb = {2.200 2.200 2.200}, int_b = -1.000005709892442, err_rb = 5.710e-06
+ rb = {2.400 2.400 2.400}, int_b = -1.000005149651934, err_rb = 5.150e-06
+ rb = {2.600 2.600 2.600}, int_b = -1.000004740337719, err_rb = 4.740e-06
+ rb = {2.800 2.800 2.800}, int_b = -1.000004458287763, err_rb = 4.458e-06
+ rb = {3.000 3.000 3.000}, int_b = -1.000004281057942, err_rb = 4.281e-06
+ rb = {3.200 3.200 3.200}, int_b = -1.000004187072453, err_rb = 4.187e-06
+ rb = {3.400 3.400 3.400}, int_b = -1.000004331142173, err_rb = 4.331e-06
+ rb = {3.600 3.600 3.600}, int_b = -1.000004833176245, err_rb = 4.833e-06
+ rb = {3.800 3.800 3.800}, int_b = -1.000005547180642, err_rb = 5.547e-06
+ rb = {4.000 4.000 4.000}, int_b = -1.000006994445710, err_rb = 6.994e-06
+ rb = {4.200 4.200 4.200}, int_b = -1.000008989825762, err_rb = 8.990e-06
+ rb = {4.400 4.400 4.400}, int_b = -1.000009838458485, err_rb = 9.838e-06
+ rb = {4.600 4.600 4.600}, int_b = -1.000009065944574, err_rb = 9.066e-06
+ rb = {4.800 4.800 4.800}, int_b = -1.000008382214008, err_rb = 8.382e-06
+ rb = {5.000 5.000 5.000}, int_b = -1.000008913428250, err_rb = 8.913e-06
+ rb = {5.200 5.200 5.200}, int_b = -1.000009376329837, err_rb = 9.376e-06
+ rb = {5.400 5.400 5.400}, int_b = -1.000007629435856, err_rb = 7.629e-06
+ rb = {5.600 5.600 5.600}, int_b = -1.000008192916498, err_rb = 8.193e-06
+ rb = {5.800 5.800 5.800}, int_b = -1.000008711837607, err_rb = 8.712e-06
+ rb = {6.000 6.000 6.000}, int_b = -0.999998850137306, err_rb = 1.150e-06
+ rb = {6.200 6.200 6.200}, int_b = -1.000000238898104, err_rb = 2.389e-07
+ rb = {6.400 6.400 6.400}, int_b = -0.999999953308406, err_rb = 4.669e-08
+ rb = {6.600 6.600 6.600}, int_b = -1.000000006533539, err_rb = 6.534e-09
+ rb = {6.600 6.600 6.600}
+ Finding rb for O ...
+ rb = {1.800 1.800 1.800}, int_b = -6.000058864523769, err_rb = 5.886e-05
+ rb = {2.000 2.000 2.000}, int_b = -6.000048878934126, err_rb = 4.888e-05
+ rb = {2.200 2.200 2.200}, int_b = -6.000039951344304, err_rb = 3.995e-05
+ rb = {2.400 2.400 2.400}, int_b = -6.000033655491918, err_rb = 3.366e-05
+ rb = {2.600 2.600 2.600}, int_b = -6.000029081993977, err_rb = 2.908e-05
+ rb = {2.800 2.800 2.800}, int_b = -6.000025681130412, err_rb = 2.568e-05
+ rb = {3.000 3.000 3.000}, int_b = -6.000023095617255, err_rb = 2.310e-05
+ rb = {3.200 3.200 3.200}, int_b = -6.000021082242378, err_rb = 2.108e-05
+ rb = {3.400 3.400 3.400}, int_b = -6.000019768369827, err_rb = 1.977e-05
+ rb = {3.600 3.600 3.600}, int_b = -6.000019229361424, err_rb = 1.923e-05
+ rb = {3.800 3.800 3.800}, int_b = -6.000019146224416, err_rb = 1.915e-05
+ rb = {4.000 4.000 4.000}, int_b = -6.000020348506509, err_rb = 2.035e-05
+ rb = {4.200 4.200 4.200}, int_b = -6.000022418327775, err_rb = 2.242e-05
+ rb = {4.400 4.400 4.400}, int_b = -6.000022606921944, err_rb = 2.261e-05
+ rb = {4.600 4.600 4.600}, int_b = -6.000020177335352, err_rb = 2.018e-05
+ rb = {4.800 4.800 4.800}, int_b = -6.000018022393025, err_rb = 1.802e-05
+ rb = {5.000 5.000 5.000}, int_b = -6.000018024864858, err_rb = 1.802e-05
+ rb = {5.200 5.200 5.200}, int_b = -6.000018002417389, err_rb = 1.800e-05
+ rb = {5.400 5.400 5.400}, int_b = -6.000014330070122, err_rb = 1.433e-05
+ rb = {5.600 5.600 5.600}, int_b = -6.000014649985238, err_rb = 1.465e-05
+ rb = {5.800 5.800 5.800}, int_b = -6.000014923976354, err_rb = 1.492e-05
+ rb = {6.000 6.000 6.000}, int_b = -5.999998035327333, err_rb = 1.965e-06
+ rb = {6.200 6.200 6.200}, int_b = -6.000000408214074, err_rb = 4.082e-07
+ rb = {6.400 6.400 6.400}, int_b = -5.999999920088587, err_rb = 7.991e-08
+ rb = {6.600 6.600 6.600}, int_b = -6.000000011210899, err_rb = 1.121e-08
+ rb = {6.800 6.800 6.800}, int_b = -5.999999999210276, err_rb = 7.897e-10
+ rb = {6.800 6.800 6.800}
+
+ ###############################################################
+ Relaxation step number: 1 
+
+ Starting pseudocharge generation and self energy calculation...
+ WARNING: Atom 3 too close to boundary for b calculation
+ WARNING: Atom 3 too close to boundary for b calculation
+ WARNING: Atom 3 too close to boundary for b calculation
+ Integration b = 8.000000022244
+
+ Integration b_ref = 8.000000000002
+
+ ****************************************
+ *          Eself_ref = 67.841370       *
+ ****************************************
+ Done. (0.456435 s)
+ Time for b calculation: 0.470 seconds.
+
+ Starting calculating nonlocal projectors ...
+ Done. (0.144125 s)
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+ Starting SCF iteration...
+ AAR converged to a relative residual of 8.34467e-09 in 169 iterations.
+ Poisson problem took 5.259173s
+ ============================================= 
+ Relaxation iteration:  1
+ SCF iteration number:  1, Chebyshev cycle: 1 
+ ============================================= 
+ Fermi energy = 3.862926
+ This SCF iteration took 4.393 s.
+
+ ============================================= 
+ Relaxation iteration:  1
+ SCF iteration number:  1, Chebyshev cycle: 2 
+ ============================================= 
+ Fermi energy = 0.353087
+ This SCF iteration took 2.187 s.
+
+ ============================================= 
+ Relaxation iteration:  1
+ SCF iteration number:  1, Chebyshev cycle: 3 
+ ============================================= 
+ Fermi energy = -0.128586
+ This SCF iteration took 2.147 s.
+
+ ============================================= 
+ Relaxation iteration:  1
+ SCF iteration number:  1, Chebyshev cycle: 4 
+ ============================================= 
+ Fermi energy = -0.191625
+ AAR converged to a relative residual of 9.96585e-09 in 139 iterations.
+ Poisson problem took 4.187343s
+ Escc = 3.01199736
+ Etot = -16.96247474
+ Eatom = -5.65415825
+ Error in SCF iteration: 2.6328e-01 
+ This SCF iteration took 6.471 s.
+
+ ========================= 
+ Relaxation iteration:  1 
+ SCF iteration number:  2 
+ ========================= 
+ Fermi energy = -0.173844
+ AAR converged to a relative residual of 9.86631e-09 in 133 iterations.
+ Poisson problem took 4.008044s
+ Escc = 0.63597659
+ Etot = -17.07967075
+ Eatom = -5.69322358
+ Error in SCF iteration: 7.0962e-02 
+ This SCF iteration took 6.289 s.
+
+ ========================= 
+ Relaxation iteration:  1 
+ SCF iteration number:  3 
+ ========================= 
+ Fermi energy = -0.166226
+ AAR converged to a relative residual of 5.83937e-09 in 127 iterations.
+ Poisson problem took 3.849756s
+ Escc = 0.01160984
+ Etot = -17.08369644
+ Eatom = -5.69456548
+ Error in SCF iteration: 2.0651e-02 
+ This SCF iteration took 6.137 s.
+
+ ========================= 
+ Relaxation iteration:  1 
+ SCF iteration number:  4 
+ ========================= 
+ Fermi energy = -0.166593
+ AAR converged to a relative residual of 7.44841e-09 in 103 iterations.
+ Poisson problem took 3.210061s
+ Escc = 0.08718957
+ Etot = -17.08396504
+ Eatom = -5.69465501
+ Error in SCF iteration: 9.1415e-03 
+ This SCF iteration took 5.494 s.
+
+ ========================= 
+ Relaxation iteration:  1 
+ SCF iteration number:  5 
+ ========================= 
+ Fermi energy = -0.165905
+ AAR converged to a relative residual of 8.34145e-09 in 109 iterations.
+ Poisson problem took 3.333565s
+ Escc = -0.04351043
+ Etot = -17.08410775
+ Eatom = -5.69470258
+ Error in SCF iteration: 5.1900e-03 
+ This SCF iteration took 5.596 s.
+
+ ========================= 
+ Relaxation iteration:  1 
+ SCF iteration number:  6 
+ ========================= 
+ Fermi energy = -0.167284
+ AAR converged to a relative residual of 7.60786e-09 in 97 iterations.
+ Poisson problem took 3.012954s
+ Escc = 0.00364273
+ Etot = -17.08412171
+ Eatom = -5.69470724
+ Error in SCF iteration: 7.0725e-04 
+ This SCF iteration took 5.271 s.
+
+ ========================= 
+ Relaxation iteration:  1 
+ SCF iteration number:  7 
+ ========================= 
+ Fermi energy = -0.167426
+ AAR converged to a relative residual of 9.7149e-09 in 82 iterations.
+ Poisson problem took 2.584290s
+ Escc = -0.00007424
+ Etot = -17.08412389
+ Eatom = -5.69470796
+ Error in SCF iteration: 1.3320e-04 
+ This SCF iteration took 4.893 s.
+
+ ========================= 
+ Relaxation iteration:  1 
+ SCF iteration number:  8 
+ ========================= 
+ Fermi energy = -0.167422
+ AAR converged to a relative residual of 8.80978e-09 in 49 iterations.
+ Poisson problem took 1.813093s
+ Escc = 0.00031169
+ Etot = -17.08412389
+ Eatom = -5.69470796
+ Error in SCF iteration: 4.7208e-05 
+ This SCF iteration took 4.135 s.
+
+ ========================= 
+ Relaxation iteration:  1 
+ SCF iteration number:  9 
+ ========================= 
+ Fermi energy = -0.167421
+ AAR converged to a relative residual of 9.73587e-09 in 33 iterations.
+ Poisson problem took 1.228971s
+ Escc = 0.00034133
+ Etot = -17.08412387
+ Eatom = -5.69470796
+ Error in SCF iteration: 3.8105e-05 
+ This SCF iteration took 3.469 s.
+
+ ========================= 
+ Relaxation iteration:  1 
+ SCF iteration number: 10 
+ ========================= 
+ Fermi energy = -0.167416
+ AAR converged to a relative residual of 7.59277e-09 in 61 iterations.
+ Poisson problem took 1.968721s
+ Escc = 0.00002460
+ Etot = -17.08412392
+ Eatom = -5.69470797
+ Error in SCF iteration: 3.8464e-06 
+ This SCF iteration took 4.187 s.
+
+ ========================= 
+ Relaxation iteration:  1 
+ SCF iteration number: 11 
+ ========================= 
+ Fermi energy = -0.167416
+ AAR converged to a relative residual of 6.53873e-09 in 31 iterations.
+ Poisson problem took 1.173301s
+ Escc = 0.00000757
+ Etot = -17.08412390
+ Eatom = -5.69470797
+ Error in SCF iteration: 2.9759e-06 
+ This SCF iteration took 3.597 s.
+
+ ========================= 
+ Relaxation iteration:  1 
+ SCF iteration number: 12 
+ ========================= 
+ Fermi energy = -0.167416
+ AAR converged to a relative residual of 8.27157e-09 in 13 iterations.
+ Poisson problem took 0.696634s
+ Escc = 0.00000542
+ Etot = -17.08412395
+ Eatom = -5.69470798
+ Error in SCF iteration: 8.9981e-07 
+ This SCF iteration took 2.926 s.
+
+
+ Finished SCF iteration in 12 steps!
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+
+ **********************************************************
+ *          Energy per unit cell = -17.084123945 Ha.       *
+ *          Energy per atom = -5.694707982 Ha.            *
+ **********************************************************
+
+ Starting atomic force calculation ... 
+ WARNING: Atom 3 too close to boundary for b calculation
+ WARNING: Atom 3 too close to boundary for b calculation
+ WARNING: Atom 3 too close to boundary for b calculation
+ local force calculation: 0.750 s
+ ***********************************************************
+ *                      Atomic Force                       *
+ ***********************************************************
+ Drift free forces (Ha/Bohr):
+  -0.000000025177511  -0.017141542469163  -0.004211107430527
+  -0.000000025006996   0.017141634401563  -0.004211118990464
+   0.000000050184507  -0.000000091932400   0.008422226420992
+
+ Max magnitude of forces (Ha/Bohr):   0.017651321568350
+
+
+ Time for calculating forces: 1.515330 s.
+
+["Stress in Ha/Bohr"
+
+
+]  -0.020806976196408
+
+
+["Stress in GPa (equivalent to all periodic system)"
+
+
+]  -3.123277414649741
+
+
+ Time for calculating stress: 3.680541 s.
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+ Final atomic positions (Cartesian) are as follows:
+  7.000000 	  4.430523 	  7.369127 
+  7.000000 	  1.569477 	  7.369127 
+  7.000000 	  3.000000 	  6.261747 
+
+ Run-time of the program: 82.242657 seconds
+
+ans = 
+
+  struct with fields:
+
+                  cell_typ: 1
+                   lat_vec: [3x3 double]
+                  metric_T: [3x3 double]
+                    grad_T: [3x3 double]
+                    lapc_T: [3x3 double]
+                      Jacb: 1
+                        L1: 14
+                        L2: 6
+                        L3: 14
+                        Nx: 71
+                        Ny: 30
+                        Nz: 71
+                         N: 151230
+                      ecut: -1
+              mesh_spacing: 0.200000000000000
+                   kptgrid: [0 0 0]
+                  kptshift: [0 0 0]
+                      nkpt: [1 1 1]
+                     tnkpt: 1
+                      wkpt: 1
+                        BC: 4
+                       BCx: 1
+                       BCy: 0
+                       BCz: 1
+                      isBS: 0
+                   lattice: 'undefined'
+                   SCF_tol: 1.000000000000000e-06
+                       Nev: 8
+               poisson_tol: 1.000000000000000e-08
+          pseudocharge_tol: 1.000000000000000e-08
+                       Cst: 27.211386245987999
+              Ha_Bohr3_GPa: 2.942101569650548e+04
+                        kB: 3.166811563455600e-06
+               elec_T_type: 0
+                      Temp: 1.160451743453262e+03
+                       bet: 2.721138785697259e+02
+                       npl: 35
+                       FDn: 6
+                    rc_ref: 0.500000000000000
+              max_relax_it: 100
+                dbg_switch: 0
+                        xc: 1
+                 Nelectron: 8
+                     n_typ: 2
+                TimeRevSym: 1
+                  spin_typ: 0
+                     nspin: 1
+              CheFSI_Optmz: 0
+          chefsibound_flag: 0
+               FixRandSeed: 0
+                rhoTrigger: 4
+                 NetCharge: 0
+                 MAXIT_SCF: 100
+                 MINIT_SCF: 3
+             MAXIT_POISSON: 1000
+            accuracy_level: -1
+     target_force_accuracy: -1
+    target_energy_accuracy: -1
+                 TOL_RELAX: 5.000000000000000e-04
+               TOL_LANCZOS: 0.010000000000000
+               precond_tol: 4.000000000000001e-05
+               precond_kTF: 1
+            precond_thresh: 0.250000000000000
+            precond_fitpow: 2
+          precond_resta_q0: 1.360000000000000
+          precond_resta_Rs: 2.760000000000000
+            MixingVariable: 1
+             MixingPrecond: 0
+                  Pf_guess: []
+             MixingHistory: 7
+           MixingParameter: 0.300000000000000
+     MixingParameterSimple: 0.300000000000000
+            PulayFrequency: 1
+          PulayRestartFreq: 0
+                    TWtime: 1.000000000000000e+09
+                 RelaxFlag: 0
+                 RelaxMeth: 'LBFGS'
+            max_dilatation: 1.200000000000000
+            TOL_RELAX_CELL: 5.000000000000000e-05
+                    MDFlag: 0
+               RestartFlag: 0
+                    MDMeth: 'NVE'
+                     MD_dt: 1
+                  MD_Nstep: 0
+                     ion_T: -1
+                thermos_TF: -1
+              ion_elec_eqT: 1
+              ion_vel_dstr: 2
+                NLCG_sigma: 0.500000000000000
+                     qmass: 1
+                 L_history: 20
+               L_finit_stp: 0.005000000000000
+                  L_maxmov: 0.200000000000000
+               L_autoscale: 1
+                 L_lineopt: 1
+                   L_icurv: 1
+                   FIRE_dt: 1
+                 FIRE_mass: 1
+               FIRE_maxmov: 0.200000000000000
+               Calc_stress: 1
+                 Calc_pres: 0
+            PrintForceFlag: 1
+          PrintAtomPosFlag: 1
+          PrintAtomVelFlag: 1
+         PrintElecDensFlag: 0
+            PrintEigenFlag: 0
+                PrintMDout: 1
+             PrintRelaxout: 1
+              Printrestart: 1
+           Printrestart_fq: 1
+                       xin: 0
+                       yin: 0
+                       zin: 0
+                     twist: 0
+                  filename: 'H2O_wire'
+            inputfile_path: '.'
+                        XC: 'LDA_PZ'
+                       Atm: [1x2 struct]
+                     n_atm: 3
+                     Atoms: [3x3 double]
+           mvAtmConstraint: [3x3 double]
+                    IsFrac: [2x1 double]
+                    IsSpin: [2x1 double]
+            is_default_psd: 0
+                  temp_tol: 1.000000000000000e-12
+                 xc_rhotol: 1.000000000000000e-14
+                Atoms_init: [3x3 double]
+                  lat_uvec: [3x3 double]
+                        dx: 0.200000000000000
+                        dy: 0.200000000000000
+                        dz: 0.200000000000000
+                        dV: 0.008000000000000
+                        w2: [1x7 double]
+                        w1: [1x7 double]
+                         W: [151230x1 double]
+                    occfac: 2
+                Relax_iter: 1
+              elecgs_Count: 1
+               StressCount: 1
+                    amu2au: 1.822888485332371e+03
+                    fs2atu: 41.341373336493000
+                      I_11: [881x1 double]
+                     II_11: [881x1 double]
+                      V_11: [881x1 double]
+                 isOutl_22: [390x1 logical]
+                 isOutr_22: [390x1 logical]
+                      I_22: [390x1 double]
+                     II_22: [390x1 double]
+                      V_22: [390x1 double]
+                      I_33: [881x1 double]
+                     II_33: [881x1 double]
+                      V_33: [881x1 double]
+                     G_J_1: [1725300x1 double]
+                     G_I_1: [1725300x1 double]
+                     G_V_1: [1725300x1 double]
+                 G_JOutl_2: [1814760x1 logical]
+                 G_JOutr_2: [1814760x1 logical]
+                     G_J_2: [1814760x1 double]
+                     G_I_2: [1814760x1 double]
+                     G_V_2: [1814760x1 double]
+                     G_J_3: [1725300x1 double]
+                     G_I_3: [1725300x1 double]
+                     G_V_3: [1725300x1 double]
+                   Lap_std: [151230x151230 double]
+                    grad_1: [151230x151230 double]
+                    grad_2: [151230x151230 double]
+                    grad_3: [151230x151230 double]
+                LapPreconL: [151230x151230 double]
+                LapPreconU: [151230x151230 double]
+              memory_usage: 481516328
+               staticfname: 'H2O_wire.static'
+                 suffixNum: 0
+                  outfname: 'H2O_wire.out'
+                  parallel: 0
+                         b: [151230x1 double]
+                     b_ref: [151230x1 double]
+                    rho_at: [151230x1 double]
+                     Eself: 35.330217315798365
+                 Eself_ref: 67.841370386155788
+                       V_c: [151230x1 double]
+                 PosCharge: 8.000000022244299
+                 NegCharge: -8.000000022244299
+                    E_corr: -9.000960577054684e-05
+                       rho: [151230x1 double]
+                      Atom: [1x3 struct]
+                       phi: [151230x1 double]
+                       Vxc: [151230x1 double]
+                 dvxcdgrho: [151230x1 double]
+                      Veff: [151230x1 double]
+                         X: [151230x7 double]
+                         F: [151230x7 double]
+          mixing_hist_fkm1: [151230x1 double]
+          mixing_hist_xkm1: [151230x1 double]
+                       psi: [151230x8 double]
+    upper_bound_guess_vecs: [151230x1 double]
+                    EigVal: [8x1 double]
+                  lambda_f: -0.167416260925395
+                       occ: [8x1 double]
+                    Etotal: -17.084123945477263
+                     Eband: -4.270492484672483
+                       Exc: -4.121614690118006
+                    Exc_dc: -5.400173559721225
+                  Eelec_dc: 21.238111574305471
+                      Eent: -1.578874528146553e-09
+                      Escc: 5.422269541090456e-06
+                   S_Debug: [1x1 struct]
+                     force: [3x3 double]
+                 abs_force: [3x1 double]
+                    Stress: -0.020806976196408
+             stress_dimred: [0 1 0]
+

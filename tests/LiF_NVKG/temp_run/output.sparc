@@ -1,0 +1,36 @@
+---------------------------------------
+Begin PBS Prologue Tue May 11 20:00:19 EDT 2021
+Job ID:     6746577.sched-hive.pace.gatech.edu
+User ID:    skumar416
+Job name:   testing_suite
+Queue:      hive
+End PBS Prologue Tue May 11 20:00:19 EDT 2021
+---------------------------------------
+/storage/hive/scratch/5/skumar416/devmsparc_05112021/tests_new/LiF_NVKG/temp_run
+{Unable to perform assignment because the size of the left side is 1-by-3 and
+the size of the right side is 0-by-3.
+
+Error in read_inpt (line 85)
+		S.lat_vec(1,:) = cell2mat(C_param);
+
+Error in initialization (line 17)
+S = read_inpt(S, filename);
+
+Error in msparc (line 34)
+S = initialization(fname);
+
+Error in launch_LiF_NVKG (line 4)
+ msparc('LiF_NVKG')
+} 
+---------------------------------------
+Begin PBS Epilogue Tue May 11 20:00:28 EDT 2021
+Job ID:     6746577.sched-hive.pace.gatech.edu
+User ID:    skumar416
+Job name:   testing_suite
+Resources:  nodes=1:ppn=1,mem=10gb,walltime=04:00:00,neednodes=1:ppn=1
+Rsrc Used:  cput=00:00:07,vmem=988424kb,walltime=00:00:09,mem=21840kb,energy_used=0
+Queue:      hive
+Nodes:     
+atl1-1-01-015-21-l.pace.gatech.edu
+End PBS Epilogue Tue May 11 20:00:28 EDT 2021
+---------------------------------------
