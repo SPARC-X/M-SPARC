@@ -24,12 +24,12 @@ M-SPARC can be executed in matlab by calling the `msparc` function (which is loc
 ```
 S = msparc('filename');
 ```
-In many cases, we would not want to put the input files inside the src/ directory. In such cases, we need to provide the path to the input file name, without any extension. As an example, one can run a test located in M-SPARC/tests/MeshConvergence as follows. First go to src/ directory. Run a DC silicon system with mesh = 0.4 bohr by:  
+In many cases, we would not want to put the input files inside the src/ directory. In such cases, we need to provide the path to the input file name, without any extension. As an example, one can run a test located in M-SPARC/tests/Example_tests as follows. First go to src/ directory. Run a DC silicon system  by:  
 
 ```
-S = msparc('../tests/MeshConvergence/Si8-ONCV-0.4');
+S = msparc('../tests/Example_tests/Si8_kpt');
 ```
-The result is printed to an output file named "Si8-ONCV-0.4.out", located in the same directory as the input files. If the file "Si8-ONCV-0.4.out" is already present, the result will be printed to "Si8-ONCV-0.4.out_1" instead. The max number of ".out" files allowed with the same name is 100. Once this number is reached, the result will instead overwrite the "Si8-ONCV-0.4.out" file. One can compare the result with the reference out file named "Si8-ONCV-0.4.refout".  
+The result is printed to an output file named "Si8_kpt.out", located in the same directory as the input files. If the file "Si8_kpt.out" is already present, the result will be printed to "Si8_kpt.out_1" instead. The max number of ".out" files allowed with the same name is 100. Once this number is reached, the result will instead overwrite the "Si8_kpt.out" file. One can compare the result with the reference out file named "Si8_kpt.refout".  
 
 In the tests/examples/ directory, we also provide a sample script file `run_examples.m`, which launches four example tests one by one. To run these examples, simply change directory to tests/examples/ directory, and run 
 ```
@@ -42,6 +42,8 @@ One can also run M-SPARC using the MATLAB parallel pool to parallelize over k-po
 S = msparc('filename',parallel_switch);
 ```
 If `parallel_switch = 1`, M-SPARC will start using the parallel pool, and if `parallel_switch = 0`, M-SPARC will not use the parallel pool, which is the default. Only turn on parallel pool if k-points or spin are present.
+
+A suite of test systems is provided in the 'tests/' directory. The test systems are arranged in a hierarchal systems of directories. Input and reference output files for each test system is stored in separate folders with the same name. A python script named 'test.py' is also provided to launch the tests on a cluster. Details on how to use the Python script can be found in 'ReadMe' file in the 'tests\' folder.
 
 ### (4) Output:
 
