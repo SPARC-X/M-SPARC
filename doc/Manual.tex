@@ -109,7 +109,7 @@ S = msparc(`filename');
 
 In many cases, we would not want to put the input files inside the \texttt{src/} directory. In such cases, we need to provide the path to the input file name, without any extension. As an example, one can run a test located in \texttt{M-SPARC/tests/Example\_tests/}. First go to \texttt{src/} directory. Run a DC silicon system  by:
 \begin{verbatim}
-S = msparc('../tests/Example_tests\Si8_kpt');
+S = msparc('../tests/Example_tests/Si8_kpt');
 \end{verbatim} 
 The result is printed to output file "Si8\_kpt.out", located in the same directory as the input files. If the file "Si8\_kpt.out" is already present, the result will be printed to "Si8\_kpt.out\_1" instead. The max number of ".out" files allowed with the same name is 100. Once this number is reached, the result will instead overwrite the "Si8\_kpt.out" file. One can compare the result with the reference out file named "Si8\_kpt.refout".\\~\\
 
