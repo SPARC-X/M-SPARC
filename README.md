@@ -24,10 +24,10 @@ M-SPARC can be executed in matlab by calling the `msparc` function (which is loc
 ```
 S = msparc('filename');
 ```
-In many cases, we would not want to put the input files inside the src/ directory. In such cases, we need to provide the path to the input file name, without any extension. As an example, one can run a test located in M-SPARC/tests/ as follows. First go to src/ directory. Run a DC silicon system  by:  
+In many cases, we would not want to put the input files inside the src/ directory. In such cases, we need to provide the path to the input file name, without any extension. As an example, one can run a test located in M-SPARC/tests/Example_tests as follows. First go to src/ directory. Run a DC silicon system  by:  
 
 ```
-S = msparc('../tests/Si8_kpt/Si8_kpt');
+S = msparc('../tests/Example_tests/Si8_kpt');
 ```
 The result is printed to an output file named "Si8_kpt.out", located in the same directory as the input files. If the file "Si8_kpt.out" is already present, the result will be printed to "Si8_kpt.out_1" instead. The max number of ".out" files allowed with the same name is 100. Once this number is reached, the result will instead overwrite the "Si8_kpt.out" file. One can compare the result with the reference out file named "Si8_kpt.refout".  
 
