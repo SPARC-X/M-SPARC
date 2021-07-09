@@ -2443,6 +2443,19 @@ if len(args) == 1 and re.findall(r'run_local',args[0]) == ['run_local']:
 	ifVHQ = False
 	isparallel = False
 
+if len(args) == 1 and re.findall(r'quick_run',args[0]) == ['quick_run']:
+	systems=['BaTiO3_quick','H2O_sheet_quick','H2O_wire_quick','SiH4_quick']
+	tags_sys = []
+	tols_sys = []
+	for i in range(len(systems)):
+		for j in range(len(SYSTEMS["systemname"])):
+			if systems[i] == SYSTEMS["systemname"][j]:
+				tags_sys.append(SYSTEMS["Tags"][j])
+				tols_sys.append(SYSTEMS["Tols"][j])
+	isAuto =  True
+	ifVHQ = False
+	isparallel = False
+
 if len(args) == 1 and re.findall(r'autosys',args[0]) == ['autosys']:
 	indx_test_temp = re.findall(r'\d+',args[0])
 	indx_test = int(indx_test_temp[0])
@@ -2684,6 +2697,7 @@ else:
 # Input to the launch function should be  - (i) systems (ii) ifmempbs (iii) numberofprocs
 if isAuto == False:
 	jobID = launchsystems(systems,memcheck,procs_sys,ismempbs, ifVHQ, isorient, not isparallel)
+
 
 ############################### Monitoring #########################################################################
 	syst_temp = []

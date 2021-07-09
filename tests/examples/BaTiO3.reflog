@@ -1,0 +1,313 @@
+
+ Reading .inpt file ...
+
+
+<INPT>
+# $ cat BaTiO3.inpt
+# Test: BaTiO3 #
+CELL: 7.63 7.63 7.63
+FD_GRID: 15 15 15
+BC: P P P
+EXCHANGE_CORRELATION: LDA_PZ
+TOL_SCF: 1e-5
+TOL_PSEUDOCHARGE: 1e-5
+PRINT_FORCES: 1
+PRINT_ATOMS: 1
+
+
+<\INPT>
+
+ Reading .ion file ...
+ Number of atom types : 3
+ Total number of atoms: 5
+ Default atomic mass for Ba is 137.327000
+ Default atomic mass for Ti is 47.867000
+ Default atomic mass for O is 15.999400
+ pseudo_dir # 1 = ../../Pseudopotentials/Ba.psp8
+ pseudo_dir # 2 = ../../Pseudopotentials/Ti.psp8
+ pseudo_dir # 3 = ../../Pseudopotentials/O.psp8
+
+ COORD:
+   7.540463013371621   7.248833728543416   7.518607464589964
+   3.725768164762889   3.878328962888697   3.426961342823767
+   4.052740031589397   7.190115020153727   3.856885000727702
+   7.090600941523509   3.476460666072041   3.727807248988862
+   3.601707961096307   3.648353082729004   0.199860166191001
+
+ kpoint grid before symmetry:
+     0     0     0
+
+ kpoint grid after symmetry:
+     0     0     0
+
+## Chebyshev polynomial degree not provided, finding npl ...
+## Based on the mesh size, npl is set to: 17
+## Number of states not provided, finding Nev ...
+## Based on the number of electrons, Nev is set to: 29
+## Poisson tolerance not provided, choosing poisson_tol ...
+## poisson_tol is set to: 1.000e-07
+ Creating differentiation matrices ...
+ Done. (0.035 sec)
+
+ Estimated memory usage:
+ Total:   12.41 MB
+ orbitals            :    2.99 MB
+ sparse matrices     :    8.70 MB
+ global-size vectors :  369.14 kB
+ mixing histories    :  369.14 kB
+
+ Finding rb for Ba ...
+ rb = {3.561 3.561 3.561}, int_b = -9.999921525074964, err_rb = 7.847e-05
+ rb = {4.069 4.069 4.069}, int_b = -10.000061099168041, err_rb = 6.110e-05
+ rb = {4.578 4.578 4.578}, int_b = -10.000021197682786, err_rb = 2.120e-05
+ rb = {5.087 5.087 5.087}, int_b = -10.000016308813512, err_rb = 1.631e-05
+ rb = {5.595 5.595 5.595}, int_b = -10.000011153740992, err_rb = 1.115e-05
+ rb = {6.104 6.104 6.104}, int_b = -9.999998575103312, err_rb = 1.425e-06
+ rb = {6.104 6.104 6.104}
+ Finding rb for Ti ...
+ rb = {3.052 3.052 3.052}, int_b = -11.999990899677675, err_rb = 9.100e-06
+ rb = {3.052 3.052 3.052}
+ Finding rb for O ...
+ rb = {2.035 2.035 2.035}, int_b = -5.996295496021606, err_rb = 3.705e-03
+ rb = {2.543 2.543 2.543}, int_b = -6.000228753767169, err_rb = 2.288e-04
+ rb = {3.052 3.052 3.052}, int_b = -6.000040176728949, err_rb = 4.018e-05
+ rb = {3.561 3.561 3.561}, int_b = -6.000040176728949, err_rb = 4.018e-05
+ rb = {4.069 4.069 4.069}, int_b = -6.000026031623906, err_rb = 2.603e-05
+ rb = {4.578 4.578 4.578}, int_b = -6.000018149058158, err_rb = 1.815e-05
+ rb = {5.087 5.087 5.087}, int_b = -6.000016275978431, err_rb = 1.628e-05
+ rb = {5.595 5.595 5.595}, int_b = -6.000012360409576, err_rb = 1.236e-05
+ rb = {6.104 6.104 6.104}, int_b = -5.999998407764163, err_rb = 1.592e-06
+ rb = {6.104 6.104 6.104}
+
+ ###############################################################
+ Relaxation step number: 1 
+
+ Starting pseudocharge generation and self energy calculation...
+ Integration b = 39.999320267883
+
+ Integration b_ref = 40.000058593117
+
+ ****************************************
+ *          Eself_ref = 588.612037       *
+ ****************************************
+ Done. (0.122520 s)
+ Time for b calculation: 0.124 seconds.
+
+ Starting calculating nonlocal projectors ...
+ Done. (0.055829 s)
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+ Starting SCF iteration...
+ AAR converged to a relative residual of 1.47079e-08 in 31 iterations.
+ Poisson problem took 0.021929s
+ ============================================= 
+ Relaxation iteration:  1
+ SCF iteration number:  1, Chebyshev cycle: 1 
+ ============================================= 
+ Fermi energy = 1.026521
+ This SCF iteration took 0.227 s.
+
+ ============================================= 
+ Relaxation iteration:  1
+ SCF iteration number:  1, Chebyshev cycle: 2 
+ ============================================= 
+ Fermi energy = 0.185457
+ This SCF iteration took 0.123 s.
+
+ ============================================= 
+ Relaxation iteration:  1
+ SCF iteration number:  1, Chebyshev cycle: 3 
+ ============================================= 
+ Fermi energy = 0.115219
+ This SCF iteration took 0.144 s.
+
+ ============================================= 
+ Relaxation iteration:  1
+ SCF iteration number:  1, Chebyshev cycle: 4 
+ ============================================= 
+ Fermi energy = 0.114580
+ AAR converged to a relative residual of 6.02685e-08 in 25 iterations.
+ Poisson problem took 0.016092s
+ Escc = 4.19715058
+ Etot = -130.89166534
+ Eatom = -26.17833307
+ Error in SCF iteration: 2.1656e-01 
+ This SCF iteration took 0.175 s.
+
+ ========================= 
+ Relaxation iteration:  1 
+ SCF iteration number:  2 
+ ========================= 
+ Fermi energy = 0.236607
+ AAR converged to a relative residual of 6.34624e-08 in 25 iterations.
+ Poisson problem took 0.012030s
+ Escc = 0.02865658
+ Etot = -131.84904641
+ Eatom = -26.36980928
+ Error in SCF iteration: 4.8907e-02 
+ This SCF iteration took 0.166 s.
+
+ ========================= 
+ Relaxation iteration:  1 
+ SCF iteration number:  3 
+ ========================= 
+ Fermi energy = 0.221328
+ AAR converged to a relative residual of 1.5456e-08 in 25 iterations.
+ Poisson problem took 0.010785s
+ Escc = -0.09452642
+ Etot = -131.87532837
+ Eatom = -26.37506567
+ Error in SCF iteration: 2.4928e-02 
+ This SCF iteration took 0.155 s.
+
+ ========================= 
+ Relaxation iteration:  1 
+ SCF iteration number:  4 
+ ========================= 
+ Fermi energy = 0.230019
+ AAR converged to a relative residual of 6.56507e-09 in 25 iterations.
+ Poisson problem took 0.011834s
+ Escc = 0.09583663
+ Etot = -131.88135595
+ Eatom = -26.37627119
+ Error in SCF iteration: 1.6272e-02 
+ This SCF iteration took 0.160 s.
+
+ ========================= 
+ Relaxation iteration:  1 
+ SCF iteration number:  5 
+ ========================= 
+ Fermi energy = 0.228293
+ AAR converged to a relative residual of 9.34521e-08 in 22 iterations.
+ Poisson problem took 0.009200s
+ Escc = -0.02050820
+ Etot = -131.88643419
+ Eatom = -26.37728684
+ Error in SCF iteration: 3.0722e-03 
+ This SCF iteration took 0.151 s.
+
+ ========================= 
+ Relaxation iteration:  1 
+ SCF iteration number:  6 
+ ========================= 
+ Fermi energy = 0.229349
+ AAR converged to a relative residual of 1.80014e-08 in 19 iterations.
+ Poisson problem took 0.008550s
+ Escc = -0.01149918
+ Etot = -131.88655729
+ Eatom = -26.37731146
+ Error in SCF iteration: 1.1704e-03 
+ This SCF iteration took 0.151 s.
+
+ ========================= 
+ Relaxation iteration:  1 
+ SCF iteration number:  7 
+ ========================= 
+ Fermi energy = 0.229376
+ AAR converged to a relative residual of 9.93279e-08 in 17 iterations.
+ Poisson problem took 0.008072s
+ Escc = 0.01069114
+ Etot = -131.88656945
+ Eatom = -26.37731389
+ Error in SCF iteration: 4.3965e-04 
+ This SCF iteration took 0.146 s.
+
+ ========================= 
+ Relaxation iteration:  1 
+ SCF iteration number:  8 
+ ========================= 
+ Fermi energy = 0.229499
+ AAR converged to a relative residual of 9.53422e-08 in 13 iterations.
+ Poisson problem took 0.005960s
+ Escc = -0.00219341
+ Etot = -131.88657110
+ Eatom = -26.37731422
+ Error in SCF iteration: 2.2970e-04 
+ This SCF iteration took 0.141 s.
+
+ ========================= 
+ Relaxation iteration:  1 
+ SCF iteration number:  9 
+ ========================= 
+ Fermi energy = 0.229402
+ AAR converged to a relative residual of 8.94424e-08 in 13 iterations.
+ Poisson problem took 0.005396s
+ Escc = -0.00204897
+ Etot = -131.88657236
+ Eatom = -26.37731447
+ Error in SCF iteration: 1.3206e-04 
+ This SCF iteration took 0.137 s.
+
+ ========================= 
+ Relaxation iteration:  1 
+ SCF iteration number: 10 
+ ========================= 
+ Fermi energy = 0.229397
+ AAR converged to a relative residual of 4.18046e-08 in 13 iterations.
+ Poisson problem took 0.005186s
+ Escc = 0.00067438
+ Etot = -131.88657206
+ Eatom = -26.37731441
+ Error in SCF iteration: 3.4174e-05 
+ This SCF iteration took 0.135 s.
+
+ ========================= 
+ Relaxation iteration:  1 
+ SCF iteration number: 11 
+ ========================= 
+ Fermi energy = 0.229397
+ AAR converged to a relative residual of 1.35098e-08 in 13 iterations.
+ Poisson problem took 0.006429s
+ Escc = -0.00025269
+ Etot = -131.88657250
+ Eatom = -26.37731450
+ Error in SCF iteration: 1.3215e-05 
+ This SCF iteration took 0.140 s.
+
+ ========================= 
+ Relaxation iteration:  1 
+ SCF iteration number: 12 
+ ========================= 
+ Fermi energy = 0.229397
+ AAR converged to a relative residual of 3.3307e-09 in 13 iterations.
+ Poisson problem took 0.005684s
+ Escc = -0.00002304
+ Etot = -131.88657235
+ Eatom = -26.37731447
+ Error in SCF iteration: 1.2706e-06 
+ This SCF iteration took 0.144 s.
+
+
+ Finished SCF iteration in 12 steps!
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+
+ **********************************************************
+ *          Energy per unit cell = -131.886572345 Ha.       *
+ *          Energy per atom = -26.377314469 Ha.            *
+ **********************************************************
+
+ Starting atomic force calculation ... 
+ local force calculation: 0.155 s
+ ***********************************************************
+ *                      Atomic Force                       *
+ ***********************************************************
+ Drift free forces (Ha/Bohr):
+   0.002949397730400  -0.069480091916376  -0.176982421133226
+   0.106587984962141   0.130222142559757  -0.281070874728515
+  -0.061964068166310   0.243780457914347  -0.429316996197950
+  -0.198922472531551  -0.641036343246562   0.539548550094342
+   0.151349158005321   0.336513834688833   0.347821741965349
+
+ Max magnitude of forces (Ha/Bohr):   0.861168033167684
+
+
+ Time for calculating forces: 0.178384 s.
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+ Final atomic positions (Cartesian) are as follows:
+  7.540463 	  7.248834 	  7.518607 
+  3.725768 	  3.878329 	  3.426961 
+  4.052740 	  7.190115 	  3.856885 
+  7.090601 	  3.476461 	  3.727807 
+  3.601708 	  3.648353 	  0.199860 
+
+ Run-time of the program: 2.911107 seconds
