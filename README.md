@@ -9,7 +9,12 @@ Matlab-Simulation Package for Ab-initio Real-space Calculations (M-SPARC) is a r
 * LDA and GGA exchange correlation functionals.  
 * ONCV and TM pseudopotentials in psp8 (ABINIT) format.  
 
-**Users of M-SPARC are expected to cite the following publication: Xu, Q., Sharma, A. and Suryanarayana, P., 2020. M-SPARC: Matlab-Simulation Package for Ab-initio Real-space Calculations. SoftwareX, 11, p.100423.**
+
+### (2) Installation:
+
+Prerequisite: Matlab 
+
+No installation required.
 
 ### (2) Input files:  
 The required input files to run a simulation with M-SPARC are (with shared names)  
@@ -80,3 +85,20 @@ See above.
 The `.aimd` file contains the atomic positions, atomic velocities, atomic forces, electronic temperature, ionic temperature and total energy for each MD step.
 - `.restart` file  
 The `.restart` file contains information necessary to perform a restarted MD calculation. 
+
+
+### (6) Acknowledgement:
+  
+* U.S. Department of Energy, Office of Science: DE-SC0019410 
+* U.S. National Science Foundation: 1333500 and 1553212
+
+### (7) Citation:
+
+If you publish work using/regarding M-SPARC, please cite some of the following articles, particularly those that are most relevant to your work:
+* **General**: https://doi.org/10.1016/j.softx.2020.100423
+* **Non-orthogonal systems**: https://doi.org/10.1016/j.cplett.2018.04.018
+* **Linear solvers**: https://doi.org/10.1016/j.cpc.2018.07.007, https://doi.org/10.1016/j.jcp.2015.11.018
+* **Stress tensor/pressure**: https://doi.org/10.1063/1.5057355
+* **Atomic forces**: https://doi.org/10.1016/j.cpc.2016.09.020, https://doi.org/10.1016/j.cpc.2017.02.019
+* **Mixing**: https://doi.org/10.1016/j.cplett.2016.01.033, https://doi.org/10.1016/j.cplett.2015.06.029, https://doi.org/10.1016/j.cplett.2019.136983 
+
