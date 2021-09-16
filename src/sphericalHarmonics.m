@@ -233,7 +233,7 @@ elseif l == 1
 	elseif m==1
 		Ylm = -C11 * ((X+iota*Y)./r);
 	else
-		error('Error:incorrect l: %d,m: %d \n',l,m);
+		error('ERROR:incorrect l: %d,m: %d \n',l,m);
 	end
 elseif l == 2
 %fprintf('In Complex spherical harmonics with l = %d \n',l);
@@ -254,7 +254,7 @@ elseif l == 2
 	elseif m==2
 		Ylm = C22 * ((X+iota*Y).^2)./r2;
 	else
-		error('Error: incorrect l: %d, m: %d \n',l,m);
+		error('ERROR: incorrect l: %d, m: %d \n',l,m);
 	end
 elseif l == 3
 	C33 = 0.417223823632784;
@@ -279,7 +279,7 @@ elseif l == 3
 	elseif m==3
 		Ylm = -C33 * ((X+iota*Y).^3)./r3;
 	else
-		error('Error: incorrect l: %d, m: %d \n',l,m);
+		error('ERROR: incorrect l: %d, m: %d \n',l,m);
 	end    
 elseif l == 4
 	C44 = 0.442532692444983;
@@ -309,7 +309,7 @@ elseif l == 4
 	elseif m==4
 		Ylm = C44 * ((X+iota*Y).^4)./r4;
 	else
-		error('Error: incorrect l: %d, m: %d \n',l,m);
+		error('ERROR: incorrect l: %d, m: %d \n',l,m);
 	end 
 elseif l == 5
 	C55 = 0.464132203440858;
@@ -341,10 +341,10 @@ elseif l == 5
 		Ylm = -C53 * (((X+iota*Y).^3).*(9*Z.^2 - r.^2))./r5;
 	elseif m==4
 		Ylm = C54 * (((X+iota*Y).^4).*Z)./r5;
-	elseif m==-5
+	elseif m==5
 		Ylm = -C55 * ((X+iota*Y).^5)./r5;
 	else
-		error('Error: incorrect l: %d, m: %d \n',l,m);
+		error('ERROR: incorrect l: %d, m: %d \n',l,m);
 	end
 elseif l == 6
 	C66 = 0.483084113580066; 

@@ -95,7 +95,7 @@ for JJ_a = 1:S.n_atm % loop over all the atoms
 		% 	(S.BCy == 0 || (S.BCy == 1 && (jj_s>1) && (jj_e<S.Ny))) && ...
 		% 	(S.BCz == 0 || (S.BCz == 1 && (kk_s>1) && (kk_e<S.Nz)));
 		% this might be redundant since rb is larger than rc
-		% assert(isInside,'Error: Atom too close to boundary for nonlocal projector calculation');
+		% assert(isInside,'ERROR: Atom too close to boundary for nonlocal projector calculation');
 
 		%**********************************************************************
 		%*                   Calculate nonlocal projector Chi                 *

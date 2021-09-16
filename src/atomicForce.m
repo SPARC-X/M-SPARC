@@ -97,7 +97,7 @@ if S.NLCC_flag
             %isInside = (S.BCx == 0 || (S.BCx == 1 && (ii_s>1) && (ii_e<S.Nx))) && ...
             %   (S.BCy == 0 || (S.BCy == 1 && (jj_s>1) && (jj_e<S.Ny))) && ...
             %   (S.BCz == 0 || (S.BCz == 1 && (kk_s>1) && (kk_e<S.Nz)));
-            % assert(isInside,'Error: Atom too close to boundary for b calculation');
+            % assert(isInside,'ERROR: Atom too close to boundary for b calculation');
             ii_s = max(ii_s,1);
             ii_e = min(ii_e,S.Nx);
             jj_s = max(jj_s,1);
@@ -224,7 +224,7 @@ for JJ_a = 1:S.n_atm % loop over all the atoms
 		isInside = (S.BCx == 0 || (S.BCx == 1 && (ii_s>=1) && (ii_e<=S.Nx))) && ...
 			(S.BCy == 0 || (S.BCy == 1 && (jj_s>=1) && (jj_e<=S.Ny))) && ...
 			(S.BCz == 0 || (S.BCz == 1 && (kk_s>=1) && (kk_e<=S.Nz)));
-		% assert(isInside,'Error: Atom too close to boundary for b calculation');
+		% assert(isInside,'ERROR: Atom too close to boundary for b calculation');
 		if ~isInside
 			fprintf(' WARNING: Atom %d too close to boundary for b calculation\n',JJ_a);
 		end

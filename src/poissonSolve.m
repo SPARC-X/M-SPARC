@@ -281,10 +281,10 @@ function xmy = colminusrow(x,y)
 % A column vector x minus a row vector.
 % In Matlab versions after R2018b, it's just x - y
 if (size(x,2) ~= 1)
-	error('Error: the first vector must be a column vector');
+	error('ERROR: the first vector must be a column vector');
 end
 if (size(y,1) ~= 1)
-	error('Error: the second vector must be a row vector');
+	error('ERROR: the second vector must be a row vector');
 end
 
 [xx,yy] = ndgrid(x,y);

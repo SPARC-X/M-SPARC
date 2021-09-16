@@ -102,7 +102,7 @@ while(~feof(fid1))
 		C_param = textscan(fid1,'%f',1,'delimiter',' ','MultipleDelimsAsOne',1);
 		S.BC = C_param{1};
 		textscan(fid1,'%s',1,'delimiter','\n','MultipleDelimsAsOne',0); % skip current line
-		fprintf('Warning: "BOUNDARY_CONDITION" is obsolete, use "BC" instead!\n');
+		fprintf('WARNING: "BOUNDARY_CONDITION" is obsolete, use "BC" instead!\n');
 	elseif (strcmp(str,'BC:'))
 		C_param = textscan(fid1,'%s %s %s',1,'delimiter',' ','MultipleDelimsAsOne',1); % read smearing type
 		bcx = char(C_param{1});
@@ -319,7 +319,7 @@ while(~feof(fid1))
 	elseif (strcmp(str,'TOL_KERKER:'))
 		C_param = textscan(fid1,'%f',1,'delimiter',' ','MultipleDelimsAsOne',1);
 		%S.kerker_tol = C_param{1};
-		fprintf('Warning: TOL_KERKER is obsolete, use TOL_PRECOND instead!\n')
+		fprintf('WARNING: TOL_KERKER is obsolete, use TOL_PRECOND instead!\n')
 		S.precond_tol = C_param{1};
 		textscan(fid1,'%s',1,'delimiter','\n','MultipleDelimsAsOne',0); % skip current line
 	elseif (strcmp(str,'TOL_PRECOND:'))
@@ -569,16 +569,16 @@ while(~feof(fid1))
 		S.Calc_pres = C_param{1};
 		textscan(fid1,'%s',1,'delimiter','\n','MultipleDelimsAsOne',0); % skip current line
 	elseif (strcmp(str,'NTYPES:'))
-		fprintf('Warning: NTYPES is no longer needed, skipping this option ...\n');
+		fprintf('WARNING: NTYPES is no longer needed, skipping this option ...\n');
 		textscan(fid1,'%s',1,'delimiter','\n','MultipleDelimsAsOne',0); % skip current line
 	elseif (strcmp(str,'ATOMIC_MASS:'))
-		fprintf('Warning: ATOMIC_MASS is now moved to .ion file, skipping this option ...\n');
+		fprintf('WARNING: ATOMIC_MASS is now moved to .ion file, skipping this option ...\n');
 		textscan(fid1,'%s',1,'delimiter','\n','MultipleDelimsAsOne',0); % skip current line
 	elseif (strcmp(str,'PSEUDOPOTENTIAL_LOCAL:'))
-		fprintf('Warning: PSEUDOPOTENTIAL_LOCAL is no longer needed, skipping this option ...\n');
+		fprintf('WARNING: PSEUDOPOTENTIAL_LOCAL is no longer needed, skipping this option ...\n');
 		textscan(fid1,'%s',1,'delimiter','\n','MultipleDelimsAsOne',0); % skip current line% remove this, and this if cond
 	elseif(strcmp(str,'PSEUDOPOTENTIAL_FILE:'))
-		fprintf('Warning: PSEUDOPOTENTIAL_FILE is now moved to .ion file, skipping this option ...\n');
+		fprintf('WARNING: PSEUDOPOTENTIAL_FILE is now moved to .ion file, skipping this option ...\n');
 		textscan(fid1,'%s',1,'delimiter','\n','MultipleDelimsAsOne',0); % skip current line
 	elseif(strcmp(str,'PRINT_FORCES:'))
 		C_param = textscan(fid1,'%f',1,'delimiter',' ','MultipleDelimsAsOne',1);

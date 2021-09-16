@@ -60,7 +60,7 @@ S.S_Debug.relax(S.Relax_iter).Eself_ref = S.Eself_ref;
 S.S_Debug.relax(S.Relax_iter).E_corr = S.E_corr;
 
 if abs(1-S.occ(1))>1e-6 || abs(S.occ(end))>1e-6
-	fprintf('[\b Warning: No. of states is not enough!]\b \n');
+	fprintf('[\b WARNING: No. of states is not enough!]\b \n');
 	S.S_Debug.relax(S.Relax_iter).occ_check = 1; % 1 means not satisfied
 else
 	S.S_Debug.relax(S.Relax_iter).occ_check = 0;

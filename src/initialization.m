@@ -345,7 +345,7 @@ if (isAtomOutx)
 		for ityp = 1:S.n_typ	
 			S.Atm(ityp).coords(:,1) = mod(S.Atm(ityp).coords(:,1),S.L1);	
 		end	
-		fprintf(' Warning: mapped atom position back to domain in x dir!\n');	
+		fprintf(' WARNING: mapped atom position back to domain in x dir!\n');	
 	else	
 		error('Atom out of domain in x dir!');	
 	end	
@@ -358,7 +358,7 @@ if (isAtomOuty)
 		for ityp = 1:S.n_typ	
 			S.Atm(ityp).coords(:,2) = mod(S.Atm(ityp).coords(:,2),S.L2);	
 		end	
-		fprintf(' Warning: mapped atom position back to domain in y dir!\n');	
+		fprintf(' WARNING: mapped atom position back to domain in y dir!\n');	
 	else	
 		error('Atom out of domain in y dir!');	
 	end	
@@ -371,7 +371,7 @@ if (isAtomOutz)
 		for ityp = 1:S.n_typ	
 			S.Atm(ityp).coords(:,3) = mod(S.Atm(ityp).coords(:,3),S.L3);	
 		end	
-		fprintf(' Warning: mapped atom position back to domain in z dir!\n');	
+		fprintf(' WARNING: mapped atom position back to domain in z dir!\n');	
 	else	
 		error('Atom out of domain in z dir!');	
 	end	
