@@ -30,7 +30,11 @@ lloc = A{1,4};
 % lloc = 4; % forcing nonlocal component to 4!
 mmax = A{1,5};
 
-textscan(fid,'%s',2,'delimiter','\n') ;
+textscan(fid,'%s',1,'delimiter','\n') ;
+Ax = textscan(fid,'%f %f %f') ;
+textscan(fid,'%s',1,'delimiter','\n') ;
+fchrg = Ax{2};
+
 A = textscan(fid,'%f %f %f %f %f');
 nproj = ones(lmax+1,1);
 for i = 0:lmax
@@ -69,6 +73,20 @@ else
 	fseek(fid, -4, 'cof');
 end
 
+S.NLCC_flag = 0;
+% read core density
+if fchrg > 0
+	uu = zeros(mmax,1);
+	Atilde = fscanf(fid,'%d %g %g %g %g %g %g',[7,mmax]) ;
+	uu(1:end,1) = Atilde(3,:)/(4*pi);
+	rho_Tilde = uu;
+	rTilde = Atilde(2,:)';
+    S.NLCC_flag = 1;
+else
+	rTilde = r;
+	rho_Tilde = zeros(length(r),1);
+end
+
 uu = zeros(mmax,1);
 size = [5,mmax];
 A = fscanf(fid,'%d %g %g %g %g',size);
@@ -98,6 +116,8 @@ S.Atm(ityp).lloc = lloc;
 S.Atm(ityp).nproj = nproj;
 S.Atm(ityp).r_grid_rho = r_grid_rho;
 S.Atm(ityp).rho_isolated_guess = rho_isolated_guess;
+S.Atm(ityp).rho_Tilde = rho_Tilde;
+S.Atm(ityp).r_grid_rho_Tilde = rTilde;
 
 fclose(fid);
 end

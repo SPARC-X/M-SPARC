@@ -1,4 +1,14 @@
 ----------------
+Sep 16, 2021
+Name: Xin Jing
+* Add LATVEC_SCALE option
+* Add magnetization mixing method
+* Add NLCC
+* udpate documentation
+* Capitalize all Error and Warning
+* Fix a bug in spherical harmonics
+
+----------------
 July 9, 2021
 Name: Shashikant Kumar
 * Changed Readme.md and doc manual to make it consistent with the new tests folder

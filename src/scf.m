@@ -214,7 +214,17 @@ while (err > S.SCF_tol && count_SCF <= max_scf_iter || count_SCF <= min_scf_iter
 					% used for the next input is S.Veff 
 					Veff_temp = S.Veff;
 				else % density mixing
-					[S, S.rho] = mixing(S,S.rho,rho_temp,count_SCF);
+					[S, RHO] = mixing(S,S.rho,rho_temp,count_SCF);
+                    negrho_count = sum(RHO < 0);
+                    if negrho_count > 0
+                        fprintf('\nDensity got negative\n\n');
+                        RHO(RHO < 0) = 0;
+                    end
+					S.rho = RHO;
+                    if negrho_count > 0
+                        scal = (-S.NegCharge/dot(S.W,S.rho));
+                        S.rho = scal*S.rho;
+                    end
 					rho_temp = S.rho;
 					% at this point rho_temp = S.rho, i.e., new input density
 					% update Veff

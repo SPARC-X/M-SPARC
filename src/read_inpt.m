@@ -40,6 +40,8 @@ Flag_accuracy = 0;
 Flag_ionT = 0;
 Flag_eqT = 0;
 %Flag_ionT_end = 0;
+Flag_cell = 0;
+Flag_latvec_scale = 0;
 
 while(~feof(fid1))
 	C_inpt = textscan(fid1,'%s',1,'delimiter',' ','MultipleDelimsAsOne',1);
@@ -69,10 +71,19 @@ while(~feof(fid1))
 		textscan(fid1,'%s',1,'delimiter','\n','MultipleDelimsAsOne',0); % skip current line           
 	elseif (strcmp(str,'CELL:'))
 		C_param = textscan(fid1,'%f %f %f',1,'delimiter',' ','MultipleDelimsAsOne',1);
+        Flag_cell = 1;
 		S.L1 = C_param{1};
 		S.L2 = C_param{2};
 		S.L3 = C_param{3};
 		textscan(fid1,'%s',1,'delimiter','\n','MultipleDelimsAsOne',0); % skip current line           
+    elseif (strcmp(str,'LATVEC_SCALE:'))
+		C_param = textscan(fid1,'%f %f %f',1,'delimiter',' ','MultipleDelimsAsOne',1);
+        Flag_latvec_scale = 1;
+        S.Flag_latvec_scale = 1;
+		S.latvec_scale_x = C_param{1};
+		S.latvec_scale_y = C_param{2};
+		S.latvec_scale_z = C_param{3};
+		textscan(fid1,'%s',1,'delimiter','\n','MultipleDelimsAsOne',0); % skip current line       
 	elseif (strcmp(str,'TWIST_ANGLE:'))
 		C_param = textscan(fid1,'%f',1,'delimiter',' ','MultipleDelimsAsOne',1);
 		S.alph = C_param{1}; % in radian/Bohr
@@ -91,7 +102,7 @@ while(~feof(fid1))
 		C_param = textscan(fid1,'%f',1,'delimiter',' ','MultipleDelimsAsOne',1);
 		S.BC = C_param{1};
 		textscan(fid1,'%s',1,'delimiter','\n','MultipleDelimsAsOne',0); % skip current line
-		fprintf('Warning: "BOUNDARY_CONDITION" is obsolete, use "BC" instead!\n');
+		fprintf('WARNING: "BOUNDARY_CONDITION" is obsolete, use "BC" instead!\n');
 	elseif (strcmp(str,'BC:'))
 		C_param = textscan(fid1,'%s %s %s',1,'delimiter',' ','MultipleDelimsAsOne',1); % read smearing type
 		bcx = char(C_param{1});
@@ -308,7 +319,7 @@ while(~feof(fid1))
 	elseif (strcmp(str,'TOL_KERKER:'))
 		C_param = textscan(fid1,'%f',1,'delimiter',' ','MultipleDelimsAsOne',1);
 		%S.kerker_tol = C_param{1};
-		fprintf('Warning: TOL_KERKER is obsolete, use TOL_PRECOND instead!\n')
+		fprintf('WARNING: TOL_KERKER is obsolete, use TOL_PRECOND instead!\n')
 		S.precond_tol = C_param{1};
 		textscan(fid1,'%s',1,'delimiter','\n','MultipleDelimsAsOne',0); % skip current line
 	elseif (strcmp(str,'TOL_PRECOND:'))
@@ -322,6 +333,14 @@ while(~feof(fid1))
 	elseif (strcmp(str,'PRECOND_KERKER_THRESH:'))
 		C_param = textscan(fid1,'%f',1,'delimiter',' ','MultipleDelimsAsOne',1);
 		S.precond_thresh = C_param{1};
+		textscan(fid1,'%s',1,'delimiter','\n','MultipleDelimsAsOne',0); % skip current line
+    elseif (strcmp(str,'PRECOND_KERKER_KTF_MAG:'))
+		C_param = textscan(fid1,'%f',1,'delimiter',' ','MultipleDelimsAsOne',1);
+		S.precond_kTF_mag = C_param{1};
+		textscan(fid1,'%s',1,'delimiter','\n','MultipleDelimsAsOne',0); % skip current line
+	elseif (strcmp(str,'PRECOND_KERKER_THRESH_MAG:'))
+		C_param = textscan(fid1,'%f',1,'delimiter',' ','MultipleDelimsAsOne',1);
+		S.precond_thresh_mag = C_param{1};
 		textscan(fid1,'%s',1,'delimiter','\n','MultipleDelimsAsOne',0); % skip current line
 	elseif (strcmp(str,'PRECOND_RESTA_Q0:'))
 		C_param = textscan(fid1,'%f',1,'delimiter',' ','MultipleDelimsAsOne',1);
@@ -369,6 +388,20 @@ while(~feof(fid1))
 			error('exiting');
 		end
 		textscan(fid1,'%s',1,'delimiter','\n','MultipleDelimsAsOne',0); % skip current line
+    
+    elseif (strcmp(str,'MIXING_PRECOND_MAG:'))
+		C_param = textscan(fid1,'%s',1,'delimiter',' ','MultipleDelimsAsOne',1);
+		temp = char(C_param{:});
+		if (strcmp(temp,'none'))
+			S.MixingPrecondMag = 0;
+		elseif (strcmp(temp,'kerker'))
+			S.MixingPrecondMag = 1;
+		else
+			fprintf('\nCannot recognize mixing preconditioner: "%s"\n',temp);
+			fprintf('Available options: "none", "kerker" \n');
+			error('exiting');
+		end
+		textscan(fid1,'%s',1,'delimiter','\n','MultipleDelimsAsOne',0); % skip current line
 	elseif (strcmp(str,'MIXING_HISTORY:'))
 		C_param = textscan(fid1,'%f',1,'delimiter',' ','MultipleDelimsAsOne',1);
 		S.MixingHistory = C_param{1};
@@ -381,6 +414,14 @@ while(~feof(fid1))
 	elseif (strcmp(str,'MIXING_PARAMETER_SIMPLE:'))
 		C_param = textscan(fid1,'%f',1,'delimiter',' ','MultipleDelimsAsOne',1);
 		S.MixingParameterSimple = C_param{1};
+		textscan(fid1,'%s',1,'delimiter','\n','MultipleDelimsAsOne',0); % skip current line
+    elseif (strcmp(str,'MIXING_PARAMETER_MAG:'))
+		C_param = textscan(fid1,'%f',1,'delimiter',' ','MultipleDelimsAsOne',1);
+		S.MixingParameterMag = C_param{1};
+		textscan(fid1,'%s',1,'delimiter','\n','MultipleDelimsAsOne',0); % skip current line
+	elseif (strcmp(str,'MIXING_PARAMETER_SIMPLE_MAG:'))
+		C_param = textscan(fid1,'%f',1,'delimiter',' ','MultipleDelimsAsOne',1);
+		S.MixingParameterSimpleMag = C_param{1};
 		textscan(fid1,'%s',1,'delimiter','\n','MultipleDelimsAsOne',0); % skip current line
 	elseif (strcmp(str,'PULAY_FREQUENCY:'))
 		C_param = textscan(fid1,'%f',1,'delimiter',' ','MultipleDelimsAsOne',1);
@@ -528,16 +569,16 @@ while(~feof(fid1))
 		S.Calc_pres = C_param{1};
 		textscan(fid1,'%s',1,'delimiter','\n','MultipleDelimsAsOne',0); % skip current line
 	elseif (strcmp(str,'NTYPES:'))
-		fprintf('Warning: NTYPES is no longer needed, skipping this option ...\n');
+		fprintf('WARNING: NTYPES is no longer needed, skipping this option ...\n');
 		textscan(fid1,'%s',1,'delimiter','\n','MultipleDelimsAsOne',0); % skip current line
 	elseif (strcmp(str,'ATOMIC_MASS:'))
-		fprintf('Warning: ATOMIC_MASS is now moved to .ion file, skipping this option ...\n');
+		fprintf('WARNING: ATOMIC_MASS is now moved to .ion file, skipping this option ...\n');
 		textscan(fid1,'%s',1,'delimiter','\n','MultipleDelimsAsOne',0); % skip current line
 	elseif (strcmp(str,'PSEUDOPOTENTIAL_LOCAL:'))
-		fprintf('Warning: PSEUDOPOTENTIAL_LOCAL is no longer needed, skipping this option ...\n');
+		fprintf('WARNING: PSEUDOPOTENTIAL_LOCAL is no longer needed, skipping this option ...\n');
 		textscan(fid1,'%s',1,'delimiter','\n','MultipleDelimsAsOne',0); % skip current line% remove this, and this if cond
 	elseif(strcmp(str,'PSEUDOPOTENTIAL_FILE:'))
-		fprintf('Warning: PSEUDOPOTENTIAL_FILE is now moved to .ion file, skipping this option ...\n');
+		fprintf('WARNING: PSEUDOPOTENTIAL_FILE is now moved to .ion file, skipping this option ...\n');
 		textscan(fid1,'%s',1,'delimiter','\n','MultipleDelimsAsOne',0); % skip current line
 	elseif(strcmp(str,'PRINT_FORCES:'))
 		C_param = textscan(fid1,'%f',1,'delimiter',' ','MultipleDelimsAsOne',1);
@@ -605,6 +646,17 @@ if(S.MDFlag == 1 && S.ion_elec_eqT == 1)
 	S.bet = 1 / (S.kB * S.Temp);
 end
 
+% check CELL and LATVEC_SCALE
+if Flag_cell == 1 && Flag_latvec_scale == 1
+    error('\nCELL and LATVEC_SCALE cannot be specified simultaneously!\n');
+end
+
+% LACVEC_SCALE takes into account the length of the LATVEC's, so we'll scale the cell lengths
+if Flag_latvec_scale == 1
+    S.L1 = S.latvec_scale_x * norm(S.lat_vec(1,:));
+    S.L2 = S.latvec_scale_y * norm(S.lat_vec(2,:));
+    S.L3 = S.latvec_scale_z * norm(S.lat_vec(3,:));
+end
 end
 
 function msparc_neglect_warning(str)

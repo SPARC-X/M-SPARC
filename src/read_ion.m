@@ -180,7 +180,7 @@ while (~feof(fid1))
 			S.mvAtmConstraint(atmcnt_relax,3) = C_param{1,3};
 			textscan(fid1,'%s',1,'delimiter','\n','MultipleDelimsAsOne',0);  % skip current line
 		end
-		fprintf('Warning: All atoms will be forced to relax\n');
+		fprintf('WARNING: All atoms will be forced to relax\n');
 	elseif (strcmp(str, 'PSEUDO_POT:')) 
 		C_param = textscan(fid1,'%s',1,'delimiter',' ','MultipleDelimsAsOne',1);
 		S.Atm(typcnt).psdfname = char(C_param{:});

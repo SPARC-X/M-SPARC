@@ -28,6 +28,135 @@ DVc_z = S.grad_3*S.V_c;
 force_corr = zeros(S.n_atm,3);
 force_nloc = zeros(S.n_atm,3);
 force_local = zeros(S.n_atm,3);
+force_xc = zeros(S.n_atm,3);
+
+if S.NLCC_flag
+    count_typ = 1;
+    count_typ_atms = 1;
+    for JJ_a = 1:S.n_atm % loop over all the atoms
+        % Atom position
+        x0 = S.Atoms(JJ_a,1);
+        y0 = S.Atoms(JJ_a,2);
+        z0 = S.Atoms(JJ_a,3);
+        % Note the S.dx, S.dy, S.dz terms are to ensure the image rb-region overlap w/ fund. domain
+        if S.BCx == 0
+            n_image_xl = floor((S.Atoms(JJ_a,1) + max(S.Atm(count_typ).r_grid_rho_Tilde))/S.L1);
+            n_image_xr = floor((S.L1 - S.Atoms(JJ_a,1)+max(S.Atm(count_typ).r_grid_rho_Tilde))/S.L1);
+        else
+            n_image_xl = 0;
+            n_image_xr = 0;
+        end
+
+        if S.BCy == 0
+            n_image_yl = floor((S.Atoms(JJ_a,2) + max(S.Atm(count_typ).r_grid_rho_Tilde))/S.L2);
+            n_image_yr = floor((S.L2 - S.Atoms(JJ_a,2)+max(S.Atm(count_typ).r_grid_rho_Tilde))/S.L2);
+        else
+            n_image_yl = 0;
+            n_image_yr = 0;
+        end
+
+        if S.BCz == 0
+            n_image_zl = floor((S.Atoms(JJ_a,3) + max(S.Atm(count_typ).r_grid_rho_Tilde))/S.L3);
+            n_image_zr = floor((S.L3 - S.Atoms(JJ_a,3)+max(S.Atm(count_typ).r_grid_rho_Tilde))/S.L3);
+        else
+            n_image_zl = 0;
+            n_image_zr = 0;
+        end
+
+        % Total No. of images of atom JJ_a (including atom JJ_a)
+        n_image_total = (n_image_xl+n_image_xr+1) * (n_image_yl+n_image_yr+1) * (n_image_zl+n_image_zr+1);
+        % Find the coordinates for all the images
+        xx_img = (-n_image_xl : n_image_xr) * S.L1 + x0;
+        yy_img = (-n_image_yl : n_image_yr) * S.L2 + y0;
+        zz_img = (-n_image_zl : n_image_zr) * S.L3 + z0;
+        [XX_IMG_3D,YY_IMG_3D,ZZ_IMG_3D] = ndgrid(xx_img,yy_img,zz_img);
+
+        % Loop over all image(s) of atom JJ_a (including atom JJ_a)
+        for count_image = 1:n_image_total
+
+            % Atom position of the image
+            x0_i = XX_IMG_3D(count_image);
+            y0_i = YY_IMG_3D(count_image);
+            z0_i = ZZ_IMG_3D(count_image);
+
+            % Indices of closest grid point to atom
+            pos_ii = round((x0_i-S.xin) / S.dx) + 1;
+            pos_jj = round((y0_i-S.yin) / S.dy) + 1;
+            pos_kk = round((z0_i-S.zin) / S.dz) + 1;
+
+            % Starting and ending indices of b-region
+            ii_s = pos_ii - ceil(max(S.Atm(count_typ).r_grid_rho_Tilde)/S.dx+0.5);
+            ii_e = pos_ii + ceil(max(S.Atm(count_typ).r_grid_rho_Tilde)/S.dx+0.5);
+            jj_s = pos_jj - ceil(max(S.Atm(count_typ).r_grid_rho_Tilde)/S.dy+0.5);
+            jj_e = pos_jj + ceil(max(S.Atm(count_typ).r_grid_rho_Tilde)/S.dy+0.5);
+            kk_s = pos_kk - ceil(max(S.Atm(count_typ).r_grid_rho_Tilde)/S.dz+0.5);
+            kk_e = pos_kk + ceil(max(S.Atm(count_typ).r_grid_rho_Tilde)/S.dz+0.5);
+
+            % Check if the b-region is inside the domain in Dirichlet BC
+            % direction
+            %isInside = (S.BCx == 0 || (S.BCx == 1 && (ii_s>1) && (ii_e<S.Nx))) && ...
+            %   (S.BCy == 0 || (S.BCy == 1 && (jj_s>1) && (jj_e<S.Ny))) && ...
+            %   (S.BCz == 0 || (S.BCz == 1 && (kk_s>1) && (kk_e<S.Nz)));
+            % assert(isInside,'ERROR: Atom too close to boundary for b calculation');
+            ii_s = max(ii_s,1);
+            ii_e = min(ii_e,S.Nx);
+            jj_s = max(jj_s,1);
+            jj_e = min(jj_e,S.Ny);
+            kk_s = max(kk_s,1);
+            kk_e = min(kk_e,S.Nz);
+
+            xx = S.xin + (ii_s-2*S.FDn-1:ii_e+2*S.FDn-1)*S.dx;% - x0_i;
+            yy = S.yin + (jj_s-2*S.FDn-1:jj_e+2*S.FDn-1)*S.dy;% - y0_i;
+            zz = S.zin + (kk_s-2*S.FDn-1:kk_e+2*S.FDn-1)*S.dz;% - z0_i;
+
+            [XX_3D,YY_3D,ZZ_3D] = ndgrid(xx,yy,zz);
+
+            % Find distances
+            dd = calculateDistance(XX_3D,YY_3D,ZZ_3D,x0_i,y0_i,z0_i,S);
+
+            % Pseudopotential at grid points through interpolation
+            rho_Tilde_at= zeros(size(dd));
+            IsLargeThanRmax = dd > max(S.Atm(count_typ).r_grid_rho_Tilde);
+            rho_Tilde_at(IsLargeThanRmax) =0;
+            rho_Tilde_at(~IsLargeThanRmax) = interp1(S.Atm(count_typ).r_grid_rho_Tilde,S.Atm(count_typ).rho_Tilde,  dd(~IsLargeThanRmax), 'spline');
+
+
+            % calculating gradient of rho_Tilde
+            drho_Tilde_at_x = zeros(size(rho_Tilde_at)); drho_Tilde_at_y = zeros(size(rho_Tilde_at)); drho_Tilde_at_z = zeros(size(rho_Tilde_at));
+
+            II = 1+2*S.FDn : size(rho_Tilde_at,1)-2*S.FDn;
+            JJ = 1+2*S.FDn : size(rho_Tilde_at,2)-2*S.FDn;
+            KK = 1+2*S.FDn : size(rho_Tilde_at,3)-2*S.FDn;
+
+            for p = 1:S.FDn
+                drho_Tilde_at_x(II,JJ,KK) = drho_Tilde_at_x(II,JJ,KK) + S.w1(p+1)/S.dx*(rho_Tilde_at(II+p,JJ,KK)-rho_Tilde_at(II-p,JJ,KK));
+                drho_Tilde_at_y(II,JJ,KK) = drho_Tilde_at_y(II,JJ,KK) + S.w1(p+1)/S.dy*(rho_Tilde_at(II,JJ+p,KK)-rho_Tilde_at(II,JJ-p,KK));
+                drho_Tilde_at_z(II,JJ,KK) = drho_Tilde_at_z(II,JJ,KK) + S.w1(p+1)/S.dz*(rho_Tilde_at(II,JJ,KK+p)-rho_Tilde_at(II,JJ,KK-p));
+            end
+            % Calculate xc 2nd term force components
+            [II_rb,JJ_rb,KK_rb] = ndgrid(ii_s:ii_e,jj_s:jj_e,kk_s:kk_e);
+            Rowcount_rb = (KK_rb-1)*S.Nx*S.Ny + (JJ_rb-1)*S.Nx + II_rb;
+            if S.nspin == 1
+                force_xc(JJ_a,1) = force_xc(JJ_a,1) + sum(sum(sum( drho_Tilde_at_x(II,JJ,KK) .* ( S.Vxc(Rowcount_rb) ) .* S.W(Rowcount_rb) )));
+                force_xc(JJ_a,2) = force_xc(JJ_a,2) + sum(sum(sum( drho_Tilde_at_y(II,JJ,KK) .* ( S.Vxc(Rowcount_rb) ) .* S.W(Rowcount_rb) )));
+                force_xc(JJ_a,3) = force_xc(JJ_a,3) + sum(sum(sum( drho_Tilde_at_z(II,JJ,KK) .* ( S.Vxc(Rowcount_rb) ) .* S.W(Rowcount_rb) )));
+            else
+                vxc = S.Vxc(:,1)+S.Vxc(:,2);
+                force_xc(JJ_a,1) = force_xc(JJ_a,1) + sum(sum(sum( 0.5*drho_Tilde_at_x(II,JJ,KK) .* (vxc(Rowcount_rb) ) .* S.W(Rowcount_rb) )));
+                force_xc(JJ_a,2) = force_xc(JJ_a,2) + sum(sum(sum( 0.5*drho_Tilde_at_y(II,JJ,KK) .* (vxc(Rowcount_rb) ) .* S.W(Rowcount_rb) )));
+                force_xc(JJ_a,3) = force_xc(JJ_a,3) + sum(sum(sum( 0.5*drho_Tilde_at_z(II,JJ,KK) .* (vxc(Rowcount_rb) ) .* S.W(Rowcount_rb) )));
+            end
+        end
+        % Check if same type of atoms are over
+        if count_typ_atms == S.Atm(count_typ).n_atm_typ
+            count_typ_atms = 1;
+            count_typ = count_typ + 1;
+        else
+            count_typ_atms = count_typ_atms + 1;
+        end
+
+    end % end of loop over atoms
+end
 
 count_typ = 1;
 count_typ_atms = 1;
@@ -95,7 +224,7 @@ for JJ_a = 1:S.n_atm % loop over all the atoms
 		isInside = (S.BCx == 0 || (S.BCx == 1 && (ii_s>=1) && (ii_e<=S.Nx))) && ...
 			(S.BCy == 0 || (S.BCy == 1 && (jj_s>=1) && (jj_e<=S.Ny))) && ...
 			(S.BCz == 0 || (S.BCz == 1 && (kk_s>=1) && (kk_e<=S.Nz)));
-		% assert(isInside,'Error: Atom too close to boundary for b calculation');
+		% assert(isInside,'ERROR: Atom too close to boundary for b calculation');
 		if ~isInside
 			fprintf(' WARNING: Atom %d too close to boundary for b calculation\n',JJ_a);
 		end
@@ -312,7 +441,7 @@ end
 
 % Total force
 
-force = force_local + force_corr + force_nloc;
+force = force_local + force_corr + force_nloc + force_xc;
 % force_local
 % force_corr
 % force_nloc
@@ -320,6 +449,7 @@ if S.cell_typ == 2
 	force = force*S.grad_T; % Convert forces from lattice to cartesian coordinates
 end
 
+force = real(force);
 end
 
 
