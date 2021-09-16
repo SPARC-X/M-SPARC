@@ -21,10 +21,20 @@ function [S,x_kp1] = Periodic_Pulay(S, g_k, x_k, iter)
 % periodic pulay mixing
 % Ref: A Banerjee et al, Chemical Physics Letters 647 (2016) 31-35.
 %      http://dx.doi.org/10.1016/j.cplett.2016.01.033
-mix_hist = S.MixingHistory; 
-mix_p_pulay = S.PulayFrequency;
-mix_param = S.MixingParameter; % beta
+m = S.MixingHistory; 
+p = S.PulayFrequency;
+beta = S.MixingParameter; % beta
 omega = S.MixingParameterSimple; % mixing parameter for simple mixing step
+beta_mag = S.MixingParameterMag;
+omega_mag = S.MixingParameterSimpleMag;
+
+Pulay_mixing_flag = (rem(iter,p) == 0 && iter > 1);
+
+if Pulay_mixing_flag   % paulay mixing
+    amix = beta; amix_mag = beta_mag;
+else                   % simple (linear) mixing
+    amix = omega; amix_mag = omega_mag;
+end
 
 f_k = g_k - x_k;
 if iter > 1
@@ -34,7 +44,7 @@ end
 
 % store residual & iteration history
 if iter > 1
-	i_hist = mod(iter-2,mix_hist)+1;
+	i_hist = mod(iter-2,m)+1;
 	if (S.PulayRestartFreq > 0 && mod(iter, S.PulayRestartFreq) == 0)
 		S.X = zeros(size(S.X)); S.F = zeros(size(S.F));
 		S.X(:,1) = x_k - x_km1;
@@ -46,7 +56,7 @@ if iter > 1
 end
 
 % apply Anderson extrapolation every p iters
-if rem(iter,mix_p_pulay) == 0 && iter > 1
+if Pulay_mixing_flag
 	% find weighted averages x_wavg, f_wavg
 	[x_wavg, f_wavg] = andersonWtdAvg(x_k, f_k, S.X, S.F);
 else 
@@ -54,51 +64,62 @@ else
 	x_wavg = x_k; f_wavg = f_k;
 end
 
+sum_f_tot = 0.0;
+sum_f_mag = 0.0;
+if S.spin_typ ~= 0
+    f_tot = f_wavg(1:S.N) + f_wavg(S.N+1:2*S.N);
+    f_mag = f_wavg(1:S.N) - f_wavg(S.N+1:2*S.N);
+    sum_f_tot = sum(f_tot);
+    sum_f_mag = sum(f_mag);
+else
+    f_tot = f_wavg; % for spin-unpolarized calculations, f_tot is just f_wavg
+    % f_mag is N/A for spin-unporlaized calculations
+end
+
+Pf = zeros(S.N,S.nspin);
 % apply preconditioner to the weighted residual
 if S.MixingPrecond > 0
-	if S.nspin == 1
-		% precondition total density
-		if S.MixingPrecond == 1      % kerker precond
-			S.Pf_guess = zeros(size(f_wavg)); % similar to using previous guess
-			f_wavg = Kerker_Precond(S, f_wavg, S.precond_tol, 1000, S.Pf_guess);
-			% S.Pf_guess = f_wavg; % update guess vector
-		elseif S.MixingPrecond == 2  % resta precond
-			S.Pf_guess = 1e-6*rand(length(f_wavg),length(S.precondcoeff_a));
-			%S.precondcoeff_lambda_TF
-			f_wavg = Resta_Precond(S, f_wavg, S.precond_tol, 1000, S.Pf_guess);
-			%S.Pf_guess = repmat(f_wavg,1,length(S.precondcoeff_a)); % update guess vector
-		elseif S.MixingPrecond == 3  % truncated kerker precond
-			S.Pf_guess = 1e-6*rand(length(f_wavg),length(S.precondcoeff_a));
-			%S.precondcoeff_lambda_TF
-			f_wavg = TruncatedKerker_Precond(S, f_wavg, S.precond_tol, 1000, S.Pf_guess);
-			%S.Pf_guess = repmat(f_wavg,1,length(S.precondcoeff_a)); % update guess vector
-		end
-	else
-		f_Rho = f_wavg(1:S.N) + f_wavg(S.N+1:end);
-		f_M = f_wavg(1:S.N) - f_wavg(S.N+1:end);
-		% precondition total density
-		if S.MixingPrecond == 1      % kerker precond
-			Pf_Rho = Kerker_Precond(S, f_Rho, S.precond_tol, 1000, S.Pf_guess); 
-			S.Pf_guess = Pf_Rho; % update guess vector
-		elseif S.MixingPrecond == 2  % resta precond
-			S.Pf_guess = 1e-6*rand(length(f_Rho),length(S.precondcoeff_a));
-			Pf_Rho = Resta_Precond(S, f_Rho, S.precond_tol, 1000, S.Pf_guess); 
-			%S.Pf_guess = repmat(Pf_Rho,1,length(S.precondcoeff_a)); % update guess vector
-		elseif S.MixingPrecond == 3  % truncated kerker precond
-			S.Pf_guess = 1e-6*rand(length(f_Rho),length(S.precondcoeff_a));
-			Pf_Rho = TruncatedKerker_Precond(S, f_Rho, S.precond_tol, 1000, S.Pf_guess);
-			%S.Pf_guess = repmat(Pf_Rho,1,length(S.precondcoeff_a)); % update guess vector
-		end
-		f_wavg = vertcat(Pf_Rho + f_M, Pf_Rho - f_M)/2;
-	end
-end    
-
-% update new input iterate
-if (rem(iter,mix_p_pulay) == 0)
-	x_kp1 = x_wavg + mix_param * f_wavg;
+    % precondition total density
+    if S.MixingPrecond == 1      % kerker precond
+        % S.Pf_guess = zeros(size(f_wavg)); % similar to using previous guess
+        % precondition the residual of total density/potential
+        k_TF = S.precond_kerker_kTF;
+        idiemac = S.precond_kerker_thresh;
+        Pf(:,1) = Kerker_Precond(S, f_tot, amix, k_TF, idiemac, S.precond_tol, 1000, zeros(S.N,1));
+    end
 else
-	x_kp1 = x_wavg + omega * f_wavg;
+    Pf(:,1) = amix * f_tot;     % mixing param is included in Pf
 end
+
+if S.spin_typ ~= 0
+    if S.MixingPrecondMag ~= 0
+        if S.MixingPrecondMag == 1
+            k_TF_mag = S.precond_kerker_kTF_mag;
+            idiemac_mag = S.precond_kerker_thresh_mag;
+            Pf(:,2) = Kerker_Precond(S, f_mag, amix, k_TF_mag, idiemac_mag, S.precond_tol, 1000, zeros(S.N,1));
+        end
+    else
+        Pf(:,2) = amix_mag * f_mag;     % mixing param is included in Pf
+    end
+end
+
+if S.spin_typ ~= 0
+    sum_Pf_tot = sum(Pf(:,1));
+    shift_Pf_tot = (sum_f_tot - sum_Pf_tot)/S.N;
+    Pf(:,1) = Pf(:,1) + shift_Pf_tot;
+    
+    sum_Pf_mag = sum(Pf(:,2));
+    shift_Pf_mag = (sum_f_mag - sum_Pf_mag)/S.N;
+    Pf(:,2) = Pf(:,2) + shift_Pf_mag;
+end
+
+% x_kp1 = x_wavg + mix_param * f_wavg;
+if S.spin_typ == 0
+    x_kp1 = x_wavg + Pf;
+else
+    x_kp1 = x_wavg + vertcat(Pf(:,1) + Pf(:,2), Pf(:,1) - Pf(:,2))/2;
+end
+
 
 if S.MixingVariable == 0
 	% due to inaccurate kerker solver, the density might have
@@ -116,10 +137,13 @@ S.mixing_hist_xkm1 = x_k;
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function Pf = Kerker_Precond(S, f, tol, maxit, Pf_guess)
+function Pf = Kerker_Precond(S, f, a, lambda_TF, idiemac, tol, maxit, Pf_guess)
 % KERKER_PRECOND applies kerker preconditioner.
-%   KERKER_PRECOND effectively applies (Lap - k_TF^2)^-1 * Lap to f
-%   by solving the linear system (Lap - k_TF^2) s = Lap*f. 
+% For given function f, this function returns 
+% Pf := a * (L - lambda_TF^2)^-1 * (L - idemac*lambda_TF^2)f, 
+% where L is the discrete Laplacian operator, c is the 
+% inverse of diemac (dielectric macroscopic constant).
+% When c is 0, it's the original Kerker preconditioner.
 
 % lambda_sqr = lambda_TF * lambda_TF;
 % 
@@ -130,8 +154,16 @@ function Pf = Kerker_Precond(S, f, tol, maxit, Pf_guess)
 % 
 % Pf = aar(B,Df,Pf_guess,tol,maxit,[],[],[],[],[]);
 
-Pf = RSfit_Precond(S,f,S.precondcoeff_a,S.precondcoeff_lambda_TF,...
-				   S.precondcoeff_k,tol,maxit,Pf_guess);
+% Pf = RSfit_Precond(S,f,S.precondcoeff_a,S.precondcoeff_lambda_TF,...
+% 				   S.precondcoeff_k,tol,maxit,Pf_guess);
+
+Lf = S.Lap_std * f - (lambda_TF*lambda_TF*idiemac)*f;
+B = S.Lap_std - spdiags(lambda_TF*lambda_TF * ones(S.N,1),0,S.N,S.N);
+Pf = aar(B,Lf,Pf_guess,tol,maxit,0.6,0.6,7,6,S.LapPreconL,S.LapPreconU);
+if abs(lambda_TF) < 1E-14
+    Pf = Pf - sum(Pf)/S.N;
+end
+Pf = a * Pf;
 
 end
 

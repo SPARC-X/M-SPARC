@@ -198,12 +198,36 @@ If you publish work using/regarding M-SPARC, please cite some of the following a
 \begin{frame}[allowframebreaks]{\textbf{Input file options}} \label{Index}
 \vspace{-2mm}
 \begin{block}{System}
-\hyperlink{CELL}{\texttt{CELL}} $\vert$ \hyperlink{LATVEC}{\texttt{LATVEC}}  $\vert$ \hyperlink{FD_GRID}{\texttt{FD\_GRID}} $\vert$ \hyperlink{MESH_SPACING}{\texttt{MESH\_SPACING}} $\vert$ \hyperlink{ECUT}{\texttt{ECUT}} $\vert$ \hyperlink{BC}{\texttt{BC}} $\vert$ \hyperlink{FD_ORDER}{\texttt{FD\_ORDER}} $\vert$ \hyperlink{EXCHANGE_CORRELATION}{\texttt{EXCHANGE\_CORRELATION}} $\vert$ \hyperlink{SPIN_TYP}{\texttt{SPIN\_TYP}} $\vert$ \hyperlink{KPOINT_GRID}{\texttt{KPOINT\_GRID}} $\vert$ \hyperlink{KPOINT_SHIFT}{\texttt{KPOINT\_SHIFT}} $\vert$ \hyperlink{ELEC_TEMP_TYPE}{\texttt{ELEC\_TEMP\_TYPE}} $\vert$ \hyperlink{ELEC_TEMP}{\texttt{ELEC\_TEMP}} $\vert$ \hyperlink{SMEARING}{\texttt{SMEARING}} $\vert$ \hyperlink{NSTATES}{\texttt{NSTATES}} \\
+\hyperlink{CELL}{\texttt{CELL}} $\vert$ \hyperlink{LATVEC_SCALE}{\texttt{LATVEC\_SCALE}} $\vert$ \hyperlink{LATVEC}{\texttt{LATVEC}}  $\vert$ \hyperlink{FD_GRID}{\texttt{FD\_GRID}} $\vert$ \hyperlink{MESH_SPACING}{\texttt{MESH\_SPACING}} $\vert$ \hyperlink{ECUT}{\texttt{ECUT}} $\vert$ \hyperlink{BC}{\texttt{BC}} $\vert$ \hyperlink{FD_ORDER}{\texttt{FD\_ORDER}} $\vert$ \hyperlink{EXCHANGE_CORRELATION}{\texttt{EXCHANGE\_CORRELATION}} $\vert$ \hyperlink{SPIN_TYP}{\texttt{SPIN\_TYP}} $\vert$ \hyperlink{KPOINT_GRID}{\texttt{KPOINT\_GRID}} $\vert$ \hyperlink{KPOINT_SHIFT}{\texttt{KPOINT\_SHIFT}} $\vert$ \hyperlink{ELEC_TEMP_TYPE}{\texttt{ELEC\_TEMP\_TYPE}} $\vert$ \hyperlink{ELEC_TEMP}{\texttt{ELEC\_TEMP}} $\vert$ \hyperlink{SMEARING}{\texttt{SMEARING}} $\vert$ \hyperlink{NSTATES}{\texttt{NSTATES}} \\
 \hyperlink{ATOM_TYPE}{\texttt{ATOM\_TYPE}} $\vert$ \hyperlink{PSEUDO_POT}{\texttt{PSEUDO\_POT}}  $\vert$ \hyperlink{N_TYPE_ATOM}{\texttt{N\_TYPE\_ATOM}} $\vert$ \hyperlink{COORD}{\texttt{COORD}} $\vert$ \hyperlink{COORD_FRAC}{\texttt{COORD\_FRAC}} $\vert$ \hyperlink{RELAX}{\texttt{RELAX}} $\vert$ \hyperlink{SPIN}{\texttt{SPIN}} 
 \end{block}
 
 \begin{block}{SCF}
-\hyperlink{CHEB_DEGREE}{\texttt{CHEB\_DEGREE}} $\vert$ \hyperlink{RHO_TRIGGER}{\texttt{RHO\_TRIGGER}} $\vert$ \hyperlink{MAXIT_SCF}{\texttt{MAXIT\_SCF}} $\vert$ \hyperlink{TOL_SCF}{\texttt{TOL\_SCF}} $\vert$ \hyperlink{SCF_FORCE_ACC}{\texttt{SCF\_FORCE\_ACC}} $\vert$ \hyperlink{SCF_ENERGY_ACC}{\texttt{SCF\_ENERGY\_ACC}} $\vert$ \hyperlink{TOL_LANCZOS}{\texttt{TOL\_LANCZOS}} $\vert$ \hyperlink{MIXING_VARIABLE}{\texttt{MIXING\_VARIABLE}} $\vert$ \hyperlink{MIXING_HISTORY}{\texttt{MIXING\_HISTORY}} $\vert$ \hyperlink{MIXING_PARAMETER}{\texttt{MIXING\_PARAMETER}} $\vert$ \hyperlink{PULAY_FREQUENCY}{\texttt{PULAY\_FREQUENCY}} $\vert$ \hyperlink{PULAY_RESTART_FREQ}{\texttt{PULAY\_RESTART\_FREQ}} $\vert$ \hyperlink{MIXING_PRECOND}{\texttt{MIXING\_PRECOND}} $\vert$ \hyperlink{TOL_PRECOND}{\texttt{TOL\_PRECOND}} $\vert$ \hyperlink{PRECOND_KERKER_KTF}{\texttt{PRECOND\_KERKER\_KTF}} $\vert$ \hyperlink{PRECOND_KERKER_THRESH}{\texttt{PRECOND\_KERKER\_THRESH}} $\vert$ \hyperlink{PRECOND_RESTA_Q0}{\texttt{PRECOND\_RESTA\_Q0}} $\vert$ \hyperlink{PRECOND_RESTA_RS}{\texttt{PRECOND\_RESTA\_RS}} $\vert$ \hyperlink{PRECOND_FITPOW}{\texttt{PRECOND\_FITPOW}}
+\hyperlink{CHEB_DEGREE}{\texttt{CHEB\_DEGREE}} $\vert$ 
+\hyperlink{RHO_TRIGGER}{\texttt{RHO\_TRIGGER}} $\vert$ 
+\hyperlink{MAXIT_SCF}{\texttt{MAXIT\_SCF}} $\vert$ 
+\hyperlink{TOL_SCF}{\texttt{TOL\_SCF}} $\vert$ 
+\hyperlink{SCF_FORCE_ACC}{\texttt{SCF\_FORCE\_ACC}} $\vert$ 
+\hyperlink{SCF_ENERGY_ACC}{\texttt{SCF\_ENERGY\_ACC}} $\vert$ 
+\hyperlink{TOL_LANCZOS}{\texttt{TOL\_LANCZOS}} $\vert$ 
+\hyperlink{MIXING_VARIABLE}{\texttt{MIXING\_VARIABLE}} $\vert$ 
+\hyperlink{MIXING_HISTORY}{\texttt{MIXING\_HISTORY}} $\vert$ 
+\hyperlink{MIXING_PARAMETER}{\texttt{MIXING\_PARAMETER}} $\vert$ 
+\hyperlink{MIXING_PARAMETER_SIMPLE}{\texttt{MIXING\_PARAMETER\_SIMPLE}} $\vert$ 
+\hyperlink{MIXING_PARAMETER_MAG}{\texttt{MIXING\_PARAMETER\_MAG}} $\vert$
+\hyperlink{MIXING_PARAMETER_SIMPLE_MAG}{\texttt{MIXING\_PARAMETER\_SIMPLE\_MAG}} $\vert$
+\hyperlink{PULAY_FREQUENCY}{\texttt{PULAY\_FREQUENCY}} $\vert$ 
+\hyperlink{PULAY_RESTART_FREQ}{\texttt{PULAY\_RESTART\_FREQ}} $\vert$ 
+\hyperlink{MIXING_PRECOND}{\texttt{MIXING\_PRECOND}} $\vert$ 
+\hyperlink{MIXING_PRECOND_MAG}{\texttt{MIXING\_PRECOND\_MAG}} $\vert$ 
+\hyperlink{TOL_PRECOND}{\texttt{TOL\_PRECOND}} $\vert$ 
+\hyperlink{PRECOND_KERKER_KTF}{\texttt{PRECOND\_KERKER\_KTF}} $\vert$ 
+\hyperlink{PRECOND_KERKER_THRESH}{\texttt{PRECOND\_KERKER\_THRESH}} $\vert$ 
+\hyperlink{PRECOND_KERKER_KTF_MAG}{\texttt{PRECOND\_KERKER\_KTF\_MAG}} $\vert$ 
+\hyperlink{PRECOND_KERKER_THRESH\_MAG}{\texttt{PRECOND\_KERKER\_THRESH\_MAG}} $\vert$ 
+% \hyperlink{PRECOND_RESTA_Q0}{\texttt{PRECOND\_RESTA\_Q0}} $\vert$ 
+% \hyperlink{PRECOND_RESTA_RS}{\texttt{PRECOND\_RESTA\_RS}} $\vert$ 
+\hyperlink{PRECOND_FITPOW}{\texttt{PRECOND\_FITPOW}}
 \end{block}
 
 \vspace{-2mm}
@@ -271,10 +295,49 @@ Bohr
 \begin{block}{Description}
 A set of three whitespace delimited values specifying the cell lengths in the lattice vector (\hyperlink{LATVEC}{\texttt{LATVEC}}) directions, respectively.
 \end{block}
-
+\begin{block}{Remark}
+    Note that \hyperlink{CELL}{\texttt{CELL}} ignores the lengths of the lattice vectors specified in the \texttt{.inpt} file and only treats them as unit vectors. \hyperlink{LATVEC_SCALE}{\texttt{LATVEC\_SCALE}} and \hyperlink{CELL}{\texttt{CELL}} cannot be specified simultaneously.
+\end{block}
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[allowframebreaks]{\texttt{LATVEC\_SCALE}} \label{LATVEC_SCALE}
+\vspace*{-15pt}
+\begin{columns}
+\column{0.4\linewidth}
+\begin{block}{Type}
+Double
+\end{block}
+
+\begin{block}{Default}
+None
+\end{block}
+
+\column{0.5\linewidth}
+\begin{block}{Unit}
+Bohr
+\end{block}
+
+\begin{block}{Example}
+\texttt{LATVEC\_SCALE}: 10.20 11.21 7.58
+\end{block}
+\end{columns}
+
+\vspace*{-2pt}
+\begin{block}{Description}
+A set of three whitespace delimited values specifying the scaling factors in the lattice vectors (\hyperlink{LATVEC}{\texttt{LATVEC}}), respectively.
+\end{block}
+\vspace*{-4pt}
+\begin{block}{Remark}
+    The difference between \hyperlink{LATVEC_SCALE}{\texttt{LATVEC\_SCALE}} and \hyperlink{CELL}{\texttt{CELL}} is that \hyperlink{CELL}{\texttt{CELL}} treats the lattice vectors as unit vectors, whereas \hyperlink{LATVEC_SCALE}{\texttt{LATVEC\_SCALE}} scales the lattice vectors directly as specified by the user. \hyperlink{LATVEC_SCALE}{\texttt{LATVEC\_SCALE}} and \hyperlink{CELL}{\texttt{CELL}} cannot be specified simultaneously.
+\end{block}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1416,6 +1479,101 @@ Values larger than the default value of 0.3 can be used for insulating systems, 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[allowframebreaks]{\texttt{MIXING\_PARAMETER\_SIMPLE}} \label{MIXING_PARAMETER_SIMPLE}
+\vspace*{-12pt}
+\begin{columns}
+\column{0.4\linewidth}
+\begin{block}{Type}
+Double
+\end{block}
+
+\begin{block}{Default}
+Automatically set to the same as \hyperlink{MIXING_PARAMETER}{\texttt{MIXING\_PARAMETER}}
+\end{block}
+
+\column{0.4\linewidth}
+\begin{block}{Unit}
+No unit
+\end{block}
+
+\begin{block}{Example}
+\texttt{MIXING\_PARAMETER\_SIMPLE}: 0.1
+\end{block}
+\end{columns}
+
+\begin{block}{Description}
+The value of the relaxation parameter used in the simple mixing step in the periodic Pulay scheme.
+\end{block}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[allowframebreaks]{\texttt{MIXING\_PARAMETER\_MAG}} \label{MIXING_PARAMETER_MAG}
+\vspace*{-12pt}
+\begin{columns}
+\column{0.4\linewidth}
+\begin{block}{Type}
+Double
+\end{block}
+
+\begin{block}{Default}
+Automatically set to the same as \hyperlink{MIXING_PARAMETER}{\texttt{MIXING\_PARAMETER}}.
+\end{block}
+
+\column{0.4\linewidth}
+\begin{block}{Unit}
+No unit
+\end{block}
+
+\begin{block}{Example}
+\texttt{MIXING\_PARAMETER\_MAG}: 4.0
+\end{block}
+\end{columns}
+
+\begin{block}{Description}
+The mixing parameter for the magnetization density in Pulay mixing for spin-polarized calculations.
+\end{block}
+
+\begin{block}{Remark}
+    For spin-polarized calculations, when SCF has difficulty to converge, increasing the mixing parameter to magnetization density might help. For example, setting it to 4.0, while turning off the preconditioner applied to the magnetization density (by setting \hyperlink{MIXING_PRECOND_MAG}{\texttt{MIXING\_PRECOND\_MAG}} to `\texttt{none}') is a good choice.
+\end{block}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[allowframebreaks]{\texttt{MIXING\_PARAMETER\_SIMPLE\_MAG}} \label{MIXING_PARAMETER_SIMPLE_MAG}
+\vspace*{-12pt}
+\begin{columns}
+\column{0.4\linewidth}
+\begin{block}{Type}
+Double
+\end{block}
+
+\begin{block}{Default}
+Automatically set to the same as \hyperlink{MIXING_PARAMETER_MAG}{\texttt{MIXING\_PARAMETER\_MAG}}
+\end{block}
+
+\column{0.5\linewidth}
+\begin{block}{Unit}
+No unit
+\end{block}
+
+\begin{block}{Example}
+\texttt{MIXING\_PARAMETER\_SIMPLE\_MAG}: 4.0
+\end{block}
+\end{columns}
+
+\begin{block}{Description}
+The value of the relaxation parameter for the magnetization density used in the simple mixing step in the periodic Pulay scheme for spin-polarized calculations.
+\end{block}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 
@@ -1520,6 +1678,38 @@ This specifies the preconditioner used in the SCF iteration. Available options a
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[allowframebreaks]{\texttt{MIXING\_PRECOND\_MAG}} \label{MIXING_PRECOND_MAG}
+\vspace*{-12pt}
+\begin{columns}
+\column{0.4\linewidth}
+\begin{block}{Type}
+String
+\end{block}
+
+\begin{block}{Default}
+\texttt{none}
+\end{block}
+
+\column{0.5\linewidth}
+\begin{block}{Unit}
+No unit
+\end{block}
+
+\begin{block}{Example}
+\texttt{MIXING\_PRECOND\_MAG}: \texttt{kerker}
+\end{block}
+\end{columns}
+
+\begin{block}{Description}
+This specifies the preconditioner used for the magnetization density in the SCF iteration for spin-polarized calculations. Available options are: \texttt{none}, \texttt{kerker}.
+\end{block}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[allowframebreaks]{\texttt{TOL\_PRECOND}} \label{TOL_PRECOND}
 \vspace*{-12pt}
 \begin{columns}
@@ -1621,10 +1811,8 @@ This threshold will be scaled by the \hyperlink{MIXING_PARAMETER}{\texttt{MIXING
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[allowframebreaks]{\texttt{PRECOND\_RESTA\_Q0}} \label{PRECOND_RESTA_Q0}
+\begin{frame}[allowframebreaks]{\texttt{PRECOND\_KERKER\_KTF\_MAG}} \label{PRECOND_KERKER_KTF_MAG}
 \vspace*{-12pt}
 \begin{columns}
 \column{0.4\linewidth}
@@ -1633,7 +1821,7 @@ Double
 \end{block}
 
 \begin{block}{Default}
-1.36
+1.0
 \end{block}
 
 \column{0.5\linewidth}
@@ -1642,12 +1830,12 @@ $\textrm{Bohr}^{-1}$
 \end{block}
 
 \begin{block}{Example}
-\texttt{PRECOND\_RESTA\_Q0}: 1.10
+\texttt{PRECOND\_KERKER\_KTF\_MAG}: 0.8
 \end{block}
 \end{columns}
 
 \begin{block}{Description}
-The Fermi-momentum-related quantity appearing in \texttt{resta} preconditioner (\hyperlink{MIXING_PRECOND}{\texttt{MIXING\_PRECOND}}).
+The Thomas-Fermi screening length appearing in the \texttt{kerker} preconditioner for the magnetization density (\hyperlink{MIXING_PRECOND_MAG}{\texttt{MIXING\_PRECOND\_MAG}}). 
 \end{block}
 
 \end{frame}
@@ -1656,7 +1844,7 @@ The Fermi-momentum-related quantity appearing in \texttt{resta} preconditioner (
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[allowframebreaks]{\texttt{PRECOND\_RESTA\_RS}} \label{PRECOND_RESTA_RS}
+\begin{frame}[allowframebreaks]{\texttt{PRECOND\_KERKER\_THRESH\_MAG}} \label{PRECOND_KERKER_THRESH_MAG}
 \vspace*{-12pt}
 \begin{columns}
 \column{0.4\linewidth}
@@ -1665,61 +1853,129 @@ Double
 \end{block}
 
 \begin{block}{Default}
-2.76
+0.1
 \end{block}
 
 \column{0.5\linewidth}
-\begin{block}{Unit}
-Bohr
-\end{block}
-
-\begin{block}{Example}
-\texttt{PRECOND\_RESTA\_RS}: 4.28
-\end{block}
-\end{columns}
-
-\begin{block}{Description}
-The screening length appearing in the \texttt{resta} preconditioner (\hyperlink{MIXING_PRECOND}{\texttt{MIXING\_PRECOND}}). 
-\end{block}
-
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[allowframebreaks]{\texttt{PRECOND\_FITPOW}} \label{PRECOND_FITPOW}
-\vspace*{-12pt}
-\begin{columns}
-\column{0.4\linewidth}
-\begin{block}{Type}
-Integer
-\end{block}
-
-\begin{block}{Default}
-2
-\end{block}
-
-\column{0.4\linewidth}
 \begin{block}{Unit}
 No unit
 \end{block}
 
 \begin{block}{Example}
-\texttt{PRECOND\_FITPOW}: 3
+\texttt{PRECOND\_KERKER\_THRESH\_MAG}: 0.0
 \end{block}
 \end{columns}
 
 \begin{block}{Description}
-Half of the highest degree of rational polynomials used for the real-space preconditioning of the SCF iteration. 
+The threshold for the \texttt{kerker} preconditioner the magnetization density (\hyperlink{MIXING_PRECOND_MAG}{\texttt{MIXING\_PRECOND\_MAG}}). 
 \end{block}
 
 \begin{block}{Remark}
-Currently this number cannot be larger than 5. Used only for the \texttt{resta} and \texttt{truncated\_kerker} preconditioners.
+This threshold will be scaled by the \hyperlink{MIXING_PARAMETER_MAG}{\texttt{MIXING\_PARAMETER\_MAG}}. If the threshold is set to 0, the original \texttt{kerker} preconditioner is recovered.
 \end{block}
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \begin{frame}[allowframebreaks]{\texttt{PRECOND\_RESTA\_Q0}} \label{PRECOND_RESTA_Q0}
+% \vspace*{-12pt}
+% \begin{columns}
+% \column{0.4\linewidth}
+% \begin{block}{Type}
+% Double
+% \end{block}
+
+% \begin{block}{Default}
+% 1.36
+% \end{block}
+
+% \column{0.5\linewidth}
+% \begin{block}{Unit}
+% $\textrm{Bohr}^{-1}$
+% \end{block}
+
+% \begin{block}{Example}
+% \texttt{PRECOND\_RESTA\_Q0}: 1.10
+% \end{block}
+% \end{columns}
+
+% \begin{block}{Description}
+% The Fermi-momentum-related quantity appearing in \texttt{resta} preconditioner (\hyperlink{MIXING_PRECOND}{\texttt{MIXING\_PRECOND}}).
+% \end{block}
+
+% \end{frame}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \begin{frame}[allowframebreaks]{\texttt{PRECOND\_RESTA\_RS}} \label{PRECOND_RESTA_RS}
+% \vspace*{-12pt}
+% \begin{columns}
+% \column{0.4\linewidth}
+% \begin{block}{Type}
+% Double
+% \end{block}
+
+% \begin{block}{Default}
+% 2.76
+% \end{block}
+
+% \column{0.5\linewidth}
+% \begin{block}{Unit}
+% Bohr
+% \end{block}
+
+% \begin{block}{Example}
+% \texttt{PRECOND\_RESTA\_RS}: 4.28
+% \end{block}
+% \end{columns}
+
+% \begin{block}{Description}
+% The screening length appearing in the \texttt{resta} preconditioner (\hyperlink{MIXING_PRECOND}{\texttt{MIXING\_PRECOND}}). 
+% \end{block}
+
+% \end{frame}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \begin{frame}[allowframebreaks]{\texttt{PRECOND\_FITPOW}} \label{PRECOND_FITPOW}
+% \vspace*{-12pt}
+% \begin{columns}
+% \column{0.4\linewidth}
+% \begin{block}{Type}
+% Integer
+% \end{block}
+
+% \begin{block}{Default}
+% 2
+% \end{block}
+
+% \column{0.4\linewidth}
+% \begin{block}{Unit}
+% No unit
+% \end{block}
+
+% \begin{block}{Example}
+% \texttt{PRECOND\_FITPOW}: 3
+% \end{block}
+% \end{columns}
+
+% \begin{block}{Description}
+% Half of the highest degree of rational polynomials used for the real-space preconditioning of the SCF iteration. 
+% \end{block}
+
+% \begin{block}{Remark}
+% Currently this number cannot be larger than 5. Used only for the \texttt{resta} and \texttt{truncated\_kerker} preconditioners.
+% \end{block}
+
+% \end{frame}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -218,4 +218,111 @@ S.E_corr = 0.5*sum((S.b_ref+S.b).*S.V_c.*S.W) + S.Eself - S.Eself_ref;
 
 fprintf(' Done. (%f s)\n',toc(t1));
 
+
+% Calculate core charge (NLCC) by summing all the atoms and their images for the fundamental domain
+count_typ = 1;
+count_typ_atms = 1;
+S.rho_Tilde_at = zeros(S.Nx,S.Ny,S.Nz);
+for JJ_a = 1:S.n_atm % loop over all the atoms
+	% Atom position
+	x0 = S.Atoms(JJ_a,1);
+	y0 = S.Atoms(JJ_a,2);
+	z0 = S.Atoms(JJ_a,3);
+	% Note the S.dx, S.dy, S.dz terms are to ensure the image rb-region overlap w/ fund. domain
+	if S.BCx == 0
+		n_image_xl = floor((S.Atoms(JJ_a,1) + max(S.Atm(count_typ).rb_x))/S.L1);
+		n_image_xr = floor((S.L1 - S.Atoms(JJ_a,1)+max(S.Atm(count_typ).rb_x))/S.L1);
+	else
+		n_image_xl = 0;
+		n_image_xr = 0;
+	end
+	
+	if S.BCy == 0
+		n_image_yl = floor((S.Atoms(JJ_a,2) + max(S.Atm(count_typ).rb_y))/S.L2);
+		n_image_yr = floor((S.L2 - S.Atoms(JJ_a,2)+max(S.Atm(count_typ).rb_y))/S.L2);
+	else
+		n_image_yl = 0;
+		n_image_yr = 0;
+	end
+	
+	if S.BCz == 0
+		n_image_zl = floor((S.Atoms(JJ_a,3) + max(S.Atm(count_typ).rb_z))/S.L3);
+		n_image_zr = floor((S.L3 - S.Atoms(JJ_a,3)+max(S.Atm(count_typ).rb_z))/S.L3);
+	else
+		n_image_zl = 0;
+		n_image_zr = 0;
+	end
+	
+	% Total No. of images of atom JJ_a (including atom JJ_a)
+	n_image_total = (n_image_xl+n_image_xr+1) * (n_image_yl+n_image_yr+1) * (n_image_zl+n_image_zr+1);
+	% Find the coordinates for all the images
+	xx_img = [-n_image_xl : n_image_xr] * S.L1 + x0;
+	yy_img = [-n_image_yl : n_image_yr] * S.L2 + y0;
+	zz_img = [-n_image_zl : n_image_zr] * S.L3 + z0;
+	[XX_IMG_3D,YY_IMG_3D,ZZ_IMG_3D] = ndgrid(xx_img,yy_img,zz_img);
+
+	% Loop over all image(s) of atom JJ_a (including atom JJ_a)
+	for count_image = 1:n_image_total
+
+		% Atom position of the image
+		x0_i = XX_IMG_3D(count_image);
+		y0_i = YY_IMG_3D(count_image);
+		z0_i = ZZ_IMG_3D(count_image);
+
+		% Indices of closest grid point to atom
+		pos_ii = round((x0_i-S.xin) / S.dx) + 1;
+		pos_jj = round((y0_i-S.yin) / S.dy) + 1;
+		pos_kk = round((z0_i-S.zin) / S.dz) + 1;
+
+		% Starting and ending indices of b-region
+		ii_s = pos_ii - ceil(max(S.Atm(count_typ).r_grid_rho_Tilde)/S.dx+0.5);
+		ii_e = pos_ii + ceil(max(S.Atm(count_typ).r_grid_rho_Tilde)/S.dx+0.5);
+		jj_s = pos_jj - ceil(max(S.Atm(count_typ).r_grid_rho_Tilde)/S.dy+0.5);
+		jj_e = pos_jj + ceil(max(S.Atm(count_typ).r_grid_rho_Tilde)/S.dy+0.5);
+		kk_s = pos_kk - ceil(max(S.Atm(count_typ).r_grid_rho_Tilde)/S.dz+0.5);
+		kk_e = pos_kk + ceil(max(S.Atm(count_typ).r_grid_rho_Tilde)/S.dz+0.5);
+
+		% Check if the b-region is inside the domain in Dirichlet BC
+		% direction
+		%isInside = (S.BCx == 0 || (S.BCx == 1 && (ii_s>1) && (ii_e<S.Nx))) && ...
+		%   (S.BCy == 0 || (S.BCy == 1 && (jj_s>1) && (jj_e<S.Ny))) && ...
+		%   (S.BCz == 0 || (S.BCz == 1 && (kk_s>1) && (kk_e<S.Nz)));
+		% assert(isInside,'Error: Atom too close to boundary for b calculation');
+		ii_s = max(ii_s,1);
+		ii_e = min(ii_e,S.Nx);
+		jj_s = max(jj_s,1);
+		jj_e = min(jj_e,S.Ny);
+		kk_s = max(kk_s,1);
+		kk_e = min(kk_e,S.Nz);
+
+		xx = S.xin + (ii_s-2*S.FDn-1:ii_e+2*S.FDn-1)*S.dx;% - x0_i;
+		yy = S.yin + (jj_s-2*S.FDn-1:jj_e+2*S.FDn-1)*S.dy;% - y0_i;
+		zz = S.zin + (kk_s-2*S.FDn-1:kk_e+2*S.FDn-1)*S.dz;% - z0_i;
+    
+		[XX_3D,YY_3D,ZZ_3D] = ndgrid(xx,yy,zz);
+
+		% Find distances
+		dd = calculateDistance(XX_3D,YY_3D,ZZ_3D,x0_i,y0_i,z0_i,S);
+
+		% Pseudopotential at grid points through interpolation
+		rho_Tilde_at= zeros(size(dd));
+		IsLargeThanRmax = dd > max(S.Atm(count_typ).r_grid_rho_Tilde);
+		rho_Tilde_at(IsLargeThanRmax) =0;
+		rho_Tilde_at(~IsLargeThanRmax) = interp1(S.Atm(count_typ).r_grid_rho_Tilde,S.Atm(count_typ).rho_Tilde,  dd(~IsLargeThanRmax), 'spline');
+		
+		II = 1+2*S.FDn : size(rho_Tilde_at,1)-2*S.FDn;
+		JJ = 1+2*S.FDn : size(rho_Tilde_at,2)-2*S.FDn;
+		KK = 1+2*S.FDn : size(rho_Tilde_at,3)-2*S.FDn;        
+		S.rho_Tilde_at(ii_s:ii_e,jj_s:jj_e,kk_s:kk_e) = S.rho_Tilde_at(ii_s:ii_e,jj_s:jj_e,kk_s:kk_e) + rho_Tilde_at(II,JJ,KK);
+	end
+	% Check if same type of atoms are over
+	if count_typ_atms == S.Atm(count_typ).n_atm_typ
+		count_typ_atms = 1;
+		count_typ = count_typ + 1;
+	else
+		count_typ_atms = count_typ_atms + 1;
+	end
+end % end of loop over atoms
+S.rho_Tilde_at = S.rho_Tilde_at(:);
+
 end

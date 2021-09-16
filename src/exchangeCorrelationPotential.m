@@ -73,8 +73,12 @@ end
 end
 %--------------------------------------------------------------------------
 
-function [S] = LDA_PW(S) 
-	rho = S.rho;
+function [S] = LDA_PW(S)
+    if S.NLCC_flag 
+        rho = S.rho+S.rho_Tilde_at;
+    else 
+        rho = S.rho;
+    end
 	rho(rho < S.xc_rhotol) = S.xc_rhotol;
 	% correlation parameters
 	p = 1 ;
@@ -101,7 +105,11 @@ end
 %--------------------------------------------------------------------------
 
 function [S] = LDA_PZ(S) 
-	rho = S.rho;
+    if S.NLCC_flag 
+        rho = S.rho+S.rho_Tilde_at;
+    else 
+        rho = S.rho;
+    end
 	rho(rho < S.xc_rhotol) = S.xc_rhotol;
 	% correlation parameters
 	A = 0.0311;
@@ -130,7 +138,11 @@ end
 %------------------------------------------------------------------------------------------------------------------------------    
 
 function [S] = GGA_PBE(S,XC)
-	rho = S.rho;
+    if S.NLCC_flag 
+        rho = S.rho+S.rho_Tilde_at;
+    else 
+        rho = S.rho;
+    end
 	rho(rho < S.xc_rhotol) = S.xc_rhotol;
 	drho_1 = S.grad_1 * rho;
 	drho_2 = S.grad_2 * rho;
@@ -332,6 +344,10 @@ end
 
 function [S] = LSDA_PW(S,XC)
 	rho = S.rho;
+    if S.NLCC_flag 
+        rho(:,2) = rho(:,2)+S.rho_Tilde_at * 0.5;
+        rho(:,3) = rho(:,3)+S.rho_Tilde_at * 0.5;
+    end
 	rho(rho < S.xc_rhotol) = S.xc_rhotol;
 	rho(:,1) = rho(:,2) + rho(:,3);
 	% Arrays
@@ -426,6 +442,10 @@ end
 %--------------------------------------------------------------------------
 function [S] = GSGA_PBE(S,XC)
 	rho = S.rho;
+    if S.NLCC_flag 
+        rho(:,2) = rho(:,2)+S.rho_Tilde_at * 0.5;
+        rho(:,3) = rho(:,3)+S.rho_Tilde_at * 0.5;
+    end
 	rho(rho < S.xc_rhotol) = S.xc_rhotol;
 	rho(:,1) = rho(:,2) + rho(:,3);
 	drho_1 = S.grad_1 * rho;

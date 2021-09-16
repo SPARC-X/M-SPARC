@@ -541,12 +541,7 @@ if S.pseudocharge_tol < 0
 	fprintf('## pseudocharge_tol is set to: %.3e\n',S.pseudocharge_tol);
 end
 
-% % kerker_tol
-% if S.kerker_tol < 0
-%     S.kerker_tol = h_eff * h_eff * 0.001;
-% end
-
-% precond_tol
+% default Kerker tolerance
 if S.precond_tol < 0
 	S.precond_tol = h_eff * h_eff * 0.001;
 end
@@ -556,30 +551,35 @@ if S.MixingParameterSimple < 0
 	S.MixingParameterSimple = S.MixingParameter;
 end
 
+% set default mixing parameter for magnetization density to the same as mixing
+% parameter for total density/potential
+if S.MixingParameterMag < 0.0
+    S.MixingParameterMag = S.MixingParameter;
+end
+
+% set default simple (linear) mixing parameter for magnetization density to be the
+% same as for pulay mixing
+if S.MixingParameterSimpleMag < 0.0
+    S.MixingParameterSimpleMag = S.MixingParameterMag;
+end
+    
 % Preconditioner for SCF convergence
 if S.MixingVariable < 0
-	% L_diag = sqrt(S.L1 * S.L1 + S.L2 * S.L2 + S.L3 * S.L3);
-	% if (L_diag <= 20 || (S.BC ~= 2 && S.BC ~= 0))
-	%     S.MixingVariable = 1;
-	% else
-	%     S.MixingVariable = 0;
-	% end
-	S.MixingVariable = 1; % set default mixing var to potential
+	S.MixingVariable = 0; % set default mixing var to density
 end
 
 if S.MixingPrecond < 0
-	% if S.MixingVariable == 0
-	%     S.MixingPrecond = 1;
-	% else
-	%     S.MixingPrecond = 0;
-	% end
-	S.MixingPrecond = 0; % set default precond to none
+	S.MixingPrecond = 1; % set default precond to 'Kerker' preconditioner
+end
+
+if S.MixingPrecondMag < 0
+	S.MixingPrecondMag = 0; % set default precond to none
 end
 
 % set up coefficients
 if S.MixingPrecond == 1 % kerker
 	S.precondcoeff_a = 1.0;
-	S.precondcoeff_lambda_TF = S.precond_kTF * S.precond_kTF;
+	S.precondcoeff_lambda_TF = S.precond_kerker_kTF * S.precond_kerker_kTF;
 	S.precondcoeff_k = 0;
 elseif S.MixingPrecond == 2 % resta
 	% put these in input options
@@ -592,8 +592,8 @@ elseif S.MixingPrecond == 2 % resta
 	% e0 = 5.7;   % parameters of the preconditioner
 	% Rs = 2.76;  % parameters of the preconditioner
 	mpower = S.precond_fitpow;
-	ktf    = S.precond_kTF;
-	a0     = S.precond_thresh;
+	ktf    = S.precond_kerker_kTF;
+	a0     = S.precond_kerker_thresh;
 	q0     = S.precond_resta_q0;
 	Rs     = S.precond_resta_Rs;
 	e0 = sinh(q0*Rs)/(q0*Rs);   % parameters of the preconditioner
@@ -615,8 +615,8 @@ elseif S.MixingPrecond == 3 % truncated kerker
 	%q0 = 1.36;   % parameters of the preconditioner
 	%Rs = 2.76;   % parameters of the preconditioner
 	mpower = S.precond_fitpow;
-	ktf    = S.precond_kTF;
-	a0     = S.precond_thresh;
+	ktf    = S.precond_kerker_kTF;
+	a0     = S.precond_kerker_thresh;
 	q0     = S.precond_resta_q0;
 	Rs     = S.precond_resta_Rs;
 	e0 = sinh(q0*Rs)/(q0*Rs);   % parameters of the preconditioner
@@ -988,25 +988,31 @@ S.target_force_accuracy = -1.0;
 S.target_energy_accuracy = -1.0;
 S.TOL_RELAX = 5e-4;
 S.TOL_LANCZOS = 1e-2;
-% S.kerker_tol = -1;
+
+% preconditioning
 S.precond_tol = -1;
 
-S.precond_kTF = 1;
-S.precond_thresh = 0.25;
-S.precond_fitpow = 2;
-S.precond_resta_q0 = 1.36;
-S.precond_resta_Rs = 2.76;
+S.precond_kerker_kTF = 1;
+S.precond_kerker_thresh = 0.1;
+S.precond_kerker_kTF_mag = 1;
+S.precond_kerker_thresh_mag = 0.1;
+% S.precond_fitpow = 2;
+% S.precond_resta_q0 = 1.36;
+% S.precond_resta_Rs = 2.76;
 
-% set back to -1
-S.MixingVariable = 1;
-S.MixingPrecond = 0;
+S.MixingVariable = -1;
+S.MixingPrecond = -1;
+S.MixingPrecondMag = -1;
 S.Pf_guess = [];
 
 S.MixingHistory = 7;
 S.MixingParameter = 0.3;
 S.MixingParameterSimple = -1.0; % for simple mixing, set up later
+S.MixingParameterMag = -1.0; % default mixing parameter for magnetization density/potential
+S.MixingParameterSimpleMag = -1.0; % for simple mixing, set up later
 S.PulayFrequency = 1;
 S.PulayRestartFreq = 0;
+
 S.TWtime = 1000000000;
 S.RelaxFlag = 0;
 S.RelaxMeth = 'LBFGS';
@@ -1044,6 +1050,12 @@ S.PrintMDout = 1;             % Flag for printing MD output in a .aimd file
 S.PrintRelaxout = 1;          % Flag for printing relax output in a .relax file
 S.Printrestart = 1;           % Flag for printing output needed for restarting a simulation
 S.Printrestart_fq = 1;        % Steps after which the output is written in the restart file
+
+% Cell option
+S.Flag_latvec_scale = 0;
+S.latvec_scale_x = 0.0;
+S.latvec_scale_y = 0.0;
+S.latvec_scale_z = 0.0;
 
 % Origin of the unit cell wrt some global origin
 S.xin = 0;  
@@ -1091,13 +1103,20 @@ fprintf(fileID,'****************************************************************
 fprintf(fileID,'                           Input parameters                                \n');
 fprintf(fileID,'***************************************************************************\n');
 
-fprintf(fileID,'CELL: %f %f %f \n',S.L1,S.L2,S.L3);
-if max(max(abs(S.lat_vec - eye(3)))) > 1e-14
-	fprintf(fileID,'LATVEC:\n');
+if S.Flag_latvec_scale == 0
+    fprintf(fileID,'CELL: %f %f %f \n',S.L1,S.L2,S.L3);
+    fprintf(fileID,'LATVEC:\n');
+	fprintf(fileID,'%.15f %.15f %.15f \n',S.lat_uvec(1,:));
+	fprintf(fileID,'%.15f %.15f %.15f \n',S.lat_uvec(2,:));
+	fprintf(fileID,'%.15f %.15f %.15f \n',S.lat_uvec(3,:));
+else
+    fprintf(fileID,'LATVEC_SCALE: %f %f %f \n',S.latvec_scale_x,S.latvec_scale_y,S.latvec_scale_z); 
+    fprintf(fileID,'LATVEC:\n');
 	fprintf(fileID,'%.15f %.15f %.15f \n',S.lat_vec(1,:));
 	fprintf(fileID,'%.15f %.15f %.15f \n',S.lat_vec(2,:));
 	fprintf(fileID,'%.15f %.15f %.15f \n',S.lat_vec(3,:));
 end
+
 fprintf(fileID,'FD_GRID: %d %d %d\n',S.Nx-S.BCx,S.Ny-S.BCy,S.Nz-S.BCz);
 fprintf(fileID,'FD_ORDER: %d\n',S.FDn*2);
 %fprintf(fileID,'BOUNDARY_CONDITION: %d\n',S.BC);
@@ -1201,31 +1220,63 @@ if (S.MixingPrecond == 0)
 	fprintf(fileID,'MIXING_PRECOND: none\n');
 elseif (S.MixingPrecond == 1)
 	fprintf(fileID,'MIXING_PRECOND: kerker\n');
-elseif (S.MixingPrecond == 2)
-	fprintf(fileID,'MIXING_PRECOND: resta\n');
-elseif (S.MixingPrecond == 3)
-	fprintf(fileID,'MIXING_PRECOND: truncated_kerker\n');
+% elseif (S.MixingPrecond == 2)
+% 	fprintf(fileID,'MIXING_PRECOND: resta\n');
+% elseif (S.MixingPrecond == 3)
+% 	fprintf(fileID,'MIXING_PRECOND: truncated_kerker\n');
+end
+
+% for large periodic systems, give warning if preconditioner is not chosen
+if S.BC == 2 || 0
+    L_diag = sqrt(S.L1^2 + S.L2^2 + S.L3^2);
+    if L_diag > 20 && S.MixingPrecond == 0
+        fprintf(fileID,"#WARNING: the preconditioner for SCF has been turned off, this \n");
+        fprintf(fileID,"might lead to slow SCF convergence. To specify SCF preconditioner, \n");
+        fprintf(fileID,"#use 'MIXING_PRECOND' in the .inpt file\n");
+    end
+end
+if S.spin_typ ~= 0
+    if (S.MixingPrecondMag == 0)
+        fprintf(fileID,'MIXING_PRECOND_MAG: none\n');
+    elseif (S.MixingPrecondMag == 1)
+        fprintf(fileID,'MIXING_PRECOND_MAG: kerker\n');
+%     elseif (S.MixingPrecondMag == 2)
+%         fprintf(fileID,'MIXING_PRECOND_MAG: resta\n');
+%     elseif (S.MixingPrecondMag == 3)
+%         fprintf(fileID,'MIXING_PRECOND_MAG: truncated_kerker\n');
+    end
 end
 if (S.MixingPrecond ~= 0)
 	fprintf(fileID,'TOL_PRECOND: %.2E\n',S.precond_tol);
 end
 if (S.MixingPrecond == 1) % kerker
-	%fprintf(fileID,'TOL_KERKER: %.2E\n',S.kerker_tol);
-	fprintf(fileID,'PRECOND_KERKER_KTF: %.2f\n',S.precond_kTF);
-elseif (S.MixingPrecond == 2) % resta
-	%fprintf(fileID,'TOL_PRECOND: %.2E\n',S.precond_tol);
-	fprintf(fileID,'PRECOND_RESTA_Q0: %.3f\n',S.precond_resta_q0);
-	fprintf(fileID,'PRECOND_RESTA_RS: %.3f\n',S.precond_resta_Rs);
-	fprintf(fileID,'PRECOND_FITPOW: %d\n',S.precond_fitpow);
-elseif (S.MixingPrecond == 3) % truncated kerker
-	fprintf(fileID,'PRECOND_KERKER_KTF: %.2f\n',S.precond_kTF);
-	fprintf(fileID,'PRECOND_KERKER_THRESH: %.2f\n',S.precond_thresh);
-	fprintf(fileID,'PRECOND_FITPOW: %d\n',S.precond_fitpow);
+	fprintf(fileID,'PRECOND_KERKER_KTF: %.2f\n',S.precond_kerker_kTF);
+    fprintf(fileID,'PRECOND_KERKER_THRESH: %.2f\n',S.precond_kerker_thresh);
+% elseif (S.MixingPrecond == 2) % resta
+% 	%fprintf(fileID,'TOL_PRECOND: %.2E\n',S.precond_tol);
+% 	fprintf(fileID,'PRECOND_RESTA_Q0: %.3f\n',S.precond_resta_q0);
+% 	fprintf(fileID,'PRECOND_RESTA_RS: %.3f\n',S.precond_resta_Rs);
+% 	fprintf(fileID,'PRECOND_FITPOW: %d\n',S.precond_fitpow);
+% elseif (S.MixingPrecond == 3) % truncated kerker
+% 	fprintf(fileID,'PRECOND_KERKER_KTF: %.2f\n',S.precond_kerker_kTF);
+% 	fprintf(fileID,'PRECOND_KERKER_THRESH: %.2f\n',S.precond_kerker_thresh);
+% 	fprintf(fileID,'PRECOND_FITPOW: %d\n',S.precond_fitpow);
 end
-
+if S.spin_typ ~= 0
+    if S.MixingPrecondMag == 1
+        fprintf(fileID,'PRECOND_KERKER_KTF_MAG: %.2f\n',S.precond_kerker_kTF_mag);
+        fprintf(fileID,'PRECOND_KERKER_THRESH_MAG: %.2f\n',S.precond_kerker_thresh_mag);
+    end
+end
 fprintf(fileID,'MIXING_PARAMETER: %.2f\n',S.MixingParameter);
-if S.MixingParameter ~= S.MixingParameterSimple
+if S.PulayFrequency > 1
 	fprintf(fileID,'MIXING_PARAMETER_SIMPLE: %.2f\n',S.MixingParameterSimple);
+end
+if S.spin_typ ~= 0
+    fprintf(fileID,'MIXING_PARAMETER_MAG: %.2f\n',S.MixingParameterMag);
+    if S.PulayFrequency > 1
+        fprintf(fileID,'MIXING_PARAMETER_SIMPLE_MAG: %.2f\n',S.MixingParameterSimpleMag);
+    end
 end
 fprintf(fileID,'MIXING_HISTORY: %d\n',S.MixingHistory);
 fprintf(fileID,'PULAY_FREQUENCY: %d\n',S.PulayFrequency);
@@ -1256,6 +1307,15 @@ fprintf(fileID,'OUTPUT_FILE: %s\n',outfname);
 if (S.RestartFlag == 1)
 	fprintf(fileID,'RESTART_FLAG: %d\n',S.RestartFlag);
 end
+
+fprintf(fileID,'***************************************************************************\n');
+fprintf(fileID,'                                Cell                                       \n');
+fprintf(fileID,'***************************************************************************\n');
+fprintf(fileID,'Lattice vectors:\n');
+fprintf(fileID,'%.15f %.15f %.15f \n',S.lat_uvec(1,:)*S.L1);
+fprintf(fileID,'%.15f %.15f %.15f \n',S.lat_uvec(2,:)*S.L2);
+fprintf(fileID,'%.15f %.15f %.15f \n',S.lat_uvec(3,:)*S.L3);
+fprintf(fileID,'Volume                  :%18.10E (Bohr^3)\n',S.L1*S.L2*S.L3*S.Jacb);
 
 % fprintf(fileID,'***************************************************************************\n');
 % fprintf(fileID,'                           Parallelization                                 \n');
