@@ -4,7 +4,7 @@
 #PBS -q hive
 #PBS -l nodes=1:ppn=1
 #PBS -l mem=170gb 
-#PBS -l walltime=4:00:00
+#PBS -l walltime=14:00:00
 
 
 module purge

@@ -42,6 +42,10 @@ SYSTEMS["systemname"].append('Fe_spin')
 SYSTEMS["Tags"].append(['bulk', 'gga', 'denmix', 'kerker', 'kpt', 'spin','orth','smear_fd'])
 SYSTEMS["Tols"].append([tols["E_tol"], tols["F_tol"], tols["stress_tol"]]) # E_tol(Ha/atom), F_tol(Ha/Bohr), stress_tol(%)
 ################################################################################################################
+SYSTEMS["systemname"].append('Fe_spin_nlcc')
+SYSTEMS["Tags"].append(['bulk', 'gga', 'denmix', 'kerker', 'kpt', 'spin','orth','smear_fd','nlcc'])
+SYSTEMS["Tols"].append([tols["E_tol"], tols["F_tol"], tols["stress_tol"]]) # E_tol(Ha/atom), F_tol(Ha/Bohr), stress_tol(%)
+################################################################################################################
 SYSTEMS["systemname"].append('H2O_sheet')
 SYSTEMS["Tags"].append(['surface', 'gga', 'potmix','orth','smear_fd','orient'])
 SYSTEMS["Tols"].append([tols["E_tol"], tols["F_tol"], tols["stress_tol"]]) # E_tol(Ha/atom), F_tol(Ha/Bohr), stress_tol(%)
@@ -70,9 +74,9 @@ SYSTEMS["systemname"].append('Si8_cell_geopt')
 SYSTEMS["Tags"].append(['bulk', 'gga', 'orth', 'potmix', 'relax_cell','gamma','smear_fd'])
 SYSTEMS["Tols"].append([tols["E_tol"], tols["F_tol"], tols["stress_tol"]]) # E_tol(Ha/atom), F_tol(Ha/Bohr), stress_tol(%)
 ################################################################################################################
-SYSTEMS["systemname"].append('Si8_full_geopt')
-SYSTEMS["Tags"].append(['bulk', 'gga', 'orth', 'potmix', 'relax_total_lbfgs','gamma','smear_fd'])
-SYSTEMS["Tols"].append([tols["E_tol"], tols["F_tol"], tols["stress_tol"]]) # E_tol(Ha/atom), F_tol(Ha/Bohr), stress_tol(%)
+# SYSTEMS["systemname"].append('Si8_full_geopt')
+# SYSTEMS["Tags"].append(['bulk', 'gga', 'orth', 'potmix', 'relax_total_lbfgs','gamma','smear_fd'])
+# SYSTEMS["Tols"].append([tols["E_tol"], tols["F_tol"], tols["stress_tol"]]) # E_tol(Ha/atom), F_tol(Ha/Bohr), stress_tol(%)
 ################################################################################################################
 SYSTEMS["systemname"].append('Si8_kpt')
 SYSTEMS["Tags"].append(['bulk', 'kpt', 'lda', 'potmix','nonorth','smear_fd'])
@@ -114,21 +118,9 @@ SYSTEMS["Tols"].append([tols["E_tol"], tols["F_tol"], tols["stress_tol"]]) # E_t
 # SYSTEMS["Tags"].append(['bulk','lda','potmix','orth','smear_fd','md_nvkg','gamma'])
 # SYSTEMS["Tols"].append([tols["E_tol"], tols["F_tol"], tols["stress_tol"]]) # E_tol(Ha/atom), F_tol(Ha/Bohr), stress_tol(%)
 ################################################################################################################
-SYSTEMS["systemname"].append('O2spin_spin_paral')
-SYSTEMS["Tags"].append(['bulk', 'spin', 'gga', 'denmix', 'kerker', 'orth','smear_fd','paral'])
+SYSTEMS["systemname"].append('TiNi_monoclinic')
+SYSTEMS["Tags"].append(['bulk', 'gga', 'potmix', 'nonorth','gamma','smear_fd','nlcc'])
 SYSTEMS["Tols"].append([tols["E_tol"], tols["F_tol"], tols["stress_tol"]]) # E_tol(Ha/atom), F_tol(Ha/Bohr), stress_tol(%)
-################################################################################################################
-SYSTEMS["systemname"].append('Si2_kpt_paral')
-SYSTEMS["Tags"].append(['bulk', 'gga', 'potmix', 'nonorth','kpt','smear_fd', 'paral'])
-SYSTEMS["Tols"].append([tols["E_tol"], tols["F_tol"], tols["stress_tol"]]) # E_tol(Ha/atom), F_tol(Ha/Bohr), stress_tol(%)
-################################################################################################################
-SYSTEMS["systemname"].append('Si2_domain_paral')
-SYSTEMS["Tags"].append(['bulk', 'gga', 'potmix', 'nonorth','kpt','smear_fd', 'paral'])
-SYSTEMS["Tols"].append([tols["E_tol"], tols["F_tol"], tols["stress_tol"]]) # E_tol(Ha/atom), F_tol(Ha/Bohr), stress_tol(%)
-################################################################################################################
-# SYSTEMS["systemname"].append('TiNi_monoclinic')
-# SYSTEMS["Tags"].append(['bulk', 'gga', 'potmix', 'nonorth','gamma','smear_fd','nlcc'])
-# SYSTEMS["Tols"].append([tols["E_tol"], tols["F_tol"], tols["stress_tol"]]) # E_tol(Ha/atom), F_tol(Ha/Bohr), stress_tol(%)
 ################################################################################################################
 SYSTEMS["systemname"].append('P_triclinic')
 SYSTEMS["Tags"].append(['bulk', 'gga', 'potmix', 'nonorth','gamma','smear_fd'])
@@ -309,7 +301,8 @@ def launchsystems(systems,memcheck,procs_sys,ismempbs,ifVHQ, isorient, isserial)
 			nnodes=1
 			index=0
 			samplePBS_content = []
-			launch_text = " clear all \n close all \n addpath('./../../../src') \n msparc('"+syst+"') \n save workspace.mat"
+			# launch_text = " clear all \n close all \n addpath('./../../../src') \n msparc('"+syst+"') \n save workspace.mat"
+			launch_text = " clear all \n close all \n addpath('./../../../src') \n msparc('"+syst+"') \n"
 			for lines in samplePBS_content_orj:
 				samplePBS_content.append(lines)
 				#samplePBS_content.append("export MV2_USE_RDMA_CM=1")
@@ -321,7 +314,10 @@ def launchsystems(systems,memcheck,procs_sys,ismempbs,ifVHQ, isorient, isserial)
 						samplePBS_content[index] = "#PBS -l nodes="+str(nnodes)+":ppn="+str(24)
 				if re.findall(r'mem',lines) == ['mem'] or re.findall(r'pmem',lines) == ['pmem']:
 					if nprocs == 1:
-						samplePBS_content[index] = "#PBS -l mem=10gb"
+						if ifVHQ == False:
+							samplePBS_content[index] = "#PBS -l mem=10gb"
+						if ifVHQ == True:
+							samplePBS_content[index] = "#PBS -l mem=50gb"
 					else:
 						samplePBS_content[index] = "#PBS -l pmem=7gb"
 				if re.findall(r'mpirun',lines) == ['mpirun']:
@@ -579,6 +575,7 @@ def ReadOutFile(filepath, isMD, geopt_typ, isSpin):
 	magnetization = []
 	pressure = []
 	index=0
+	stress = []
 
 
 	for lines in f_out_content:
@@ -601,15 +598,17 @@ def ReadOutFile(filepath, isMD, geopt_typ, isSpin):
 			val_temp = int(val_temp[0])
 			if val_temp == 1:
 				isPrintStress = True
-			elif val_temp == 0:
-				isPrintStress = False
-		if re.findall(r"CALC_PRES",lines) == ['CALC_PRES']:
-			val_temp = re.findall(r'\d',lines)
-			val_temp = int(val_temp[0])
-			if val_temp == 1:
 				isPrintPres = True
 			elif val_temp == 0:
+				isPrintStress = False
 				isPrintPres = False
+		# if re.findall(r"CALC_PRES",lines) == ['CALC_PRES']:
+		# 	val_temp = re.findall(r'\d',lines)
+		# 	val_temp = int(val_temp[0])
+		# 	if val_temp == 1:
+		# 		isPrintPres = True
+		# 	elif val_temp == 0:
+		# 		isPrintPres = False
 		if re.findall(r"Total number of atoms",lines) == ['Total number of atoms']:
 			atom_temp =  re.findall(r'\d+',lines)
 			no_atoms = int(atom_temp[0])
@@ -632,6 +631,18 @@ def ReadOutFile(filepath, isMD, geopt_typ, isSpin):
 				stressDim = 1
 			if lines == ['BC: D D D']:
 				stressDim = 0
+		if isPrintStress ==  True:
+			if lines == 'Stress (GPa):' or lines=='Stress (Ha/Bohr**2):' or lines=='Stress (Ha/Bohr):':
+				St_tempscf =[]
+				for i in range(stressDim):
+					line_temp = f_out_content[index+i+1]
+					St_atom_temp =  re.findall(r'\b[+-]?[0-9]+\.[0-9]+\b',line_temp)
+					for j in range(len(St_atom_temp)):
+						St_atom_temp[j] = float(St_atom_temp[j])
+					St_tempscf.append(St_atom_temp)
+				stress=St_tempscf
+
+
 		if isSpin == True:
 			if isMD ==  True:
 				if re.findall(r'Total number of SCF',lines) == ['Total number of SCF']:
@@ -653,6 +664,7 @@ def ReadOutFile(filepath, isMD, geopt_typ, isSpin):
 				SCF_no.append(float(re.findall("\d+",lines)[0]))
 
 
+
 	if geopt_typ ==  "cell_relax":
 		isPrintF = False
 		isPrintCell = True
@@ -662,6 +674,7 @@ def ReadOutFile(filepath, isMD, geopt_typ, isSpin):
 		isPrintF = True
 		isPrintCell = False
 		isPrintAtoms  = True
+		isPrintStress = False
 	if geopt_typ == "full_relax":
 		isPrintF = True
 		isPrintCell = True
@@ -680,7 +693,8 @@ def ReadOutFile(filepath, isMD, geopt_typ, isSpin):
 		"pressure": pressure,
 		"walltime": walltime,
 		"isPrintCell": isPrintCell,
-		"SCF_no": SCF_no}
+		"SCF_no": SCF_no,
+		"stress": stress}
 	return(Info)
 
 def ReadStaticFile(filepath, info_out):
@@ -690,7 +704,7 @@ def ReadStaticFile(filepath, info_out):
 	with open(filepath,'r') as f_static:
 		f_static_content = [ line.strip() for line in f_static ]
 	force = []
-	stress = []
+	# stress = []
 	index=0
 	
 	for lines in f_static_content:
@@ -707,16 +721,16 @@ def ReadStaticFile(filepath, info_out):
 						F_atom_temp[j] = float(F_atom_temp[j])
 					F_tempscf.append(F_atom_temp)
 				force=F_tempscf
-		if info_out["isPrintStress"] == True:
-			if lines == 'Stress (GPa):' or lines=='Stress (Ha/Bohr**2):' or lines=='Atomic forces (Ha/Bohr):':
-				St_tempscf =[]
-				for i in range(info_out["stressDim"]):
-					line_temp = f_static_content[index+i+1]
-					St_atom_temp =  re.findall(r'\b[+-]?[0-9]+\.[0-9]+E[+-]?[0-9]+\b',line_temp)
-					for j in range(len(St_atom_temp)):
-						St_atom_temp[j] = float(St_atom_temp[j])
-					St_tempscf.append(St_atom_temp)
-				stress=St_tempscf
+		# if info_out["isPrintStress"] == True:
+		# 	if lines == 'Stress (GPa):' or lines=='Stress (Ha/Bohr**2):' or lines=='Stress (Ha/Bohr):':
+		# 		St_tempscf =[]
+		# 		for i in range(info_out["stressDim"]):
+		# 			line_temp = f_static_content[index+i+1]
+		# 			St_atom_temp =  re.findall(r'\b[+-]?[0-9]+\.[0-9]+E[+-]?[0-9]+\b',line_temp)
+		# 			for j in range(len(St_atom_temp)):
+		# 				St_atom_temp[j] = float(St_atom_temp[j])
+		# 			St_tempscf.append(St_atom_temp)
+		# 		stress=St_tempscf
 		index=index+1
 	### Error Handling ###
 	truth1 = True
@@ -727,16 +741,9 @@ def ReadStaticFile(filepath, info_out):
 		truth1=True
 	else:
 		truth1=False
-	if info_out["isPrintStress"] and stress !=[]:
-		truth2=True
-	elif info_out["isPrintStress"]==False and stress ==[]:
-		truth2=True
-	else:
-		truth2=False
 	assert (truth1 and truth2),"Problem in static file for system "+filepath
 	### Error Handling ###
-	Info_static = {"stress": stress,
-				   "force": force,
+	Info_static = {"force": force
 				   }
 	return(Info_static)
 
@@ -745,6 +752,7 @@ def ReadStaticFile(filepath, info_out):
 def ReadGeoptFile(filepath, info_out):
 
 	#""" Reads .geopt file from SPARC runs and reference """
+
 	with open(filepath,'r') as f_geopt:
 		f_geopt_content = [ line.strip() for line in f_geopt ]
 	force = []
@@ -755,17 +763,19 @@ def ReadGeoptFile(filepath, info_out):
 	index = 0
 	for lines in f_geopt_content:
 		if info_out["isPrintF"] == True:
-			if lines == ':F(Ha/Bohr):':
+			if lines == ':F:' or lines == ':F(Ha/Bohr):':
 				F_tempscf =[]
 				for i in range(info_out["no_atoms"]):
 					line_temp = f_geopt_content[index+i+1]
-					F_atom_temp =  re.findall(r'\b[+-]?[0-9]+\.[0-9]+\b',line_temp)
+					F_atom_temp =  re.findall(r'\b[+-]?[0-9]+\.[0-9]+E[+-]?[0-9]+\b',line_temp)
+					if F_atom_temp == []:
+						F_atom_temp =  re.findall(r'\b[+-]?[0-9]+\.[0-9]+\b',line_temp)
 					for j in range(len(F_atom_temp)):
 						F_atom_temp[j] = float(F_atom_temp[j])
 					F_tempscf.append(F_atom_temp)
 				force.append(F_tempscf)
 		if info_out["isPrintAtoms"] == True:
-			if lines == ':R(Bohr):':
+			if lines == ':R:' or lines ==':R(Bohr):':
 				pos_tempscf =[]
 				for i in range(info_out["no_atoms"]):
 					line_temp = f_geopt_content[index+i+1]
@@ -992,7 +1002,6 @@ def getInfo(syst,singlept,Type, ifref,memcheck, ismempbs, isspin, ifVHQ, isorien
 
 	os.chdir(syst)
 
-	
 	if (singlept == True):
 		# Extract energy, forces, stress, no of scf iteration, walltime, 
 		#------------------------ Memory from output.sparc ----------------------------#
@@ -1037,7 +1046,7 @@ def getInfo(syst,singlept,Type, ifref,memcheck, ismempbs, isspin, ifVHQ, isorien
 			if infout["isPrintF"] == True:
 				force = infstatic["force"]
 			if infout["isPrintStress"] == True:
-				stress = infstatic["stress"]
+				stress = infout["stress"]
 			if infout["isPrintPres"] == True:
 				pressure = infout["pressure"]
 			no_atoms = infout["no_atoms"]
@@ -1052,7 +1061,7 @@ def getInfo(syst,singlept,Type, ifref,memcheck, ismempbs, isspin, ifVHQ, isorien
 			if infout1["isPrintF"] == True:
 				force = infstatic1["force"]#[infstatic1["force"],infstatic2["force"],infstatic3["force"]]
 			if infout1["isPrintStress"] == True:
-				stress = infstatic1["stress"]#[infstatic1["stress"],infstatic2["stress"],infstatic3["stress"]]
+				stress = infout1["stress"]#[infstatic1["stress"],infstatic2["stress"],infstatic3["stress"]]
 			if infout1["isPrintPres"] == True:
 				pressure = infout1["pressure"]#[infout1["pressure"],infout1["pressure"],infout1["pressure"]]
 			no_atoms = infout1["no_atoms"]
@@ -1157,29 +1166,29 @@ def getInfo(syst,singlept,Type, ifref,memcheck, ismempbs, isspin, ifVHQ, isorien
 		if ifref == False:
 			if isorientsys == False:
 				infout = ReadOutFile("./temp_run/"+syst+".out", False, "cell_relax", isspin)
-				infgeopt = ReadGeoptFile("./temp_run/"+syst+".geopt", infout)
+				infgeopt = ReadGeoptFile("./temp_run/"+syst+".cellopt", infout)
 			else:
 				infout1 = ReadOutFile("./temp_run1/"+syst+".out", False, "cell_relax", isspin)
-				infgeopt1 = ReadGeoptFile("./temp_run1/"+syst+".geopt", infout1)
+				infgeopt1 = ReadGeoptFile("./temp_run1/"+syst+".cellopt", infout1)
 				infout2 = ReadOutFile("./temp_run2/"+syst+".out", False, "cell_relax", isspin)
-				infgeopt2 = ReadGeoptFile("./temp_run2/"+syst+".geopt", infout2)
+				infgeopt2 = ReadGeoptFile("./temp_run2/"+syst+".cellopt", infout2)
 				infout3 = ReadOutFile("./temp_run3/"+syst+".out", False, "cell_relax", isspin)
-				infgeopt3 = ReadGeoptFile("./temp_run3/"+syst+".geopt", infout3)
+				infgeopt3 = ReadGeoptFile("./temp_run3/"+syst+".cellopt", infout3)
 		else:
 			if isorientsys == False:
 				if ifVHQ == True:
 					infout = ReadOutFile("./high_accuracy/"+syst+".refout", False, "cell_relax", isspin)
-					infgeopt = ReadGeoptFile("./high_accuracy/"+syst+".refgeopt", infout)
+					infgeopt = ReadGeoptFile("./high_accuracy/"+syst+".refcellopt", infout)
 				else:
 					infout = ReadOutFile("./low_accuracy/"+syst+".refout", False, "cell_relax", isspin)
-					infgeopt = ReadGeoptFile("./low_accuracy/"+syst+".refgeopt", infout)
+					infgeopt = ReadGeoptFile("./low_accuracy/"+syst+".refcellopt", infout)
 			else:
 				if ifVHQ == True:
 					infout = ReadOutFile("./high_accuracy_orientation1/"+syst+".refout", False, "cell_relax", isspin)
-					infgeopt = ReadGeoptFile("./high_accuracy_orientation1/"+syst+".refgeopt", infout)
+					infgeopt = ReadGeoptFile("./high_accuracy_orientation1/"+syst+".refcellopt", infout)
 				else:
 					infout = ReadOutFile("./low_accuracy_orientation1/"+syst+".refout", False, "cell_relax", isspin)
-					infgeopt = ReadGeoptFile("./low_accuracy_orientation1/"+syst+".refgeopt", infout)
+					infgeopt = ReadGeoptFile("./low_accuracy_orientation1/"+syst+".refcellopt", infout)
 
 		if isorientsys == False or ifref == False:
 			E = infout["E"]
@@ -1534,7 +1543,7 @@ def WriteReport(data_info, systems, isparallel, ifVHQ, isorient):
 			stress_ref = info_ref["stress"]
 			if isabinit == True:
 				stress_abinit = info_abinit["stress"]
-
+			# print(systems[i],stress_run,stress_ref)
 			for j in range(len(stress_run)):
 				temp =[]
 				for jj in range(len(stress_run[j])):
@@ -2383,7 +2392,7 @@ def WriteReport(data_info, systems, isparallel, ifVHQ, isorient):
   ################### Printing #############################################################
 	f_report = open("Report.txt",'w')
 	f_report.write("*************************************************************************** \n")
-	f_report.write("*                   TEST REPORT (Version 16 June 2020)                    *\n*                      Date:  "+date_time+"                        * \n")
+	f_report.write("*                   TEST REPORT (Version 19 Sep 2020)                    *\n*                      Date:  "+date_time+"                        * \n")
 	f_report.write("*************************************************************************** \n")
 	f_report.write("Tests Passed: "+str(passtests)+"/"+str(passtests+failtests)+"\n")
 	f_report.write("Tests Failed: "+str(failtests)+"/"+str(passtests+failtests)+"\n")
@@ -2435,6 +2444,28 @@ ifVHQ = False
 isAuto = False
 is_valgrind_all = False
 no_concurrency=6 # number of jobs running concurrently on github server
+temp_result =  False
+
+if 'temp_present' in args:
+	temp_result =  True 
+	args.remove('temp_present')
+
+if len(args) == 1 and re.findall(r'clean_temp',args[0]) == ['clean_temp']:
+	systems=SYSTEMS['systemname']
+	tags_sys=SYSTEMS['Tags']
+	tols_sys=SYSTEMS['Tols']
+	count=0
+	for s in systems:
+		os.chdir(s)
+		if 'orient' in tags_sys[count]:
+			os.system("rm -r temp_run1 temp_run2 temp_run3")
+		else:
+			os.system("rm -r temp_run")
+		count=count+1
+		os.chdir("./..")
+	sys.exit("Deleted the temp files")
+
+	
 if len(args) == 1 and re.findall(r'run_local',args[0]) == ['run_local']:
 	systems=SYSTEMS['systemname']
 	tags_sys=SYSTEMS['Tags']
@@ -2695,11 +2726,12 @@ else:
 ######################### Launching the jobs ######################################################################
 # launch in a batch of 5 systems in a single pbs file in case of "mempbscheck == False" and in a batch of 1 otherwise
 # Input to the launch function should be  - (i) systems (ii) ifmempbs (iii) numberofprocs
-if isAuto == False:
+
+if isAuto == False and temp_result == False:
 	jobID = launchsystems(systems,memcheck,procs_sys,ismempbs, ifVHQ, isorient, not isparallel)
 
 
-############################### Monitoring #########################################################################
+############################## Monitoring #########################################################################
 	syst_temp = []
 	isorient_temp=[]
 	for i in range(len(systems)):
@@ -2726,72 +2758,6 @@ if isAuto == False:
 			time.sleep(.3)
 
 	print('\n')
-else:
-	countrun=0
-	for systs in systems:
-		print(str(countrun)+": "+systs+" started running")
-		os.chdir(systs)
-		if isorient[countrun] == False:
-			if os.path.exists("temp_run"):
-				os.system("rm -r temp_run")
-				os.system("mkdir temp_run")
-				os.system("cp low_accuracy/*.inpt ./temp_run/")
-				os.system("cp low_accuracy/*.ion ./temp_run/")
-				os.system("cp ./*.psp8 ./temp_run/")
-			else:
-				os.system("mkdir temp_run")
-				os.system("cp low_accuracy/*.inpt ./temp_run/")
-				os.system("cp low_accuracy/*.ion ./temp_run/")
-				os.system("cp ./*.psp8 ./temp_run/")
-			os.chdir("temp_run")
-			os.system("./../../sparc -name "+systs+" > log")
-		else:
-			if os.path.exists("temp_run1"):
-				os.system("rm -r temp_run1")
-				os.system("mkdir temp_run1")
-				os.system("cp low_accuracy_orientation1/*.inpt ./temp_run1/")
-				os.system("cp low_accuracy_orientation1/*.ion ./temp_run1/")
-				os.system("cp ./*.psp8 ./temp_run1/")
-			else:
-				os.system("mkdir temp_run1")
-				os.system("cp low_accuracy_orientation1/*.inpt ./temp_run1/")
-				os.system("cp low_accuracy_orientation1/*.ion ./temp_run1/")
-				os.system("cp ./*.psp8 ./temp_run1/")
-			os.chdir("temp_run1")
-			os.system("./../../sparc -name "+systs+" > log")
-
-			os.chdir("./..")
-			if os.path.exists("temp_run2"):
-				os.system("rm -r temp_run2")
-				os.system("mkdir temp_run2")
-				os.system("cp low_accuracy_orientation2/*.inpt ./temp_run2/")
-				os.system("cp low_accuracy_orientation2/*.ion ./temp_run2/")
-				os.system("cp ./*.psp8 ./temp_run2/")
-			else:
-				os.system("mkdir temp_run2")
-				os.system("cp low_accuracy_orientation2/*.inpt ./temp_run2/")
-				os.system("cp low_accuracy_orientation2/*.ion ./temp_run2/")
-				os.system("cp ./*.psp8 ./temp_run2/")
-
-			os.chdir("temp_run2")
-			os.system("./../../sparc -name "+systs+" > log")
-			os.chdir("./..")
-			if os.path.exists("temp_run3"):
-				os.system("rm -r temp_run3")
-				os.system("mkdir temp_run3")
-				os.system("cp low_accuracy_orientation3/*.inpt ./temp_run3/")
-				os.system("cp low_accuracy_orientation3/*.ion ./temp_run3/")
-				os.system("cp ./*.psp8 ./temp_run3/")
-			else:
-				os.system("mkdir temp_run3")
-				os.system("cp low_accuracy_orientation3/*.inpt ./temp_run3/")
-				os.system("cp low_accuracy_orientation3/*.ion ./temp_run3/")
-				os.system("cp ./*.psp8 ./temp_run3/")
-			os.chdir("temp_run3")
-			os.system("./../../sparc -name "+systs+" > log")
-		countrun=countrun+1
-		print(str(countrun)+": "+systs+" has finished running")
-		os.chdir("./../..")
 
 
 #######################################################################################################################
@@ -2808,11 +2774,6 @@ try:
 except:
 	print("Warning: "+systems[0]+" has some issues: please check that \n")
 
-#temp2 = getInfo(systems[0],singlept[0],Type[0],True,memcheck[0],ismempbs,isspin[0])
-# if os.path.exists('./'+systems[0]+"/"+systems[0]+".refabinitout"):
-# 	temp2 = getInfoAbinit(systems[0],singlept[0],Type[0],isspin[0],ifVHQ)
-# 	data_info = {0: {'a': temp, 'b': temp1, 'c': temp2}}
-# else:
 
 for i in range(len(systems)):
 	if i>0:
@@ -2820,13 +2781,8 @@ for i in range(len(systems)):
 			os.chdir(home_directory)
 			temp=getInfo(systems[i],singlept[i],Type[i],False,memcheck[i],ismempbs,isspin[i],ifVHQ,isorient[i],tols_sys[i])				
 			temp1=getInfo(systems[i],singlept[i],Type[i],True,memcheck[i],ismempbs,isspin[i],ifVHQ,isorient[i],tols_sys[i])
-			# if os.path.exists('./'+systems[i]+"/"+systems[i]+".refabinitout"):
-			# 	temp2 = getInfoAbinit(systems[i],singlept[i],Type[i],isspin[i],ifVHQ)
-			# 	temp_dict = {'a': temp, 'b': temp1, 'c': temp2}
-			# 	data_info[i] = temp_dict
-			# else:
 			temp_dict = {'a': temp, 'b': temp1}
-				#data_info[i] = temp_dict
+
 			data_info[count_run] = temp_dict
 			sys_which_ran_idx.append(i)
 			count_run=count_run+1
