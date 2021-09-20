@@ -428,13 +428,8 @@ while(~feof(fid1))
 		S.PulayFrequency = C_param{1};
 		textscan(fid1,'%s',1,'delimiter','\n','MultipleDelimsAsOne',0); % skip current line
 	elseif (strcmp(str,'PULAY_RESTART:'))
-		% C_param = textscan(fid1,'%f',1,'delimiter',' ','MultipleDelimsAsOne',1);
-		% S.PulayRestartFlag = C_param{1};
-		% textscan(fid1,'%s',1,'delimiter','\n','MultipleDelimsAsOne',0); % skip current line
-		error('"PULAY_RESTART" is obsolete, please provide PULAY_RESTART_FREQ instead!\n');
-	elseif (strcmp(str,'PULAY_RESTART_FREQ:'))
 		C_param = textscan(fid1,'%f',1,'delimiter',' ','MultipleDelimsAsOne',1);
-		S.PulayRestartFreq = C_param{1};
+		S.PulayRestartFlag = C_param{1};
 		textscan(fid1,'%s',1,'delimiter','\n','MultipleDelimsAsOne',0); % skip current line
 	elseif (strcmp(str,'TWTIME:'))
 		C_param = textscan(fid1,'%f',1,'delimiter',' ','MultipleDelimsAsOne',1);

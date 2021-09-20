@@ -1,4 +1,12 @@
 ----------------
+Sep 20, 2021
+Name: Xin Jing
+* Add GGA_RPBE, GGA_PBEsol
+* Add reference_cuoff warnings
+* Replace PulayRestartFreq with PulayRestartFlag
+
+
+----------------
 Sep 19, 2021
 Name: Shashikant Kumar
 * Updated reference output files in tests folder

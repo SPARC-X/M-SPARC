@@ -17,11 +17,16 @@ function [S] = exchangeCorrelationPotential(S)
 XC = struct;
 XC.alpha_zeta2 = 1.0 - 1.0e-6; XC.alpha_zeta = 1.0 - 1.0e-6; % ABINIT
 %XC.alpha_zeta2 = 1.0; XC.alpha_zeta = 1.0; %LIBXC
-XC.beta = 0.066725;
-%XC.beta = 0.06672455060314922;
+if (strcmp(S.XC, 'GGA_PBEsol'))
+    XC.beta = 0.046;
+    XC.mu = 10.0/81.0;
+else
+    XC.beta = 0.066725;
+    %XC.beta = 0.06672455060314922;
+    XC.mu = 0.2195149727645171;
+end
 XC.fsec_inv = 1.0/1.709921;
 XC.kappa_pbe = 0.804;
-XC.mu = 0.2195149727645171;
 XC.rsfac = 0.6203504908994000;
 XC.kappa = XC.kappa_pbe;
 XC.mu_divkappa_pbe = XC.mu/XC.kappa_pbe;
@@ -201,9 +206,15 @@ function [S] = GGA_PBE(S,XC)
 	rho_inv = rhomot .* rhomot .* rhomot;
 	coeffss = (1.0/4.0) * XC.sixpi2m1_3 * XC.sixpi2m1_3 * (rho_inv .* rho_inv .* rhomot .* rhomot);
 	ss = (sigma/4.0) .* coeffss;
-	divss = 1.0./(1.0 + XC.mu_divkappa * ss);
-	dfxdss = XC.mu * (divss .* divss);
-	%d2fxdss2 = -XC.mu * 2.0 * XC.mu_divkappa * (divss .* divss .* divss);
+    
+    if (strcmp(S.XC,'GGA_PBE') || strcmp(S.XC,'GGA_PBEsol'))
+        divss = 1.0./(1.0 + XC.mu_divkappa * ss);
+        dfxdss = XC.mu * (divss .* divss);
+    elseif (strcmp(S.XC,'GGA_RPBE'))
+        divss = exp(-XC.mu_divkappa * ss);
+        dfxdss = XC.mu * divss;
+    end
+	
 	fx = 1.0 + XC.kappa * (1.0 - divss);
 	ex_gga = ex_lsd .* fx;
 	dssdn = (-8.0/3.0) * (ss .* rho_inv);
@@ -481,8 +492,15 @@ function [S] = GSGA_PBE(S,XC)
 	rho_inv = rhomot .* rhomot .* rhomot;
 	coeffss = (1.0/4.0) * XC.sixpi2m1_3 * XC.sixpi2m1_3 * (rho_inv .* rho_inv .* rhomot .* rhomot);
 	ss = sigma(:,2:3) .* coeffss;
-	divss = 1.0./(1.0 + XC.mu_divkappa * ss);
-	dfxdss = XC.mu * (divss .* divss);
+    
+    if (strcmp(S.XC,'GGA_PBE') || strcmp(S.XC,'GGA_PBEsol'))
+        divss = 1.0./(1.0 + XC.mu_divkappa * ss);
+        dfxdss = XC.mu * (divss .* divss);
+    elseif (strcmp(S.XC,'GGA_RPBE'))
+        divss = exp(-XC.mu_divkappa * ss);
+        dfxdss = XC.mu * divss;
+    end
+    
 	fx = 1.0 + XC.kappa * (1.0 - divss);
 	ex_gga = ex_lsd .* fx;
 	dssdn = (-8.0/3.0) * (ss .* rho_inv);

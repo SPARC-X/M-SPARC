@@ -27,6 +27,17 @@ if (S.RelaxFlag || S.MDFlag)
 	S.Atoms = coordinateTransformation(S, atom_pos, 'cart2noncart_dis');
 end
 
+% Reference_cutoff checks
+nndis = calculate_min_distance(S);
+if S.rc_ref > 0.5*nndis
+    fprintf("\n WARNING: REFERENCE _CUFOFF (%.6f Bohr) > 1/2 nn (nearest neighbor) distance (%.6f Bohr) in SCF#%d\n",...
+            S.rc_ref, 0.5*nndis, S.Relax_iter);
+end
+if S.rc_ref < S.dx || S.rc_ref < S.dy || S.rc_ref < S.dz
+    fprintf("\n WARNIG: REFERENCE _CUFOFF (%.6f Bohr) < MESH_SPACING (dx %.6f Bohr, dy %.6f Bohr, dz %.6f Bohr) in SCF#%d\n",...
+            S.rc_ref, S.dx, S.dy, S.dz, S.Relax_iter);
+end
+    
 % Check position of atom near the boundary and apply wraparound in case of PBC
 S = check_atomlocation(S);
 
@@ -298,7 +309,15 @@ end
 end
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+function nndis = calculate_min_distance(S)
+pairs = nchoosek(1:S.n_atm,2);
+p1 = S.Atoms(pairs(:,1),:);
+p2 = S.Atoms(pairs(:,2),:);
 
+dd = calculateDistance(p1(:,1),p1(:,2),p1(:,3),p2(:,1),p2(:,2),p2(:,3),S);
+nndis = min(dd);
+end
 
 
 
