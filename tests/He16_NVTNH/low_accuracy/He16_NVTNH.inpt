@@ -4,7 +4,11 @@
 # 4x2x2 unit cell, 800 K, 1.6 g/cc
 
 # cell and boundary conditions ####################
-CELL: 12.151112185593 6.0755560927965 6.0755560927965    # cell vector multipliers
+LATVEC_SCALE: 12.151112185593 6.0755560927965 6.0755560927965    # cell vector multipliers
+LATVEC:
+1.000000000000000 0.000000000000000 0.000000000000000 
+0.000000000000000 1.000000000000000 0.000000000000000 
+0.000000000000000 0.000000000000000 1.000000000000000 
 
 BC: P P P                     # boundary cond. in each direction: P= Bloch-periodic, D= Dirichlet
 

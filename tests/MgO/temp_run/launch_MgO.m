@@ -2,4 +2,3 @@
  close all 
  addpath('./../../../src') 
  msparc('MgO') 
- save workspace.mat

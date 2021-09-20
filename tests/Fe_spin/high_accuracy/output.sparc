@@ -1,21 +1,21 @@
 ---------------------------------------
-Begin PBS Prologue Mon May 10 00:33:05 EDT 2021
-Job ID:     6745168.sched-hive.pace.gatech.edu
+Begin PBS Prologue Sun Sep 19 00:02:16 EDT 2021
+Job ID:     7013921.sched-hive.pace.gatech.edu
 User ID:    skumar416
 Job name:   testing_suite
-Queue:      hive-interact
-End PBS Prologue Mon May 10 00:33:05 EDT 2021
+Queue:      hive
+End PBS Prologue Sun Sep 19 00:02:16 EDT 2021
 ---------------------------------------
-/storage/hive/scratch/5/skumar416/sparc_05092021/tests_VHQ/Fe_spin/temp_run
+/storage/hive/scratch/5/skumar416/test_merge_09172021/M-SPARC/tests_VHQ_final/Fe_spin/temp_run
 ---------------------------------------
-Begin PBS Epilogue Mon May 10 00:41:36 EDT 2021
-Job ID:     6745168.sched-hive.pace.gatech.edu
+Begin PBS Epilogue Sun Sep 19 09:01:40 EDT 2021
+Job ID:     7013921.sched-hive.pace.gatech.edu
 User ID:    skumar416
 Job name:   testing_suite
-Resources:  nodes=1:ppn=24,pmem=7gb,walltime=01:00:00,neednodes=1:ppn=24
-Rsrc Used:  cput=03:23:27,vmem=28847608kb,walltime=00:08:31,mem=12348996kb,energy_used=0
-Queue:      hive-interact
+Resources:  nodes=1:ppn=1,mem=50gb,walltime=14:00:00,neednodes=1:ppn=1
+Rsrc Used:  cput=08:57:47,vmem=10001152kb,walltime=08:59:24,mem=5836544kb,energy_used=0
+Queue:      hive
 Nodes:     
-atl1-1-01-017-4-l.pace.gatech.edu
-End PBS Epilogue Mon May 10 00:41:36 EDT 2021
+atl1-1-01-016-31-l.pace.gatech.edu
+End PBS Epilogue Sun Sep 19 09:01:40 EDT 2021
 ---------------------------------------

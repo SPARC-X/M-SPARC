@@ -1,4 +1,13 @@
 ----------------
+Sep 19, 2021
+Name: Shashikant Kumar
+* Updated reference output files in tests folder
+* Changed CELL to LATVEC_SCALE in tests folder
+* Removed the saving workspace for each runs
+* Added NLCC tests
+
+
+----------------
 Sep 16, 2021
 Name: Xin Jing
 * Add LATVEC_SCALE option
