@@ -144,11 +144,11 @@ S.temp_tol = 1e-12;
 S.xc_rhotol = 1e-14;
 
 % exchange correlation
-if strcmp(S.XC, 'LDA_PW') || strcmp(S.XC, 'LDA')
+if strcmp(S.XC, 'LDA_PW')
 	S.xc = 0;
 elseif strcmp(S.XC, 'LDA_PZ')
 	S.xc = 1; % TODO: Implement PZ LDA!
-elseif strcmp(S.XC, 'GGA_PBE') || strcmp(S.XC, 'GGA')
+elseif strcmp(S.XC, 'GGA_PBE') || strcmp(S.XC, 'GGA_RPBE') || strcmp(S.XC, 'GGA_PBEsol')
 	S.xc = 2;
 end
 
@@ -1011,7 +1011,7 @@ S.MixingParameterSimple = -1.0; % for simple mixing, set up later
 S.MixingParameterMag = -1.0; % default mixing parameter for magnetization density/potential
 S.MixingParameterSimpleMag = -1.0; % for simple mixing, set up later
 S.PulayFrequency = 1;
-S.PulayRestartFreq = 0;
+S.PulayRestartFlag = 0;
 
 S.TWtime = 1000000000;
 S.RelaxFlag = 0;
@@ -1095,7 +1095,7 @@ end
 
 start_time = fix(clock);
 fprintf(fileID,'***************************************************************************\n');
-fprintf(fileID,'*                      M-SPARC v1.0.0 (Oct 07, 2020)                      *\n');
+fprintf(fileID,'*                      M-SPARC v1.0.0 (Sep 20, 2021)                      *\n');
 fprintf(fileID,'*   Copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech   *\n');
 fprintf(fileID,'*           Distributed under GNU General Public License 3 (GPL)          *\n');
 fprintf(fileID,'*                Date: %s  Start time: %02d:%02d:%02d                  *\n',date,start_time(4),start_time(5),start_time(6));
@@ -1280,7 +1280,7 @@ if S.spin_typ ~= 0
 end
 fprintf(fileID,'MIXING_HISTORY: %d\n',S.MixingHistory);
 fprintf(fileID,'PULAY_FREQUENCY: %d\n',S.PulayFrequency);
-fprintf(fileID,'PULAY_RESTART_FREQ: %d\n',S.PulayRestartFreq);
+fprintf(fileID,'PULAY_RESTART: %d\n',S.PulayRestartFlag);
 fprintf(fileID,'REFERENCE_CUTOFF: %.2f\n',S.rc_ref);
 fprintf(fileID,'RHO_TRIGGER: %d\n',S.rhoTrigger);
 fprintf(fileID,'FIX_RAND: %d\n',S.FixRandSeed);

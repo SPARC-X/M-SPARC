@@ -45,7 +45,7 @@ end
 % store residual & iteration history
 if iter > 1
 	i_hist = mod(iter-2,m)+1;
-	if (S.PulayRestartFreq > 0 && mod(iter, S.PulayRestartFreq) == 0)
+	if (S.PulayRestartFlag ~= 0 && i_hist == 1)
 		S.X = zeros(size(S.X)); S.F = zeros(size(S.F));
 		S.X(:,1) = x_k - x_km1;
 		S.F(:,1) = f_k - f_km1;

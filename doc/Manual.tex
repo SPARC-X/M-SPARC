@@ -217,7 +217,7 @@ If you publish work using/regarding M-SPARC, please cite some of the following a
 \hyperlink{MIXING_PARAMETER_MAG}{\texttt{MIXING\_PARAMETER\_MAG}} $\vert$
 \hyperlink{MIXING_PARAMETER_SIMPLE_MAG}{\texttt{MIXING\_PARAMETER\_SIMPLE\_MAG}} $\vert$
 \hyperlink{PULAY_FREQUENCY}{\texttt{PULAY\_FREQUENCY}} $\vert$ 
-\hyperlink{PULAY_RESTART_FREQ}{\texttt{PULAY\_RESTART\_FREQ}} $\vert$ 
+\hyperlink{PULAY_RESTART}{\texttt{PULAY\_RESTART}} $\vert$ 
 \hyperlink{MIXING_PRECOND}{\texttt{MIXING\_PRECOND}} $\vert$ 
 \hyperlink{MIXING_PRECOND_MAG}{\texttt{MIXING\_PRECOND\_MAG}} $\vert$ 
 \hyperlink{TOL_PRECOND}{\texttt{TOL\_PRECOND}} $\vert$ 
@@ -584,7 +584,7 @@ No unit
 \end{columns}
 
 \begin{block}{Description}
-Choice of exchange-correlation functional. Options are \texttt{LDA\_PW} (Perdew-Wang LDA), \texttt{LDA\_PZ} (Purdew-Zunger LDA), and \texttt{GGA\_PBE} (PBE GGA).
+Choice of exchange-correlation functional. Options are \texttt{LDA\_PW} (Perdew-Wang LDA), \texttt{LDA\_PZ} (Purdew-Zunger LDA), \texttt{GGA\_PBE} (PBE GGA), \texttt{GGA\_RPBE} (PBE RGGA), and \texttt{GGA\_PBEsol} (PBE GGAsol).
 \end{block}
 
 \begin{block}{Remark}
@@ -1615,7 +1615,7 @@ The default value of 1 corresponds to Pulay mixing.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[allowframebreaks]{\texttt{PULAY\_RESTART\_FREQ}} \label{PULAY_RESTART_FREQ}
+\begin{frame}[allowframebreaks]{\texttt{PULAY\_RESTART}} \label{PULAY_RESTART}
 \vspace*{-12pt}
 \begin{columns}
 \column{0.4\linewidth}
@@ -1633,12 +1633,12 @@ No unit
 \end{block}
 
 \begin{block}{Example}
-\texttt{PULAY\_RESTART\_FREQ}: 4
+\texttt{PULAY\_RESTART}: 1
 \end{block}
 \end{columns}
 
 \begin{block}{Description}
-The frequency for restarting the `Periodic Pulay' mixing. If set to 0, the restarted Pulay method is turned off.
+The flag for restarting the `Periodic Pulay' mixing. If set to 0, the restarted Pulay method is turned off.
 \end{block}
 
 \end{frame}
