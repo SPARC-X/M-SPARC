@@ -480,6 +480,10 @@ if S.BCz == 0
 end
 
 pressure = -(P_eng + P_elec + P_corr + P_nl + P_nlcc)/(3 * cell_measure);
+
+if S.d3Flag == 1 
+	pressure = pressure - (S.d3stress(1,1) + S.d3stress(2,2) + S.d3stress(3,3))/3;
+end
 end
 
 
