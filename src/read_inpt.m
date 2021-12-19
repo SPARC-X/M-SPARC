@@ -563,6 +563,18 @@ while(~feof(fid1))
 		C_param = textscan(fid1,'%f',1,'delimiter',' ','MultipleDelimsAsOne',1);
 		S.Calc_pres = C_param{1};
 		textscan(fid1,'%s',1,'delimiter','\n','MultipleDelimsAsOne',0); % skip current line
+	elseif (strcmp(str,'D3_FLAG:'))
+		C_param = textscan(fid1,'%f',1,'delimiter',' ','MultipleDelimsAsOne',1);
+		S.d3Flag = C_param{1};
+		textscan(fid1,'%s',1,'delimiter','\n','MultipleDelimsAsOne',0); % skip current line
+	elseif (strcmp(str,'D3_RTHR:'))
+		C_param = textscan(fid1,'%f',1,'delimiter',' ','MultipleDelimsAsOne',1);
+		S.d3Rthr = C_param{1};
+		textscan(fid1,'%s',1,'delimiter','\n','MultipleDelimsAsOne',0); % skip current line
+	elseif (strcmp(str,'D3_CN_THR:'))
+		C_param = textscan(fid1,'%f',1,'delimiter',' ','MultipleDelimsAsOne',1);
+		S.d3Cn_thr = C_param{1};
+		textscan(fid1,'%s',1,'delimiter','\n','MultipleDelimsAsOne',0); % skip current line
 	elseif (strcmp(str,'NTYPES:'))
 		fprintf('WARNING: NTYPES is no longer needed, skipping this option ...\n');
 		textscan(fid1,'%s',1,'delimiter','\n','MultipleDelimsAsOne',0); % skip current line

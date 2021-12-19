@@ -152,6 +152,15 @@ elseif strcmp(S.XC, 'GGA_PBE') || strcmp(S.XC, 'GGA_RPBE') || strcmp(S.XC, 'GGA_
 	S.xc = 2;
 end
 
+if S.d3Flag == 1 
+	if S.xc ~= 2
+		fprintf('WARNING: Cannot find D3 coefficients for this functional. DFT-D3 correction calculation canceled!\n');
+		S.d3Flag  = 0;
+	else
+		S = set_D3_coefficients(S);
+	end
+end
+
 % calculate Nelectron
 S.Nelectron = 0;
 for ityp = 1:S.n_typ
@@ -1064,6 +1073,12 @@ S.zin = 0;
 
 % Cychel
 S.alph = 0.0;
+
+% DFT-D3 parameters
+S.d3Flag = 0;
+S.d3Rthr = 1600.0;
+S.d3Cn_thr = 625.0;
+
 end
 
 
@@ -1095,7 +1110,7 @@ end
 
 start_time = fix(clock);
 fprintf(fileID,'***************************************************************************\n');
-fprintf(fileID,'*                      M-SPARC v1.0.0 (Sep 20, 2021)                      *\n');
+fprintf(fileID,'*                      M-SPARC v1.0.0 (Dec 18, 2021)                      *\n');
 fprintf(fileID,'*   Copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech   *\n');
 fprintf(fileID,'*           Distributed under GNU General Public License 3 (GPL)          *\n');
 fprintf(fileID,'*                Date: %s  Start time: %02d:%02d:%02d                  *\n',date,start_time(4),start_time(5),start_time(6));
@@ -1672,4 +1687,101 @@ function [S] = Generate_kpts(S)
 	S.kptgrid = kptgrid;
 	S.tnkpt   = tnkpt;
 	S.wkpt    = wkpt;
+end
+
+function [S] = set_D3_coefficients(S)
+	scaledR2R4=...
+	[2.00734898,  1.56637132,  5.01986934,  3.85379032,  3.64446594,...
+	 3.10492822,  2.71175247,  2.59361680,  2.38825250,  2.21522516,...
+	 6.58585536,  5.46295967,  5.65216669,  4.88284902,  4.29727576,...
+	 4.04108902,  3.72932356,  3.44677275,  7.97762753,  7.07623947,...
+	 6.60844053,  6.28791364,  6.07728703,  5.54643096,  5.80491167,...
+	 5.58415602,  5.41374528,  5.28497229,  5.22592821,  5.09817141,...
+	 6.12149689,  5.54083734,  5.06696878,  4.87005108,  4.59089647,...
+	 4.31176304,  9.55461698,  8.67396077,  7.97210197,  7.43439917,...
+	 6.58711862,  6.19536215,  6.01517290,  5.81623410,  5.65710424,...
+	 5.52640661,  5.44263305,  5.58285373,  7.02081898,  6.46815523,...
+	 5.98089120,  5.81686657,  5.53321815,  5.25477007, 11.02204549,...
+	 10.15679528,  9.35167836,  9.06926079,  8.97241155,  8.90092807,...
+	 8.85984840,  8.81736827,  8.79317710,  7.89969626,  8.80588454,...
+	 8.42439218,  8.54289262,  8.47583370,  8.45090888,  8.47339339,...
+	 7.83525634,  8.20702843,  7.70559063,  7.32755997,  7.03887381,...
+	 6.68978720,  6.05450052,  5.88752022,  5.70661499,  5.78450695,...
+	 7.79780729,  7.26443867,  6.78151984,  6.67883169,  6.39024318,...
+	 6.09527958, 11.79156076, 11.10997644,  9.51377795,  8.67197068,...
+	 8.77140725,  8.65402716,  8.53923501,  8.85024712];
+	scaledRcov =...
+	[0.80628308, 1.15903197, 3.02356173, 2.36845659, 1.94011865,...
+	 1.88972601, 1.78894056, 1.58736983, 1.61256616, 1.68815527,...
+	 3.52748848, 3.14954334, 2.84718717, 2.62041997, 2.77159820,...
+	 2.57002732, 2.49443835, 2.41884923, 4.43455700, 3.88023730,...
+	 3.35111422, 3.07395437, 3.04875805, 2.77159820, 2.69600923,...
+	 2.62041997, 2.51963467, 2.49443835, 2.54483100, 2.74640188,...
+	 2.82199085, 2.74640188, 2.89757982, 2.77159820, 2.87238349,...
+	 2.94797246, 4.76210950, 4.20778980, 3.70386304, 3.50229216,...
+	 3.32591790, 3.12434702, 2.89757982, 2.84718717, 2.84718717,...
+	 2.72120556, 2.89757982, 3.09915070, 3.22513231, 3.17473967,...
+	 3.17473967, 3.09915070, 3.32591790, 3.30072128, 5.26603625,...
+	 4.43455700, 4.08180818, 3.70386304, 3.98102289, 3.95582657,...
+	 3.93062995, 3.90543362, 3.80464833, 3.82984466, 3.80464833,...
+	 3.77945201, 3.75425569, 3.75425569, 3.72905937, 3.85504098,...
+	 3.67866672, 3.45189952, 3.30072128, 3.09915070, 2.97316878,...
+	 2.92277614, 2.79679452, 2.82199085, 2.84718717, 3.32591790,...
+	 3.27552496, 3.27552496, 3.42670319, 3.30072128, 3.47709584,...
+	 3.57788113, 5.06446567, 4.56053862, 4.20778980, 3.98102289,...
+	 3.82984466, 3.85504098, 3.88023730, 3.90543362];
+	S.atomicNumbers = zeros(S.n_atm,1);
+	S.atomScaledR2R4 = zeros(S.n_atm,1);
+	S.atomScaledRcov = zeros(S.n_atm,1);
+
+	typeMap = containers.Map;
+	typeMap('H')=  1;  typeMap('He')= 2;  typeMap('Li')= 3; typeMap('Be')= 4;  typeMap('B')= 5;
+	typeMap('C')=  6;  typeMap('N')= 7;   typeMap('O')= 8;  typeMap('F')= 9;   typeMap('Ne')= 10;
+	typeMap('Na')= 11; typeMap('Mg')= 12; typeMap('Al')= 13;typeMap('Si')= 14; typeMap('P')= 15;
+	typeMap('S')=  16; typeMap('Cl')= 17; typeMap('Ar')= 18;typeMap('K')= 19;  typeMap('Ca')= 20;
+	typeMap('Sc')= 21; typeMap('Ti')= 22; typeMap('V')= 23; typeMap('Cr')= 24; typeMap('Mn')= 25;
+	typeMap('Fe')= 26; typeMap('Co')= 27; typeMap('Ni')= 28;typeMap('Cu')= 29; typeMap('Zn')= 30;
+	typeMap('Ga')= 31; typeMap('Ge')= 32; typeMap('As')= 33;typeMap('Se')= 34; typeMap('Br')= 35;
+	typeMap('Kr')= 36; typeMap('Rb')= 37; typeMap('Sr')=38; typeMap('Y')= 39;  typeMap('Zr')= 40;
+	typeMap('Nb')= 41; typeMap('Mo')= 42; typeMap('Tc')=43; typeMap('Ru')= 44; typeMap('Rh')= 45;
+	typeMap('Pd')= 46; typeMap('Ag')= 47; typeMap('Cd')=48; typeMap('In')= 49; typeMap('Sn')= 50;
+	typeMap('Sb')= 51; typeMap('Te')= 52; typeMap('I')=53;  typeMap('Xe')= 54; typeMap('Cs')= 55;
+	typeMap('Ba')= 56; typeMap('La')= 57; typeMap('Ce')=58; typeMap('Pr')= 59; typeMap('Nd')= 60;
+	typeMap('Pm')= 61; typeMap('Sm')= 62; typeMap('Eu')=63; typeMap('Gd')= 64; typeMap('Tb')= 65;
+	typeMap('Dy')= 66; typeMap('Ho')= 67; typeMap('Er')=68; typeMap('Tm')= 69; typeMap('Yb')= 70;
+	typeMap('Lu')= 71; typeMap('Hf')= 72; typeMap('Ta')=73; typeMap('W')= 74;  typeMap('Re')= 75;
+	typeMap('Os')= 76; typeMap('Ir')= 77; typeMap('Pt')=78; typeMap('Au')= 79; typeMap('Hg')= 80;
+	typeMap('Tl')= 81; typeMap('Pb')= 82; typeMap('Bi')=83; typeMap('Po')= 84; typeMap('At')= 85;
+	typeMap('Rn')= 86; typeMap('Fr')= 87; typeMap('Ra')=88; typeMap('Ac')= 89; typeMap('Th')= 90;
+	typeMap('Pa')= 91; typeMap('U')= 92;  typeMap('Np')=93; typeMap('Pu')= 94;
+
+	atomCount = 1;
+	for ityp = 1:S.n_typ
+		type = S.Atm(ityp).typ;
+		for iatom = 1:S.Atm(ityp).n_atm_typ
+			thisAtomNumber = typeMap(type);
+			S.atomicNumbers(atomCount) = thisAtomNumber;
+			S.atomScaledR2R4(atomCount) = scaledR2R4(thisAtomNumber);
+			S.atomScaledRcov(atomCount) = scaledRcov(thisAtomNumber);
+			atomCount = atomCount + 1;
+		end
+	end
+
+	S.periodicBCFlag = S.BCx + S.BCy + S.BCz;
+	if strcmp(S.XC, 'GGA_PBE')
+		S.d3Rs6 = 1.217;
+		S.d3S18 = 0.722;
+	elseif strcmp(S.XC, 'GGA_PBEsol')
+		S.d3Rs6 = 1.345;
+		S.d3S18 = 0.612;
+	elseif strcmp(S.XC, 'GGA_RPBE')
+		S.d3Rs6 = 0.872;
+		S.d3S18 = 0.514;
+	else 
+		fprintf('WARNING: Cannot find D3 coefficients for this functional. Default value is rs6 = 1.217 and s18 = 0.722.\n');
+		S.d3Rs6 = 1.217;
+		S.d3S18 = 0.722;
+	end
+
+	S.c6ab = d3Copyc6();
 end
