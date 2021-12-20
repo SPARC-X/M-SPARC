@@ -1323,6 +1323,12 @@ if (S.RestartFlag == 1)
 	fprintf(fileID,'RESTART_FLAG: %d\n',S.RestartFlag);
 end
 
+if(S.d3Flag == 1)
+	fprintf(fileID,'D3_FLAG: %d\n',S.d3Flag);
+	fprintf(fileID,'D3_RTHR: %f\n',S.d3Rthr);
+	fprintf(fileID,'D3_CN_THR: %f\n',S.d3Cn_thr);
+end
+
 fprintf(fileID,'***************************************************************************\n');
 fprintf(fileID,'                                Cell                                       \n');
 fprintf(fileID,'***************************************************************************\n');
