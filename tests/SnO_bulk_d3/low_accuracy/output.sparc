@@ -1,0 +1,21 @@
+---------------------------------------
+Begin PBS Prologue Tue Dec 21 14:35:17 EST 2021
+Job ID:     7153540.sched-hive.pace.gatech.edu
+User ID:    skumar416
+Job name:   testing_suite
+Queue:      hive
+End PBS Prologue Tue Dec 21 14:35:17 EST 2021
+---------------------------------------
+/storage/hive/scratch/5/skumar416/00msparc_merge_tests/tests/SnO_bulk_d3/temp_run
+---------------------------------------
+Begin PBS Epilogue Tue Dec 21 14:38:19 EST 2021
+Job ID:     7153540.sched-hive.pace.gatech.edu
+User ID:    skumar416
+Job name:   testing_suite
+Resources:  nodes=1:ppn=1,mem=10gb,walltime=14:00:00,neednodes=1:ppn=1
+Rsrc Used:  cput=00:02:58,vmem=4782200kb,walltime=00:03:02,mem=719720kb,energy_used=0
+Queue:      hive
+Nodes:     
+atl1-1-01-013-3-r.pace.gatech.edu
+End PBS Epilogue Tue Dec 21 14:38:19 EST 2021
+---------------------------------------
