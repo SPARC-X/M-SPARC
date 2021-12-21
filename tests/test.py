@@ -322,7 +322,7 @@ def launchsystems(systems,memcheck,procs_sys,ismempbs,ifVHQ, isorient, isserial)
 			index=0
 			samplePBS_content = []
 			# launch_text = " clear all \n close all \n addpath('./../../../src') \n msparc('"+syst+"') \n save workspace.mat"
-			launch_text = " clear all \n close all \n addpath('./../../../src') \n msparc('"+syst+"') \n"
+			launch_text = " clear all \n close all \n addpath(genpath('./../../../src')) \n msparc('"+syst+"') \n"
 			for lines in samplePBS_content_orj:
 				samplePBS_content.append(lines)
 				#samplePBS_content.append("export MV2_USE_RDMA_CM=1")

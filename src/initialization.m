@@ -1696,6 +1696,11 @@ function [S] = Generate_kpts(S)
 end
 
 function [S] = set_D3_coefficients(S)
+	if ispc % windows
+		addpath('vdW\d3\');
+	else % max/linux
+		addpath('vdW/d3/');
+	end
 	scaledR2R4=...
 	[2.00734898,  1.56637132,  5.01986934,  3.85379032,  3.64446594,...
 	 3.10492822,  2.71175247,  2.59361680,  2.38825250,  2.21522516,...
