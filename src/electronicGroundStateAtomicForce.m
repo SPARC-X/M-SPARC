@@ -76,6 +76,16 @@ if abs(1-S.occ(1))>1e-6 || abs(S.occ(end))>1e-6
 else
 	S.S_Debug.relax(S.Relax_iter).occ_check = 0;
 end
+
+if S.d3Flag == 1
+	if ispc % windows
+		addpath('vdW\d3\');
+	else % max/linux
+		addpath('vdW/d3/');
+	end
+	S = d3EnergyGradient(S);
+    S.Etotal = S.Etotal + S.d3Energy;
+end
 	
 % Etotal = evaluateTotalEnergy(EigVal,occ,rho,S.b,phi,Vxc,S.W,S.bet,S.Eself,S.E_corr,1) ;
 
@@ -101,6 +111,9 @@ fprintf(fileID,'Exchange correlation energy        :%18.10E (Ha)\n', S.Exc);
 fprintf(fileID,'Self and correction energy         :%18.10E (Ha)\n', S.E_corr-S.Eself);
 fprintf(fileID,'Entropy*kb*T                       :%18.10E (Ha)\n', S.Eent);
 fprintf(fileID,'Fermi level                        :%18.10E (Ha)\n', S.lambda_f);
+if S.d3Flag == 1
+	fprintf(fileID,'DFT-D3 correction                  :%18.10E (Ha)\n', S.d3Energy);
+end
 if S.nspin ~= 1
 	fprintf(fileID,'Net Magnetization                  :%18.10E \n', S.netM);
 end

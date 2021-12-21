@@ -450,6 +450,10 @@ if S.cell_typ == 2
 end
 
 force = real(force);
+
+if S.d3Flag == 1 
+	force = force - S.d3gradAtomPos;
+end
 end
 
 

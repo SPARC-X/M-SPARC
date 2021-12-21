@@ -126,6 +126,26 @@ SYSTEMS["systemname"].append('P_triclinic')
 SYSTEMS["Tags"].append(['bulk', 'gga', 'potmix', 'nonorth','gamma','smear_fd'])
 SYSTEMS["Tols"].append([tols["E_tol"], tols["F_tol"], tols["stress_tol"]]) # E_tol(Ha/atom), F_tol(Ha/Bohr), stress_tol(%)
 ##################################################################################################################
+SYSTEMS["systemname"].append('SnO_bulk_d3')
+SYSTEMS["Tags"].append(['bulk', 'gga','d3'])
+SYSTEMS["Tols"].append([tols["E_tol"], tols["F_tol"], tols["stress_tol"]]) # E_tol(Ha/atom), F_tol(Ha/Bohr), stress_tol(%)
+################################################################################################################
+SYSTEMS["systemname"].append('Au_wire_d3')
+SYSTEMS["Tags"].append(['wire', 'gga','d3'])
+SYSTEMS["Tols"].append([tols["E_tol"], tols["F_tol"], tols["stress_tol"]]) # E_tol(Ha/atom), F_tol(Ha/Bohr), stress_tol(%)
+################################################################################################################
+SYSTEMS["systemname"].append('MoS2_surface_d3')
+SYSTEMS["Tags"].append(['surface', 'gga','d3','nonorth'])
+SYSTEMS["Tols"].append([tols["E_tol"], tols["F_tol"], tols["stress_tol"]]) # E_tol(Ha/atom), F_tol(Ha/Bohr), stress_tol(%)
+################################################################################################################
+SYSTEMS["systemname"].append('Si8_atom_geopt_d3')
+SYSTEMS["Tags"].append(['bulk', 'gga', 'orth', 'denmix', 'kerker', 'relax_atom_lbfgs','gamma','smear_gauss','d3'])
+SYSTEMS["Tols"].append([tols["E_tol"], tols["F_tol"], tols["stress_tol"]]) # E_tol(Ha/atom), F_tol(Ha/Bohr), stress_tol(%)
+################################################################################################################
+SYSTEMS["systemname"].append('Si8_cell_geopt_d3')
+SYSTEMS["Tags"].append(['bulk', 'gga', 'orth', 'potmix', 'relax_cell','gamma','smear_fd','d3'])
+SYSTEMS["Tols"].append([tols["E_tol"], tols["F_tol"], tols["stress_tol"]]) # E_tol(Ha/atom), F_tol(Ha/Bohr), stress_tol(%)
+################################################################################################################
 						# < Uncomment 3 lines below and fill in the details for the new systems>
 # SYSTEMS["systemname"].append('??type the system name??')
 # SYSTEMS["Tags"].append([??type the tags for the system as strings separated by comma??])
@@ -302,7 +322,7 @@ def launchsystems(systems,memcheck,procs_sys,ismempbs,ifVHQ, isorient, isserial)
 			index=0
 			samplePBS_content = []
 			# launch_text = " clear all \n close all \n addpath('./../../../src') \n msparc('"+syst+"') \n save workspace.mat"
-			launch_text = " clear all \n close all \n addpath('./../../../src') \n msparc('"+syst+"') \n"
+			launch_text = " clear all \n close all \n addpath(genpath('./../../../src')) \n msparc('"+syst+"') \n"
 			for lines in samplePBS_content_orj:
 				samplePBS_content.append(lines)
 				#samplePBS_content.append("export MV2_USE_RDMA_CM=1")

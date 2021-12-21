@@ -614,6 +614,10 @@ stress(3,1) = stress(1,3);
 stress(3,2) = stress(2,3);
 
 stress = stress / cell_measure;
+
+if S.d3Flag == 1 
+	stress = stress + S.d3stress;
+end
 end
 
 
