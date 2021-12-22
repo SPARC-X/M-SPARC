@@ -1,4 +1,10 @@
 ----------------
+Dec 22, 2021
+Name: Qimen Xu, Taehee Ko (Penn State University)
+* Fix an issue with phase factor in nonlocal force calculation.
+
+
+----------------
 Dec 21, 2021
 Name: Shashikant Kumar
 * Modify the slow tests in the test-suite
