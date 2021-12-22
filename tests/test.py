@@ -104,7 +104,7 @@ SYSTEMS["Tols"].append([tols["E_tol"], tols["F_tol"], tols["stress_tol"]]) # E_t
 ################################################################################################################
 SYSTEMS["systemname"].append('MoS2')
 SYSTEMS["Tags"].append(['surface','gga','potmix','nonorth','smear_fd','orient'])
-SYSTEMS["Tols"].append([tols["E_tol"], tols["F_tol"], tols["stress_tol"]]) # E_tol(Ha/atom), F_tol(Ha/Bohr), stress_tol(%)
+SYSTEMS["Tols"].append([1e-5, tols["F_tol"], tols["stress_tol"]]) # E_tol(Ha/atom), F_tol(Ha/Bohr), stress_tol(%)
 ################################################################################################################
 # SYSTEMS["systemname"].append('He16_NVKG')
 # SYSTEMS["Tags"].append(['bulk','lda','potmix','orth','smear_fd','md_nvkg','gamma'])
