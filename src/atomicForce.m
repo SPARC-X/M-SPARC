@@ -387,13 +387,13 @@ for ks = 1:S.tnkpt*S.nspin
 		kpt = ks - S.tnkpt;
 	end
 
-	if (kpt(1) == 0 && kpt(2) == 0 && kpt(3) == 0)
+	kpt_vec = S.kptgrid(kpt,:);
+
+	if (max(abs(kpt_vec)) < 1e-8)
 		fac = 1.0;
 	else
 		fac = 1.0i;
 	end
-	
-	kpt_vec = S.kptgrid(kpt,:);
 
 	% Calculate gradient of psi    
 	Dpsi_x = blochGradient(S,kpt_vec,1)*S.psi(:,:,ks);
