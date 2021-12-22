@@ -18,14 +18,14 @@ ATOM_TYPE: Si                # atom type followed with valence charge
 PSEUDO_POT:  Si.psp8   # pseudopotential
 N_TYPE_ATOM: 1               # number of atoms of this type
 COORD:                       # coordinates follows
-11.5 11.5 11.5
+11.5000000000      11.5000000000      11.5000000000
 
 
 ATOM_TYPE: H                 # atom type followed with valence charge
 PSEUDO_POT:  H.psp8   # pseudopotential
 N_TYPE_ATOM: 4               # number of atoms of this type
 COORD:                       # coordinates follows
-13.127432021000001  13.127432021000001  13.127432021000001
-   9.872567978999999   9.872567978999999  13.127432021000001
-   9.872567978999999  13.127432021000001   9.872567978999999
-  13.127432021000001   9.872567978999999   9.872567978999999
+     13.1274320210      13.1274320210      13.1274320210
+      9.8725679790       9.8725679790      13.1274320210
+      9.8725679790      13.1274320210       9.8725679790
+     13.1274320210       9.8725679790       9.8725679790
