@@ -1,4 +1,10 @@
 ----------------
+Feb 13, 2022
+Name: Boqin Zhang
+* Add vdW-DF1 and vdW-DF2 feature
+
+
+----------------
 Dec 22, 2021
 Name: Qimen Xu, Taehee Ko (Penn State University)
 * Fix an issue with phase factor in nonlocal force calculation.

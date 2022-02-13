@@ -484,6 +484,11 @@ pressure = -(P_eng + P_elec + P_corr + P_nl + P_nlcc)/(3 * cell_measure);
 if S.d3Flag == 1 
 	pressure = pressure - (S.d3stress(1,1) + S.d3stress(2,2) + S.d3stress(3,3))/3;
 end
+
+if (S.vdWDFFlag == 1) || (S.vdWDFFlag == 2)
+	S = vdWDF_stress(S);
+	pressure = pressure - (S.vdWstress(1,1) + S.vdWstress(2,2) + S.vdWstress(3,3))/3;
+end
 end
 
 
