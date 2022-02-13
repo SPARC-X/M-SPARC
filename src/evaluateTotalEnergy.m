@@ -59,8 +59,11 @@ if S.nspin == 1
 		CEnergyPotential(~islt1) = gamma1./(1.0+beta1*sqrt(CEnergyPotential(~islt1))+beta2*CEnergyPotential(~islt1));
 		%rho = rho-(1e-50) ;
 		Exc = sum(CEnergyPotential.*(rho+S.rho_Tilde_at).*S.W) - C2*sum(((rho+S.rho_Tilde_at).^(4/3)).*S.W) ;
-	elseif S.xc == 2
+	elseif S.xc == 2 || (S.xc == -102) || (S.xc == -108) % GGA, including vdWDF
 		Exc = sum(S.e_xc.*(rho+S.rho_Tilde_at).*S.W);
+		if (S.vdWDFFlag == 1) || (S.vdWDFFlag == 2) % add vdW energy in Exc
+			Exc = Exc + S.vdWenergy; 
+		end
 	end
 	% Exchange-correlation energy double counting correction
 	Exc_dc = sum(S.Vxc.*rho.*S.W) ;

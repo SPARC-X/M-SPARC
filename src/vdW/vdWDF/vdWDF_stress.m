@@ -1,0 +1,91 @@
+function S = vdWDF_stress(S)
+    S.vdWstress = zeros(3);
+    vdWstrGradTerm = vdWDF_stress_gradient(S);
+    vdWstrKernelTerm = vdWDF_stress_kernel(S);
+    S.vdWstress = vdWstrGradTerm + vdWstrKernelTerm; % initial sign is minus, which is wrong
+    for l=1:3
+        for m = 1:l-1
+            S.vdWstress(m, l) = S.vdWstress(l, m);
+        end
+    end
+    S.vdWstress = real(S.vdWstress);
+end
+
+function stressGrad = vdWDF_stress_gradient(S)
+    stressGrad = zeros(3);
+    DpDq0s = S.vdW_DpDq0s;
+    nnr = size(DpDq0s, 1);
+    qnum = size(DpDq0s, 2);
+    gradRhoLength = S.vdW_gradRhoLength;
+    u = S.vdW_u;
+    Dq0Dgradrho = S.vdWDF_Dq0Dgradrho;
+    prefactor = zeros(nnr, 1);
+    for q = 1:qnum
+        prefactor = prefactor + u(:, q).*DpDq0s(:, q).*Dq0Dgradrho(:);
+    end
+    gradLarger0 = gradRhoLength > 0;
+    prefactorGradLarger0 = prefactor(gradLarger0)./gradRhoLength(gradLarger0);
+    for l=1:3
+        for m=1:l
+            productlm = S.Drho(gradLarger0, l).*S.Drho(gradLarger0, m);
+            stressGrad(l, m) = stressGrad(l, m) - sum(prefactorGradLarger0.*productlm);
+        end
+    end
+    stressGrad = stressGrad/nnr;
+end
+
+function stressKernel = vdWDF_stress_kernel(S)
+    qnum = size(S.vdW_DpDq0s, 2);
+    uniReciVecLen = S.vdWuniReciVecLength;
+    uniReciVecIndexes = S.vdWuniReciVecIndexes;
+    numUniVecLen = size(uniReciVecLen, 1);
+    boolLargerLimit = uniReciVecLen > S.vdWDF_dk*S.vdWDF_Nrpoints; % find reciprocal vectors length less than limit of spline interpolation
+    if ismember(1, boolLargerLimit)
+        fprintf('in vdWDF_energy, there are reciprocal lattice vectors whose length are larger than limit.\n');
+    end
+    uniVecLenLLimit = uniReciVecLen(~boolLargerLimit);
+    DkernelDkofLengths = interpolate_DkernelDk(uniVecLenLLimit, S.vdWDF_kernel, S.vdWDF_d2Phidk2, S.vdWDF_dk);
+    DkernelDkofAllLengths = zeros(numUniVecLen, qnum, qnum);
+    DkernelDkofAllLengths(1:size(DkernelDkofLengths, 1), :, :) = DkernelDkofLengths(:, :, :);
+    DkernelDkOnPoints = DkernelDkofAllLengths(uniReciVecIndexes(:), :, :); % all kernel function values on all reci lattice vectors
+    thetaOnPoints = S.vdWDF_thetasFFT;
+    reciVecCoord = S.reciVecCoord; % coordinate of g vectors
+    ngm = size(reciVecCoord, 1);
+    reciVecLen = uniReciVecLen(uniReciVecIndexes(:)); % length = 0 needs to be excluded
+    reciVecLenLZero = reciVecLen > 1e-8;
+    
+    theta_DkernelDk_conjTheta = zeros(ngm, 1);
+    for q2 = 1:qnum
+        for q1 = 1:qnum
+            theta_DkernelDk_conjTheta = theta_DkernelDk_conjTheta + ...
+                thetaOnPoints(:, q1).*DkernelDkOnPoints(:,q1,q2).*conj(thetaOnPoints(:, q2));
+        end
+    end
+    stressKernel = zeros(3);
+    for l = 1:3
+        for m = 1:l
+            stressKernel(l, m) = -0.5*sum(theta_DkernelDk_conjTheta(reciVecLenLZero)...
+                .*reciVecCoord(reciVecLenLZero, l).*reciVecCoord(reciVecLenLZero, m)./reciVecLen(reciVecLenLZero));
+        end
+    end
+end
+
+function DkernelDkofLengths = interpolate_DkernelDk(uniVecLen, kernel, D2PhiDk2, dk)
+    timeofdk = floor(uniVecLen / dk) + 1;
+    uniLenNum = size(uniVecLen, 1);
+    qnum = size(kernel, 2);
+    A = (dk*((timeofdk - 1) + 1.0) - uniVecLen)/dk;
+    B = (uniVecLen - dk*(timeofdk - 1))/dk;
+    dAdk = -1.0/dk;
+    dBdk = 1.0/dk;
+    dCdk = -((3*A.^2 - 1.0)/6.0)*dk;
+    dDdk = ((3*B.^2 -1.0)/6.0)*dk;
+    DkernelDkofLengths = zeros(uniLenNum, qnum, qnum);
+    for q1 = 1:qnum
+        for q2 = 1:q1
+            DkernelDkofLengths(:, q1, q2) = dAdk*kernel(timeofdk(:), q1, q2) + dBdk*kernel(timeofdk(:)+1, q1, q2)...
+                + (dCdk.*D2PhiDk2(timeofdk(:), q1, q2) + dDdk.*D2PhiDk2(timeofdk(:)+1, q1, q2));
+            DkernelDkofLengths(:, q2, q1) = DkernelDkofLengths(:, q1, q2);
+        end
+    end
+end

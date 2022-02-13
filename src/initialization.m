@@ -150,6 +150,22 @@ elseif strcmp(S.XC, 'LDA_PZ')
 	S.xc = 1; % TODO: Implement PZ LDA!
 elseif strcmp(S.XC, 'GGA_PBE') || strcmp(S.XC, 'GGA_RPBE') || strcmp(S.XC, 'GGA_PBEsol')
 	S.xc = 2;
+elseif strcmp(S.XC, 'vdWDF1')
+    if ispc % windows
+		addpath('vdW\vdWDF\');
+	else % max/linux
+		addpath('vdW/vdWDF/');
+    end
+    S.xc = -102; % Zhang-Yang revPBE
+    S.vdWDFFlag = 1;
+elseif strcmp(S.XC, 'vdWDF2')
+    if ispc % windows
+		addpath('vdW\vdWDF\');
+	else % max/linux
+		addpath('vdW/vdWDF/');
+    end
+    S.xc = -108; % rPW86
+    S.vdWDFFlag = 2;
 end
 
 if S.d3Flag == 1 
@@ -733,6 +749,15 @@ S.grad_3 = blochGradient(S,[0 0 0],3);
 % Calculate preconditioners for negative discrete laplacian
 [S.LapPreconL, S.LapPreconU] = ilu(S.Lap_std,struct('droptol',1e-5));
 
+% initialize vdWDF
+if (S.vdWDFFlag == 1) || (S.vdWDFFlag == 2) % 1: temporary flag of vdW-DF1 2: vdW-DF2
+    if S.vdWDFKernelGenFlag == 1
+	    S = vdWDF_Initial_GenKernel(S);
+    else % input the saved Kernel function for saving time
+        S = vdWDFinitialize_InputKernel(S);
+    end
+end
+
 fprintf(' Done. (%.3f sec)\n', toc(t1));
 
 % Estimate memory usage
@@ -1060,6 +1085,9 @@ S.PrintRelaxout = 1;          % Flag for printing relax output in a .relax file
 S.Printrestart = 1;           % Flag for printing output needed for restarting a simulation
 S.Printrestart_fq = 1;        % Steps after which the output is written in the restart file
 
+S.vdWDFFlag = 0;              % Flag for calculating vdW-DF
+S.vdWDFKernelGenFlag = 0;     % Flag for calculating kernel functions of vdW-DF
+
 % Cell option
 S.Flag_latvec_scale = 0;
 S.latvec_scale_x = 0.0;
@@ -1110,7 +1138,7 @@ end
 
 start_time = fix(clock);
 fprintf(fileID,'***************************************************************************\n');
-fprintf(fileID,'*                      M-SPARC v1.0.0 (Dec 22, 2021)                      *\n');
+fprintf(fileID,'*                      M-SPARC v1.0.0 (Feb 13, 2022)                      *\n');
 fprintf(fileID,'*   Copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech   *\n');
 fprintf(fileID,'*           Distributed under GNU General Public License 3 (GPL)          *\n');
 fprintf(fileID,'*                Date: %s  Start time: %02d:%02d:%02d                  *\n',date,start_time(4),start_time(5),start_time(6));
@@ -1327,6 +1355,10 @@ if(S.d3Flag == 1)
 	fprintf(fileID,'D3_FLAG: %d\n',S.d3Flag);
 	fprintf(fileID,'D3_RTHR: %f\n',S.d3Rthr);
 	fprintf(fileID,'D3_CN_THR: %f\n',S.d3Cn_thr);
+end
+
+if(S.vdWDFFlag == 1 || S.vdWDFFlag == 2)  
+	fprintf(fileID,'VDWDF_GEN_KERNEL: %d\n',S.vdWDFKernelGenFlag);  
 end
 
 fprintf(fileID,'***************************************************************************\n');

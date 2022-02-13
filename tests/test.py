@@ -146,6 +146,22 @@ SYSTEMS["systemname"].append('Si8_cell_geopt_d3')
 SYSTEMS["Tags"].append(['bulk', 'gga', 'orth', 'potmix', 'relax_cell','gamma','smear_fd','d3'])
 SYSTEMS["Tols"].append([tols["E_tol"], tols["F_tol"], tols["stress_tol"]]) # E_tol(Ha/atom), F_tol(Ha/Bohr), stress_tol(%)
 ################################################################################################################
+SYSTEMS["systemname"].append('BaTiO3_vdWDF1')
+SYSTEMS["Tags"].append(['bulk', 'gga', 'orth', 'potmix', 'gamma','vdWDF'])
+SYSTEMS["Tols"].append([tols["E_tol"], tols["F_tol"], tols["stress_tol"]]) # E_tol(Ha/atom), F_tol(Ha/Bohr), stress_tol(%)
+################################################################################################################
+SYSTEMS["systemname"].append('BaTiO3_vdWDF2')
+SYSTEMS["Tags"].append(['bulk', 'gga', 'orth', 'potmix', 'gamma','vdWDF'])
+SYSTEMS["Tols"].append([tols["E_tol"], tols["F_tol"], tols["stress_tol"]]) # E_tol(Ha/atom), F_tol(Ha/Bohr), stress_tol(%)
+################################################################################################################
+SYSTEMS["systemname"].append('Si4_kpt_vdWDF1')
+SYSTEMS["Tags"].append(['bulk', 'gga', 'nonorth', 'potmix', 'kpt','vdWDF'])
+SYSTEMS["Tols"].append([tols["E_tol"], tols["F_tol"], tols["stress_tol"]]) # E_tol(Ha/atom), F_tol(Ha/Bohr), stress_tol(%)
+################################################################################################################
+SYSTEMS["systemname"].append('Si4_kpt_vdWDF2')
+SYSTEMS["Tags"].append(['bulk', 'gga', 'nonorth', 'potmix', 'kpt','vdWDF'])
+SYSTEMS["Tols"].append([tols["E_tol"], tols["F_tol"], tols["stress_tol"]]) # E_tol(Ha/atom), F_tol(Ha/Bohr), stress_tol(%)
+################################################################################################################
 						# < Uncomment 3 lines below and fill in the details for the new systems>
 # SYSTEMS["systemname"].append('??type the system name??')
 # SYSTEMS["Tags"].append([??type the tags for the system as strings separated by comma??])

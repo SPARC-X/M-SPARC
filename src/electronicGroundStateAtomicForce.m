@@ -114,6 +114,9 @@ fprintf(fileID,'Fermi level                        :%18.10E (Ha)\n', S.lambda_f)
 if S.d3Flag == 1
 	fprintf(fileID,'DFT-D3 correction                  :%18.10E (Ha)\n', S.d3Energy);
 end
+if (S.vdWDFFlag == 1) || (S.vdWDFFlag == 2)
+    fprintf(fileID,'vdWDF energy                       :%18.10E (Ha)\n', S.vdWenergy);
+end
 if S.nspin ~= 1
 	fprintf(fileID,'Net Magnetization                  :%18.10E \n', S.netM);
 end
