@@ -1,4 +1,12 @@
 ----------------
+May 15, 2022
+Name: Boqin Zhang
+* Add scan exchange-correlation functional and metaGGA functions
+* Add description of vdW-DF files, and modify the line seperators in these files
+* Fix the bug of printing Cartesian coordinates
+
+
+----------------
 Feb 13, 2022
 Name: Boqin Zhang
 * Add vdW-DF1 and vdW-DF2 feature

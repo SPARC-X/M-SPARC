@@ -1,0 +1,125 @@
+***************************************************************************
+*                      M-SPARC v1.0.0 (Feb 13, 2022)                      *
+*   Copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech   *
+*           Distributed under GNU General Public License 3 (GPL)          *
+*                Date: 13-May-2022  Start time: 10:33:01                  *
+***************************************************************************
+                           Input parameters                                
+***************************************************************************
+CELL: 7.297342 7.297342 14.594684 
+LATVEC:
+0.707106781186547 0.707106781186547 0.000000000000000 
+0.000000000000000 0.707106781186547 0.707106781186547 
+0.707106781186547 0.000000000000000 0.707106781186547 
+FD_GRID: 30 30 61
+FD_ORDER: 12
+BC: P P P
+KPOINT_GRID: 2 2 1
+KPOINT_SHIFT: 0 0 0
+ELEC_TEMP_TYPE: gaussian
+SMEARING: 0.007349864
+CHEB_DEGREE: 30
+NSTATES: 12
+EXCHANGE_CORRELATION: SCAN
+CALC_STRESS: 1
+MAXIT_SCF: 100
+TOL_SCF: 5.00E-06
+TOL_POISSON: 5.00E-08
+TOL_LANCZOS: 1.00E-02
+TOL_PSEUDOCHARGE: 5.00E-08
+MIXING_VARIABLE: potential
+MIXING_PRECOND: kerker
+TOL_PRECOND: 5.85E-05
+PRECOND_KERKER_KTF: 1.00
+PRECOND_KERKER_THRESH: 0.10
+MIXING_PARAMETER: 0.30
+MIXING_HISTORY: 7
+PULAY_FREQUENCY: 1
+PULAY_RESTART: 0
+REFERENCE_CUTOFF: 0.50
+RHO_TRIGGER: 4
+FIX_RAND: 0
+PRINT_FORCES: 1
+PRINT_ATOMS: 0
+PRINT_EIGEN: 0
+PRINT_DENSITY: 0
+OUTPUT_FILE: /home/bzhang376/Documents/MATLAB/M-SPARC/M-SPARC/test_scan_Si4_testsuit/Si4_kpt_scan.out
+***************************************************************************
+                                Cell                                       
+***************************************************************************
+Lattice vectors:
+5.159999999968059 5.159999999968059 0.000000000000000 
+0.000000000000000 5.159999999968059 5.159999999968059 
+10.320000000006829 0.000000000000000 10.320000000006829 
+Volume                  :  5.4955238399E+02 (Bohr^3)
+***************************************************************************
+                             Initialization                                
+***************************************************************************
+Mesh spacing in x-direction        :  0.243245 (Bohr)
+Mesh spacing in y-direction        :  0.243245 (Bohr)
+Mesh spacing in z direction        :  0.239257 (Bohr)
+Number of symmetry adapted k-points:  2
+Output printed to                  :  /home/bzhang376/Documents/MATLAB/M-SPARC/M-SPARC/test_scan_Si4_testsuit/Si4_kpt_scan.out
+Total number of atom types         :  1
+Total number of atoms              :  4
+Total number of electrons          :  16
+Atom type 1  (valence electrons)   :  Si 4
+Pseudopotential                    :  Si.psp8
+lloc                               :  4
+Pseudocharge radii of atom type 1  :  8.03 8.03 7.90
+Number of atoms of type 1          :  4
+Estimated total memory usage       :  233.72 MB
+=====================================================================
+                    Self Consistent Field (SCF#1)                     
+=====================================================================
+Iteration     Free Energy (Ha/atom)   SCF Error        Timing (sec)
+1            -4.0302537197E+00        7.101E-02        60.500
+2            -3.9822488789E+00        5.501E-02        19.845
+3            -3.9848075337E+00        4.522E-02        33.592
+4            -3.9843441166E+00        3.086E-02        34.930
+5            -3.9844014419E+00        7.342E-03        33.643
+6            -3.9844689374E+00        4.189E-03        33.017
+7            -3.9846709248E+00        1.820E-03        32.859
+8            -3.9846790541E+00        1.151E-03        32.698
+9            -3.9847041355E+00        4.285E-04        32.761
+10           -3.9847173272E+00        1.816E-04        32.634
+11           -3.9847173617E+00        1.410E-04        32.510
+12           -3.9847201402E+00        3.536E-05        33.917
+13           -3.9847197731E+00        2.096E-05        34.460
+14           -3.9847200930E+00        1.389E-05        32.648
+15           -3.9847201200E+00        5.566E-06        31.997
+16           -3.9847202132E+00        4.231E-06        32.236
+Total number of SCF: 16    
+====================================================================
+                                Energy                              
+====================================================================
+Free energy per atom               : -3.9847202132E+00 (Ha/atom)
+Total free energy                  : -1.5938880853E+01 (Ha)
+Band structure energy              :  2.1612742160E-01 (Ha)
+Exchange correlation energy        : -4.8239691459E+00 (Ha)
+Self and correction energy         : -5.7573539273E+01 (Ha)
+Entropy*kb*T                       : -1.6723488795E-09 (Ha)
+Fermi level                        :  1.9293263162E-01 (Ha)
+Average force                      :  4.5502085363E-02 (Ha/Bohr)
+Maximum force                      :  4.8687820073E-02 (Ha/Bohr)
+Time for force calculation         :  2.686 (sec)
+Stress (GPa):
+     -1.2958992032      -3.5965312755      -2.3181231991
+     -3.5965312755      14.3031626621      -3.4302545285
+     -2.3181231991      -3.4302545285      -1.2441266000
+Pressure                           : -3.9210456196E+00 (GPa)
+Maximum stress                     :  1.4303162662E+01 (GPa)
+Time for stress calculation        :  8.561 (sec)
+***************************************************************************
+                               Timing info                                 
+***************************************************************************
+Total walltime                     :  596.381 sec
+___________________________________________________________________________
+
+***************************************************************************
+*             Material Physics & Mechanics Group, Georgia Tech            *
+*                       PI: Phanish Suryanarayana                         *
+*                Main Developers: Qimen Xu, Abhiraj Sharma                *
+*     Acknowledgements: U.S. DOE (DE-SC0019410); NSF (1333500,1553212)    *
+***************************************************************************
+                                                                           

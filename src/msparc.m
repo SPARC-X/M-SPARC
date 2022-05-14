@@ -74,7 +74,8 @@ end
 % Print results (Final atom positions)
 fprintf(' Final atomic positions (Cartesian) are as follows:\n');
 for k = 1:S.n_atm
-	fprintf(' %9.6f \t %9.6f \t %9.6f \n', S.Atoms(k,1),S.Atoms(k,2),S.Atoms(k,3));
+	atomKPos = S.Atoms(k,:)*S.lat_uvec;
+	fprintf(' %9.6f \t %9.6f \t %9.6f \n', atomKPos(1), atomKPos(2), atomKPos(3));
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -33,6 +33,7 @@ fclose(fileID);
 S = poissonSolve(S, S.poisson_tol, 0);
 
 % Exchange-correlation potential
+S.countPotential = -1;
 S = exchangeCorrelationPotential(S);
 
 % Effective potential
@@ -137,7 +138,7 @@ while (err > S.SCF_tol && count_SCF <= max_scf_iter || count_SCF <= min_scf_iter
 		% Electron density
 		S = electronDensity(S);
 
-		if S.MixingVariable == 1
+        if S.MixingVariable == 1
 			% update Veff before calculating the energy %
 			% Electrostatic potential
 			S = poissonSolve(S, S.poisson_tol, 1);

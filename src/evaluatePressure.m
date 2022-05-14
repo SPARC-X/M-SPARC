@@ -186,6 +186,33 @@ if S.nspin == 1
 	P_eng = P_eng - sum(S.rho .* S.Vxc .* S.W) + (3*S.Exc) + ...
 			- S.W' * (S.dvxcdgrho .* (S.lapc_T(1,1)*Drho_x.*Drho_x + S.lapc_T(2,2)*Drho_y.*Drho_y + S.lapc_T(3,3)*Drho_z.*Drho_z +...
 										 S.lapc_T(1,2)*Drho_x.*Drho_y + S.lapc_T(2,3)*Drho_y.*Drho_z + S.lapc_T(1,3)*Drho_z.*Drho_x ));
+    if (S.countPotential > 0) &&(S.xc == 4) % add metaGGA pressure term
+		P_eng = P_eng - sum(S.W .* S.VxcScan3 .* S.tau);
+        ks = 1;
+        for kpt = 1:S.tnkpt
+			kpt_vec = S.kptgrid(kpt,:);
+
+		    Dpsi_x = blochGradient(S,kpt_vec,1)*S.psi(:,:,ks);
+		    Dpsi_y = blochGradient(S,kpt_vec,2)*S.psi(:,:,ks);
+		    Dpsi_z = blochGradient(S,kpt_vec,3)*S.psi(:,:,ks);
+
+		    TDpsi_1 = S.grad_T(1,1)*Dpsi_x + S.grad_T(2,1)*Dpsi_y + S.grad_T(3,1)*Dpsi_z;
+		    TDpsi_2 = S.grad_T(1,2)*Dpsi_x + S.grad_T(2,2)*Dpsi_y + S.grad_T(3,2)*Dpsi_z;
+		    TDpsi_3 = S.grad_T(1,3)*Dpsi_x + S.grad_T(2,3)*Dpsi_y + S.grad_T(3,3)*Dpsi_z;
+		    TDcpsi_1 = conj(TDpsi_1);
+		    TDcpsi_2 = conj(TDpsi_2);
+		    TDcpsi_3 = conj(TDpsi_3);
+
+			P_eng = P_eng - real(S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
+				(S.VxcScan3.*TDcpsi_1.*TDpsi_1)) * S.occ(:,ks));
+			P_eng = P_eng - real(S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
+				(S.VxcScan3.*TDcpsi_2.*TDpsi_2)) * S.occ(:,ks));
+			P_eng = P_eng - real(S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
+				(S.VxcScan3.*TDcpsi_3.*TDpsi_3)) * S.occ(:,ks));
+
+            ks = ks + 1;
+        end
+    end
 else
 	P_eng = P_eng - sum(sum(S.Vxc.*S.rho(:,2:3),2).*S.W) + (3*S.Exc) + ...
 			- sum(S.W' * (S.dvxcdgrho .* (S.lapc_T(1,1)*Drho_x.*Drho_x + S.lapc_T(2,2)*Drho_y.*Drho_y + S.lapc_T(3,3)*Drho_z.*Drho_z +...

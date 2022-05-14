@@ -67,6 +67,8 @@ if S.nspin == 1
 	elseif (S.xc == -102) || (S.xc == -108)
         S = Calculate_Vxc_vdWExchangeLinearCorre(S, XC);
         S = Calculate_nonLinearCorr_E_V_vdWDF(S);
+    elseif S.xc == 4
+        S = mGGA(S,XC);
 	end
 else
 	if S.xc == 0
@@ -210,7 +212,7 @@ function [S] = GGA_PBE(S,XC)
 	coeffss = (1.0/4.0) * XC.sixpi2m1_3 * XC.sixpi2m1_3 * (rho_inv .* rho_inv .* rhomot .* rhomot);
 	ss = (sigma/4.0) .* coeffss;
     
-    if (strcmp(S.XC,'GGA_PBE') || strcmp(S.XC,'GGA_PBEsol'))
+    if (strcmp(S.XC,'GGA_PBE') || strcmp(S.XC,'GGA_PBEsol') || strcmp(S.XC,'SCAN'))
         divss = 1.0./(1.0 + XC.mu_divkappa * ss);
         dfxdss = XC.mu * (divss .* divss);
     elseif (strcmp(S.XC,'GGA_RPBE'))
@@ -817,4 +819,72 @@ function [S] = GSGA_PBE(S,XC)
 	S.Vxc(:,2) = v_xc(:,2) - Vxc_temp(:,3) - Vxc_temp(:,1);             
 end
 
+function [S] = mGGA(S,XC) % the function does not consider spin. The function containing spin will be developed seperately
+%     if S.countSCF == -1 % compute potential before SCF by GGA_PBE, there is no psi yet
+    if S.countPotential == -1 % compute potential before SCF by GGA_PBE, there is no psi yet
+        S = GGA_PBE(S,XC);
+        S.countPotential = S.countPotential + 1;
+        return;
+    end
+    rho = S.rho;
+    
+    rho(rho < S.xc_rhotol) = S.xc_rhotol;
+    drho_1 = S.grad_1 * rho;
+	drho_2 = S.grad_2 * rho;
+	drho_3 = S.grad_3 * rho;
+    Drho = [drho_1, drho_2, drho_3]; % gradient of electron density n, nnr*3 vectors
+    if S.cell_typ == 2 % unorthogonal cell
+        Drho = Drho / (S.lat_uvec');
+    end
+    
+    normDrho = (Drho(:,1).^2 + Drho(:,2).^2 + Drho(:,3).^2).^0.5;
+    normDrho(normDrho < 1e-10) = 1e-10; % for preventing numerical issue
 
+    tau = zeros(size(rho,1), size(rho,2)); % <psi|-0.5\nabla^2|psi> = 0.5*<\nabla*psi|\nabla*psi>
+     % there is no orbital in 1st SCF
+    for kpt =1:S.tnkpt
+        kpt_vec = S.kptgrid(kpt,:);
+        psiTheKpt = reshape(S.psi(:,:,kpt), S.N, S.Nev);
+        
+        dpsiTheKpt_1 = blochGradient(S,kpt_vec,1) * psiTheKpt; % modified. To compute the gradient of psi of different k-points
+        dpsiTheKpt_2 = blochGradient(S,kpt_vec,2) * psiTheKpt;
+        dpsiTheKpt_3 = blochGradient(S,kpt_vec,3) * psiTheKpt;
+        if S.cell_typ == 2 % unorthogonal cell
+            lapc_T = [S.lapc_T(1,1), S.lapc_T(2,1), S.lapc_T(3,1);
+            S.lapc_T(2,1), S.lapc_T(2,2), S.lapc_T(3,2);
+            S.lapc_T(3,1), S.lapc_T(3,2), S.lapc_T(3,3)];
+
+            dpsiTheKpt_theWaveFun = [dpsiTheKpt_1(:), dpsiTheKpt_2(:), dpsiTheKpt_3(:)];
+            dpsiTheKptMLapT_theWaveFun = dpsiTheKpt_theWaveFun*lapc_T;
+            dpsiTheKptMLapT_1 = reshape(dpsiTheKptMLapT_theWaveFun(:, 1), S.N, S.Nev);
+            dpsiTheKptMLapT_2 = reshape(dpsiTheKptMLapT_theWaveFun(:, 2), S.N, S.Nev);
+            dpsiTheKptMLapT_3 = reshape(dpsiTheKptMLapT_theWaveFun(:, 3), S.N, S.Nev);
+            tau = tau + 0.5 * 2*S.wkpt(kpt)*(conj(dpsiTheKpt_1) .* dpsiTheKptMLapT_1)*S.occ(:,kpt);
+            tau = tau + 0.5 * 2*S.wkpt(kpt)*(conj(dpsiTheKpt_2) .* dpsiTheKptMLapT_2)*S.occ(:,kpt);
+            tau = tau + 0.5 * 2*S.wkpt(kpt)*(conj(dpsiTheKpt_3) .* dpsiTheKptMLapT_3)*S.occ(:,kpt);
+        else % orthogonal cell
+            tau = tau + 0.5 * 2*S.wkpt(kpt)*(conj(dpsiTheKpt_1) .* (dpsiTheKpt_1))*S.occ(:,kpt); % multiply occupation, then sum over NSTATES
+            tau = tau + 0.5 * 2*S.wkpt(kpt)*(conj(dpsiTheKpt_2) .* (dpsiTheKpt_2))*S.occ(:,kpt);
+            tau = tau + 0.5 * 2*S.wkpt(kpt)*(conj(dpsiTheKpt_3) .* (dpsiTheKpt_3))*S.occ(:,kpt);
+        end
+    end
+	S.tau = real(tau); % it is \tau=-1/2\nabla^2\phi = 1/2(\nabla\phi)\cdot(\nabla\phi)
+    
+    if (S.xc == 4) % for adding other metaGGA functionals
+        [excScan, VxcScan1, VxcScan2, VxcScan3] = xcScan(rho, normDrho, tau);
+    end
+	% VxcScan2 is d(n*e_xc)/d(|grad n|) = n*d(e_xc)/d(|grad n|)
+    
+    S.dvxcdgrho = VxcScan2./normDrho; % unify with GGA
+	if S.cell_typ ~= 2
+		S.Vxc = VxcScan1 - S.grad_1*(S.dvxcdgrho.*drho_1) - S.grad_2*(S.dvxcdgrho.*drho_2) - S.grad_3*(S.dvxcdgrho.*drho_3);
+		% S.Vxc = v_xc - S.grad_1 * (S.dvxcdgrho.*drho_1) - S.grad_2 * (S.dvxcdgrho.*drho_2) - S.grad_3 * (S.dvxcdgrho.*drho_3);
+	else
+		S.Vxc = VxcScan1 - ( S.lapc_T(1,1)*S.grad_1*(S.dvxcdgrho.*drho_1) + S.lapc_T(2,2)*S.grad_2*(S.dvxcdgrho.*drho_2) + S.lapc_T(3,3)*S.grad_3*(S.dvxcdgrho.*drho_3) +...
+						     S.lapc_T(2,1)*S.grad_1*(S.dvxcdgrho.*drho_2) + S.lapc_T(2,1)*S.grad_2*(S.dvxcdgrho.*drho_1) + S.lapc_T(3,2)*S.grad_2*(S.dvxcdgrho.*drho_3) +...
+						     S.lapc_T(3,2)*S.grad_3*(S.dvxcdgrho.*drho_2) + S.lapc_T(3,1)*S.grad_1*(S.dvxcdgrho.*drho_3) + S.lapc_T(3,1)*S.grad_3*(S.dvxcdgrho.*drho_1) );
+	end
+    S.e_xc = excScan;
+	S.VxcScan3 = VxcScan3; % to be used in h_nonlocal_vector_mult.m
+    S.countPotential = S.countPotential + 1;
+end

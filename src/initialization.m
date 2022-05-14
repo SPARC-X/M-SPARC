@@ -166,6 +166,13 @@ elseif strcmp(S.XC, 'vdWDF2')
     end
     S.xc = -108; % rPW86
     S.vdWDFFlag = 2;
+elseif strcmp(S.XC, 'SCAN')
+    if ispc
+        addpath('mgga\');
+    else
+        addpath('mgga/');
+    end
+    S.xc = 4;
 end
 
 if S.d3Flag == 1 
@@ -751,11 +758,22 @@ S.grad_3 = blochGradient(S,[0 0 0],3);
 
 % initialize vdWDF
 if (S.vdWDFFlag == 1) || (S.vdWDFFlag == 2) % 1: temporary flag of vdW-DF1 2: vdW-DF2
+    if S.nspin ~= 1
+        error('Currently vdW-DF does not support spin polarization!');
+    end
+    if S.BC ~= 2 % vdWDF can only be used in 3D periodic boundary condition because it used FFT
+        error('vdW-DF can only be used in 3D periodic system!');
+    end
+        
     if S.vdWDFKernelGenFlag == 1
 	    S = vdWDF_Initial_GenKernel(S);
     else % input the saved Kernel function for saving time
         S = vdWDFinitialize_InputKernel(S);
     end
+end
+
+if (S.xc == 4) && (S.nspin ~= 1)
+	error('Currently SCAN does not support spin polarization!');
 end
 
 fprintf(' Done. (%.3f sec)\n', toc(t1));
@@ -1138,7 +1156,7 @@ end
 
 start_time = fix(clock);
 fprintf(fileID,'***************************************************************************\n');
-fprintf(fileID,'*                      M-SPARC v1.0.0 (Feb 13, 2022)                      *\n');
+fprintf(fileID,'*                      M-SPARC v1.0.0 (May 15, 2022)                      *\n');
 fprintf(fileID,'*   Copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech   *\n');
 fprintf(fileID,'*           Distributed under GNU General Public License 3 (GPL)          *\n');
 fprintf(fileID,'*                Date: %s  Start time: %02d:%02d:%02d                  *\n',date,start_time(4),start_time(5),start_time(6));
@@ -1473,7 +1491,8 @@ if ((S.PrintAtomPosFlag == 1 || S.PrintForceFlag == 1) && S.MDFlag == 0 && S.Rel
 		elseif nFracCoord == 0
 			fprintf(fileID,'Cartesian coordinates of atoms (Bohr):\n');
 			for j = 1:S.n_atm
-				fprintf(fileID,'%18.10f %18.10f %18.10f\n',S.Atoms(j,:));
+				atomJPos = S.Atoms(j,:)*S.lat_uvec;
+				fprintf(fileID,'%18.10f %18.10f %18.10f\n',atomJPos(1), atomJPos(2), atomJPos(3));
 			end
 		else
 			for ityp = 1:S.n_typ
@@ -1485,7 +1504,8 @@ if ((S.PrintAtomPosFlag == 1 || S.PrintForceFlag == 1) && S.MDFlag == 0 && S.Rel
 				else
 					fprintf(fileID,'Cartesian coordinates of %s (Bohr):\n',S.Atm(ityp).typ); 
 					for j = 1:S.Atm(ityp).n_atm_typ
-						fprintf(fileID,'%18.10f %18.10f %18.10f\n',S.Atm(ityp).coords(j,:));
+						atomJPos = S.Atm(ityp).coords(j,:)*S.lat_uvec;
+						fprintf(fileID,'%18.10f %18.10f %18.10f\n',atomJPos(1), atomJPos(2), atomJPos(3));
 					end
 				end
 			end
