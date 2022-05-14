@@ -1,4 +1,17 @@
 function S = vdWDF_stress(S)
+% @file    vdWDF_stress.m
+% @brief   This file contains the functions computing vdWDF stress term
+% @authors Boqin Zhang <bzhang376@gatech.edu>
+%          Phanish Suryanarayana <phanish.suryanarayana@ce.gatech.edu>
+% Reference:
+% Dion, Max, Henrik Rydberg, Elsebeth Schröder, David C. Langreth, and Bengt I. Lundqvist. 
+% "Van der Waals density functional for general geometries." 
+% Physical review letters 92, no. 24 (2004): 246401.
+% Román-Pérez, Guillermo, and José M. Soler. 
+% "Efficient implementation of a van der Waals density functional: application to double-wall carbon nanotubes." 
+% Physical review letters 103, no. 9 (2009): 096102.
+% Copyright (c) 2020 Material Physics & Mechanics Group, Georgia Tech.
+% ==============================================================================================
     S.vdWstress = zeros(3);
     vdWstrGradTerm = vdWDF_stress_gradient(S);
     vdWstrKernelTerm = vdWDF_stress_kernel(S);

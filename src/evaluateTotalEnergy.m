@@ -61,12 +61,18 @@ if S.nspin == 1
 		Exc = sum(CEnergyPotential.*(rho+S.rho_Tilde_at).*S.W) - C2*sum(((rho+S.rho_Tilde_at).^(4/3)).*S.W) ;
 	elseif S.xc == 2 || (S.xc == -102) || (S.xc == -108) % GGA, including vdWDF
 		Exc = sum(S.e_xc.*(rho+S.rho_Tilde_at).*S.W);
-		if (S.vdWDFFlag == 1) || (S.vdWDFFlag == 2) % add vdW energy in Exc
+        if (S.vdWDFFlag == 1) || (S.vdWDFFlag == 2) % add vdW energy in Exc
 			Exc = Exc + S.vdWenergy; 
-		end
+        end
+    elseif S.xc == 4 % S.xc == 4 SCAN functional, can contain more metaGGA functionals
+        Exc = sum(S.e_xc.*(rho+S.rho_Tilde_at).*S.W); % the formula is similar to GGA
 	end
 	% Exchange-correlation energy double counting correction
 	Exc_dc = sum(S.Vxc.*rho.*S.W) ;
+    if (S.countPotential > 0) && (S.xc == 4) % S.xc == 4 SCAN functional
+        Eext_scan_dc = sum(S.VxcScan3.*S.tau.*S.W);
+        Exc_dc = Exc_dc + Eext_scan_dc;
+    end
 else
 	Exc = sum(S.e_xc.*(rho(:,1)+S.rho_Tilde_at).*S.W);
 	% Exchange-correlation energy double counting correction

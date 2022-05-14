@@ -1,4 +1,17 @@
 function [S] = vdWDF_getQ0onGrid(S)
+% @file    vdWDF_getQ0onGrid.m
+% @brief   This file contains the functions computing the energy ratio q0(x)
+% @authors Boqin Zhang <bzhang376@gatech.edu>
+%          Phanish Suryanarayana <phanish.suryanarayana@ce.gatech.edu>
+% Reference:
+% Dion, Max, Henrik Rydberg, Elsebeth Schröder, David C. Langreth, and Bengt I. Lundqvist. 
+% "Van der Waals density functional for general geometries." 
+% Physical review letters 92, no. 24 (2004): 246401.
+% Román-Pérez, Guillermo, and José M. Soler. 
+% "Efficient implementation of a van der Waals density functional: application to double-wall carbon nanotubes." 
+% Physical review letters 103, no. 9 (2009): 096102.
+% Copyright (c) 2020 Material Physics & Mechanics Group, Georgia Tech.
+% ==============================================================================================
     nnr = S.Nx*S.Ny*S.Nz;
     q_cut = S.vdWDF_qmesh(end);
     q_min = S.vdWDF_qmesh(1);

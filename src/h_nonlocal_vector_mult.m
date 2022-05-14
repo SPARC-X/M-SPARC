@@ -20,6 +20,32 @@ function  Hnlx = h_nonlocal_vector_mult(DL11,DL22,DL33,DG1,DG2,DG3,Veff,X,S,kptv
 %Hnlx = -0.5*(lapVec(DL11,DL22,DL33,DG1,DG2,DG3,X,S)) + Veff * X;
 Hnlx = -0.5*(lapVec(DL11,DL22,DL33,DG1,DG2,DG3,X,S)) + bsxfun(@times,Veff,X);
 
+% if (S.xc == 4) && (S.countSCF > 0) % metaGGA, set a flag to seperate it from the 1st PBE SCF computation
+if (S.xc == 4) && (S.countPotential > 0) % metaGGA, set a flag to seperate it from the 1st PBE SCF computation
+    VxcScan3 = S.VxcScan3;
+    
+    if S.cell_typ == 2 % unorthogonal cell
+        lapc_T = [S.lapc_T(1,1), S.lapc_T(2,1), S.lapc_T(3,1);
+            S.lapc_T(2,1), S.lapc_T(2,2), S.lapc_T(3,2);
+            S.lapc_T(3,1), S.lapc_T(3,2), S.lapc_T(3,3)];
+        v3grad1 = blochGradient(S,kptvec,1) *X; 
+        v3grad2 = blochGradient(S,kptvec,2) *X; 
+        v3grad3 = blochGradient(S,kptvec,3) *X; 
+
+        v3gradpsiTheKpt = [v3grad1(:), v3grad2(:), v3grad3(:)];
+        v3gradpsiTheKptMLapT = v3gradpsiTheKpt*lapc_T;
+        v3gradpsiTheKptMLapT_1 = VxcScan3 .* reshape(v3gradpsiTheKptMLapT(:, 1), S.N, S.Nev);
+        v3gradpsiTheKptMLapT_2 = VxcScan3 .* reshape(v3gradpsiTheKptMLapT(:, 2), S.N, S.Nev);
+        v3gradpsiTheKptMLapT_3 = VxcScan3 .* reshape(v3gradpsiTheKptMLapT(:, 3), S.N, S.Nev);
+        Hnlx = Hnlx - 0.5*(blochGradient(S,kptvec,1)*v3gradpsiTheKptMLapT_1 + blochGradient(S,kptvec,2)*v3gradpsiTheKptMLapT_2 + blochGradient(S,kptvec,3)*v3gradpsiTheKptMLapT_3);
+    else % orthogonal cell
+        v3grad1 = VxcScan3 .* (blochGradient(S,kptvec,1) *X);
+        v3grad2 = VxcScan3 .* (blochGradient(S,kptvec,2) *X);
+        v3grad3 = VxcScan3 .* (blochGradient(S,kptvec,3) *X);
+        Hnlx = Hnlx - 0.5*(blochGradient(S,kptvec,1)*v3grad1 + blochGradient(S,kptvec,2)*v3grad2 + blochGradient(S,kptvec,3)*v3grad3);
+    end
+end
+
 % Vnl * X
 if (kptvec(1) == 0 && kptvec(2) == 0 && kptvec(3) == 0)
 	fac = 1.0;
