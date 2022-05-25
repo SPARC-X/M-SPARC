@@ -77,6 +77,8 @@ else
 		S = LSDA_PZ(S,XC);
 	elseif S.xc == 2
 		S = GSGA_PBE(S,XC);
+    elseif S.xc == 4
+        S = mGSGA(S,XC);
 	end
 end
 
@@ -886,5 +888,77 @@ function [S] = mGGA(S,XC) % the function does not consider spin. The function co
 	end
     S.e_xc = excScan;
 	S.VxcScan3 = VxcScan3; % to be used in h_nonlocal_vector_mult.m
+    S.countPotential = S.countPotential + 1;
+end
+
+function [S] = mGSGA(S,XC)
+    if S.countPotential == -1 % compute potential before SCF by GGA_PBE, there is no psi yet
+        S = GSGA_PBE(S,XC);
+        S.countPotential = S.countPotential + 1;
+        return;
+    end
+    rho = S.rho;
+    rho(:,1) = rho(:,2) + rho(:,3);
+    drho_1 = S.grad_1 * rho;
+	drho_2 = S.grad_2 * rho;
+	drho_3 = S.grad_3 * rho;
+	if S.cell_typ ~= 2
+		sigma = drho_1.*drho_1 + drho_2.*drho_2 + drho_3.*drho_3; 
+	else
+		sigma = (S.lapc_T(1,1)*drho_1.*drho_1 + S.lapc_T(2,2)*drho_2.*drho_2 + S.lapc_T(3,3)*drho_3.*drho_3 +...
+				 S.lapc_T(1,2)*drho_1.*drho_2 + S.lapc_T(2,3)*drho_2.*drho_3 + S.lapc_T(1,3)*drho_3.*drho_1 ) ; % grad_rho . grad_rho
+	end
+    normDrho = sigma.^0.5; % col1: grad of n; col2: grad of n up; col3: grad of n dn
+    normDrho(normDrho < 1e-10) = 1e-10;
+    
+    tau = zeros(size(rho,1), size(rho,2)); % <psi|-0.5\nabla^2|psi> = 0.5*<\nabla*psi|\nabla*psi>
+    ks = 1;
+    for spin = 1:S.nspin
+        for kpt = 1:S.tnkpt
+            kpt_vec = S.kptgrid(kpt,:);
+            psiTheKpt = reshape(S.psi(:,:,ks), S.N, S.Nev);
+            dpsiTheKpt_1 = blochGradient(S,kpt_vec,1) * psiTheKpt; % modified. To compute the gradient of psi of different k-points
+            dpsiTheKpt_2 = blochGradient(S,kpt_vec,2) * psiTheKpt;
+            dpsiTheKpt_3 = blochGradient(S,kpt_vec,3) * psiTheKpt;
+            if S.cell_typ == 2
+                lapc_T = [S.lapc_T(1,1), S.lapc_T(2,1), S.lapc_T(3,1);
+                        S.lapc_T(2,1), S.lapc_T(2,2), S.lapc_T(3,2);
+                        S.lapc_T(3,1), S.lapc_T(3,2), S.lapc_T(3,3)];
+                dpsiTheKpt_theWaveFun = [dpsiTheKpt_1(:), dpsiTheKpt_2(:), dpsiTheKpt_3(:)];
+                dpsiTheKptMLapT_theWaveFun = dpsiTheKpt_theWaveFun*lapc_T;
+                dpsiTheKptMLapT_1 = reshape(dpsiTheKptMLapT_theWaveFun(:, 1), S.N, S.Nev);
+                dpsiTheKptMLapT_2 = reshape(dpsiTheKptMLapT_theWaveFun(:, 2), S.N, S.Nev);
+                dpsiTheKptMLapT_3 = reshape(dpsiTheKptMLapT_theWaveFun(:, 3), S.N, S.Nev);
+                tau(:, spin+1) = tau(:, spin+1) + 0.5 * S.wkpt(kpt)*(conj(dpsiTheKpt_1) .* dpsiTheKptMLapT_1)*S.occ(:,ks);
+                tau(:, spin+1) = tau(:, spin+1) + 0.5 * S.wkpt(kpt)*(conj(dpsiTheKpt_2) .* dpsiTheKptMLapT_2)*S.occ(:,ks);
+                tau(:, spin+1) = tau(:, spin+1) + 0.5 * S.wkpt(kpt)*(conj(dpsiTheKpt_3) .* dpsiTheKptMLapT_3)*S.occ(:,ks);
+            else
+                tau(:, spin+1) = tau(:, spin+1) + 0.5 * S.wkpt(kpt)*(conj(dpsiTheKpt_1) .* dpsiTheKpt_1)*S.occ(:,ks);
+                tau(:, spin+1) = tau(:, spin+1) + 0.5 * S.wkpt(kpt)*(conj(dpsiTheKpt_2) .* dpsiTheKpt_2)*S.occ(:,ks);
+                tau(:, spin+1) = tau(:, spin+1) + 0.5 * S.wkpt(kpt)*(conj(dpsiTheKpt_3) .* dpsiTheKpt_3)*S.occ(:,ks);
+            end
+            ks = ks + 1;
+        end
+    end
+    tau(:, 1) = tau(:, 2) + tau(:, 3);
+    S.tau = real(tau);
+    
+    if (S.xc == 4) % for adding other metaGGA functionals
+        [excScan, VxcScan1, VxcScan2, VxcScan3] = xcSScan(rho, normDrho, tau); % all three input variables have 3 cols
+        % VxcScan1 and VxcScan3 have 2 cols; VxcScan2 have 3 cols
+    end
+    
+    S.dvxcdgrho = VxcScan2./normDrho; % col 1 for correlation potential (up similar to down), col 2 for up exchange potential, col 3 for down exchange potential
+	if S.cell_typ ~= 2
+		Vxc_temp = S.grad_1 * (S.dvxcdgrho.*drho_1) + S.grad_2 * (S.dvxcdgrho.*drho_2) + S.grad_3 * (S.dvxcdgrho.*drho_3);
+	else
+		Vxc_temp = S.lapc_T(1,1)*S.grad_1*(S.dvxcdgrho.*drho_1) + S.lapc_T(2,2)*S.grad_2*(S.dvxcdgrho.*drho_2) + S.lapc_T(3,3)*S.grad_3*(S.dvxcdgrho.*drho_3) +...
+				   S.lapc_T(2,1)*S.grad_1*(S.dvxcdgrho.*drho_2) + S.lapc_T(2,1)*S.grad_2*(S.dvxcdgrho.*drho_1) + S.lapc_T(3,2)*S.grad_2*(S.dvxcdgrho.*drho_3) +...
+				   S.lapc_T(3,2)*S.grad_3*(S.dvxcdgrho.*drho_2) + S.lapc_T(3,1)*S.grad_1*(S.dvxcdgrho.*drho_3) + S.lapc_T(3,1)*S.grad_3*(S.dvxcdgrho.*drho_1) ;
+	end
+	S.Vxc(:,1) = VxcScan1(:,1) - Vxc_temp(:,2) - Vxc_temp(:,1);
+	S.Vxc(:,2) = VxcScan1(:,2) - Vxc_temp(:,3) - Vxc_temp(:,1);
+    S.e_xc = excScan;
+	S.VxcScan3 = VxcScan3; % like S.Vxc, two columns, 1 for up, 2 for down, to be used in h_nonlocal_vector_mult.m
     S.countPotential = S.countPotential + 1;
 end
