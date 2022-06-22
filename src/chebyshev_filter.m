@@ -1,4 +1,4 @@
-function Y = chebyshev_filter(X,m,a,b,a0,DL11,DL22,DL33,DG1,DG2,DG3,Veff,S,kpt_vec)
+function Y = chebyshev_filter(X,m,a,b,a0,DL11,DL22,DL33,DG1,DG2,DG3,Veff,S,kpt_vec,spin)
 % @brief    CHEBYSHEV_FILTER performs chebyshev fitering on the given
 %           states.
 %
@@ -26,14 +26,14 @@ c = (b+a)/2;
 sigma = e/(a0 - c); sigma1 = sigma;
 gamma = 2/sigma1;
 % HX = H * X;
-HX = h_nonlocal_vector_mult(DL11,DL22,DL33,DG1,DG2,DG3,Veff,X,S,kpt_vec);
+HX = h_nonlocal_vector_mult(DL11,DL22,DL33,DG1,DG2,DG3,Veff,X,S,kpt_vec,spin);
 Y = (sigma1/e)*(HX-c*X);
 
 ii = 2;
 while(ii <= m)
 	sigma2 = 1/(gamma - sigma);
 	% HX = H * Y;
-	HX = h_nonlocal_vector_mult(DL11,DL22,DL33,DG1,DG2,DG3,Veff,Y,S,kpt_vec);
+	HX = h_nonlocal_vector_mult(DL11,DL22,DL33,DG1,DG2,DG3,Veff,Y,S,kpt_vec,spin);
 	Ynew = (2*sigma2/e)*(HX - c*Y) - ((sigma*sigma2)*X);
 	X = Y;
 	Y = Ynew;

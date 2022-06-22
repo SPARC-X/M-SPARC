@@ -227,49 +227,6 @@ if S.nspin == 1
 								 (alpha == beta) * ( 0.5 * sum( S.W .* (S.b - S.rho) .* S.phi ) - S.Eself + S.E_corr )  ;
 		end
     end
-    if (S.countPotential > 0) &&(S.xc == 4) % add metaGGA stress term
-        for alpha = 1:3
-            stress(alpha,alpha) = stress(alpha,alpha) - sum(S.W .* S.VxcScan3 .* S.tau);
-        end
-        ks = 1;
-        for spin = 1:S.nspin
-            for kpt = 1:S.tnkpt
-                kpt_vec = S.kptgrid(kpt,:);
-
-		        Dpsi_x = blochGradient(S,kpt_vec,1)*S.psi(:,:,ks);
-		        Dpsi_y = blochGradient(S,kpt_vec,2)*S.psi(:,:,ks);
-		        Dpsi_z = blochGradient(S,kpt_vec,3)*S.psi(:,:,ks);
-
-		        TDpsi_1 = S.grad_T(1,1)*Dpsi_x + S.grad_T(2,1)*Dpsi_y + S.grad_T(3,1)*Dpsi_z;
-		        TDpsi_2 = S.grad_T(1,2)*Dpsi_x + S.grad_T(2,2)*Dpsi_y + S.grad_T(3,2)*Dpsi_z;
-		        TDpsi_3 = S.grad_T(1,3)*Dpsi_x + S.grad_T(2,3)*Dpsi_y + S.grad_T(3,3)*Dpsi_z;
-		        TDcpsi_1 = conj(TDpsi_1);
-		        TDcpsi_2 = conj(TDpsi_2);
-		        TDcpsi_3 = conj(TDpsi_3);
-                stress(1,1) = stress(1,1) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
-					  (S.VxcScan3.*TDcpsi_1.*TDpsi_1)) * S.occ(:,ks));
-		        stress(1,2) = stress(1,2) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
-					  (S.VxcScan3.*TDcpsi_1.*TDpsi_2)) * S.occ(:,ks));
-		        stress(1,3) = stress(1,3) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
-					  (S.VxcScan3.*TDcpsi_1.*TDpsi_3)) * S.occ(:,ks));    
-% 		        stress(2,1) = stress(2,1) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
-% 					  (S.VxcScan3.*TDcpsi_2.*TDpsi_1)) * S.occ(:,ks));
-		        stress(2,2) = stress(2,2) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
-					  (S.VxcScan3.*TDcpsi_2.*TDpsi_2)) * S.occ(:,ks));
-		        stress(2,3) = stress(2,3) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
-					  (S.VxcScan3.*TDcpsi_2.*TDpsi_3)) * S.occ(:,ks));
-% 		        stress(3,1) = stress(3,1) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
-% 					  (S.VxcScan3.*TDcpsi_3.*TDpsi_1)) * S.occ(:,ks));
-% 		        stress(3,2) = stress(3,2) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
-% 					  (S.VxcScan3.*TDcpsi_3.*TDpsi_2)) * S.occ(:,ks));
-		        stress(3,3) = stress(3,3) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
-					  (S.VxcScan3.*TDcpsi_3.*TDpsi_3)) * S.occ(:,ks));
-		
-		        ks = ks + 1;           
-            end
-        end
-%         fprintf("The metaGGA stress term is computed.\n");
-    end
 else
 	for alpha = 1:3
 		for beta = 1:3
@@ -280,6 +237,58 @@ else
 								 (alpha == beta) * ( 0.5 * sum( S.W .* (S.b - S.rho(:,1)) .* S.phi ) - S.Eself + S.E_corr )  ;
 		end
 	end
+end
+if (S.countPotential > 0) &&(S.xc == 4) % add metaGGA stress term
+    for alpha = 1:3
+        if S.nspin == 1
+            stress(alpha,alpha) = stress(alpha,alpha) - sum(S.W .* S.VxcScan3 .* S.tau);
+        else
+            stress(alpha,alpha) = stress(alpha,alpha) - sum(sum(S.W .* S.VxcScan3 .* S.tau(:, 2:3)));
+        end
+    end
+    ks = 1;
+    for spin = 1:S.nspin
+        if S.nspin == 1
+            VxcScan3 = S.VxcScan3;
+        else
+            VxcScan3 = S.VxcScan3(:, spin);
+        end
+        for kpt = 1:S.tnkpt
+            kpt_vec = S.kptgrid(kpt,:);
+
+		    Dpsi_x = blochGradient(S,kpt_vec,1)*S.psi(:,:,ks);
+		    Dpsi_y = blochGradient(S,kpt_vec,2)*S.psi(:,:,ks);
+		    Dpsi_z = blochGradient(S,kpt_vec,3)*S.psi(:,:,ks);
+
+		    TDpsi_1 = S.grad_T(1,1)*Dpsi_x + S.grad_T(2,1)*Dpsi_y + S.grad_T(3,1)*Dpsi_z;
+		    TDpsi_2 = S.grad_T(1,2)*Dpsi_x + S.grad_T(2,2)*Dpsi_y + S.grad_T(3,2)*Dpsi_z;
+		    TDpsi_3 = S.grad_T(1,3)*Dpsi_x + S.grad_T(2,3)*Dpsi_y + S.grad_T(3,3)*Dpsi_z;
+		    TDcpsi_1 = conj(TDpsi_1);
+		    TDcpsi_2 = conj(TDpsi_2);
+		    TDcpsi_3 = conj(TDpsi_3);
+            stress(1,1) = stress(1,1) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
+					  (VxcScan3.*TDcpsi_1.*TDpsi_1)) * S.occ(:,ks));
+		    stress(1,2) = stress(1,2) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
+					  (VxcScan3.*TDcpsi_1.*TDpsi_2)) * S.occ(:,ks));
+		    stress(1,3) = stress(1,3) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
+					  (VxcScan3.*TDcpsi_1.*TDpsi_3)) * S.occ(:,ks));    
+% 		        stress(2,1) = stress(2,1) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
+% 					  (S.VxcScan3.*TDcpsi_2.*TDpsi_1)) * S.occ(:,ks));
+		    stress(2,2) = stress(2,2) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
+					  (VxcScan3.*TDcpsi_2.*TDpsi_2)) * S.occ(:,ks));
+		    stress(2,3) = stress(2,3) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
+					  (VxcScan3.*TDcpsi_2.*TDpsi_3)) * S.occ(:,ks));
+% 		        stress(3,1) = stress(3,1) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
+% 					  (S.VxcScan3.*TDcpsi_3.*TDpsi_1)) * S.occ(:,ks));
+% 		        stress(3,2) = stress(3,2) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
+% 					  (S.VxcScan3.*TDcpsi_3.*TDpsi_2)) * S.occ(:,ks));
+		    stress(3,3) = stress(3,3) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
+					  (VxcScan3.*TDcpsi_3.*TDpsi_3)) * S.occ(:,ks));
+		
+		    ks = ks + 1;           
+        end
+    end
+%         fprintf("The metaGGA stress term is computed.\n");
 end
 
 % Stress contribution from remaining terms in electrostatics
