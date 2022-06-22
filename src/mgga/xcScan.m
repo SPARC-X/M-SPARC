@@ -1,10 +1,19 @@
 function [excScan, VxcScan1, VxcScan2, VxcScan3] = xcScan(rho, normDrho, tau)
+% @file    xcSscan.m
+% @brief   This file contains the functions computing the energy density \epsilon and the potential V
+% @authors Boqin Zhang <bzhang376@gatech.edu>
+%          Phanish Suryanarayana <phanish.suryanarayana@ce.gatech.edu>
+% Reference:
+% Sun, Jianwei, Adrienn Ruzsinszky, and John P. Perdew. 
+% "Strongly constrained and appropriately normed semilocal density functional." 
+% Physical review letters 115, no. 3 (2015): 036402.
+% Copyright (c) 2020 Material Physics & Mechanics Group, Georgia Tech.
+% ==============================================================================================
 % rho is electron density n, nnr*1 vector 
 % !!! attention: rho(rho < S.xc_rhotol) = S.xc_rhotol; process rho before
 % calling the function!
 % Drho is gradient of electron density n, nnr*3 vectors
 % tau is kinetic energy density, nnr*1 vector
-% the function doesn't support spin
 [s, alpha, DsDn, DsDDn, DalphaDn, DalphaDDn, DalphaDtau]...
     = basicMGGAvariables(rho, normDrho, tau);
 [ex, Vx1, Vx2, Vx3] = exchangeSCAN(rho, s, alpha, DsDn, DsDDn, DalphaDn, DalphaDDn, DalphaDtau);
@@ -183,7 +192,7 @@ function [ec, Vc1, Vc2, Vc3] = correlationSCAN(rho, s, alpha, DsDn, DsDDn, Dalph
     Dw0Dn = (w0 + 1) .* (-DecLDA0Dn/b1c);
     DH0Dn = b1c*(Dw0Dn.*(1 - gInf0s) - w0.*DgInf0sDn) ./ (1 + w0.*(1 - gInf0s));
     DH0DDn = b1c* (-w0.*DgInf0sDDn) ./ (1 + w0.*(1 - gInf0s));
-    Dec0Dn = (DecLDA0Dn + DH0Dn).*Gc + (ec0 + H0).*DGcDn;
+    Dec0Dn = (DecLDA0Dn + DH0Dn).*Gc + (ecLDA0 + H0).*DGcDn;
     Dec0DDn = DH0DDn.*Gc;
     %% compute variation of epsilon_c^1
     Dec_lsda1Dn = - (rs./rho/3).*(-2*AA*alpha1*log(1+1./(2*AA*( beta1*sqr_rs + beta2*rs + beta3*(rs.^1.5) + beta4*(rs.^(p+1))))) ...

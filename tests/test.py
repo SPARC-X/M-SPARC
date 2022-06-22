@@ -170,6 +170,14 @@ SYSTEMS["systemname"].append('Si4_kpt_scan')
 SYSTEMS["Tags"].append(['bulk', 'nonorth', 'kpt','scan'])
 SYSTEMS["Tols"].append([tols["E_tol"], tols["F_tol"], tols["stress_tol"]]) # E_tol(Ha/atom), F_tol(Ha/Bohr), stress_tol(%)
 ##################################################################################################################
+SYSTEMS["systemname"].append('Fe2_spin_scan_gamma')
+SYSTEMS["Tags"].append(['bulk', 'nonorth', 'gamma','scan','spin'])
+SYSTEMS["Tols"].append([tols["E_tol"], tols["F_tol"], tols["stress_tol"]]) # E_tol(Ha/atom), F_tol(Ha/Bohr), stress_tol(%)
+##################################################################################################################
+SYSTEMS["systemname"].append('Fe2_spin_scan_kpt')
+SYSTEMS["Tags"].append(['bulk', 'orth', 'kpt','scan','spin'])
+SYSTEMS["Tols"].append([tols["E_tol"], tols["F_tol"], tols["stress_tol"]]) # E_tol(Ha/atom), F_tol(Ha/Bohr), stress_tol(%)
+##################################################################################################################
 						# < Uncomment 3 lines below and fill in the details for the new systems>
 # SYSTEMS["systemname"].append('??type the system name??')
 # SYSTEMS["Tags"].append([??type the tags for the system as strings separated by comma??])
@@ -2799,7 +2807,7 @@ if isAuto == False and temp_result == False:
 					# isorient_temp.remove(isorient_temp[j])
 					temp = False
 					break
-			time.sleep(.3)
+			time.sleep(30)
 
 	print('\n')
 

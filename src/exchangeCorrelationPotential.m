@@ -642,7 +642,7 @@ function [S] = GSGA_PBE(S,XC)
 	coeffss = (1.0/4.0) * XC.sixpi2m1_3 * XC.sixpi2m1_3 * (rho_inv .* rho_inv .* rhomot .* rhomot);
 	ss = sigma(:,2:3) .* coeffss;
     
-    if (strcmp(S.XC,'GGA_PBE') || strcmp(S.XC,'GGA_PBEsol'))
+    if (strcmp(S.XC,'GGA_PBE') || strcmp(S.XC,'GGA_PBEsol') || strcmp(S.XC,'SCAN'))
         divss = 1.0./(1.0 + XC.mu_divkappa * ss);
         dfxdss = XC.mu * (divss .* divss);
     elseif (strcmp(S.XC,'GGA_RPBE'))
@@ -898,6 +898,7 @@ function [S] = mGSGA(S,XC)
         return;
     end
     rho = S.rho;
+    rho(rho < S.xc_rhotol) = S.xc_rhotol;
     rho(:,1) = rho(:,2) + rho(:,3);
     drho_1 = S.grad_1 * rho;
 	drho_2 = S.grad_2 * rho;

@@ -772,9 +772,9 @@ if (S.vdWDFFlag == 1) || (S.vdWDFFlag == 2) % 1: temporary flag of vdW-DF1 2: vd
     end
 end
 
-if (S.xc == 4) && (S.nspin ~= 1)
-	error('Currently SCAN does not support spin polarization!');
-end
+% if (S.xc == 4) && (S.nspin ~= 1)
+% 	error('Currently SCAN does not support spin polarization!');
+% end
 
 fprintf(' Done. (%.3f sec)\n', toc(t1));
 
@@ -1156,7 +1156,7 @@ end
 
 start_time = fix(clock);
 fprintf(fileID,'***************************************************************************\n');
-fprintf(fileID,'*                      M-SPARC v1.0.0 (May 15, 2022)                      *\n');
+fprintf(fileID,'*                      M-SPARC v1.0.0 (Jun 23, 2022)                      *\n');
 fprintf(fileID,'*   Copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech   *\n');
 fprintf(fileID,'*           Distributed under GNU General Public License 3 (GPL)          *\n');
 fprintf(fileID,'*                Date: %s  Start time: %02d:%02d:%02d                  *\n',date,start_time(4),start_time(5),start_time(6));
