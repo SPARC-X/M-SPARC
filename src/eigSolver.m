@@ -71,7 +71,9 @@ if S.parallel ~= 1
 		else
 			% For subsequent steps
 			if (count > S.rhoTrigger)
-				if S.chefsibound_flag == 1
+				if S.chefsibound_flag == 1 || ((S.xc == 4) && (count == S.rhoTrigger + 1))
+					% for metaGGA: since 1st SCF of SCAN is GGA_PBE, it is
+                    % necessary to make another Lanczos in 2nd SCF
 					% Upper bound
 					opts.tol = S.TOL_LANCZOS; % WARNING: might need more accuracy than the default
 					opts.v0 = S.upper_bound_guess_vecs(:,ks);
@@ -169,7 +171,9 @@ else
 		else
 			% For subsequent steps
 			if (count > S.rhoTrigger)
-				if S.chefsibound_flag == 1
+				if S.chefsibound_flag == 1 || ((S.xc == 4) && (count == S.rhoTrigger + 1))
+					% for metaGGA: since 1st SCF of SCAN is GGA_PBE, it is
+                    % necessary to make another Lanczos in 2nd SCF
 					% Upper bound
 					opts.tol = S.TOL_LANCZOS; % WARNING: might need more accuracy than the default
 					opts.v0 = S.upper_bound_guess_vecs(:,ks);
