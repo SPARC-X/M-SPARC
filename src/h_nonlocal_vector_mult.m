@@ -26,7 +26,7 @@ if (S.xc == 4) && (S.countPotential > 0) % metaGGA, set a flag to seperate it fr
     else % spin polarization mGSGA
         VxcScan3 = S.VxcScan3(:, spin); 
     end
-    
+    nCol = size(X, 2);
     if S.cell_typ == 2 % unorthogonal cell
         lapc_T = [S.lapc_T(1,1), S.lapc_T(2,1), S.lapc_T(3,1);
             S.lapc_T(2,1), S.lapc_T(2,2), S.lapc_T(3,2);
@@ -37,9 +37,9 @@ if (S.xc == 4) && (S.countPotential > 0) % metaGGA, set a flag to seperate it fr
 
         v3gradpsiTheKpt = [v3grad1(:), v3grad2(:), v3grad3(:)];
         v3gradpsiTheKptMLapT = v3gradpsiTheKpt*lapc_T;
-        v3gradpsiTheKptMLapT_1 = VxcScan3 .* reshape(v3gradpsiTheKptMLapT(:, 1), S.N, S.Nev);
-        v3gradpsiTheKptMLapT_2 = VxcScan3 .* reshape(v3gradpsiTheKptMLapT(:, 2), S.N, S.Nev);
-        v3gradpsiTheKptMLapT_3 = VxcScan3 .* reshape(v3gradpsiTheKptMLapT(:, 3), S.N, S.Nev);
+        v3gradpsiTheKptMLapT_1 = VxcScan3 .* reshape(v3gradpsiTheKptMLapT(:, 1), S.N, nCol);
+        v3gradpsiTheKptMLapT_2 = VxcScan3 .* reshape(v3gradpsiTheKptMLapT(:, 2), S.N, nCol);
+        v3gradpsiTheKptMLapT_3 = VxcScan3 .* reshape(v3gradpsiTheKptMLapT(:, 3), S.N, nCol);
         Hnlx = Hnlx - 0.5*(blochGradient(S,kptvec,1)*v3gradpsiTheKptMLapT_1 + blochGradient(S,kptvec,2)*v3gradpsiTheKptMLapT_2 + blochGradient(S,kptvec,3)*v3gradpsiTheKptMLapT_3);
     else % orthogonal cell
         v3grad1 = VxcScan3 .* (blochGradient(S,kptvec,1) *X);
