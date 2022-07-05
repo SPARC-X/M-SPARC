@@ -2,12 +2,14 @@
 ### (1) Brief:  
 Matlab-Simulation Package for Ab-initio Real-space Calculations (M-SPARC) is a real-space code for performing electronic structure calculations based on Kohn-Sham Density Functional Theory (DFT). Its primary purpose is the rapid development and testing of new algorithms and methods within DFT. The main features of the current version of M-SPARC include  
 
-* Boundary conditions for crystals, surfaces, wires, and molecules.  
-* Calculation of ground state energy, atomic forces, and stress tensor.  
-* Unconstrained collinear magnetization via spin polarized calculations.  
-* Structural relaxation and molecular dynamics (MD).  
-* LDA and GGA exchange correlation functionals.  
-* ONCV and TM pseudopotentials in psp8 (ABINIT) format.  
+* Applicable to isolated systems such as molecules as well as extended systems such as crystals, surfaces, and wires.
+* Local, semilocal, and nonlocal (including hybrid) exchange-correlation functionals.
+* Standard ONCV pseudopotentials, including nonlinear core corrections.
+* Calculation of ground state energy, atomic forces, and stress tensor.
+* Structural relaxation and ab initio molecular dynamics (NVE, NVT, and NPT).
+* Spin polarized and unpolarized calculations.
+* Spin-orbit coupling.
+* Dispersion interactions through DFT-D3, vdW-DF1, and vdW-DF2.
 
 
 ### (2) Installation:
@@ -87,11 +89,6 @@ The `.aimd` file contains the atomic positions, atomic velocities, atomic forces
 The `.restart` file contains information necessary to perform a restarted MD calculation. 
 
 
-### (6) Acknowledgement:
-  
-* U.S. Department of Energy, Office of Science: DE-SC0019410 
-* U.S. National Science Foundation: 1333500 and 1553212
-
 ### (7) Citation:
 
 If you publish work using/regarding M-SPARC, please cite some of the following articles, particularly those that are most relevant to your work:
@@ -102,3 +99,7 @@ If you publish work using/regarding M-SPARC, please cite some of the following a
 * **Atomic forces**: https://doi.org/10.1016/j.cpc.2016.09.020, https://doi.org/10.1016/j.cpc.2017.02.019
 * **Mixing**: https://doi.org/10.1016/j.cplett.2016.01.033, https://doi.org/10.1016/j.cplett.2015.06.029, https://doi.org/10.1016/j.cplett.2019.136983 
 
+### (6) Acknowledgement:
+  
+* U.S. Department of Energy, Office of Science: DE-SC0019410 
+* U.S. National Science Foundation: 1333500 and 1553212

@@ -77,25 +77,19 @@ filecolor=pink,
 \begin{frame}[allowframebreaks]{\textbf{Introduction}} \label{Introduction}
 Matlab-Simulation Package for Ab-initio Real-space Calculations (M-SPARC) is a real-space code for performing electronic structure calculations based on Kohn-Sham Density Functional Theory (DFT). Its primary purpose is the rapid development and testing of new algorithms and methods within DFT. The main features of M-SPARC v1.0.0 include
 \begin{itemize}
-  \item Boundary conditions for crystals, surfaces, wires, and molecules. 
+  \item Applicable to isolated systems such as molecules as well as extended systems such as crystals, surfaces, and wires.
+  \item Local, semilocal, and nonlocal (including hybrid) exchange-correlation functionals.
+  \item Standard ONCV pseudopotentials, including nonlinear core corrections.
   \item Calculation of ground state energy, atomic forces, and stress tensor.
-  \item Unconstrained collinear magnetization via spin polarized calculations.
-  \item Structural relaxation and molecular dynamics (MD). 
-  \item LDA and GGA exchange correlation functionals. 
-  \item ONCV and TM pseudopotentials in psp8 (ABINIT) format. 
+  \item Structural relaxation and ab initio molecular dynamics (NVE, NVT, and NPT).
+  \item Spin polarized and unpolarized calculations.
+  \item Spin-orbit coupling.
+  \item Dispersion interactions through DFT-D3, vdW-DF1, and vdW-DF2.
 \end{itemize}
-Additional details regarding the formulation and implementation of M-SPARC can be found in the accompanying paper. Please direct any questions and report any bugs to Prof.~Phanish Suryanarayana.
+% Additional details regarding the formulation and implementation of M-SPARC can be found in the accompanying paper. Please direct any questions and report any bugs to Prof.~Phanish Suryanarayana.
 
 \end{frame}
 
-
-\begin{frame}[allowframebreaks]{\textbf{Acknowledgments}} \label{Acknowledgments}
-\begin{itemize}
-    \item U.S. Department of Energy, Office of Science: DE-SC0019410
-    \item U.S. National Science Foundation: 1333500 and 1553212
-\end{itemize}
-
-\end{frame}
 
 
 \begin{frame}[allowframebreaks]{\textbf{Citation}} \label{Citation}
@@ -109,6 +103,17 @@ If you publish work using/regarding M-SPARC, please cite some of the following a
     \item Mixing: \url{https://doi.org/10.1016/j.cplett.2016.01.033}, \url{https://doi.org/10.1016/j.cplett.2015.06.029}, \url{https://doi.org/10.1016/j.cplett.2019.136983}
 \end{itemize}
 \end{frame}
+
+
+
+\begin{frame}[allowframebreaks]{\textbf{Acknowledgments}} \label{Acknowledgments}
+  \begin{itemize}
+      \item U.S. Department of Energy, Office of Science: DE-SC0019410
+      \item U.S. National Science Foundation: 1333500 and 1553212
+  \end{itemize}
+  
+\end{frame}
+
 
 
 \begin{frame}[allowframebreaks,fragile]{\textbf{Installation}} \label{Installation}
