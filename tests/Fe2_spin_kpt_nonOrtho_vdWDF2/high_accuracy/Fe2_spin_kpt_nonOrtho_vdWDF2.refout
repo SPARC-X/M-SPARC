@@ -1,0 +1,124 @@
+***************************************************************************
+*                      M-SPARC v1.0.0 (Jun 30, 2022)                      *
+*   Copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech   *
+*           Distributed under GNU General Public License 3 (GPL)          *
+*                Date: 16-Aug-2022  Start time: 15:29:22                  *
+***************************************************************************
+                           Input parameters                                
+***************************************************************************
+LATVEC_SCALE: 2.840052 2.840052 2.840052 
+LATVEC:
+1.000000000000000 0.100000000000000 0.000000000000000 
+0.100000000000000 1.000000000000000 0.000000000000000 
+0.000000000000000 0.000000000000000 1.000000000000000 
+FD_GRID: 20 20 20
+FD_ORDER: 12
+BC: P P P
+KPOINT_GRID: 3 3 3
+KPOINT_SHIFT: 0 0 0
+SPIN_TYP: 1
+ELEC_TEMP_TYPE: fermi-dirac
+SMEARING: 0.001000000
+CHEB_DEGREE: 43
+NSTATES: 24
+EXCHANGE_CORRELATION: vdWDF2
+CALC_STRESS: 1
+MAXIT_SCF: 100
+TOL_SCF: 1.00E-05
+TOL_POISSON: 1.00E-08
+TOL_LANCZOS: 1.00E-02
+TOL_PSEUDOCHARGE: 1.00E-08
+MIXING_VARIABLE: potential
+MIXING_PRECOND: kerker
+MIXING_PRECOND_MAG: none
+TOL_PRECOND: 2.03E-05
+PRECOND_KERKER_KTF: 1.00
+PRECOND_KERKER_THRESH: 0.10
+MIXING_PARAMETER: 0.30
+MIXING_PARAMETER_MAG: 0.30
+MIXING_HISTORY: 7
+PULAY_FREQUENCY: 1
+PULAY_RESTART: 0
+REFERENCE_CUTOFF: 0.50
+RHO_TRIGGER: 4
+FIX_RAND: 0
+PRINT_FORCES: 1
+PRINT_ATOMS: 1
+PRINT_EIGEN: 0
+PRINT_DENSITY: 0
+OUTPUT_FILE: Fe2_spin_kpt_nonOrtho_vdWDF2.out
+VDWDF_GEN_KERNEL: 0
+***************************************************************************
+                                Cell                                       
+***************************************************************************
+Lattice vectors:
+2.840052000000000 0.284005200000000 0.000000000000000 
+0.284005200000000 2.840052000000000 0.000000000000000 
+0.000000000000000 0.000000000000000 2.840052000000000 
+Volume                  :  2.2678486634E+01 (Bohr^3)
+***************************************************************************
+                             Initialization                                
+***************************************************************************
+Mesh spacing in x-direction        :  0.142711 (Bohr)
+Mesh spacing in y-direction        :  0.142711 (Bohr)
+Mesh spacing in z direction        :  0.142003 (Bohr)
+Number of symmetry adapted k-points:  14
+Output printed to                  :  Fe2_spin_kpt_nonOrtho_vdWDF2.out
+Total number of atom types         :  1
+Total number of atoms              :  2
+Total number of electrons          :  32
+Atom type 1  (valence electrons)   :  Fe 16
+Pseudopotential                    :  Fe_LDA.psp8
+lloc                               :  4
+Pseudocharge radii of atom type 1  :  6.85 6.85 6.82
+Number of atoms of type 1          :  2
+Estimated total memory usage       :  350.46 MB
+========================================================================================
+                            Self Consistent Field (SCF#1)                     
+========================================================================================
+Iteration     Free Energy (Ha/atom)    Magnetization     SCF Error        Timing (sec)
+1            -1.1397224264E+02         3.4196E-01        1.200E-01        381.409
+2            -1.1398805513E+02         8.4551E-04        7.237E-02        111.545
+3            -1.1399708036E+02        -9.2401E-03        1.087E-02        111.266
+4            -1.1399714683E+02         8.3343E-04        5.540E-03        112.231
+5            -1.1399715698E+02         2.0538E-05        2.854E-03        110.943
+6            -1.1399716137E+02         5.4954E-05        3.040E-04        110.282
+7            -1.1399716145E+02        -2.2155E-05        6.295E-05        110.836
+8            -1.1399716146E+02         1.2265E-05        3.211E-05        110.431
+9            -1.1399716146E+02        -2.9088E-07        3.821E-06        109.930
+Total number of SCF: 9     
+====================================================================
+                                Energy                              
+====================================================================
+Free energy per atom               : -1.1399716146E+02 (Ha/atom)
+Total free energy                  : -2.2799432291E+02 (Ha)
+Band structure energy              :  4.7579416232E+00 (Ha)
+Exchange correlation energy        : -3.1596852684E+01 (Ha)
+Self and correction energy         : -2.4173788496E+02 (Ha)
+Entropy*kb*T                       : -6.7707412327E-06 (Ha)
+Fermi level                        :  1.8871769414E+00 (Ha)
+vdWDF energy                       :  7.2815981192E-02 (Ha)
+Net Magnetization                  : -2.9087726006E-07 
+Average force                      :  4.8825459180E-01 (Ha/Bohr)
+Maximum force                      :  4.8825459180E-01 (Ha/Bohr)
+Time for force calculation         :  8.921 (sec)
+Stress (GPa):
+ -23891.0718997290    4631.1288254434      -6.1769694666
+   4631.1288254434  -23960.5945155242       4.3835544809
+     -6.1769694666       4.3835544809  -25269.8971688378
+Pressure                           :  2.4373854528E+04 (GPa)
+Maximum stress                     :  2.5269897169E+04 (GPa)
+Time for stress calculation        :  31.947 (sec)
+***************************************************************************
+                               Timing info                                 
+***************************************************************************
+Total walltime                     :  1439.370 sec
+___________________________________________________________________________
+
+***************************************************************************
+*             Material Physics & Mechanics Group, Georgia Tech            *
+*                       PI: Phanish Suryanarayana                         *
+*                Main Developers: Qimen Xu, Abhiraj Sharma                *
+*     Acknowledgements: U.S. DOE (DE-SC0019410); NSF (1333500,1553212)    *
+***************************************************************************
+                                                                           

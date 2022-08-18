@@ -29,6 +29,7 @@ function [S] = vdWDF_Initial_GenKernel(S)
     S.vdWDF_qmesh = reshape(S.vdWDF_qmesh', [], 1);
     S.vdWDF_kernel = zeros(1 + S.vdWDF_Nrpoints, S.vdWDF_Nqs, S.vdWDF_Nqs); %% kernal Phi, index 0, reciprocal
     S.vdWDF_d2Phidk2 = zeros(1 + S.vdWDF_Nrpoints, S.vdWDF_Nqs, S.vdWDF_Nqs); %% 2nd derivative of kernal
+    S.vdWenergy = 0.0;
     fprintf('\n Begin generating kernel functions of vdW-DF...\n');
 %% Generate Wab(a, b) function
     NintegratePoints = 256; % Number of imagine frequency points integrated for building kernel

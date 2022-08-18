@@ -670,16 +670,17 @@ if S.d3Flag == 1
 	stress = stress + S.d3stress;
 end
 if (S.vdWDFFlag == 1) || (S.vdWDFFlag == 2) % add vdW stress in Exc
-	S = vdWDF_stress(S);
-    stress = stress + S.vdWstress;
+%     if (S.nspin == 1) % to be removed after finishing svdW-DF
+        S = vdWDF_stress(S);
+        stress = stress + S.vdWstress;
 
-	fprintf('vdW-DF energy(Ha)         %10.6E \n', S.vdWenergy);
-	fprintf('vdW-DF stress(GPa) of cell listed below\n');
-    for i = 1:3
-        fprintf('%16.12E %16.12E %16.12E\n', ...
-        S.vdWstress(i,1)*2.94210119*(10^4), S.vdWstress(i,2)*2.94210119*(10^4), S.vdWstress(i,3)*2.94210119*(10^4));
-    end
-
+        fprintf('vdW-DF energy(Ha)         %10.6E \n', S.vdWenergy);
+        fprintf('vdW-DF stress(GPa) of cell listed below\n');
+        for i = 1:3
+            fprintf('%16.12E %16.12E %16.12E\n', ...
+            S.vdWstress(i,1)*2.94210119*(10^4), S.vdWstress(i,2)*2.94210119*(10^4), S.vdWstress(i,3)*2.94210119*(10^4));
+        end
+%     end
 end
 end
 
