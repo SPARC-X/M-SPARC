@@ -1,4 +1,4 @@
-function S = vdWDF_uGenerate_Potential(S)
+function [S, potential] = vdWDF_uGenerate_Potential(S, inptDrho, vdWDF_Dq0Drho, vdWDF_Dq0Dgradrho, ps, DpDq0s) 
 % @file    vdWDF_uGenerate_Potential.m
 % @brief   This file contains the functions for getting u in real space,
 %          and generating vdW-DF potential
@@ -14,31 +14,27 @@ function S = vdWDF_uGenerate_Potential(S)
 % Copyright (c) 2020 Material Physics & Mechanics Group, Georgia Tech.
 % ==============================================================================================
 	nnr = S.Nx*S.Ny*S.Nz;
-	qnum = size(S.vdWDF_qmesh, 1);
-    for q = 1:qnum
-        uReci3D = reshape(S.vdW_u(:, q), S.Nx, S.Ny, S.Nz);
-        u3D = ifftn(uReci3D)*nnr; % the position of const 1/(Nx*Ny*Nz) is in ifftn in MATLAB 
-        %but the const is in fwfft(cfft3d R->G) in FORTRAN
-        S.vdW_u(:, q) = u3D(:);
-    end
 	hPrefactor = zeros(nnr, 1);
-	[ps, DpDq0s] = spline_interpolation_more(S.vdWDF_qmesh, S.vdWDF_q0, S.vdWDF_D2yDx2);
+    % ps and DpDq0s are computed in function vdWDF_splineInterpolation_energy
+% 	[ps, DpDq0s] = spline_interpolation_more(S.vdWDF_qmesh, S.vdWDF_q0, S.vdWDF_D2yDx2);
 	u = S.vdW_u; % attention: it is NOT wrong! u at here is thetas*Kernel(Phi)
-	Dq0Drho = S.vdWDF_Dq0Drho;
-	Dq0Dgradrho = S.vdWDF_Dq0Dgradrho;
+    Drho = inptDrho;
+	Dq0Drho = vdWDF_Dq0Drho;
+	Dq0Dgradrho = vdWDF_Dq0Dgradrho;
 	potential = zeros(nnr, 1);
+    qnum = size(S.vdWDF_qmesh, 1);
 	for q = 1:qnum
 		potential = potential + u(:, q).*(ps(:, q) + DpDq0s(:, q).*Dq0Drho(:));
 		hPrefactor = hPrefactor + u(:, q).*DpDq0s(:, q).*Dq0Dgradrho(:);
 	end
-    gradRhoLength = sqrt(S.Drho(:, 1).^2 + S.Drho(:, 2).^2 + S.Drho(:, 3).^2);
+    gradRhoLength = sqrt(Drho(:, 1).^2 + Drho(:, 2).^2 + Drho(:, 3).^2);
     gradLarger0 = gradRhoLength > 0;
     S.vdW_DpDq0s = DpDq0s; % to be used in calculating stress
-    S.vdW_gradRhoLength = gradRhoLength; % to be used in calculating stress
+%     S.vdW_gradRhoLength = gradRhoLength; % to be used in calculating stress
 %     reciVecLabel = S.reciVecLabel;
 %     reciVecCoord = S.reciVecCoord;
     for direc = 1:3
-        h = hPrefactor.*S.Drho(:, direc);
+        h = hPrefactor.*Drho(:, direc);
         hGradLarger0 = h(gradLarger0)./gradRhoLength(gradLarger0);
         h(gradLarger0) = hGradLarger0(:);
         % hFFT = fftn(reshape(h, S.Nx,S.Ny,S.Nz)); %*(1/nnr)
@@ -71,37 +67,5 @@ function S = vdWDF_uGenerate_Potential(S)
         end
     end
     potential = potential - (sum(hDirectDeriv, 2));
-	S.vdWpotential = potential;
-end
-
-function [ps, DpDq0s] = spline_interpolation_more(qmesh, q0, D2yDx2)
-    qnum = size(qmesh, 1);
-    gridNum = size(q0, 1);
-    ps = zeros(gridNum, qnum);
-    DpDq0s = zeros(gridNum, qnum);
-    lowerBound = ones(gridNum, 1);
-    upperBound = ones(gridNum, 1)*qnum;
-    while (max(upperBound - lowerBound) > 1)
-        idx = floor((upperBound + lowerBound)/2);
-        boolLargerq0idx = q0 > qmesh(idx(:));
-        lowerBound(boolLargerq0idx) = idx(boolLargerq0idx);
-        upperBound(~boolLargerq0idx) = idx(~boolLargerq0idx);
-    end
-    dx = qmesh(upperBound) - qmesh(lowerBound);
-    a = (qmesh(upperBound) - q0)./dx;
-    b = (q0 - qmesh(lowerBound))./dx;
-    c = (a.^3 - a).*(dx.^2)/6.0;
-    d = (b.^3 - b).*(dx.^2)/6.0;
-    e = (3.0*a.^2 - 1.0).*dx/6.0;
-    f = (3.0*b.^2 - 1.0).*dx/6.0;
-    for q = 1:qnum
-        y = zeros(qnum, 1);
-        y(q) = 1;
-        for i=1:gridNum
-            ps(i, q) = a(i)*y(lowerBound(i)) + b(i)*y(upperBound(i));
-            ps(i, q) = ps(i, q) + c(i)*D2yDx2(q, lowerBound(i));
-            ps(i, q) = ps(i, q) + d(i)*D2yDx2(q, upperBound(i));
-            DpDq0s(i, q) = (y(upperBound(i)) - y(lowerBound(i)))/dx(i) - e(i)*D2yDx2(q,lowerBound(i)) + f(i)*D2yDx2(q,upperBound(i));
-        end
-    end
+% 	S.vdWpotential = potential;
 end

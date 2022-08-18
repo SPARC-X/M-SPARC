@@ -77,6 +77,9 @@ else
 	Exc = sum(S.e_xc.*(rho(:,1)+S.rho_Tilde_at).*S.W);
 	% Exchange-correlation energy double counting correction
 	Exc_dc = sum(sum(S.Vxc.*rho(:,2:3),2).*S.W) ;
+    if (S.vdWDFFlag == 1) || (S.vdWDFFlag == 2) % add vdW energy in Exc
+		Exc = Exc + S.vdWenergy; 
+    end
     if (S.countPotential > 0) && (S.xc == 4) % S.xc == 4 SCAN functional
         Eext_scan_dc = sum(sum(S.VxcScan3.*S.tau(:, 2:3).*S.W));
         Exc_dc = Exc_dc + Eext_scan_dc;

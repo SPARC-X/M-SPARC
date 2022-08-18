@@ -1,4 +1,4 @@
-function [S] = vdWDF_getQ0onGrid(S)
+function [S] = vdWDF_getQ0onGrid(S, ecPW, v_cPW)
 % @file    vdWDF_getQ0onGrid.m
 % @brief   This file contains the functions computing the energy ratio q0(x)
 % @authors Boqin Zhang <bzhang376@gatech.edu>
@@ -41,36 +41,21 @@ function [S] = vdWDF_getQ0onGrid(S)
     r_s = (3./(4*pi*rhoGepsr)).^(1/3);
     kFResult = kF(rhoGepsr);
     s = sqrt(Drho_xGepsr.^2 + Drho_yGepsr.^2 + Drho_zGepsr.^2)./(2*kFResult.*rhoGepsr);
-    [ecLDA_PW, Dq0Drho_p] = pw(r_s); % Dq0Drho not finish in this step
+    % [ecLDA_PW, Dq0Drho_p] = pw(r_s); % Dq0Drho not finish in this step
     FsResult = Fs(s, S.vdWDFFlag);
-    q_p = -4.0*pi/3.0*ecLDA_PW + kFResult.*FsResult; % energy ratio on every point
+    q_p = -4.0*pi/3.0*ecPW + kFResult.*FsResult; % energy ratio on every point
     [q0_p, Dq0Dq_p] = saturate_q(q_p, q_cut); % force q to be in an interval
     q0_p(q0_p < q_min) = q_min;
     DqxDrho_p = dqx_drho(rhoGepsr, s, S.vdWDFFlag);
-    Dq0Drho_p = Dq0Dq_p.*rhoGepsr.*(-4.0*pi/3.0*(Dq0Drho_p - ecLDA_PW)./rhoGepsr(:) + DqxDrho_p);
+    Dq0Drho_p = Dq0Dq_p.*rhoGepsr.*(-4.0*pi/3.0*(v_cPW - ecPW)./rhoGepsr(:) + DqxDrho_p);
     Dq0Dgradrho_p = Dq0Dq_p.*rhoGepsr.*kFResult.*dFs_ds(s, S.vdWDFFlag).*ds_dgradrho(rhoGepsr);
     %% the real result is the results above adding zeros(for grids whose rho is less than epsr)
     S.vdWDF_q0(boolRhoGepsr) = q0_p(:);
     S.vdWDF_Dq0Drho(boolRhoGepsr) = Dq0Drho_p(:);
     S.vdWDF_Dq0Dgradrho(boolRhoGepsr) = Dq0Dgradrho_p(:);
-    clear Drho_xGepsr Drho_yGepsr Drho_zGepsr r_s kFResult s ecLDA_PW FsResult...
+    clear Drho_xGepsr Drho_yGepsr Drho_zGepsr r_s kFResult s FsResult...
         q0_p DqxDrho_p Dq0Drho_p Dq0Dgradrho_p;
 %     pack;
-end
-
-function [ecLDA_PW, Dq0Drho] = pw(r_s) %% LDA_PW exchange energy
-    %% parameters of LDA_PW
-    a =0.031091;
-    a1=0.21370;
-    b1=7.5957; b2=3.5876; b3=1.6382; b4=0.49294;
-    %% computation
-    rs12 = sqrt(r_s(:)); rs32 = r_s.*rs12; rs2 = r_s.^2;
-    om   = 2.0*a*(b1*rs12 + b2*r_s + b3*rs32 + b4*rs2);
-    dom  = 2.0*a*(0.5*b1*rs12 + b2*r_s + 1.5*b3*rs32 + 2.0*b4*rs2);
-    olog = log(1.0 + 1.0./om(:));
-    ecLDA_PW = -2.0*a*(1.0 + a1*r_s).*olog; % energy on every point
-    Dq0Drho  = -2.0*a*(1.0 + 2.0/3.0*a1*r_s).*olog - 2.0/3.0*a*(1.0 + a1*r_s).*dom./(om.*(om + 1.0));
-    % corresponding to Vc, derivative of energy regarding rho
 end
 
 function [q0, Dq0Dq] = saturate_q(q, q_cutoff)
