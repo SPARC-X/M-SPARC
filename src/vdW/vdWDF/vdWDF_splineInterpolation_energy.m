@@ -1,4 +1,4 @@
-function S = vdWDF_splineInterpolation_energy(S)
+function [S, ps, DpDq0s] = vdWDF_splineInterpolation_energy(S)
 % @file    vdWDF_splineInterpolation_energy.m
 % @brief   This file contains the functions for interpolating q0 to get
 %          energy ratio cpmponent of every model energy ratio ps(q_1)
@@ -41,11 +41,11 @@ function S = vdWDF_splineInterpolation_energy(S)
     vecLength = vecLength3D(:); % get the length of these reciprocal lattice vectors
 %% spline interpolation and FFT to get thetas (p(q)*rho) in reciprocal space
     % D2yDx2 of spline functions are generated in vdWDFinitialize_InputKernel
-    ps = spline_interpolation(S.vdWDF_qmesh, S.vdWDF_q0, S.vdWDF_D2yDx2); % solve p
+    [ps, DpDq0s] = spline_interpolation_more(S.vdWDF_qmesh, S.vdWDF_q0, S.vdWDF_D2yDx2); % solve p
     thetas = zeros(nnr, qnum);
     S.vdWDF_thetasFFT = zeros(nnr, qnum);
     for q = 1:qnum
-        thetas(:, q) = ps(:, q).*rho;
+        thetas(:, q) = ps(:, q).*rho(:, 1);
         thetasFFT = fftn(reshape(thetas(:, q), S.Nx,S.Ny,S.Nz));
         S.vdWDF_thetasFFT(:, q) = thetasFFT(:);
     end
@@ -57,9 +57,11 @@ function S = vdWDF_splineInterpolation_energy(S)
     numUniVecLen = size(uniVecLen, 1);
     boolLargerLimit = uniVecLen > S.vdWDF_dk*S.vdWDF_Nrpoints;
     if ismember(1, boolLargerLimit)
-        fprintf('in vdWDF_energy, there are reciprocal lattice vectors whose length are larger than limit.\n');
+        fprintf('in vdWDF_energy, there are reciprocal lattice vectors whose length are larger than limit. Please try using a coarser mesh.\n');
     end
-    uniVecLenLLimit = uniVecLen(~boolLargerLimit);
+    uniVecLenLLimit = uniVecLen(~boolLargerLimit); % actually, if there is reciprocal vector longer than the length linit,
+    % the computation should be stopped and a larger kernel functions
+    % should be generated.
     kernelofLengths = interpolate_kernel(uniVecLenLLimit, S.vdWDF_kernel, S.vdWDF_d2Phidk2, S.vdWDF_dk);
     kernelofAllLengths = zeros(numUniVecLen, qnum, qnum);
     kernelofAllLengths(1:size(kernelofLengths, 1), :, :) = kernelofLengths(:, :, :);
@@ -74,13 +76,22 @@ function S = vdWDF_splineInterpolation_energy(S)
     end
 %% modify scaling factors: (2pi^3/Omega)[differential element]*Omega*Omega[from theta after FFT]*(1/(2pi^3))[kernel FT-IFT, make sure correct scale]
     S.vdWenergy = real(S.vdWenergy) * 0.5 * omega;
-    S.vdW_u = u; % prepare for solving potential of vdW. theta_beta.*Phi_alphabeta
+    S.vdW_u = u; % prepare for solving potential of vdW. theta_beta.*Phi_alphabetaqnum = size(S.vdWDF_qmesh, 1);
+    
+    for q = 1:qnum % transfer u back to real space from reciprocal space
+        uReci3D = reshape(S.vdW_u(:, q), S.Nx, S.Ny, S.Nz);
+        u3D = ifftn(uReci3D)*nnr; % the position of const 1/(Nx*Ny*Nz) is in ifftn in MATLAB 
+        %but the const is in fwfft(cfft3d R->G) in FORTRAN
+        S.vdW_u(:, q) = u3D(:);
+    end
+    
 end
 
-function ps = spline_interpolation(qmesh, q0, D2yDx2)
+function [ps, DpDq0s] = spline_interpolation_more(qmesh, q0, D2yDx2)
     qnum = size(qmesh, 1);
     gridNum = size(q0, 1);
     ps = zeros(gridNum, qnum);
+    DpDq0s = zeros(gridNum, qnum);
     lowerBound = ones(gridNum, 1);
     upperBound = ones(gridNum, 1)*qnum;
     while (max(upperBound - lowerBound) > 1)
@@ -94,13 +105,8 @@ function ps = spline_interpolation(qmesh, q0, D2yDx2)
     b = (q0 - qmesh(lowerBound))./dx;
     c = (a.^3 - a).*(dx.^2)/6.0;
     d = (b.^3 - b).*(dx.^2)/6.0;
-%     for q = 1:qnum %% vectorization causes Out of memory
-%         y = zeros(qnum, 1);
-%         y(q) = 1;
-%         thetas(:, q) = a.*y(lowerBound(:)) + b.*y(upperBound(:));
-%         thetas(:, q) = thetas(:, q) + c.*D2yDx2(q, lowerBound(:));
-%         thetas(:, q) = thetas(:, q) + d.*D2yDx2(q, upperBound(:));
-%     end
+    e = (3.0*a.^2 - 1.0).*dx/6.0;
+    f = (3.0*b.^2 - 1.0).*dx/6.0;
     for q = 1:qnum
         y = zeros(qnum, 1);
         y(q) = 1;
@@ -108,6 +114,7 @@ function ps = spline_interpolation(qmesh, q0, D2yDx2)
             ps(i, q) = a(i)*y(lowerBound(i)) + b(i)*y(upperBound(i));
             ps(i, q) = ps(i, q) + c(i)*D2yDx2(q, lowerBound(i));
             ps(i, q) = ps(i, q) + d(i)*D2yDx2(q, upperBound(i));
+            DpDq0s(i, q) = (y(upperBound(i)) - y(lowerBound(i)))/dx(i) - e(i)*D2yDx2(q,lowerBound(i)) + f(i)*D2yDx2(q,upperBound(i));
         end
     end
 end

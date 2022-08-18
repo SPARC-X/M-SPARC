@@ -758,9 +758,9 @@ S.grad_3 = blochGradient(S,[0 0 0],3);
 
 % initialize vdWDF
 if (S.vdWDFFlag == 1) || (S.vdWDFFlag == 2) % 1: temporary flag of vdW-DF1 2: vdW-DF2
-    if S.nspin ~= 1
-        error('Currently vdW-DF does not support spin polarization!');
-    end
+%     if S.nspin ~= 1
+%         error('Currently vdW-DF does not support spin polarization!');
+%     end
     if S.BC ~= 2 % vdWDF can only be used in 3D periodic boundary condition because it used FFT
         error('vdW-DF can only be used in 3D periodic system!');
     end
@@ -1156,7 +1156,7 @@ end
 
 start_time = fix(clock);
 fprintf(fileID,'***************************************************************************\n');
-fprintf(fileID,'*                      M-SPARC v1.0.0 (Jun 30, 2022)                      *\n');
+fprintf(fileID,'*                      M-SPARC v1.0.0 (Aug 18, 2022)                      *\n');
 fprintf(fileID,'*   Copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech   *\n');
 fprintf(fileID,'*           Distributed under GNU General Public License 3 (GPL)          *\n');
 fprintf(fileID,'*                Date: %s  Start time: %02d:%02d:%02d                  *\n',date,start_time(4),start_time(5),start_time(6));

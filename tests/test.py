@@ -147,19 +147,27 @@ SYSTEMS["Tags"].append(['bulk', 'gga', 'orth', 'potmix', 'relax_cell','gamma','s
 SYSTEMS["Tols"].append([tols["E_tol"], tols["F_tol"], tols["stress_tol"]]) # E_tol(Ha/atom), F_tol(Ha/Bohr), stress_tol(%)
 ################################################################################################################
 SYSTEMS["systemname"].append('BaTiO3_vdWDF1')
-SYSTEMS["Tags"].append(['bulk', 'gga', 'orth', 'potmix', 'gamma','vdWDF'])
+SYSTEMS["Tags"].append(['bulk', 'orth', 'potmix', 'gamma','vdWDF'])
 SYSTEMS["Tols"].append([tols["E_tol"], tols["F_tol"], tols["stress_tol"]]) # E_tol(Ha/atom), F_tol(Ha/Bohr), stress_tol(%)
 ################################################################################################################
 SYSTEMS["systemname"].append('BaTiO3_vdWDF2')
-SYSTEMS["Tags"].append(['bulk', 'gga', 'orth', 'potmix', 'gamma','vdWDF'])
+SYSTEMS["Tags"].append(['bulk', 'orth', 'potmix', 'gamma','vdWDF'])
 SYSTEMS["Tols"].append([tols["E_tol"], tols["F_tol"], tols["stress_tol"]]) # E_tol(Ha/atom), F_tol(Ha/Bohr), stress_tol(%)
 ################################################################################################################
 SYSTEMS["systemname"].append('Si4_kpt_vdWDF1')
-SYSTEMS["Tags"].append(['bulk', 'gga', 'nonorth', 'potmix', 'kpt','vdWDF'])
+SYSTEMS["Tags"].append(['bulk', 'nonorth', 'potmix', 'kpt','vdWDF'])
 SYSTEMS["Tols"].append([tols["E_tol"], tols["F_tol"], tols["stress_tol"]]) # E_tol(Ha/atom), F_tol(Ha/Bohr), stress_tol(%)
 ################################################################################################################
 SYSTEMS["systemname"].append('Si4_kpt_vdWDF2')
-SYSTEMS["Tags"].append(['bulk', 'gga', 'nonorth', 'potmix', 'kpt','vdWDF'])
+SYSTEMS["Tags"].append(['bulk', 'nonorth', 'potmix', 'kpt','vdWDF'])
+SYSTEMS["Tols"].append([tols["E_tol"], tols["F_tol"], tols["stress_tol"]]) # E_tol(Ha/atom), F_tol(Ha/Bohr), stress_tol(%)
+################################################################################################################
+SYSTEMS["systemname"].append('Fe2_spin_gamma_ortho_vdWDF1')
+SYSTEMS["Tags"].append(['bulk', 'spin', 'orth', 'gamma','vdWDF'])
+SYSTEMS["Tols"].append([tols["E_tol"], tols["F_tol"], tols["stress_tol"]]) # E_tol(Ha/atom), F_tol(Ha/Bohr), stress_tol(%)
+##################################################################################################################
+SYSTEMS["systemname"].append('Fe2_spin_kpt_nonOrtho_vdWDF2')
+SYSTEMS["Tags"].append(['bulk', 'spin', 'nonorth', 'kpt','vdWDF'])
 SYSTEMS["Tols"].append([tols["E_tol"], tols["F_tol"], tols["stress_tol"]]) # E_tol(Ha/atom), F_tol(Ha/Bohr), stress_tol(%)
 ################################################################################################################
 SYSTEMS["systemname"].append('BaTiO3_scan')

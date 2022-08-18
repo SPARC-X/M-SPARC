@@ -513,8 +513,10 @@ if S.d3Flag == 1
 end
 
 if (S.vdWDFFlag == 1) || (S.vdWDFFlag == 2)
-	S = vdWDF_stress(S);
-	pressure = pressure - (S.vdWstress(1,1) + S.vdWstress(2,2) + S.vdWstress(3,3))/3;
+%     if (S.nspin == 1) % to be removed after finishing svdW-DF
+        S = vdWDF_stress(S);
+        pressure = pressure - (S.vdWstress(1,1) + S.vdWstress(2,2) + S.vdWstress(3,3))/3;
+%     end
 end
 end
 

@@ -13,7 +13,11 @@ function S = vdWDF_stress(S)
 % Copyright (c) 2020 Material Physics & Mechanics Group, Georgia Tech.
 % ==============================================================================================
     S.vdWstress = zeros(3);
-    vdWstrGradTerm = vdWDF_stress_gradient(S);
+    if S.nspin == 1
+        vdWstrGradTerm = vdWDF_stress_gradient(S);
+    else
+        vdWstrGradTerm = SvdWDF_stress_gradient(S);
+    end
     vdWstrKernelTerm = vdWDF_stress_kernel(S);
     S.vdWstress = vdWstrGradTerm + vdWstrKernelTerm; % initial sign is minus, which is wrong
     for l=1:3
@@ -29,14 +33,14 @@ function stressGrad = vdWDF_stress_gradient(S)
     DpDq0s = S.vdW_DpDq0s;
     nnr = size(DpDq0s, 1);
     qnum = size(DpDq0s, 2);
-    gradRhoLength = S.vdW_gradRhoLength;
+    gradRhoLength = sqrt(S.Drho(:, 1).^2 + S.Drho(:, 2).^2 + S.Drho(:, 3).^2);
     u = S.vdW_u;
     Dq0Dgradrho = S.vdWDF_Dq0Dgradrho;
     prefactor = zeros(nnr, 1);
     for q = 1:qnum
         prefactor = prefactor + u(:, q).*DpDq0s(:, q).*Dq0Dgradrho(:);
     end
-    gradLarger0 = gradRhoLength > 0;
+    gradLarger0 = gradRhoLength > 0.0;
     prefactorGradLarger0 = prefactor(gradLarger0)./gradRhoLength(gradLarger0);
     for l=1:3
         for m=1:l
@@ -46,6 +50,31 @@ function stressGrad = vdWDF_stress_gradient(S)
     end
     stressGrad = stressGrad/nnr;
 end
+
+function stressGrad = SvdWDF_stress_gradient(S)
+    stressGrad = zeros(3);
+    DpDq0s = S.vdW_DpDq0s;
+    nnr = size(DpDq0s, 1);
+    qnum = size(DpDq0s, 2);
+    gradRhoLengthUp = vecnorm(S.DrhoUp, 2, 2);
+    gradRhoLengthDn = vecnorm(S.DrhoDn, 2, 2);
+    gradLarger0 = (gradRhoLengthUp > 0.0) & (gradRhoLengthDn > 0.0);
+    u = S.vdW_u;
+    Dq0Dgradrho = S.vdWDF_Dq0Dgradrho;
+    prefactor = zeros(nnr, 2);
+    for q = 1:qnum
+        prefactor = prefactor + (u(:, q).*DpDq0s(:, q)) .* Dq0Dgradrho; % col 1: prefactor_up; col 2: prefactor_dn
+    end
+    prefactorGradLarger0 = prefactor(gradLarger0, :)./[gradRhoLengthUp(gradLarger0), gradRhoLengthDn(gradLarger0)];
+    for l=1:3
+        for m=1:l
+            productlm = [S.DrhoUp(gradLarger0, l).*S.DrhoUp(gradLarger0, m), S.DrhoDn(gradLarger0, l).*S.DrhoDn(gradLarger0, m)];
+            stressGrad(l, m) = stressGrad(l, m) - sum(sum(prefactorGradLarger0.*productlm));
+        end
+    end
+    stressGrad = stressGrad/nnr;
+end
+
 
 function stressKernel = vdWDF_stress_kernel(S)
     qnum = size(S.vdW_DpDq0s, 2);
