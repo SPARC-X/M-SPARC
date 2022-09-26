@@ -20,6 +20,11 @@ function  Hnlx = h_nonlocal_vector_mult(DL11,DL22,DL33,DG1,DG2,DG3,Veff,X,S,kptv
 %Hnlx = -0.5*(lapVec(DL11,DL22,DL33,DG1,DG2,DG3,X,S)) + Veff * X;
 Hnlx = -0.5*(lapVec(DL11,DL22,DL33,DG1,DG2,DG3,X,S)) + bsxfun(@times,Veff,X);
 
+if S.usefock > 1
+    Vexx = evaluateExactExchangePotential(S,X,kptvec,spin);
+    Hnlx = Hnlx + S.hyb_mixing*Vexx;
+end
+
 if (S.xc == 4) && (S.countPotential > 0) % metaGGA, set a flag to seperate it from the 1st PBE SCF computation
     if S.nspin == 1
         VxcScan3 = S.VxcScan3;

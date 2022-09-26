@@ -1,0 +1,170 @@
+***************************************************************************
+*                      M-SPARC v1.0.0 (Sep 23, 2022)                      *
+*   Copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech   *
+*           Distributed under GNU General Public License 3 (GPL)          *
+*                Date: 23-Sep-2022  Start time: 14:42:20                  *
+***************************************************************************
+                           Input parameters                                
+***************************************************************************
+LATVEC_SCALE: 7.000000 7.000000 7.000000 
+LATVEC:
+0.000000000000000 0.500000000000000 0.500000000000000 
+0.500000000000000 0.000000000000000 0.500000000000000 
+0.500000000000000 0.500000000000000 0.000000000000000 
+FD_GRID: 16 16 16
+FD_ORDER: 12
+BC: P P P
+KPOINT_GRID: 2 2 2
+KPOINT_SHIFT: 5.000000e-01 5.000000e-01 5.000000e-01
+ELEC_TEMP_TYPE: fermi-dirac
+SMEARING: 0.001000000
+CHEB_DEGREE: 25
+NSTATES: 15
+EXCHANGE_CORRELATION: PBE0
+CALC_STRESS: 1
+MAXIT_SCF: 100
+TOL_SCF: 1.00E-06
+TOL_POISSON: 1.00E-08
+TOL_LANCZOS: 1.00E-02
+TOL_PSEUDOCHARGE: 1.00E-08
+MIXING_VARIABLE: density
+MIXING_PRECOND: kerker
+TOL_PRECOND: 9.57E-05
+PRECOND_KERKER_KTF: 1.00
+PRECOND_KERKER_THRESH: 0.10
+MIXING_PARAMETER: 0.30
+MIXING_HISTORY: 7
+PULAY_FREQUENCY: 1
+PULAY_RESTART: 0
+REFERENCE_CUTOFF: 0.50
+RHO_TRIGGER: 4
+FIX_RAND: 0
+PRINT_FORCES: 1
+PRINT_ATOMS: 1
+PRINT_EIGEN: 0
+PRINT_DENSITY: 0
+OUTPUT_FILE: ../dev_tests/testsuit/NaCl_PBE0/low_accuracy/NaCl_PBE0.out
+MAXIT_FOCK: 20
+MINIT_FOCK: 2
+TOL_FOCK: 2.00E-07
+TOL_SCF_INIT: 1.00E-03
+EXX_METHOD: FOURIER_SPACE
+ACE_FLAG: 1
+EXX_ACE_VALENCE_STATES: 100
+EXX_DOWNSAMPLING: 1 1 1
+EXX_DIVERGENCE: SPHERICAL
+***************************************************************************
+                                Cell                                       
+***************************************************************************
+Lattice vectors:
+0.000000000000000 3.500000000000000 3.500000000000000 
+3.500000000000000 0.000000000000000 3.500000000000000 
+3.500000000000000 3.500000000000000 0.000000000000000 
+Volume                  :  8.5750000000E+01 (Bohr^3)
+***************************************************************************
+                             Initialization                                
+***************************************************************************
+Mesh spacing                       :  0.309359 (Bohr)
+Number of symmetry adapted k-points:  4
+Output printed to                  :  ../dev_tests/testsuit/NaCl_PBE0/low_accuracy/NaCl_PBE0.out
+Total number of atom types         :  2
+Total number of atoms              :  2
+Total number of electrons          :  16
+Atom type 1  (valence electrons)   :  Na 9
+Pseudopotential                    :  ../Na_ONCV_PBE-1.2.psp8
+lloc                               :  4
+Pseudocharge radii of atom type 1  :  8.66 8.66 8.66
+Number of atoms of type 1          :  1
+Atom type 2  (valence electrons)   :  Cl 7
+Pseudopotential                    :  ../Cl_ONCV_PBE-1.2.psp8
+lloc                               :  4
+Pseudocharge radii of atom type 2  :  8.97 8.97 8.97
+Number of atoms of type 2          :  1
+Estimated total memory usage       :  26.44 MB
+=====================================================================
+                    Self Consistent Field (SCF#1)                     
+=====================================================================
+Iteration     Free Energy (Ha/atom)   SCF Error        Timing (sec)
+1            -2.8521761272E+01        8.801E-02        21.246
+2            -2.8517145746E+01        6.185E-02        5.519
+3            -2.8511460921E+01        1.128E-02        5.497
+4            -2.8511368018E+01        3.742E-03        5.609
+5            -2.8511372436E+01        9.271E-04        5.621
+Total number of SCF: 5     
+
+No.1 Exx outer loop:
+1            -2.8534703765E+01        1.467E-03        8.702
+2            -2.8534729390E+01        9.682E-04        8.703
+3            -2.8534729430E+01        5.184E-04        6.219
+4            -2.8534728813E+01        2.372E-04        5.739
+5            -2.8534728751E+01        1.253E-04        5.455
+6            -2.8534728742E+01        4.131E-05        5.408
+7            -2.8534728736E+01        6.095E-06        5.411
+8            -2.8534728721E+01        1.820E-06        5.418
+9            -2.8534728751E+01        2.671E-07        5.394
+Total number of SCF: 9     
+Exx outer loop error: 1.1310e-03 
+
+No.2 Exx outer loop:
+1            -2.8534747220E+01        1.670E-04        8.070
+2            -2.8534747710E+01        1.343E-04        8.071
+3            -2.8534747679E+01        3.869E-05        5.406
+4            -2.8534747678E+01        3.756E-06        5.436
+5            -2.8534747703E+01        2.563E-06        5.359
+6            -2.8534747720E+01        4.466E-07        5.372
+Total number of SCF: 6     
+Exx outer loop error: 1.1079e-04 
+
+No.3 Exx outer loop:
+1            -2.8534747065E+01        2.299E-05        8.986
+2            -2.8534747825E+01        1.952E-05        8.987
+3            -2.8534747847E+01        3.500E-06        5.421
+4            -2.8534747826E+01        2.076E-06        5.367
+5            -2.8534747815E+01        2.188E-07        5.331
+Total number of SCF: 5     
+Exx outer loop error: 1.2083e-05 
+
+No.4 Exx outer loop:
+1            -2.8534748350E+01        3.809E-06        7.957
+2            -2.8534747848E+01        3.263E-06        7.957
+3            -2.8534747847E+01        6.102E-07        5.375
+Total number of SCF: 3     
+Exx outer loop error: 1.3928e-06 
+
+No.5 Exx outer loop:
+1            -2.8534751384E+01        6.855E-07        7.556
+Total number of SCF: 1     
+Exx outer loop error: 1.8277e-07 
+====================================================================
+                                Energy                              
+====================================================================
+Free energy per atom               : -2.8534751384E+01 (Ha/atom)
+Total free energy                  : -5.7069502769E+01 (Ha)
+Band structure energy              : -2.6801402856E+00 (Ha)
+Exchange correlation energy        : -9.9789321570E+00 (Ha)
+Self and correction energy         : -1.0164419457E+02 (Ha)
+Entropy*kb*T                       : -5.7870467971E-11 (Ha)
+Fermi level                        :  6.0929889275E-01 (Ha)
+Average force                      :  3.8968797142E-01 (Ha/Bohr)
+Maximum force                      :  3.8968797142E-01 (Ha/Bohr)
+Time for force calculation         :  3.018 (sec)
+Stress (GPa):
+   -574.3063036232      22.0437414430      15.4930514740
+     22.0437414430    -597.5244540092      65.5817694419
+     15.4930514740      65.5817694419    -812.7728506856
+Pressure                           :  6.6153453611E+02 (GPa)
+Maximum stress                     :  8.1277285069E+02 (GPa)
+Time for stress calculation        :  119.797 (sec)
+***************************************************************************
+                               Timing info                                 
+***************************************************************************
+Total walltime                     :  338.145 sec
+___________________________________________________________________________
+
+***************************************************************************
+*             Material Physics & Mechanics Group, Georgia Tech            *
+*                       PI: Phanish Suryanarayana                         *
+*                Main Developers: Qimen Xu, Abhiraj Sharma                *
+*     Acknowledgements: U.S. DOE (DE-SC0019410); NSF (1333500,1553212)    *
+***************************************************************************
+                                                                           

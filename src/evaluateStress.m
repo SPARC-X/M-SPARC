@@ -649,6 +649,11 @@ for ks = 1:S.tnkpt*S.nspin
 	end % end of loop over atoms
 end
 
+if S.usefock > 0
+    stress_exx = evaluateHybridStress(S);
+    stress = stress + stress_exx;
+end
+
 cell_measure = S.Jacb;
 if S.BCx == 0
 	cell_measure = cell_measure * S.L1;

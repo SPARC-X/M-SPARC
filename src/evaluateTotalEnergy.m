@@ -59,7 +59,8 @@ if S.nspin == 1
 		CEnergyPotential(~islt1) = gamma1./(1.0+beta1*sqrt(CEnergyPotential(~islt1))+beta2*CEnergyPotential(~islt1));
 		%rho = rho-(1e-50) ;
 		Exc = sum(CEnergyPotential.*(rho+S.rho_Tilde_at).*S.W) - C2*sum(((rho+S.rho_Tilde_at).^(4/3)).*S.W) ;
-	elseif S.xc == 2 || (S.xc == -102) || (S.xc == -108) % GGA, including vdWDF
+	elseif S.xc == 2 || S.xc == -102 || S.xc == -108 ...
+            || S.xc == 40 || S.xc == 41 || S.xc == 427 % GGA, including vdWDF
 		Exc = sum(S.e_xc.*(rho+S.rho_Tilde_at).*S.W);
         if (S.vdWDFFlag == 1) || (S.vdWDFFlag == 2) % add vdW energy in Exc
 			Exc = Exc + S.vdWenergy; 
@@ -106,17 +107,28 @@ for spin = 1:S.nspin
 end
 
 % Total free energy
-Etot = Eband + Exc - Exc_dc + Eelec_dc - S.Eself + S.E_corr + Eent;
+if S.usefock < 2
+    % Total free energy
+    Etot = Eband + Exc - Exc_dc + Eelec_dc - S.Eself + S.E_corr + Eent;
+else
+    Exc = Exc + S.Eex;
+    % Total free energy
+    Etot = Eband + Exc - Exc_dc + Eelec_dc - S.Eself + S.E_corr + Eent - 2*S.Eex;
+end
 
-%fprintf(2,' ------------------\n');
-% fprintf(' Eband = %.8f\n', Eband);
-% fprintf(' Exc = %.8f\n', Exc);
-% fprintf(' Exc_dc = %.8f\n', Exc_dc);
-% fprintf(' Eelec_dc = %.8f\n', Eelec_dc);
-% fprintf(' Eent = %.8f\n', Eent);
-% fprintf(' E_corr = %.8f\n', S.E_corr);
-% fprintf(' Eself = %.8f\n', S.Eself);
-% fprintf(' Etot = %.8f\n', Etot);
-%fprintf(2,' ------------------\n');
+
+fprintf(2,' ------------------\n');
+fprintf(' Eband = %.8f\n', Eband);
+fprintf(' Exc = %.8f\n', Exc);
+fprintf(' Exc_dc = %.8f\n', Exc_dc);
+fprintf(' Eelec_dc = %.8f\n', Eelec_dc);
+fprintf(' Eent = %.8f\n', Eent);
+fprintf(' E_corr = %.8f\n', S.E_corr);
+fprintf(' Eself = %.8f\n', S.Eself);
+if S.usefock > 1
+    fprintf(' Eex = %.8f\n', S.Eex);
+end
+fprintf(' Etot = %.8f\n', Etot);
+fprintf(2,' ------------------\n');
 
 end

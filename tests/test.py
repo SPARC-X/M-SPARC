@@ -186,6 +186,22 @@ SYSTEMS["systemname"].append('Fe2_spin_scan_kpt')
 SYSTEMS["Tags"].append(['bulk', 'orth', 'kpt','scan','spin'])
 SYSTEMS["Tols"].append([tols["E_tol"], tols["F_tol"], tols["stress_tol"]]) # E_tol(Ha/atom), F_tol(Ha/Bohr), stress_tol(%)
 ##################################################################################################################
+SYSTEMS["systemname"].append('C_HSE_aux')
+SYSTEMS["Tags"].append(['bulk', 'nonorth', 'gamma','HSE'])
+SYSTEMS["Tols"].append([tols["E_tol"], tols["F_tol"], tols["stress_tol"]]) # E_tol(Ha/atom), F_tol(Ha/Bohr), stress_tol(%)
+##################################################################################################################
+SYSTEMS["systemname"].append('NaCl_PBE0')
+SYSTEMS["Tags"].append(['bulk', 'nonorth', 'kpt','PBE0'])
+SYSTEMS["Tols"].append([tols["E_tol"], tols["F_tol"], tols["stress_tol"]]) # E_tol(Ha/atom), F_tol(Ha/Bohr), stress_tol(%)
+##################################################################################################################
+SYSTEMS["systemname"].append('O2_spin_HSE')
+SYSTEMS["Tags"].append(['molecule', 'orth', 'gamma','hse','spin'])
+SYSTEMS["Tols"].append([tols["E_tol"], tols["F_tol"], tols["stress_tol"]]) # E_tol(Ha/atom), F_tol(Ha/Bohr), stress_tol(%)
+##################################################################################################################
+SYSTEMS["systemname"].append('Si2_kpt_PBE0')
+SYSTEMS["Tags"].append(['bulk', 'nonorth', 'kpt','PBE0'])
+SYSTEMS["Tols"].append([tols["E_tol"], tols["F_tol"], tols["stress_tol"]]) # E_tol(Ha/atom), F_tol(Ha/Bohr), stress_tol(%)
+##################################################################################################################
 						# < Uncomment 3 lines below and fill in the details for the new systems>
 # SYSTEMS["systemname"].append('??type the system name??')
 # SYSTEMS["Tags"].append([??type the tags for the system as strings separated by comma??])

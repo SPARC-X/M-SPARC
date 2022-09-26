@@ -327,7 +327,11 @@ end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function nndis = calculate_min_distance(S)
-pairs = nchoosek(1:S.n_atm,2);
+if S.n_atm == 1
+    pairs = [1, 1];
+else 
+    pairs = nchoosek(1:S.n_atm,2);
+end
 p1 = S.Atoms(pairs(:,1),:);
 p2 = S.Atoms(pairs(:,2),:);
 

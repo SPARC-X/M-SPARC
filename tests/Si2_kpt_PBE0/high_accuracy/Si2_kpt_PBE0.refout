@@ -1,0 +1,202 @@
+***************************************************************************
+*                      M-SPARC v1.0.0 (Sep 23, 2022)                      *
+*   Copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech   *
+*           Distributed under GNU General Public License 3 (GPL)          *
+*                Date: 23-Sep-2022  Start time: 14:43:14                  *
+***************************************************************************
+                           Input parameters                                
+***************************************************************************
+LATVEC_SCALE: 6.000000 6.000000 6.000000 
+LATVEC:
+0.667124384994991 0.741249316661101 0.074124931666110 
+0.074124931666110 0.741249316661101 0.667124384994991 
+0.667124384994991 0.074124931666110 0.741249316661101 
+FD_GRID: 60 60 60
+FD_ORDER: 12
+BC: P P P
+KPOINT_GRID: 2 2 2
+KPOINT_SHIFT: 5.000000e-01 5.000000e-01 5.000000e-01
+ELEC_TEMP_TYPE: fermi-dirac
+SMEARING: 0.001000000
+CHEB_DEGREE: 50
+NSTATES: 10
+EXCHANGE_CORRELATION: PBE0
+CALC_STRESS: 1
+MAXIT_SCF: 100
+TOL_SCF: 1.00E-06
+TOL_POISSON: 1.00E-08
+TOL_LANCZOS: 1.00E-02
+TOL_PSEUDOCHARGE: 1.00E-08
+MIXING_VARIABLE: density
+MIXING_PRECOND: kerker
+TOL_PRECOND: 1.00E-05
+PRECOND_KERKER_KTF: 1.00
+PRECOND_KERKER_THRESH: 0.10
+MIXING_PARAMETER: 0.30
+MIXING_HISTORY: 7
+PULAY_FREQUENCY: 1
+PULAY_RESTART: 0
+REFERENCE_CUTOFF: 0.50
+RHO_TRIGGER: 4
+FIX_RAND: 0
+PRINT_FORCES: 1
+PRINT_ATOMS: 1
+PRINT_EIGEN: 0
+PRINT_DENSITY: 0
+OUTPUT_FILE: ../dev_tests/testsuit/Si2_kpt_PBE0/high_accuracy/Si2_kpt_PBE0.out
+MAXIT_FOCK: 20
+MINIT_FOCK: 2
+TOL_FOCK: 2.00E-07
+TOL_SCF_INIT: 1.00E-03
+EXX_METHOD: FOURIER_SPACE
+ACE_FLAG: 1
+EXX_ACE_VALENCE_STATES: 3
+EXX_DOWNSAMPLING: 1 1 1
+EXX_DIVERGENCE: SPHERICAL
+***************************************************************************
+                                Cell                                       
+***************************************************************************
+Lattice vectors:
+4.002746309969947 4.447495899966606 0.444749589996660 
+0.444749589996660 4.447495899966606 4.002746309969947 
+4.002746309969947 0.444749589996660 4.447495899966606 
+Volume                  :  1.2668032278E+02 (Bohr^3)
+***************************************************************************
+                             Initialization                                
+***************************************************************************
+Mesh spacing                       :  0.100000 (Bohr)
+Number of symmetry adapted k-points:  4
+Output printed to                  :  ../dev_tests/testsuit/Si2_kpt_PBE0/high_accuracy/Si2_kpt_PBE0.out
+Total number of atom types         :  1
+Total number of atoms              :  2
+Total number of electrons          :  8
+Atom type 1  (valence electrons)   :  Si 4
+Pseudopotential                    :  ../Si_ONCV_PBE-1.2.psp8
+lloc                               :  4
+Pseudocharge radii of atom type 1  :  8.90 8.90 8.90
+Number of atoms of type 1          :  2
+Estimated total memory usage       :  1.10 GB
+=====================================================================
+                    Self Consistent Field (SCF#1)                     
+=====================================================================
+Iteration     Free Energy (Ha/atom)   SCF Error        Timing (sec)
+1            -3.6003150028E+00        2.042E-01        1778.814
+2            -3.6863456166E+00        1.623E-01        394.208
+3            -3.6942350260E+00        7.502E-02        397.230
+4            -3.6951577453E+00        2.519E-02        389.194
+5            -3.6953978405E+00        7.408E-03        389.781
+6            -3.6954437533E+00        3.230E-03        385.829
+7            -3.6954493845E+00        9.732E-04        382.517
+Total number of SCF: 7     
+
+No.1 Exx outer loop:
+1            -3.7018069492E+00        5.337E-03        1097.944
+2            -3.7018927407E+00        4.256E-03        1097.946
+3            -3.7018931947E+00        3.190E-03        398.132
+4            -3.7018916731E+00        9.168E-04        398.684
+5            -3.7018915860E+00        3.897E-04        397.142
+6            -3.7018916261E+00        3.187E-04        396.434
+7            -3.7018916075E+00        1.317E-04        393.435
+8            -3.7018916074E+00        1.835E-05        389.695
+9            -3.7018915941E+00        1.325E-05        387.929
+10           -3.7018916279E+00        2.261E-06        386.049
+11           -3.7018915723E+00        9.824E-07        385.279
+Total number of SCF: 11    
+Exx outer loop error: 3.5257e-04 
+
+No.2 Exx outer loop:
+1            -3.7019478995E+00        1.338E-03        1132.122
+2            -3.7019491431E+00        9.358E-04        1132.122
+3            -3.7019490378E+00        4.427E-04        403.352
+4            -3.7019489508E+00        6.095E-05        406.705
+5            -3.7019489409E+00        4.321E-05        404.070
+6            -3.7019489719E+00        1.135E-05        398.325
+7            -3.7019489800E+00        4.145E-06        399.914
+8            -3.7019490083E+00        2.171E-06        402.905
+9            -3.7019489746E+00        7.413E-07        394.289
+Total number of SCF: 9     
+Exx outer loop error: 1.0638e-04 
+
+No.3 Exx outer loop:
+1            -3.7019530423E+00        3.866E-04        1105.163
+2            -3.7019527604E+00        2.999E-04        1105.171
+3            -3.7019527292E+00        3.700E-05        398.657
+4            -3.7019527507E+00        1.814E-05        389.073
+5            -3.7019527497E+00        6.606E-06        393.090
+6            -3.7019527518E+00        3.127E-06        386.699
+7            -3.7019526826E+00        1.035E-06        386.109
+8            -3.7019527686E+00        4.176E-07        388.802
+Total number of SCF: 8     
+Exx outer loop error: 2.9701e-05 
+
+No.4 Exx outer loop:
+1            -3.7019530832E+00        1.357E-04        1101.019
+2            -3.7019530693E+00        1.042E-04        1101.019
+3            -3.7019530825E+00        1.139E-05        395.140
+4            -3.7019531091E+00        5.004E-06        388.198
+5            -3.7019530842E+00        7.352E-07        386.821
+Total number of SCF: 5     
+Exx outer loop error: 8.3520e-06 
+
+No.5 Exx outer loop:
+1            -3.7019538325E+00        5.772E-05        1102.133
+2            -3.7019530716E+00        4.238E-05        1102.134
+3            -3.7019531007E+00        2.959E-06        393.651
+4            -3.7019531522E+00        1.260E-06        390.463
+5            -3.7019531356E+00        2.879E-07        384.382
+Total number of SCF: 5     
+Exx outer loop error: 2.4390e-06 
+
+No.6 Exx outer loop:
+1            -3.7019533787E+00        2.717E-05        1095.846
+2            -3.7019530827E+00        1.925E-05        1095.846
+3            -3.7019530751E+00        9.522E-07        390.910
+Total number of SCF: 3     
+Exx outer loop error: 7.4315e-07 
+
+No.7 Exx outer loop:
+1            -3.7019531971E+00        1.317E-05        1099.580
+2            -3.7019531099E+00        9.296E-06        1099.580
+3            -3.7019530984E+00        7.102E-07        388.140
+Total number of SCF: 3     
+Exx outer loop error: 2.4452e-07 
+
+No.8 Exx outer loop:
+1            -3.7019533072E+00        6.413E-06        1092.820
+2            -3.7019531175E+00        4.608E-06        1092.820
+3            -3.7019531152E+00        4.607E-07        388.746
+Total number of SCF: 3     
+Exx outer loop error: 8.6858e-08 
+====================================================================
+                                Energy                              
+====================================================================
+Free energy per atom               : -3.7019531152E+00 (Ha/atom)
+Total free energy                  : -7.4039062304E+00 (Ha)
+Band structure energy              :  2.8510102546E+00 (Ha)
+Exchange correlation energy        : -2.8882740337E+00 (Ha)
+Self and correction energy         : -5.3952421421E+01 (Ha)
+Entropy*kb*T                       : -6.9033382619E-11 (Ha)
+Fermi level                        :  7.3478985738E-01 (Ha)
+Average force                      :  2.9349065169E-01 (Ha/Bohr)
+Maximum force                      :  2.9349065169E-01 (Ha/Bohr)
+Time for force calculation         :  38.703 (sec)
+Stress (GPa):
+   -257.8423690783      73.3385826523      89.9514732703
+     73.3385826523    -351.9565434009      64.8363210351
+     89.9514732703      64.8363210351    -304.1266071572
+Pressure                           :  3.0464183988E+02 (GPa)
+Maximum stress                     :  3.5195654340E+02 (GPa)
+Time for stress calculation        :  7748.306 (sec)
+***************************************************************************
+                               Timing info                                 
+***************************************************************************
+Total walltime                     :  36676.285 sec
+___________________________________________________________________________
+
+***************************************************************************
+*             Material Physics & Mechanics Group, Georgia Tech            *
+*                       PI: Phanish Suryanarayana                         *
+*                Main Developers: Qimen Xu, Abhiraj Sharma                *
+*     Acknowledgements: U.S. DOE (DE-SC0019410); NSF (1333500,1553212)    *
+***************************************************************************
+                                                                           
