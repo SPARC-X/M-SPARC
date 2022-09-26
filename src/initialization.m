@@ -173,6 +173,30 @@ elseif strcmp(S.XC, 'SCAN')
         addpath('mgga/');
     end
     S.xc = 4;
+elseif strcmp(S.XC, 'HF')
+	S.xc = 40;
+    S.usefock = 1;
+    if ispc % windows
+		addpath('exx\');
+	else % max/linux
+		addpath('exx/');
+    end
+elseif strcmp(S.XC, 'PBE0')
+	S.xc = 41;
+    S.usefock = 1;
+    if ispc % windows
+		addpath('exx\');
+	else % max/linux
+		addpath('exx/');
+    end
+elseif strcmp(S.XC, 'HSE')
+    S.xc = 427;
+    S.usefock = 1;
+    if ispc % windows
+		addpath('exx\');
+	else % max/linux
+		addpath('exx/');
+    end
 end
 
 if S.d3Flag == 1 
@@ -781,6 +805,10 @@ fprintf(' Done. (%.3f sec)\n', toc(t1));
 % Estimate memory usage
 S.memory_usage = estimate_memory(S);
 
+if S.usefock == 1
+    S = exx_initialization(S);
+end
+
 end
 
 
@@ -1112,6 +1140,9 @@ S.latvec_scale_x = 0.0;
 S.latvec_scale_y = 0.0;
 S.latvec_scale_z = 0.0;
 
+% NLCC
+S.NLCC_flag = 0;
+
 % Origin of the unit cell wrt some global origin
 S.xin = 0;  
 S.yin = 0;
@@ -1125,6 +1156,20 @@ S.d3Flag = 0;
 S.d3Rthr = 1600.0;
 S.d3Cn_thr = 625.0;
 
+% hybrid functionals
+S.usefock = 0;
+S.MAXIT_FOCK = -1;
+S.MINIT_FOCK = -1;
+S.FOCK_TOL = -1;
+S.hyb_mixing = 0.0;
+S.hyb_range_fock = -1;
+S.hyb_range_pbe = -1;
+S.ExxMethod = '';
+S.SCF_tol_init = -1;
+S.ACEFlag = 0;
+S.EXXACEVal_state = 3;
+S.exx_downsampling = [1 1 1];
+S.ExxDivMethod = '';
 end
 
 
@@ -1156,7 +1201,7 @@ end
 
 start_time = fix(clock);
 fprintf(fileID,'***************************************************************************\n');
-fprintf(fileID,'*                      M-SPARC v1.0.0 (Aug 18, 2022)                      *\n');
+fprintf(fileID,'*                      M-SPARC v1.0.0 (Sep 26, 2022)                      *\n');
 fprintf(fileID,'*   Copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech   *\n');
 fprintf(fileID,'*           Distributed under GNU General Public License 3 (GPL)          *\n');
 fprintf(fileID,'*                Date: %s  Start time: %02d:%02d:%02d                  *\n',date,start_time(4),start_time(5),start_time(6));
@@ -1367,6 +1412,26 @@ end
 fprintf(fileID,'OUTPUT_FILE: %s\n',outfname);
 if (S.RestartFlag == 1)
 	fprintf(fileID,'RESTART_FLAG: %d\n',S.RestartFlag);
+end
+
+if(S.usefock == 1)
+    fprintf(fileID,'MAXIT_FOCK: %d\n',S.MAXIT_FOCK);
+    fprintf(fileID,'MINIT_FOCK: %d\n',S.MINIT_FOCK);
+    fprintf(fileID,'TOL_FOCK: %.2E\n',S.FOCK_TOL);
+    fprintf(fileID,'TOL_SCF_INIT: %.2E\n',S.SCF_tol_init);
+    fprintf(fileID,'EXX_METHOD: %s\n',S.ExxMethod);
+    fprintf(fileID,'ACE_FLAG: %d\n',S.ACEFlag);
+    if S.ACEFlag == 1
+        fprintf(fileID,'EXX_ACE_VALENCE_STATES: %d\n',S.EXXACEVal_state);
+    end
+    if S.BC == 2
+        fprintf(fileID,'EXX_DOWNSAMPLING: %d %d %d\n',S.exx_downsampling);
+    end
+    fprintf(fileID,'EXX_DIVERGENCE: %s\n', S.ExxDivMethod);
+    if S.xc == 427
+        fprintf(fileID,'EXX_RANGE_FOCK: %.4f\n', S.hyb_range_fock);
+        fprintf(fileID,'EXX_RANGE_PBE: %.4f\n', S.hyb_range_pbe);
+    end
 end
 
 if(S.d3Flag == 1)
@@ -1677,7 +1742,8 @@ function [S] = Generate_kpts(S)
 	end
 
 	% Monkhorst-pack grid for Brillouin zone sampling
-	MPG_typ1 = @(nkpt) (2*(1:nkpt) - nkpt - 1)/2; % MP grid points for infinite group order
+% 	MPG_typ1 = @(nkpt) (2*(1:nkpt) - nkpt - 1)/2; % MP grid points for infinite group order
+    MPG_typ1 = @(nkpt) (-floor((nkpt - 1)/2):(-floor((nkpt - 1)/2)+nkpt-1));
 	MPG_typ2 = @(nkpt) (0:nkpt-1); % MP grid points for finite group order
 
 	if S.cell_typ < 3
@@ -1713,8 +1779,8 @@ function [S] = Generate_kpts(S)
 
 	[kptgrid_X, kptgrid_Y, kptgrid_Z] = ndgrid(kptgrid_x,kptgrid_y,kptgrid_z);
 	kptgrid = [reshape(kptgrid_X,[],1),reshape(kptgrid_Y,[],1),reshape(kptgrid_Z,[],1)];
-	disp(' kpoint grid before symmetry:');
-	disp(kptgrid);
+	disp(' reduced kpoint grid before symmetry:');
+	disp(kptgrid*diag([S.L1/2/pi,S.L2/2/pi,S.L3/2/pi]));
 	
 	tnkpt = prod(nkpt);
 	wkpt = ones(tnkpt,1)/tnkpt;% weights for k-points
@@ -1739,12 +1805,61 @@ function [S] = Generate_kpts(S)
 		tnkpt = size(wkpt,1);
 	end
 
-	disp(' kpoint grid after symmetry:');	
-	disp(kptgrid);
+	disp(' reduced kpoint grid after symmetry:');	
+	disp(kptgrid*diag([S.L1/2/pi,S.L2/2/pi,S.L3/2/pi]));
 	% Store into the structure
 	S.kptgrid = kptgrid;
 	S.tnkpt   = tnkpt;
 	S.wkpt    = wkpt;
+    
+    % Generate kpoints grid for fock exchange
+    if S.usefock == 1
+        S.isgamma = 0;
+        if tnkpt == 1 && sum(kptgrid == [0,0,0])==3
+            S.isgamma = 1;
+        end
+        
+        % Use part of full k-point grid
+        if S.exx_downsampling(1) == 0
+            kptgrid_x_hf = 0;
+            if sum(find(ismembertol(kptgrid_x,0,1e-8))) == 0
+                error("Gamma point is not one of the k-vectors. Please use positive EXX_DOWNSAMPLING or change k-point grid in first direction.");
+            end
+        else
+            range = S.exx_downsampling(1):S.exx_downsampling(1):nkpt(1);
+            kptgrid_x_hf = kptgrid_x(range);
+        end
+        
+        if S.exx_downsampling(2) == 0
+            kptgrid_y_hf = 0;
+            if sum(find(ismembertol(kptgrid_y,0,1e-8))) == 0
+                error("Gamma point is not one of the k-vectors. Please use positive EXX_DOWNSAMPLING or change k-point grid in second direction.");
+            end
+        else
+            range = S.exx_downsampling(2):S.exx_downsampling(2):nkpt(2);
+            kptgrid_y_hf = kptgrid_y(range);
+        end
+        
+        if S.exx_downsampling(3) == 0
+            kptgrid_z_hf = 0;
+            if sum(find(ismembertol(kptgrid_z,0,1e-8))) == 0
+                error("Gamma point is not one of the k-vectors. Please use positive EXX_DOWNSAMPLING or change k-point grid in third direction.");
+            end
+        else
+            range = S.exx_downsampling(3):S.exx_downsampling(3):nkpt(3);
+            kptgrid_z_hf = kptgrid_z(range);
+        end
+        
+        [kptgrid_X_HF, kptgrid_Y_HF, kptgrid_Z_HF] = ndgrid(kptgrid_x_hf,kptgrid_y_hf,kptgrid_z_hf);
+        kptgrid_HF = [reshape(kptgrid_X_HF,[],1),reshape(kptgrid_Y_HF,[],1),reshape(kptgrid_Z_HF,[],1)];
+        disp(' reduced kpoint grid for Fock Exchange operator.');
+        disp(kptgrid_HF*diag([S.L1/2/pi,S.L2/2/pi,S.L3/2/pi]));
+        
+        S.kptgridhf = kptgrid_HF;
+        S.tnkpthf   = length(kptgrid_x_hf)*length(kptgrid_y_hf)*length(kptgrid_z_hf);
+        S.wkpthf    = ones(S.tnkpthf,1)/S.tnkpthf;
+        S.nkpthf = [length(kptgrid_x_hf), length(kptgrid_y_hf), length(kptgrid_z_hf)];
+    end
 end
 
 function [S] = set_D3_coefficients(S)

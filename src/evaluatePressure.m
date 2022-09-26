@@ -494,6 +494,9 @@ for ks = 1:S.tnkpt*S.nspin
 	end % end of loop over atoms    
 end 
 
+if S.usefock > 1
+    pres_exx = evaluateHybridPressure(S);
+end
 
 cell_measure = S.Jacb;
 if S.BCx == 0
@@ -506,7 +509,11 @@ if S.BCz == 0
 	cell_measure = cell_measure * S.L3;
 end
 
-pressure = -(P_eng + P_elec + P_corr + P_nl + P_nlcc)/(3 * cell_measure);
+if S.usefock > 0
+    pressure = -(P_eng + P_elec + P_corr + P_nl + pres_exx + P_nlcc)/(3 * cell_measure);
+else
+    pressure = -(P_eng + P_elec + P_corr + P_nl + P_nlcc)/(3 * cell_measure);
+end
 
 if S.d3Flag == 1 
 	pressure = pressure - (S.d3stress(1,1) + S.d3stress(2,2) + S.d3stress(3,3))/3;

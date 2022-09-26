@@ -73,7 +73,6 @@ else
 	fseek(fid, -4, 'cof');
 end
 
-S.NLCC_flag = 0;
 % read core density
 if fchrg > 0
 	uu = zeros(mmax,1);

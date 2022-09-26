@@ -1,4 +1,11 @@
 ----------------
+Sep 26, 2022
+Name: Xin Jing
+* Add hybrid 
+* fix a bug in NLCC
+* use the same kpt grid as SPARC
+
+----------------
 Aug 18, 2022
 Name: Boqin Zhang
 * Add spin-polarized vdW-DF

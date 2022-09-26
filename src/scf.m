@@ -46,8 +46,7 @@ S.mixing_hist_fkm1 = zeros(S.N*S.nspin,1);
 
 if S.nspin == 1
 	if S.MixingVariable == 0
-		S.mixing_hist_xkm1 = S.rho;
-		rho_temp = S.rho;
+		S.mixing_hist_xkm1 = S.rho;		
 	else
 		% for potential mixing, we store the mean-0 part only
 		if S.BC == 2
@@ -55,20 +54,17 @@ if S.nspin == 1
 		else
 			Veff_mean = 0.0;
 		end
-		S.mixing_hist_xkm1 = S.Veff - Veff_mean;
-		Veff_temp = S.Veff;
+		S.mixing_hist_xkm1 = S.Veff - Veff_mean;		
 	end
 else
 	if S.MixingVariable == 0
 		RHO_temp = vertcat(S.rho(:,2),S.rho(:,3));
-		S.mixing_hist_xkm1 = RHO_temp;
-		rho_temp = S.rho;
+		S.mixing_hist_xkm1 = RHO_temp;		
 	else
 		VEFF_temp = vertcat(S.Veff(:,1),S.Veff(:,2));
 		% for potential mixing, we store the mean-0 part only
 		VEFF_temp_mean = mean(VEFF_temp);
-		S.mixing_hist_xkm1 = VEFF_temp - VEFF_temp_mean;
-		Veff_temp = S.Veff;
+		S.mixing_hist_xkm1 = VEFF_temp - VEFF_temp_mean;		
 	end
 end
 
@@ -86,6 +82,110 @@ if(S.ForceCount == 1)
 end
 % S.EigVal = zeros(S.Nev,S.tnkpt*S.nspin);
 
+if S.usefock == 1
+    scf_tol_init = S.SCF_tol_init;
+else
+    scf_tol_init = S.SCF_tol;
+end
+
+S.lambda_f = 0.0;
+S = scf_loop(S,scf_tol_init);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%          SCF LOOP Exact Exchange            %%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Exact exchange potential 
+if S.usefock == 1
+    S.usefock = S.usefock+1;
+else
+    return;
+end
+
+% Exchange-correlation potential
+S = exchangeCorrelationPotential(S);
+
+% Effective potential
+S.Veff = real(bsxfun(@plus,S.phi,S.Vxc));
+
+% Note: No need to update mixing_hist_xk. Done in mixing of first iteration.
+
+% Exact exchange potential parameters
+err_Exx = S.FOCK_TOL+1;
+count_Exx = 1;
+
+S.lambda_f = 0.0;
+while(count_Exx <= S.MAXIT_FOCK)
+    % Store orbitals and occupations for outer loop
+    S.psi_outer = S.psi;                                                                                                                                                                                                                                                                                                 
+    S.occ_outer = S.occ;
+    
+    if S.ACEFlag == 1
+        S = ace_operator(S);
+    end
+    
+    % Calculate estimation of Exact Exchange energy
+    S = evaluateExactExchangeEnergy(S);
+    
+    if count_Exx > 1
+        err_Exx = abs(S.Eex - Eexx_pre)/S.n_atm;        
+        fprintf(' Exx outer loop error: %.4e \n',err_Exx) ;
+        fileID = fopen(S.outfname,'a');
+        fprintf(fileID, 'Exx outer loop error: %.4e \n', err_Exx);
+        fclose(fileID);
+
+        if err_Exx < S.FOCK_TOL && count_Exx > S.MINIT_FOCK
+            break;
+        end
+    end
+    Eexx_pre = S.Eex;
+    
+    fileID = fopen(S.outfname,'a');
+    fprintf(fileID, '\nNo.%d Exx outer loop:\n', count_Exx);
+    fclose(fileID);
+    
+    % Start SCF with hybrid functional
+    S = scf_loop(S,S.SCF_tol,count_Exx);
+    count_Exx = count_Exx + 1;
+end % end of Vxx loop
+
+if count_Exx == S.MAXIT_FOCK
+    % update exact exchange energy
+    S.Etotal = S.Etotal + 2*S.Eex;
+    S.Exc = S.Exc - S.Eex;
+    % Calculate accurate Exact Exchange energy
+    S = evaluateExactExchangeEnergy(S);
+    % update exact exchange energy
+    S.Etotal = S.Etotal - 2*S.Eex;
+    S.Exc = S.Exc + S.Eex;
+end
+
+fprintf('\n Finished outer loop in %d steps!\n', (count_Exx - 1));
+fprintf(' ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ \n');
+
+if count_Exx > S.MAXIT_FOCK && err_Exx > S.FOCK_TOL
+    disp(' Exact Exchange outer loop did not converge. Maximum iterations reached!');
+    fileID = fopen(S.outfname,'a');
+    fprintf(fileID, ...
+        ' Warning: Exact Exchange outer loop did not converge. Maximum iterations reached!\n ');
+    fclose(fileID);
+end
+
+% make sure next scf starts with normal scf
+S.usefock = S.usefock+1;
+end
+
+
+function S = scf_loop(varargin)
+S = varargin{1};
+scf_tol = varargin{2};
+count_Exx = -1;
+
+if nargin == 3
+	count_Exx = varargin{3};
+elseif nargin > 3 || nargin < 2
+	error('Too many input arguments.');
+end
 
 % SCF LOOP 
 count = 1;
@@ -97,8 +197,12 @@ max_scf_iter = S.MAXIT_SCF;
 min_scf_iter = S.MINIT_SCF;
 if max_scf_iter < min_scf_iter
 	min_scf_iter = max_scf_iter;
+end 
+
+if count_Exx > 0
+    min_scf_iter = 1;
+    max_count_first_relax = 1;
 end
-S.lambda_f = 0.0;
 
 % Spectrum bounds and filter cutoff for Chebyshev filtering
 bup = zeros(S.tnkpt*S.nspin,1);
@@ -107,16 +211,38 @@ lambda_cutoff = zeros(S.tnkpt*S.nspin,1);
 
 % time for one scf
 t_SCF = 0; 
+if S.nspin == 1
+	if S.MixingVariable == 0
+		rho_temp = S.rho;
+    else
+		Veff_temp = S.Veff;
+	end
+else
+	if S.MixingVariable == 0
+        RHO_temp = vertcat(S.rho(:,2),S.rho(:,3));
+		rho_temp = S.rho;
+    else
+        VEFF_temp = vertcat(S.Veff(:,1),S.Veff(:,2));
+		% for potential mixing, we store the mean-0 part only
+		Veff_temp = S.Veff;
+	end
+end
 
 % start scf loop
-while (err > S.SCF_tol && count_SCF <= max_scf_iter || count_SCF <= min_scf_iter)
+while (err > scf_tol && count_SCF <= max_scf_iter || count_SCF <= min_scf_iter)
 	tic_cheb = tic;
 	if(count_SCF > 1)
 		fprintf(' ========================= \n');
+        if S.usefock > 1
+            fprintf(' Outer loop iteration number: %2d\n', count_Exx);
+        end
 		fprintf(' Relaxation iteration: %2d \n SCF iteration number: %2d \n',S.Relax_iter,count_SCF);
 		fprintf(' ========================= \n');
 	else
 		fprintf(' ============================================= \n');
+        if S.usefock > 1
+            fprintf(' Outer loop iteration number: %2d\n', count_Exx);
+        end
 		fprintf(' Relaxation iteration: %2d\n SCF iteration number:  1, Chebyshev cycle: %d \n',S.Relax_iter,count);
 		fprintf(' ============================================= \n');
 	end
@@ -128,7 +254,8 @@ while (err > S.SCF_tol && count_SCF <= max_scf_iter || count_SCF <= min_scf_iter
 	S = occupations(S);
 	
 	if (((S.ForceCount == 1) && (count >= max_count_first_relax)) ...
-			|| ((S.ForceCount > 1) && (count >= max_count_gen_relax)))
+			|| ((S.ForceCount > 1) && (count >= max_count_gen_relax))...
+            || (S.usefock > 1 && count >= max_count_gen_relax))
 		% for density mixing, can estimate energy based on input rho and
 		% input veff, will recalculate energy once scf is converged
 		if S.MixingVariable == 0

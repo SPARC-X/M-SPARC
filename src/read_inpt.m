@@ -42,6 +42,7 @@ Flag_eqT = 0;
 %Flag_ionT_end = 0;
 Flag_cell = 0;
 Flag_latvec_scale = 0;
+Flag_kptshift = 0;
 
 while(~feof(fid1))
 	C_inpt = textscan(fid1,'%s',1,'delimiter',' ','MultipleDelimsAsOne',1);
@@ -167,6 +168,7 @@ while(~feof(fid1))
 	elseif (strcmp(str,'KPOINT_SHIFT:'))	
 		C_param = textscan(fid1,'%f %f %f',1,'delimiter',' ','MultipleDelimsAsOne',1);	
 		S.kptshift = cell2mat(C_param);	
+        Flag_kptshift = 1;
 		textscan(fid1,'%s',1,'delimiter','\n','MultipleDelimsAsOne',0); % skip current line    
 	elseif (strcmp(str,'ELEC_TEMP_TYPE:'))
 		Flag_smear_typ = Flag_smear_typ + 1;
@@ -615,6 +617,48 @@ while(~feof(fid1))
 		C_param = textscan(fid1,'%s',1,'delimiter',' ','MultipleDelimsAsOne',1);
 		S.filename_out = char(C_param{:});
 		textscan(fid1,'%s',1,'delimiter','\n','MultipleDelimsAsOne',0); % skip current line
+    elseif (strcmp(str,'MAXIT_FOCK:'))	  
+		C_param = textscan(fid1,'%f',1,'delimiter',' ','MultipleDelimsAsOne',1);
+		S.MAXIT_FOCK = C_param{1};
+		textscan(fid1,'%s',1,'delimiter','\n','MultipleDelimsAsOne',0); % skip current line
+    elseif (strcmp(str,'TOL_FOCK:'))	  
+		C_param = textscan(fid1,'%f',1,'delimiter',' ','MultipleDelimsAsOne',1);
+		S.FOCK_TOL = C_param{1};
+		textscan(fid1,'%s',1,'delimiter','\n','MultipleDelimsAsOne',0); % skip current line
+    elseif (strcmp(str,'TOL_SCF_INIT:'))	  
+		C_param = textscan(fid1,'%f',1,'delimiter',' ','MultipleDelimsAsOne',1);
+		S.SCF_tol_init = C_param{1};
+		textscan(fid1,'%s',1,'delimiter','\n','MultipleDelimsAsOne',0); % skip current line
+    elseif (strcmp(str,'EXX_METHOD:'))	  
+		C_param = textscan(fid1,'%s',1,'delimiter',' ','MultipleDelimsAsOne',1);
+		S.ExxMethod = char(C_param{:});
+		textscan(fid1,'%s',1,'delimiter','\n','MultipleDelimsAsOne',0); % skip current line
+    elseif (strcmp(str,'ACE_FLAG:'))	  
+		C_param = textscan(fid1,'%f',1,'delimiter',' ','MultipleDelimsAsOne',1);
+		S.ACEFlag = char(C_param{:});
+		textscan(fid1,'%s',1,'delimiter','\n','MultipleDelimsAsOne',0); % skip current line
+    elseif (strcmp(str,'EXX_ACE_VALENCE_STATES:'))	  
+		C_param = textscan(fid1,'%f',1,'delimiter',' ','MultipleDelimsAsOne',1);
+		S.EXXACEVal_state = C_param{1};
+		textscan(fid1,'%s',1,'delimiter','\n','MultipleDelimsAsOne',0); % skip current line
+    elseif (strcmp(str,'EXX_DOWNSAMPLING:'))
+		C_param = textscan(fid1,'%f %f %f',1,'delimiter',' ','MultipleDelimsAsOne',1);
+		S.exx_downsampling(1) = C_param{1};
+		S.exx_downsampling(2) = C_param{2};
+		S.exx_downsampling(3) = C_param{3};
+		textscan(fid1,'%s',1,'delimiter','\n','MultipleDelimsAsOne',0); % skip current line
+    elseif (strcmp(str,'EXX_DIVERGENCE:'))
+		C_param = textscan(fid1,'%s',1,'delimiter',' ','MultipleDelimsAsOne',1);
+		S.ExxDivMethod = char(C_param{:});
+		textscan(fid1,'%s',1,'delimiter','\n','MultipleDelimsAsOne',0); % skip current line
+    elseif (strcmp(str,'EXX_RANGE_FOCK:'))	  
+		C_param = textscan(fid1,'%f',1,'delimiter',' ','MultipleDelimsAsOne',1);
+		S.hyb_range_fock = C_param{1};
+		textscan(fid1,'%s',1,'delimiter','\n','MultipleDelimsAsOne',0); % skip current line
+    elseif (strcmp(str,'EXX_RANGE_PBE:'))	  
+		C_param = textscan(fid1,'%f',1,'delimiter',' ','MultipleDelimsAsOne',1);
+		S.hyb_range_pbe = C_param{1};
+		textscan(fid1,'%s',1,'delimiter','\n','MultipleDelimsAsOne',0); % skip current line
 	else 
 		error('\nCannot recognize input variable identifier: "%s"\n',str);
 		%fprintf('\nCannot recognize input flag in .inpt file: "%s"\n',str);
@@ -667,6 +711,10 @@ if Flag_latvec_scale == 1
     S.L1 = S.latvec_scale_x * norm(S.lat_vec(1,:));
     S.L2 = S.latvec_scale_y * norm(S.lat_vec(2,:));
     S.L3 = S.latvec_scale_z * norm(S.lat_vec(3,:));
+end
+
+if Flag_kptshift == 0
+    S.kptshift = 0.5*(1-mod(S.nkpt,2));
 end
 end
 
