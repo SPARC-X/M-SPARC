@@ -27,8 +27,12 @@ for JJ_a = 1:S.n_atm % loop over all the atoms
 	Atom(JJ_a).lloc = lloc;
 	Atom(JJ_a).lmax = lmax;
 	Atom(JJ_a).psptyp = S.Atm(count_typ).psptyp;
+    Atom(JJ_a).count_typ = count_typ;
 	if S.Atm(count_typ).psptyp == 1
 		Atom(JJ_a).nproj = S.Atm(count_typ).nproj;
+        if S.Atm(count_typ).pspsoc == 1
+            Atom(JJ_a).nprojso = S.Atm(count_typ).nprojso;
+        end
 	end
 	
 	% Atom position of atom JJ_a
@@ -232,7 +236,36 @@ for JJ_a = 1:S.n_atm % loop over all the atoms
 							end
 						end
 					end
-				end
+                end
+                
+                if S.Atm(count_typ).pspsoc == 1
+                    % implementation for psp8 format
+                    angnumso = 0;
+					for l=1:lmax
+						if l~=lloc
+							for pp = 1:S.Atm(count_typ).nprojso(l)
+								for m=-l:l
+									angnumso = angnumso + 1;
+								end
+							end
+						end
+					end
+					Atom(JJ_a).angnumso = angnumso;
+					Atom(JJ_a).rcImage(imgRcCount).Chiso_mat = zeros(rc_n_nodes, Atom(JJ_a).angnumso);
+					count_pp = 1;
+					for l=1:lmax
+						if l~=lloc
+							for pp = 1:S.Atm(count_typ).nprojso(l)
+								UdV_Jl= interp1(S.Atm(count_typ).r_grid_vloc, S.Atm(count_typ).Potso(l).proj(:,pp),rc_dd_nl,'spline');
+								for m=-l:l
+									Ylm = sphericalHarmonics(rc_XX,rc_YY,rc_ZZ,l,m,'complex');
+									Atom(JJ_a).rcImage(imgRcCount).Chiso_mat(:,count_pp) = Atom(JJ_a).rcImage(imgRcCount).Chiso_mat(:,count_pp) + UdV_Jl .* Ylm;
+									count_pp = count_pp + 1;
+								end
+							end
+						end
+					end
+                end
 
 			else
 				isImgRc = false;
@@ -263,8 +296,56 @@ for JJ_a = 1:S.n_atm % loop over all the atoms
 				end
 			end
 		end
-	end
+    end
 	
+    if S.Atm(count_typ).pspsoc == 1
+        % gamma for first term 0.5*m*gamma_Jln
+        Atom(JJ_a).term1_index_so = zeros(Atom(JJ_a).angnumso,1);
+        Atom(JJ_a).term1_gammaso_Jl = zeros(Atom(JJ_a).angnumso,1);
+        indx_so = 0;
+        count_pp = 0;
+        for l=1:lmax
+            if l~=lloc
+                for pp = 1:S.Atm(count_typ).nprojso(l)
+                    gammaso_Jl = S.Atm(count_typ).Potso(l).gamma_Jl(pp);
+                    for m=-l:l
+                        indx_so = indx_so + 1;
+                        % only store the projectors with nonzero scaled factor
+                        if m ~= 0
+                            count_pp = count_pp + 1;
+                            Atom(JJ_a).term1_index_so(count_pp) = indx_so;
+                            Atom(JJ_a).term1_gammaso_Jl(count_pp,1) = 0.5*m*gammaso_Jl;
+                        end
+                    end
+                end
+            end
+        end
+        Atom(JJ_a).ncol_term1 = count_pp;
+        
+        % gamma and indexing for second term
+        Atom(JJ_a).term2_index_so = zeros(Atom(JJ_a).angnumso,1);
+        Atom(JJ_a).term2_gammaso_Jl = zeros(Atom(JJ_a).angnumso,1);
+        indx_so = 0;
+        count_pp = 0;
+        for l=1:lmax
+            if l~=lloc
+                for pp = 1:S.Atm(count_typ).nprojso(l)
+                    gammaso_Jl = S.Atm(count_typ).Potso(l).gamma_Jl(pp);
+                    for m=-l:l
+                        indx_so = indx_so + 1;
+                        % only store the projectors with nonzero scaled factor
+                        if m < l
+                            count_pp = count_pp + 1;
+                            Atom(JJ_a).term2_index_so(count_pp) = indx_so;
+                            Atom(JJ_a).term2_gammaso_Jl(count_pp) = sqrt(l*(l+1)-m*(m+1))*gammaso_Jl*0.5;
+                        end
+                    end
+                end
+            end
+        end
+        Atom(JJ_a).ncol_term2 = count_pp;
+    end
+    
 	% number of rc-images: rc-region of which has influence in the fund. domain
 	Atom(JJ_a).n_image_rc = imgRcCount;
 

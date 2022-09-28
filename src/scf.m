@@ -76,8 +76,8 @@ end
 if(S.ForceCount == 1)
 	rng('default'); % Initialize random number generator
 	rng(1); % Specify the seed to be 1
-	S.psi = rand(S.N,S.Nev,S.tnkpt*S.nspin)-0.5;
-	S.upper_bound_guess_vecs = zeros(S.N,S.tnkpt*S.nspin);
+	S.psi = rand(S.N*S.nspinor,S.Nev,S.tnkpt*S.nspin)-0.5;
+	S.upper_bound_guess_vecs = zeros(S.N*S.nspinor,S.tnkpt*S.nspin);
 	S.EigVal = zeros(S.Nev,S.tnkpt*S.nspin);
 end
 % S.EigVal = zeros(S.Nev,S.tnkpt*S.nspin);

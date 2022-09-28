@@ -38,6 +38,7 @@ serial
 VHQ
 d3, vdWDF
 PBE0,HSE
+SOC
 
 
 3) To add a system:

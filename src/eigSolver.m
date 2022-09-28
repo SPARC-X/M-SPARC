@@ -37,11 +37,11 @@ if S.parallel ~= 1
         rng('default'); % Initialize random number generator
 		rng(ks+1);
 		%opts = struct('maxit', 10000, 'tol', 1e-6, 'p', S.Nev+10, 'v0', rand(S.N,1), 'isreal', true);
-		opts = struct('maxit', 100, 'tol', S.TOL_LANCZOS, 'v0', rand(S.N,1));
+		opts = struct('maxit', 100, 'tol', S.TOL_LANCZOS, 'v0', rand(S.N*S.nspinor,1));
 		kpt_vec = S.kptgrid(kpt,:);
 		[DL11,DL22,DL33,DG1,DG2,DG3] = blochLaplacian_1d(S,kpt_vec);
 		Hfun = @(x) h_nonlocal_vector_mult(DL11,DL22,DL33,DG1,DG2,DG3,Heff,x,S,kpt_vec,spin);
-		if ~(isreal(DL11) && isreal(DL22) && isreal(DL33))
+		if ~(isreal(DL11) && isreal(DL22) && isreal(DL33)) || S.SOC_flag
 			opts.isreal = false;
 		end
 
@@ -50,18 +50,18 @@ if S.parallel ~= 1
 			opts.maxit = 300; % WARNING: might need more accuracy
 			if(S.ForceCount == 1)
 				% For first relaxation step
-				[upper_bound_guess_vecs(:,ks), bup(ks)] = (eigs(Hfun,S.N,1,'lr',opts));
+				[upper_bound_guess_vecs(:,ks), bup(ks)] = (eigs(Hfun,S.N*S.nspinor,1,'lr',opts));
 				bup(ks) = real(bup(ks)) * 1.01;
 			else
 				% For subsequent relaxation steps
 				opts.v0 = S.upper_bound_guess_vecs(:,ks);
-				[upper_bound_guess_vecs(:,ks), bup(ks)] = eigs(Hfun,S.N,1,'lr',opts) ;
+				[upper_bound_guess_vecs(:,ks), bup(ks)] = eigs(Hfun,S.N*S.nspinor,1,'lr',opts) ;
 				bup(ks) = real(bup(ks)) * 1.01;
 			end
 			% Lower bound estimator
 			if(S.ForceCount == 1)
 				% For first relaxation step
-				a0(ks) = real(eigs(Hfun,S.N,1,'sr',opts)) - 0.1;
+				a0(ks) = real(eigs(Hfun,S.N*S.nspinor,1,'sr',opts)) - 0.1;
 			else
 				% For subsequent relaxation steps use lowest eigenvalue
 				a0(ks) = min(S.EigVal(:,ks));
@@ -77,7 +77,7 @@ if S.parallel ~= 1
 					% Upper bound
 					opts.tol = S.TOL_LANCZOS; % WARNING: might need more accuracy than the default
 					opts.v0 = S.upper_bound_guess_vecs(:,ks);
-					[upper_bound_guess_vecs(:,ks), bup(ks)] = eigs(Hfun,S.N,1,'lr',opts);
+					[upper_bound_guess_vecs(:,ks), bup(ks)] = eigs(Hfun,S.N*S.nspinor,1,'lr',opts);
 					bup(ks) = real(bup(ks)) * 1.01;
 				end
 				% Lower bound
@@ -117,7 +117,7 @@ if S.parallel ~= 1
 		psi(:,:,ks) = psi(:,:,ks) * Q;
 
 		% Normalize psi, s.t. integral(psi_new' * psi_new) = 1
-		scfac = 1 ./ sqrt(sum(repmat(S.W,1,S.Nev) .* (psi(:,:,ks) .* conj(psi(:,:,ks))),1));
+		scfac = 1 ./ sqrt(sum(repmat(S.W,S.nspinor,S.Nev) .* (psi(:,:,ks) .* conj(psi(:,:,ks))),1));
 		% psi(:,:,ks) = psi(:,:,ks) * diag(scfac);
 		psi(:,:,ks) = bsxfun(@times, psi(:,:,ks), scfac);
     end
@@ -137,11 +137,11 @@ else
         rng('default'); % Initialize random number generator
 		rng(ks+1);
 		%opts = struct('maxit', 10000, 'tol', 1e-6, 'p', S.Nev+10, 'v0', rand(S.N,1), 'isreal', true);
-		opts = struct('maxit', 100, 'tol', S.TOL_LANCZOS, 'v0', rand(S.N,1));
+		opts = struct('maxit', 100, 'tol', S.TOL_LANCZOS, 'v0', rand(S.N*S.nspinor,1));
 		kpt_vec = S.kptgrid(kpt,:);
 		[DL11,DL22,DL33,DG1,DG2,DG3] = blochLaplacian_1d(S,kpt_vec);
 		Hfun = @(x) h_nonlocal_vector_mult(DL11,DL22,DL33,DG1,DG2,DG3,Heff,x,S,kpt_vec,spin);
-		if ~(isreal(DL11) && isreal(DL22) && isreal(DL33))
+		if ~(isreal(DL11) && isreal(DL22) && isreal(DL33)) || S.SOC_flag
 			opts.isreal = false;
 		end
 
@@ -150,18 +150,18 @@ else
 			opts.maxit = 300; % WARNING: might need more accuracy
 			if(S.ForceCount == 1)
 				% For first relaxation step
-				[upper_bound_guess_vecs(:,ks), bup(ks)] = (eigs(Hfun,S.N,1,'lr',opts));
+				[upper_bound_guess_vecs(:,ks), bup(ks)] = (eigs(Hfun,S.N*S.nspinor,1,'lr',opts));
 				bup(ks) = real(bup(ks)) * 1.01;
 			else
 				% For subsequent relaxation steps
 				opts.v0 = S.upper_bound_guess_vecs(:,ks);
-				[upper_bound_guess_vecs(:,ks), bup(ks)] = eigs(Hfun,S.N,1,'lr',opts) ;
+				[upper_bound_guess_vecs(:,ks), bup(ks)] = eigs(Hfun,S.N*S.nspinor,1,'lr',opts) ;
 				bup(ks) = real(bup(ks)) * 1.01;
 			end
 			% Lower bound estimator
 			if(S.ForceCount == 1)
 				% For first relaxation step
-				a0(ks) = real(eigs(Hfun,S.N,1,'sr',opts)) - 0.1;
+				a0(ks) = real(eigs(Hfun,S.N*S.nspinor,1,'sr',opts)) - 0.1;
 			else
 				% For subsequent relaxation steps use lowest eigenvalue
 				a0(ks) = min(S.EigVal(:,ks));
@@ -177,7 +177,7 @@ else
 					% Upper bound
 					opts.tol = S.TOL_LANCZOS; % WARNING: might need more accuracy than the default
 					opts.v0 = S.upper_bound_guess_vecs(:,ks);
-					[upper_bound_guess_vecs(:,ks), bup(ks)] = eigs(Hfun,S.N,1,'lr',opts);
+					[upper_bound_guess_vecs(:,ks), bup(ks)] = eigs(Hfun,S.N*S.nspinor,1,'lr',opts);
 					bup(ks) = real(bup(ks)) * 1.01;
 				end
 				% Lower bound
@@ -217,7 +217,7 @@ else
 		psi(:,:,ks) = psi(:,:,ks) * Q;
 
 		% Normalize psi, s.t. integral(psi_new' * psi_new) = 1
-		scfac = 1 ./ sqrt(sum(repmat(S.W,1,S.Nev) .* (psi(:,:,ks) .* conj(psi(:,:,ks))),1));
+		scfac = 1 ./ sqrt(sum(repmat(S.W,S.nspinor,S.Nev) .* (psi(:,:,ks) .* conj(psi(:,:,ks))),1));
 		% psi(:,:,ks) = psi(:,:,ks) * diag(scfac);
 		psi(:,:,ks) = bsxfun(@times, psi(:,:,ks), scfac);
     end
