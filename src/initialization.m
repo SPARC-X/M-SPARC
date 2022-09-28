@@ -298,6 +298,15 @@ if S.cell_typ == 2
 	end
 end
 
+% check spin-orbit coupling
+for ityp = 1:S.n_typ
+    if S.Atm(ityp).pspsoc == 1
+        S.SOC_flag = 1;
+        S.nspinor = 2;
+        break;
+    end
+end
+
 % Set up number of spin
 if S.spin_typ == 0
 	S.nspin = 1;
@@ -546,7 +555,7 @@ end
 % Nev
 if S.Nev < 0
 	fprintf('## Number of states not provided, finding Nev ...\n');
-	S.Nev = floor(S.Nelectron / 2) * 1.2 + 5; 
+	S.Nev = S.nspinor*(floor(S.Nelectron / 2) * 1.2 + 5); 
 	S.Nev = round(S.Nev);
 	fprintf('## Based on the number of electrons, Nev is set to: %d\n',S.Nev);
 end
@@ -684,9 +693,9 @@ elseif S.MixingPrecond == 3 % truncated kerker
 end
 
 if S.nspin == 1
-	S.occfac = 2;
+	S.occfac = 2/S.nspinor;
 else
-	S.occfac = 1;
+	S.occfac = 1/S.nspinor;
 end
 
 % Name of the relax file
@@ -1151,6 +1160,10 @@ S.zin = 0;
 % Cychel
 S.alph = 0.0;
 
+% SOC
+S.SOC_flag = 0;
+S.nspinor = 1;
+
 % DFT-D3 parameters
 S.d3Flag = 0;
 S.d3Rthr = 1600.0;
@@ -1201,7 +1214,7 @@ end
 
 start_time = fix(clock);
 fprintf(fileID,'***************************************************************************\n');
-fprintf(fileID,'*                      M-SPARC v1.0.0 (Sep 26, 2022)                      *\n');
+fprintf(fileID,'*                      M-SPARC v1.0.0 (Sep 28, 2022)                      *\n');
 fprintf(fileID,'*   Copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech   *\n');
 fprintf(fileID,'*           Distributed under GNU General Public License 3 (GPL)          *\n');
 fprintf(fileID,'*                Date: %s  Start time: %02d:%02d:%02d                  *\n',date,start_time(4),start_time(5),start_time(6));

@@ -40,9 +40,25 @@ nproj = ones(lmax+1,1);
 for i = 0:lmax
 	nproj(i+1) = A{1,i+1};
 end
-textscan(fid,'%s',2,'delimiter','\n') ;
+textscan(fid,'%s',1,'delimiter','\n') ;
+
+extension_switch = fscanf(fid,'%f',1);
+textscan(fid,'%s',1,'delimiter','\n') ;
+
+nprojso = zeros(lmax,1);
+pspsoc = 0; % indicating if the psp file including spin-orbit coupling
+if extension_switch == 2 || extension_switch == 3
+    fprintf("This psp8 includes spin-orbit coupling.\n");
+    pspsoc = 1;
+    A = textscan(fid,'%f %f %f %f %f');
+    for i = 1:lmax
+        nprojso(i) = A{1,i};
+    end
+    textscan(fid,'%s',1,'delimiter','\n');
+end
 
 Pot = repmat(struct([]), lmax+1, 1);
+Potso = repmat(struct([]), lmax, 1);
 
 l_read = fscanf(fid,'%f',1);
 for l = 0:lmax
@@ -71,6 +87,21 @@ if lloc > lmax || l_read == 4
 else
 	% move back file pointer 4 columns
 	fseek(fid, -4, 'cof');
+end
+
+% read spin-orbit projectors
+if pspsoc == 1
+    for l = 1:lmax
+        fscanf(fid,'%f',1);
+        A = fscanf(fid,'%f',nprojso(l)) ;
+        Potso(l).gamma_Jl = A(:); 
+        sz = [2+nprojso(l),mmax];
+        A = fscanf(fid,'%g',sz) ;
+        r = A(2,:)' ;
+        Potso(l).proj = A(3:end,:)';
+        Potso(l).proj(2:end,:) = Potso(l).proj(2:end,:)./repmat(r(2:end),1,nprojso(l));
+        Potso(l).proj(1,:) = Potso(l).proj(2,:);
+    end
 end
 
 % read core density
@@ -117,6 +148,9 @@ S.Atm(ityp).r_grid_rho = r_grid_rho;
 S.Atm(ityp).rho_isolated_guess = rho_isolated_guess;
 S.Atm(ityp).rho_Tilde = rho_Tilde;
 S.Atm(ityp).r_grid_rho_Tilde = rTilde;
+S.Atm(ityp).pspsoc = pspsoc;
+S.Atm(ityp).Potso = Potso;
+S.Atm(ityp).nprojso = nprojso;
 
 fclose(fid);
 end

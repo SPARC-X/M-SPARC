@@ -202,6 +202,10 @@ SYSTEMS["systemname"].append('Si2_kpt_PBE0')
 SYSTEMS["Tags"].append(['bulk', 'nonorth', 'kpt','PBE0'])
 SYSTEMS["Tols"].append([tols["E_tol"], tols["F_tol"], tols["stress_tol"]]) # E_tol(Ha/atom), F_tol(Ha/Bohr), stress_tol(%)
 ##################################################################################################################
+SYSTEMS["systemname"].append('PtAu_SOC')
+SYSTEMS["Tags"].append(['bulk', 'nonorth', 'kpt','SOC'])
+SYSTEMS["Tols"].append([tols["E_tol"], tols["F_tol"], tols["stress_tol"]]) # E_tol(Ha/atom), F_tol(Ha/Bohr), stress_tol(%)
+##################################################################################################################
 						# < Uncomment 3 lines below and fill in the details for the new systems>
 # SYSTEMS["systemname"].append('??type the system name??')
 # SYSTEMS["Tags"].append([??type the tags for the system as strings separated by comma??])
