@@ -65,8 +65,7 @@ if S.nspin == 1
 	elseif S.xc == 2 || S.xc == 41 || S.xc == 427 % For PBE_GGA and PBE0
 		S = GGA_PBE(S,XC);
 	elseif (S.xc == -102) || (S.xc == -108)
-        [S, ecPW, v_cPW] = vdWDF_ExchangeLinearCorre(S, XC);
-        S = Calculate_nonLinearCorr_E_V_vdWDF(S, ecPW, v_cPW);
+		S = vdW_DF(S, XC);
     elseif S.xc == 4
         S = mGGA(S,XC);
     elseif S.xc == 40                   % For Hartree Fock
@@ -87,8 +86,7 @@ else
 	elseif S.xc == 2 || S.xc == 41 || S.xc == 427 % For PBE_GGA and PBE0
 		S = GSGA_PBE(S,XC);
     elseif (S.xc == -102) || (S.xc == -108)
-        [S, ecPW, v_cPW] = SvdWDF_ExchangeLinearCorre(S, XC);
-        S = Calculate_nonLinearCorr_E_V_SvdWDF(S, ecPW, v_cPW);
+        S = SvdW_DF(S, XC);
     elseif S.xc == 4
         S = mGSGA(S,XC);
     elseif S.xc == 40                   % For Hartree Fock
@@ -397,23 +395,30 @@ function [S] = GGA_PBE(S,XC)
 end
 %--------------------------------------------------------------------------
 
-
-% Two functions below are for calculating non-local correlation part of van der Waals functional.
+% Two functions below are for calculating van der Waals Density functional (vdW-DF).
 % Reference: 
 % Dion, M., Rydberg, H., Schröder, E., Langreth, D. C., & Lundqvist, B. I. (2004). Physical review letters, 92(24), 246401.
 % Román-Pérez, G., & Soler, J. M. (2009). Physical review letters, 103(9), 096102.
 % Lee, K., Murray, É. D., Kong, L., Lundqvist, B. I., & Langreth, D. C. (2010). Physical Review B, 82(8), 081101.
 % Thonhauser, T., Zuluaga, S., Arter, C. A., Berland, K., Schröder, E., & Hyldgaard, P. (2015). Physical review letters, 115(13), 136402.
-function [S] = Calculate_nonLinearCorr_E_V_vdWDF(S, ecPW, v_cPW)
+% vdW-DF and spin-polarized vdW-DF implemented in Quantum Espresso:
+% Thonhauser, T., Cooper, V. R., Li, S., Puzder, A., Hyldgaard, P., & Langreth, D. C. (2007). Physical Review B, 76(12), 125112.
+% Sabatini, R., Küçükbenli, E., Kolb, B., Thonhauser, T., & De Gironcoli, S. (2012). Journal of Physics: Condensed Matter, 24(42), 424209.
+function [S] = vdW_DF(S, XC)
+	[S, ecPW, v_cPW] = vdWDF_ExchangeLinearCorre(S, XC);
+	% the three functions below are for computing nonlinear correlation part of vdW-DF.
     S = vdWDF_getQ0onGrid(S, ecPW, v_cPW);
     [S, ps, DpDq0s] = vdWDF_splineInterpolation_energy(S); % compute the vector u for potential and vdW energy
     [S, vdWpotential] = vdWDF_uGenerate_Potential(S, S.Drho, S.vdWDF_Dq0Drho, S.vdWDF_Dq0Dgradrho, ps, DpDq0s);
     S.vdWpotential = vdWpotential;
     S.Vxc = S.Vxc + S.vdWpotential;
 end
+
 %--------------------------------------------------------------------------
 
-function [S] = Calculate_nonLinearCorr_E_V_SvdWDF(S, ecPW, v_cPW)
+function [S] = SvdW_DF(S, XC)
+	[S, ecPW, v_cPW] = SvdWDF_ExchangeLinearCorre(S, XC);
+	% the four functions below are for computing nonlinear correlation part of spin-polarized vdW-DF.
     S = SvdWDF_getQ0onGrid(S, ecPW, v_cPW);
     [S, ps, DpDq0s] = vdWDF_splineInterpolation_energy(S); % the function does not need to modify for spin
     [S, vdWpotential_up] = vdWDF_uGenerate_Potential(S, S.DrhoUp, S.vdWDF_Dq0Drho(:, 1), S.vdWDF_Dq0Dgradrho(:, 1), ps, DpDq0s);
@@ -421,6 +426,7 @@ function [S] = Calculate_nonLinearCorr_E_V_SvdWDF(S, ecPW, v_cPW)
     S.vdWpotential = [vdWpotential_up, vdWpotential_dn];
     S.Vxc = S.Vxc + S.vdWpotential;
 end
+
 %--------------------------------------------------------------------------
 
 
@@ -766,7 +772,12 @@ function [S] = mGGA(S,XC) % the function does not consider spin. The function co
         S.countPotential = S.countPotential + 1;
         return;
     end
-    rho = S.rho;
+
+	if S.NLCC_flag 
+        rho = S.rho + S.rho_Tilde_at;
+    else 
+        rho = S.rho;
+    end
     
     rho(rho < S.xc_rhotol) = S.xc_rhotol;
     drho_1 = S.grad_1 * rho;
@@ -836,6 +847,10 @@ function [S] = mGSGA(S,XC)
         return;
     end
     rho = S.rho;
+    if S.NLCC_flag 
+        rho(:,2) = rho(:,2)+S.rho_Tilde_at * 0.5;
+        rho(:,3) = rho(:,3)+S.rho_Tilde_at * 0.5;
+    end
     rho(rho < S.xc_rhotol) = S.xc_rhotol;
     rho(:,1) = rho(:,2) + rho(:,3);
     drho_1 = S.grad_1 * rho;
