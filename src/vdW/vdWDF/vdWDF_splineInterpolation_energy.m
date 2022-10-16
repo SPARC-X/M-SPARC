@@ -17,7 +17,21 @@ function [S, ps, DpDq0s] = vdWDF_splineInterpolation_energy(S)
 % ==============================================================================================
     nnr = S.Nx*S.Ny*S.Nz;
     qnum = size(S.vdWDF_qmesh, 1);
-    rho = S.rho;
+    if S.nspin == 1
+        if S.NLCC_flag 
+            rho = S.rho + S.rho_Tilde_at;
+        else 
+            rho = S.rho;
+        end
+    else
+        rho = S.rho;
+        if S.NLCC_flag 
+            rho(:,2) = rho(:,2) + S.rho_Tilde_at * 0.5;
+            rho(:,3) = rho(:,3) + S.rho_Tilde_at * 0.5;
+        end
+        rho(rho < S.xc_rhotol) = S.xc_rhotol;
+	    rho(:,1) = rho(:,2) + rho(:,3);
+    end
     S.vdWenergy = 0.0;
 %% the index of reciprocal lattice mesh grids
     reciLatticeVecs = ((S.lat_uvec.*repmat([S.L1, S.L2, S.L3]', 1, 3)) \ (2*pi * eye(3)))';

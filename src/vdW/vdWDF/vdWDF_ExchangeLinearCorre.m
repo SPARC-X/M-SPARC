@@ -19,7 +19,11 @@ function [S, ecPW, v_cPW] = vdWDF_ExchangeLinearCorre(S, XC)
 % Copyright (c) 2020 Material Physics & Mechanics Group, Georgia Tech.
 % ==============================================================================================
     % exchange part
-    rho = S.rho;
+    if S.NLCC_flag 
+        rho = S.rho+S.rho_Tilde_at;
+    else 
+        rho = S.rho;
+    end
 	rho(rho < S.xc_rhotol) = S.xc_rhotol;
 	drho_1 = S.grad_1 * rho;
 	drho_2 = S.grad_2 * rho;

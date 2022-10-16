@@ -24,6 +24,12 @@ function [S] = SvdWDF_getQ0onGrid(S, ecPW, v_cPW)
     S.vdWDF_Dq0Dgradrho = zeros(nnr, 2); % up and down
     rho = S.rho;
     epsr = 1.0E-12;
+    if S.NLCC_flag 
+        rho(:,2) = rho(:,2)+S.rho_Tilde_at * 0.5;
+        rho(:,3) = rho(:,3)+S.rho_Tilde_at * 0.5;
+    end
+    rho(rho < S.xc_rhotol) = S.xc_rhotol;
+	rho(:,1) = rho(:,2) + rho(:,3);
     
     boolRhoGepsr = rho(:, 1) > epsr;
     boolRhoUpGepsr = (rho(:, 2) > epsr/2.0) & boolRhoGepsr;
@@ -31,9 +37,9 @@ function [S] = SvdWDF_getQ0onGrid(S, ecPW, v_cPW)
     rhoGepsr = rho(boolRhoGepsr, 1);
     rhoUpGepsr = rho(boolRhoUpGepsr, 2);
     rhoDnGepsr = rho(boolRhoDnGepsr, 3);
-    Drho_a1 = S.grad_1*(S.rho);
-    Drho_a2 = S.grad_2*(S.rho);
-    Drho_a3 = S.grad_3*(S.rho);
+    Drho_a1 = S.grad_1*(rho);
+    Drho_a2 = S.grad_2*(rho);
+    Drho_a3 = S.grad_3*(rho);
     
     directDrhoUp = [Drho_a1(:, 2), Drho_a2(:, 2), Drho_a3(:, 2)];
     DrhoUp_car = S.grad_T'*directDrhoUp';
