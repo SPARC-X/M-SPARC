@@ -176,6 +176,7 @@ function S = LBFGS(S)
 		S.LBFGS_DELTAG = zeros(N,M);
 		S.LBFGS_IYS = zeros(M,1);
 		S.LBFGS_FOLD = zeros(N,1);
+		S.LBFGS_ATOMDISP = zeros(N,1);
 	end
 	ALPHA = zeros(M,1);
 	
