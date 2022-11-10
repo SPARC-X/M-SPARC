@@ -1,0 +1,129 @@
+***************************************************************************
+*                      M-SPARC v1.0.0 (Oct 26, 2022)                      *
+*   Copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech   *
+*           Distributed under GNU General Public License 3 (GPL)          *
+*                Date: 10-Nov-2022  Start time: 12:22:56                  *
+***************************************************************************
+                           Input parameters                                
+***************************************************************************
+LATVEC_SCALE: 1.890000 1.890000 1.890000 
+LATVEC:
+2.611495005624771 -4.523242033454475 0.000000000000000 
+2.611495005624771 4.523242033454475 0.000000000000000 
+0.000000000000000 0.000000000000000 14.129241814159172 
+FD_GRID: 20 20 53
+FD_ORDER: 12
+BC: P P P
+KPOINT_GRID: 2 2 2
+KPOINT_SHIFT: 5.000000e-01 5.000000e-01 5.000000e-01
+ELEC_TEMP_TYPE: gaussian
+SMEARING: 0.007349864
+CHEB_DEGREE: 17
+NSTATES: 127
+EXCHANGE_CORRELATION: LDA_PW
+CALC_STRESS: 1
+MAXIT_SCF: 100
+TOL_SCF: 1.00E-04
+TOL_POISSON: 1.00E-06
+TOL_LANCZOS: 1.00E-02
+TOL_PSEUDOCHARGE: 1.00E-06
+MIXING_VARIABLE: density
+MIXING_PRECOND: kerker
+TOL_PRECOND: 2.47E-04
+PRECOND_KERKER_KTF: 1.00
+PRECOND_KERKER_THRESH: 0.10
+MIXING_PARAMETER: 0.30
+MIXING_HISTORY: 7
+PULAY_FREQUENCY: 1
+PULAY_RESTART: 0
+REFERENCE_CUTOFF: 0.50
+RHO_TRIGGER: 4
+FIX_RAND: 0
+PRINT_FORCES: 1
+PRINT_ATOMS: 1
+PRINT_EIGEN: 0
+PRINT_DENSITY: 0
+OUTPUT_FILE: LiNbO2_primitive_quick_scf.out
+***************************************************************************
+                                Cell                                       
+***************************************************************************
+Lattice vectors:
+4.935725560630818 -8.548927443228957 0.000000000000000 
+4.935725560630818 8.548927443228957 0.000000000000000 
+0.000000000000000 0.000000000000000 26.704267028760835 
+Volume                  :  2.2535816238E+03 (Bohr^3)
+***************************************************************************
+                             Initialization                                
+***************************************************************************
+Mesh spacing in x-direction        :  0.493573 (Bohr)
+Mesh spacing in y-direction        :  0.493573 (Bohr)
+Mesh spacing in z direction        :  0.503854 (Bohr)
+Number of symmetry adapted k-points:  4
+Output printed to                  :  LiNbO2_primitive_quick_scf.out
+Total number of atom types         :  3
+Total number of atoms              :  30
+Total number of electrons          :  204
+Atom type 1  (valence electrons)   :  Li 3
+Pseudopotential                    :  ../../../psps/03_Li_3_1.6_1.6_pbe_v1.0.psp8
+lloc                               :  4
+Pseudocharge radii of atom type 1  :  4.44 4.53 4.53
+Number of atoms of type 1          :  6
+Atom type 2  (valence electrons)   :  Nb 13
+Pseudopotential                    :  ../../../psps/41_Nb_13_1.5_1.7_pbe_n_v1.0.psp8
+lloc                               :  4
+Pseudocharge radii of atom type 2  :  6.91 7.05 7.05
+Number of atoms of type 2          :  6
+Atom type 3  (valence electrons)   :  O 6
+Pseudopotential                    :  ../../../psps/08_O_6_1.2_1.4_pbe_n_v1.0.psp8
+lloc                               :  4
+Pseudocharge radii of atom type 3  :  7.40 7.56 7.56
+Number of atoms of type 3          :  18
+Estimated total memory usage       :  716.52 MB
+=====================================================================
+                    Self Consistent Field (SCF#1)                     
+=====================================================================
+Iteration     Free Energy (Ha/atom)   SCF Error        Timing (sec)
+1            -2.3873440380E+01        1.483E-01        357.874
+2            -2.3824327372E+01        6.836E-02        117.156
+3            -2.3813952887E+01        4.052E-02        117.130
+4            -2.3812919400E+01        2.129E-02        117.067
+5            -2.3812387841E+01        1.148E-02        116.977
+6            -2.3812125748E+01        2.191E-03        117.245
+7            -2.3812122298E+01        1.308E-03        117.185
+8            -2.3812119791E+01        4.254E-04        116.926
+9            -2.3812119574E+01        1.331E-04        117.035
+10           -2.3812118165E+01        3.690E-05        116.676
+Total number of SCF: 10    
+====================================================================
+                                Energy                              
+====================================================================
+Free energy per atom               : -2.3812118165E+01 (Ha/atom)
+Total free energy                  : -7.1436354495E+02 (Ha)
+Band structure energy              : -8.5081270043E+01 (Ha)
+Exchange correlation energy        : -1.6105039290E+02 (Ha)
+Self and correction energy         : -1.0434924111E+03 (Ha)
+Entropy*kb*T                       : -3.8099211701E-07 (Ha)
+Fermi level                        :  1.5929678021E-01 (Ha)
+Average force                      :  1.0609403562E-01 (Ha/Bohr)
+Maximum force                      :  2.2278314718E-01 (Ha/Bohr)
+Time for force calculation         :  8.795 (sec)
+Stress (GPa):
+    101.4920599462      -0.0030223713      -0.0021503849
+     -0.0030223713     137.1930892758       0.1920934879
+     -0.0021503849       0.1920934879     157.6638896005
+Pressure                           : -1.3211634627E+02 (GPa)
+Maximum stress                     :  1.5766388960E+02 (GPa)
+Time for stress calculation        :  25.733 (sec)
+***************************************************************************
+                               Timing info                                 
+***************************************************************************
+Total walltime                     :  1573.796 sec
+___________________________________________________________________________
+
+***************************************************************************
+*             Material Physics & Mechanics Group, Georgia Tech            *
+*                       PI: Phanish Suryanarayana                         *
+*                Main Developers: Qimen Xu, Abhiraj Sharma                *
+*     Acknowledgements: U.S. DOE (DE-SC0019410); NSF (1333500,1553212)    *
+***************************************************************************
+                                                                           

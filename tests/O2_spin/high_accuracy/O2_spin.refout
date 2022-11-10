@@ -1,33 +1,29 @@
 ***************************************************************************
-*                       SPARC (version Jul 23, 2021)                      *
-*   Copyright (c) 2020 Material Physics & Mechanics Group, Georgia Tech   *
+*                      M-SPARC v1.0.0 (Oct 26, 2022)                      *
+*   Copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech   *
 *           Distributed under GNU General Public License 3 (GPL)          *
-*                   Start time: Sat Jul 31 02:24:27 2021                  *
+*                Date: 09-Nov-2022  Start time: 10:53:50                  *
 ***************************************************************************
                            Input parameters                                
 ***************************************************************************
-LATVEC_SCALE: 21 18 18 
+LATVEC_SCALE: 21.000000 18.000000 18.000000 
 LATVEC:
-1 0 0 
-0 1 0 
-0 0 1 
+1.000000000000000 0.000000000000000 0.000000000000000 
+0.000000000000000 1.000000000000000 0.000000000000000 
+0.000000000000000 0.000000000000000 1.000000000000000 
 FD_GRID: 210 180 180
 FD_ORDER: 12
 BC: D D D
-SPIN_TYP: 2
-ELEC_TEMP_TYPE: Fermi-Dirac
-SMEARING: 0.001000000336
+SPIN_TYP: 1
+ELEC_TEMP_TYPE: fermi-dirac
+SMEARING: 0.001000000
 CHEB_DEGREE: 50
 NSTATES: 12
 EXCHANGE_CORRELATION: GGA_PBE
 CALC_STRESS: 0
 CALC_PRES: 0
-CHEFSI_BOUND_FLAG: 0
 MAXIT_SCF: 100
-MINIT_SCF: 3
-MAXIT_POISSON: 3000
 TOL_SCF: 1.00E-06
-POISSON_SOLVER: AAR
 TOL_POISSON: 1.00E-08
 TOL_LANCZOS: 1.00E-02
 TOL_PSEUDOCHARGE: 1.00E-08
@@ -35,98 +31,91 @@ MIXING_VARIABLE: density
 MIXING_PRECOND: kerker
 MIXING_PRECOND_MAG: none
 TOL_PRECOND: 1.00E-05
-PRECOND_KERKER_KTF: 1
-PRECOND_KERKER_THRESH: 0.1
+PRECOND_KERKER_KTF: 1.00
+PRECOND_KERKER_THRESH: 0.10
 MIXING_PARAMETER: 0.55
 MIXING_PARAMETER_MAG: 0.55
 MIXING_HISTORY: 7
 PULAY_FREQUENCY: 1
 PULAY_RESTART: 0
-REFERENCE_CUTOFF: 0.5
+REFERENCE_CUTOFF: 0.50
 RHO_TRIGGER: 4
 FIX_RAND: 0
-VERBOSITY: 1
 PRINT_FORCES: 1
 PRINT_ATOMS: 1
 PRINT_EIGEN: 0
 PRINT_DENSITY: 0
-OUTPUT_FILE: O2_spin
+OUTPUT_FILE: O2_spin.out
 ***************************************************************************
-                           Parallelization                                 
+                                Cell                                       
 ***************************************************************************
-NP_SPIN_PARAL: 2
-NP_KPOINT_PARAL: 1
-NP_BAND_PARAL: 12
-NP_DOMAIN_PARAL: 1 1 1
-NP_DOMAIN_PHI_PARAL: 4 2 3
-EIG_SERIAL_MAXNS: 10000
+Lattice vectors:
+21.000000000000000 0.000000000000000 0.000000000000000 
+0.000000000000000 18.000000000000000 0.000000000000000 
+0.000000000000000 0.000000000000000 18.000000000000000 
+Volume                  :  6.8040000000E+03 (Bohr^3)
 ***************************************************************************
                              Initialization                                
 ***************************************************************************
-Number of processors               :  24
-Mesh spacing                       :  0.1 (Bohr)
+Mesh spacing                       :  0.100000 (Bohr)
 Output printed to                  :  O2_spin.out
 Total number of atom types         :  1
 Total number of atoms              :  2
 Total number of electrons          :  12
 Atom type 1  (valence electrons)   :  O 6
-Pseudopotential                    :  O.psp8
-Pseudocharge radii of atom type 1  :  6.50 6.50 6.50 (x, y, z dir)
+Pseudopotential                    :  ../../../psps/08_O_6_1.2_1.4_pbe_n_v1.0.psp8
+lloc                               :  4
+Pseudocharge radii of atom type 1  :  6.50 6.50 6.50
 Number of atoms of type 1          :  2
-Estimated total memory usage       :  12.46 GB
-Estimated memory per processor     :  531.79 MB
+Estimated total memory usage       :  29.07 GB
 ========================================================================================
-                    Self Consistent Field (SCF#1)                     
+                            Self Consistent Field (SCF#1)                     
 ========================================================================================
 Iteration     Free Energy (Ha/atom)    Magnetization     SCF Error        Timing (sec)
-1            -1.5698177515E+01         4.3607E-11        2.361E-01        65.727
-2            -1.5953717714E+01         2.0000E+00        2.752E-01        33.840
-3            -1.5914426250E+01         2.0000E+00        1.517E-01        32.155
-4            -1.5913098668E+01         2.0000E+00        1.251E-01        32.582
-5            -1.5909215458E+01         2.0000E+00        6.328E-02        32.295
-6            -1.5910438238E+01         2.0000E+00        2.377E-02        30.395
-7            -1.5910675967E+01         2.0000E+00        1.873E-02        29.464
-8            -1.5910608910E+01         2.0000E+00        7.920E-03        28.920
-9            -1.5910596163E+01         2.0000E+00        4.098E-03        29.091
-10           -1.5910600530E+01         2.0000E+00        1.055E-03        28.127
-11           -1.5910614158E+01         2.0000E+00        2.379E-04        27.709
-12           -1.5910620259E+01         2.0000E+00        8.354E-05        26.026
-13           -1.5910622278E+01         2.0000E+00        4.276E-05        25.620
-14           -1.5910623971E+01         2.0000E+00        2.730E-05        25.724
-15           -1.5910625492E+01         2.0000E+00        2.145E-05        24.507
-16           -1.5910626041E+01         2.0000E+00        8.414E-06        23.702
-17           -1.5910626253E+01         2.0000E+00        3.431E-06        23.400
-18           -1.5910626360E+01         2.0000E+00        2.279E-06        20.908
-19           -1.5910626378E+01         2.0000E+00        9.397E-07        10.265
+1            -1.6006221958E+01         4.0656E-02        2.446E-01        2843.155
+2            -1.6430425868E+01         1.5991E+00        2.067E-01        1561.991
+3            -1.6427714056E+01         2.0000E+00        1.697E-01        1504.865
+4            -1.6420921830E+01         2.0000E+00        1.196E-01        1217.400
+5            -1.6417136282E+01         2.0000E+00        8.006E-02        1217.490
+6            -1.6416535789E+01         2.0000E+00        2.731E-02        1236.182
+7            -1.6416660669E+01         2.0000E+00        8.273E-03        1170.909
+8            -1.6416703395E+01         2.0000E+00        2.242E-03        1179.705
+9            -1.6416716823E+01         2.0000E+00        1.116E-03        1142.597
+10           -1.6416725602E+01         2.0000E+00        4.658E-04        1111.876
+11           -1.6416740828E+01         2.0000E+00        2.239E-04        1119.953
+12           -1.6416754309E+01         2.0000E+00        1.151E-04        1111.552
+13           -1.6416761370E+01         2.0000E+00        7.337E-05        1096.860
+14           -1.6416765640E+01         2.0000E+00        2.647E-05        1081.620
+15           -1.6416767671E+01         2.0000E+00        8.371E-06        1041.125
+16           -1.6416768063E+01         2.0000E+00        6.642E-06        948.746
+17           -1.6416768196E+01         2.0000E+00        4.491E-06        920.581
+18           -1.6416768367E+01         2.0000E+00        2.302E-06        929.240
+19           -1.6416768393E+01         2.0000E+00        8.640E-07        878.709
 Total number of SCF: 19    
-
-k = [0.000, 0.000, 0.000]
-Occupation of state 11 = 0.000000000000000.
-Occupation of state 12 = 0.000000000000000.
 ====================================================================
-                    Energy and force calculation                    
+                                Energy                              
 ====================================================================
-Free energy per atom               : -1.5910626389E+01 (Ha/atom)
-Total free energy                  : -3.1821252778E+01 (Ha)
-Band structure energy              : -6.6843498869E+00 (Ha)
-Exchange correlation energy        : -6.6429644526E+00 (Ha)
-Self and correction energy         : -6.4061700837E+01 (Ha)
-Entropy*kb*T                       : -1.1144464423E-12 (Ha)
-Fermi level                        : -2.6890010826E-01 (Ha)
-RMS force                          :  1.6379756224E-01 (Ha/Bohr)
-Maximum force                      :  1.6379756224E-01 (Ha/Bohr)
-Time for force calculation         :  0.296 (sec)
+Free energy per atom               : -1.6416768393E+01 (Ha/atom)
+Total free energy                  : -3.2833536786E+01 (Ha)
+Band structure energy              : -6.6924073812E+00 (Ha)
+Exchange correlation energy        : -7.9295502620E+00 (Ha)
+Self and correction energy         : -4.8029877741E+01 (Ha)
+Entropy*kb*T                       : -4.2118549108E-11 (Ha)
+Fermi level                        : -3.0508224586E-01 (Ha)
+Net Magnetization                  :  1.9999999981E+00 
+Average force                      :  1.6131919714E-01 (Ha/Bohr)
+Maximum force                      :  1.6131919714E-01 (Ha/Bohr)
+Time for force calculation         :  95.509 (sec)
 ***************************************************************************
                                Timing info                                 
 ***************************************************************************
-Total walltime                     :  578.389 sec
+Total walltime                     :  24913.860 sec
 ___________________________________________________________________________
 
 ***************************************************************************
 *             Material Physics & Mechanics Group, Georgia Tech            *
 *                       PI: Phanish Suryanarayana                         *
 *                Main Developers: Qimen Xu, Abhiraj Sharma                *
-*     Collaborators: J.E. Pask (LLNL), A.J. Medford (GT), E. Chow (GT)    *
-*  Acknowledgements: U.S. DOE (DE-SC0019410); U.S. NSF (1333500,1553212)  *
+*     Acknowledgements: U.S. DOE (DE-SC0019410); NSF (1333500,1553212)    *
 ***************************************************************************
                                                                            

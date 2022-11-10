@@ -1,8 +1,8 @@
 ***************************************************************************
-*                      M-SPARC v1.0.0 (Feb 13, 2022)                      *
+*                      M-SPARC v1.0.0 (Oct 26, 2022)                      *
 *   Copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech   *
 *           Distributed under GNU General Public License 3 (GPL)          *
-*                Date: 13-May-2022  Start time: 10:11:31                  *
+*                Date: 09-Nov-2022  Start time: 21:03:49                  *
 ***************************************************************************
                            Input parameters                                
 ***************************************************************************
@@ -11,14 +11,14 @@ LATVEC:
 1.000000000000000 0.000000000000000 0.000000000000000 
 0.000000000000000 1.000000000000000 0.000000000000000 
 0.000000000000000 0.000000000000000 1.000000000000000 
-FD_GRID: 38 38 38
+FD_GRID: 76 76 76
 FD_ORDER: 12
 BC: P P P
 KPOINT_GRID: 1 1 1
 KPOINT_SHIFT: 0 0 0
 ELEC_TEMP_TYPE: gaussian
 SMEARING: 0.007349864
-CHEB_DEGREE: 35
+CHEB_DEGREE: 50
 NSTATES: 29
 EXCHANGE_CORRELATION: SCAN
 CALC_STRESS: 1
@@ -29,7 +29,7 @@ TOL_LANCZOS: 1.00E-02
 TOL_PSEUDOCHARGE: 5.00E-08
 MIXING_VARIABLE: density
 MIXING_PRECOND: kerker
-TOL_PRECOND: 4.03E-05
+TOL_PRECOND: 1.01E-05
 PRECOND_KERKER_KTF: 1.00
 PRECOND_KERKER_THRESH: 0.10
 MIXING_PARAMETER: 0.30
@@ -43,7 +43,7 @@ PRINT_FORCES: 1
 PRINT_ATOMS: 1
 PRINT_EIGEN: 0
 PRINT_DENSITY: 0
-OUTPUT_FILE: /home/bzhang376/Documents/MATLAB/M-SPARC/M-SPARC/test_scan_BaTiO3_testsuit/BaTiO3_scan.out
+OUTPUT_FILE: BaTiO3_scan.out
 ***************************************************************************
                                 Cell                                       
 ***************************************************************************
@@ -55,71 +55,71 @@ Volume                  :  4.4419494700E+02 (Bohr^3)
 ***************************************************************************
                              Initialization                                
 ***************************************************************************
-Mesh spacing                       :  0.200789 (Bohr)
+Mesh spacing                       :  0.100395 (Bohr)
 Number of symmetry adapted k-points:  1
-Output printed to                  :  /home/bzhang376/Documents/MATLAB/M-SPARC/M-SPARC/test_scan_BaTiO3_testsuit/BaTiO3_scan.out
+Output printed to                  :  BaTiO3_scan.out
 Total number of atom types         :  3
 Total number of atoms              :  5
 Total number of electrons          :  40
 Atom type 1  (valence electrons)   :  Ba 10
-Pseudopotential                    :  Ba.psp8
+Pseudopotential                    :  ../Ba.psp8
 lloc                               :  4
-Pseudocharge radii of atom type 1  :  6.83 6.83 6.83
+Pseudocharge radii of atom type 1  :  6.32 6.32 6.32
 Number of atoms of type 1          :  1
 Atom type 2  (valence electrons)   :  Ti 12
-Pseudopotential                    :  Ti.psp8
+Pseudopotential                    :  ../Ti.psp8
 lloc                               :  4
-Pseudocharge radii of atom type 2  :  6.63 6.63 6.63
+Pseudocharge radii of atom type 2  :  6.32 6.32 6.32
 Number of atoms of type 2          :  1
 Atom type 3  (valence electrons)   :  O 6
-Pseudopotential                    :  O.psp8
+Pseudopotential                    :  ../O.psp8
 lloc                               :  4
-Pseudocharge radii of atom type 3  :  6.83 6.83 6.83
+Pseudocharge radii of atom type 3  :  6.43 6.43 6.43
 Number of atoms of type 3          :  3
-Estimated total memory usage       :  201.78 MB
+Estimated total memory usage       :  1.58 GB
 =====================================================================
                     Self Consistent Field (SCF#1)                     
 =====================================================================
 Iteration     Free Energy (Ha/atom)   SCF Error        Timing (sec)
-1            -2.6401005681E+01        1.687E-01        6.478
-2            -2.6355401429E+01        7.227E-02        2.542
-3            -2.6350895428E+01        4.601E-02        7.579
-4            -2.6352853949E+01        3.708E-02        7.654
-5            -2.6350575568E+01        1.126E-02        7.434
-6            -2.6350472019E+01        7.278E-03        7.463
-7            -2.6350502483E+01        1.637E-03        7.393
-8            -2.6350524850E+01        1.494E-03        7.598
-9            -2.6350526815E+01        5.087E-04        7.425
-10           -2.6350526582E+01        1.445E-04        7.381
-11           -2.6350526624E+01        7.273E-05        7.332
-12           -2.6350526585E+01        1.979E-05        7.441
-13           -2.6350526687E+01        1.273E-05        7.342
-14           -2.6350526700E+01        2.719E-06        7.421
+1            -2.6355258197E+01        1.696E-01        198.841
+2            -2.6352335288E+01        7.421E-02        83.659
+3            -2.6350677115E+01        4.706E-02        499.365
+4            -2.6352016275E+01        3.533E-02        390.447
+5            -2.6350017841E+01        1.132E-02        381.261
+6            -2.6350082528E+01        6.960E-03        384.013
+7            -2.6350148826E+01        2.135E-03        381.972
+8            -2.6350185841E+01        9.162E-04        382.987
+9            -2.6350189817E+01        7.829E-04        381.501
+10           -2.6350189804E+01        2.039E-04        383.307
+11           -2.6350189741E+01        8.830E-05        389.664
+12           -2.6350189842E+01        1.910E-05        383.678
+13           -2.6350189825E+01        1.210E-05        389.283
+14           -2.6350189893E+01        4.600E-06        381.770
 Total number of SCF: 14    
 ====================================================================
                                 Energy                              
 ====================================================================
-Free energy per atom               : -2.6350526700E+01 (Ha/atom)
-Total free energy                  : -1.3175263350E+02 (Ha)
-Band structure energy              : -1.2242173084E+01 (Ha)
-Exchange correlation energy        : -2.1939876687E+01 (Ha)
-Self and correction energy         : -2.0603335695E+02 (Ha)
-Entropy*kb*T                       : -4.3546669761E-11 (Ha)
-Fermi level                        :  3.0096152038E-01 (Ha)
-Average force                      :  1.1409756142E-01 (Ha/Bohr)
-Maximum force                      :  2.5515639812E-01 (Ha/Bohr)
-Time for force calculation         :  0.875 (sec)
+Free energy per atom               : -2.6350189893E+01 (Ha/atom)
+Total free energy                  : -1.3175094947E+02 (Ha)
+Band structure energy              : -1.2242862137E+01 (Ha)
+Exchange correlation energy        : -2.1936798646E+01 (Ha)
+Self and correction energy         : -2.0603305348E+02 (Ha)
+Entropy*kb*T                       : -4.1200503322E-10 (Ha)
+Fermi level                        :  2.3244610007E-01 (Ha)
+Average force                      :  1.1767715602E-01 (Ha/Bohr)
+Maximum force                      :  2.6078530139E-01 (Ha/Bohr)
+Time for force calculation         :  14.619 (sec)
 Stress (GPa):
-    -31.4882471771       5.3252946809      -2.6328904310
-      5.3252946809     -33.1780222694       2.3111156084
-     -2.6328904310       2.3111156084     -44.5547838821
-Pressure                           :  3.6407017776E+01 (GPa)
-Maximum stress                     :  4.4554783882E+01 (GPa)
-Time for stress calculation        :  2.640 (sec)
+    -30.9395613653       5.4701417527      -2.9317285015
+      5.4701417527     -33.4444589183       2.2068293787
+     -2.9317285015       2.2068293787     -44.3235918452
+Pressure                           :  3.6235870710E+01 (GPa)
+Maximum stress                     :  4.4323591845E+01 (GPa)
+Time for stress calculation        :  42.099 (sec)
 ***************************************************************************
                                Timing info                                 
 ***************************************************************************
-Total walltime                     :  110.855 sec
+Total walltime                     :  5473.924 sec
 ___________________________________________________________________________
 
 ***************************************************************************
