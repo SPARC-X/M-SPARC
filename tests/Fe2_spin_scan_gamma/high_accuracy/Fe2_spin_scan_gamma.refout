@@ -1,8 +1,8 @@
 ***************************************************************************
-*                      M-SPARC v1.0.0 (May 15, 2022)                      *
+*                      M-SPARC v1.0.0 (Oct 26, 2022)                      *
 *   Copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech   *
 *           Distributed under GNU General Public License 3 (GPL)          *
-*                Date: 21-Jun-2022  Start time: 15:47:09                  *
+*                Date: 06-Nov-2022  Start time: 18:38:32                  *
 ***************************************************************************
                            Input parameters                                
 ***************************************************************************
@@ -46,7 +46,7 @@ PRINT_FORCES: 1
 PRINT_ATOMS: 1
 PRINT_EIGEN: 0
 PRINT_DENSITY: 0
-OUTPUT_FILE: Fe2.out
+OUTPUT_FILE: Fe2_spin_scan_gamma.out
 ***************************************************************************
                                 Cell                                       
 ***************************************************************************
@@ -62,12 +62,12 @@ Mesh spacing in x-direction        :  0.079284 (Bohr)
 Mesh spacing in y-direction        :  0.079284 (Bohr)
 Mesh spacing in z direction        :  0.078890 (Bohr)
 Number of symmetry adapted k-points:  1
-Output printed to                  :  Fe2.out
+Output printed to                  :  Fe2_spin_scan_gamma.out
 Total number of atom types         :  1
 Total number of atoms              :  2
 Total number of electrons          :  32
 Atom type 1  (valence electrons)   :  Fe 16
-Pseudopotential                    :  Fe.pot
+Pseudopotential                    :  ../Fe.psp8
 lloc                               :  4
 Pseudocharge radii of atom type 1  :  6.42 6.42 6.39
 Number of atoms of type 1          :  2
@@ -76,41 +76,41 @@ Estimated total memory usage       :  198.62 MB
                             Self Consistent Field (SCF#1)                     
 ========================================================================================
 Iteration     Free Energy (Ha/atom)    Magnetization     SCF Error        Timing (sec)
-1            -1.1571247125E+02         1.8131E-08        1.759E-01        61.590
-2            -1.1416205428E+02         1.6578E-08        1.117E-01        22.550
-3            -1.1415191657E+02         1.0488E-08        3.786E-02        78.952
-4            -1.1415476108E+02         2.5231E-09        4.330E-03        78.149
-5            -1.1415774158E+02         8.5364E-10        1.087E-03        78.063
-6            -1.1415794894E+02         3.2614E-10        3.487E-04        78.145
-7            -1.1415798175E+02         9.0786E-11        6.306E-05        77.951
-8            -1.1415798900E+02         5.6872E-11        3.468E-05        78.549
-9            -1.1415798861E+02         1.9064E-11        9.103E-06        77.094
+1            -1.1571247125E+02         1.8131E-08        1.759E-01        68.589
+2            -1.1416205431E+02         1.6578E-08        1.117E-01        24.370
+3            -1.1415191648E+02         1.0488E-08        3.786E-02        58.082
+4            -1.1415476099E+02         2.5199E-09        4.331E-03        50.108
+5            -1.1415774160E+02         8.5402E-10        1.087E-03        51.174
+6            -1.1415794894E+02         3.2595E-10        3.487E-04        50.998
+7            -1.1415798175E+02         9.0683E-11        6.306E-05        50.575
+8            -1.1415798900E+02         5.6882E-11        3.468E-05        52.165
+9            -1.1415798861E+02         1.9064E-11        9.103E-06        50.114
 Total number of SCF: 9     
 ====================================================================
                                 Energy                              
 ====================================================================
 Free energy per atom               : -1.1415798861E+02 (Ha/atom)
 Total free energy                  : -2.2831597722E+02 (Ha)
-Band structure energy              :  2.1149028678E+00 (Ha)
-Exchange correlation energy        : -3.1398896794E+01 (Ha)
+Band structure energy              :  2.1149028614E+00 (Ha)
+Exchange correlation energy        : -3.1398896795E+01 (Ha)
 Self and correction energy         : -2.4173788459E+02 (Ha)
-Entropy*kb*T                       : -3.5389143504E-10 (Ha)
-Fermi level                        :  2.1070194044E+00 (Ha)
+Entropy*kb*T                       : -3.5389148317E-10 (Ha)
+Fermi level                        :  2.1070194038E+00 (Ha)
 Net Magnetization                  :  1.9063861600E-11 
-Average force                      :  9.5937276094E-01 (Ha/Bohr)
-Maximum force                      :  9.5937276094E-01 (Ha/Bohr)
-Time for force calculation         :  24.149 (sec)
+Average force                      :  9.5937276419E-01 (Ha/Bohr)
+Maximum force                      :  9.5937276419E-01 (Ha/Bohr)
+Time for force calculation         :  24.374 (sec)
 Stress (GPa):
- -21921.0694866834    1395.4453843010     -50.3300922013
-   1395.4453843010  -21977.5078233333    -126.4934729858
-    -50.3300922013    -126.4934729858  -22381.8515118489
-Pressure                           :  2.2093476274E+04 (GPa)
-Maximum stress                     :  2.2381851512E+04 (GPa)
-Time for stress calculation        :  68.482 (sec)
+ -21921.0694806687    1395.4453763950     -50.3300934109
+   1395.4453763950  -21977.5078178930    -126.4934745888
+    -50.3300934109    -126.4934745888  -22381.8515218789
+Pressure                           :  2.2093476273E+04 (GPa)
+Maximum stress                     :  2.2381851522E+04 (GPa)
+Time for stress calculation        :  71.193 (sec)
 ***************************************************************************
                                Timing info                                 
 ***************************************************************************
-Total walltime                     :  868.686 sec
+Total walltime                     :  671.958 sec
 ___________________________________________________________________________
 
 ***************************************************************************
