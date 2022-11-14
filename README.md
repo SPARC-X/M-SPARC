@@ -50,7 +50,7 @@ S = msparc('filename',parallel_switch);
 ```
 If `parallel_switch = 1`, M-SPARC will start using the parallel pool, and if `parallel_switch = 0`, M-SPARC will not use the parallel pool, which is the default. Only turn on parallel pool if k-points or spin are present.
 
-A suite of test systems is provided in the 'tests/' directory. The test systems are arranged in a hierarchal systems of directories. Input and reference output files for each test system is stored in separate folders with the same name. A python script named 'test.py' is also provided to launch the tests on a cluster. Details on how to use the Python script can be found in 'ReadMe' file in the 'tests\' folder.
+A suite of test systems is provided in the 'tests/' directory. The test systems are arranged in a hierarchal systems of directories. Input and reference output files for each test system is stored in separate folders with the same name. A python script named 'MSPARC_testing_script.py' is also provided to launch the tests on a cluster. Details on how to use the Python script can be found in 'ReadMe.md' file in the 'tests\' folder.
 
 ### (5) Output:
 
