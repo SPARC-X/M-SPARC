@@ -102,4 +102,4 @@ If you publish work using/regarding M-SPARC, please cite some of the following a
 ### (6) Acknowledgement:
   
 * U.S. Department of Energy, Office of Science: DE-SC0019410 
-* U.S. National Science Foundation: 1333500 and 1553212
+* Preliminary developments: U.S. National Science Foundation (1333500,1553212)

@@ -2,7 +2,7 @@
 *                      M-SPARC v1.0.0 (Oct 26, 2022)                      *
 *   Copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech   *
 *           Distributed under GNU General Public License 3 (GPL)          *
-*                Date: 06-Nov-2022  Start time: 18:36:23                  *
+*                Date: 13-Nov-2022  Start time: 12:42:37                  *
 ***************************************************************************
                            Input parameters                                
 ***************************************************************************
@@ -74,20 +74,20 @@ Estimated total memory usage       :  670.38 MB
                     Self Consistent Field (SCF#1)                     
 =====================================================================
 Iteration     Free Energy (Ha/atom)   SCF Error        Timing (sec)
-1            -1.4345448711E+02        3.143E-02        135.560
-2            -1.4345626399E+02        8.836E-03        49.185
-3            -1.4345646567E+02        5.195E-03        48.943
-4            -1.4345633703E+02        3.623E-03        48.890
-5            -1.4345625840E+02        1.835E-03        48.777
-6            -1.4345625604E+02        1.402E-03        48.354
-7            -1.4345623739E+02        3.249E-04        48.172
-8            -1.4345623779E+02        2.371E-04        48.416
-9            -1.4345623760E+02        3.968E-05        48.142
-10           -1.4345623760E+02        1.864E-05        47.542
-11           -1.4345623760E+02        6.579E-06        47.306
-12           -1.4345623759E+02        2.465E-06        46.171
-13           -1.4345623760E+02        1.715E-06        46.496
-14           -1.4345623760E+02        6.604E-07        46.020
+1            -1.4345448711E+02        3.143E-02        135.738
+2            -1.4345626399E+02        8.836E-03        48.771
+3            -1.4345646567E+02        5.195E-03        48.726
+4            -1.4345633703E+02        3.623E-03        48.332
+5            -1.4345625840E+02        1.835E-03        48.151
+6            -1.4345625604E+02        1.402E-03        48.170
+7            -1.4345623739E+02        3.249E-04        48.314
+8            -1.4345623779E+02        2.371E-04        47.748
+9            -1.4345623760E+02        3.968E-05        47.254
+10           -1.4345623760E+02        1.864E-05        46.901
+11           -1.4345623760E+02        6.579E-06        46.704
+12           -1.4345623759E+02        2.465E-06        46.094
+13           -1.4345623760E+02        1.715E-06        45.447
+14           -1.4345623760E+02        6.604E-07        45.382
 Total number of SCF: 14    
 ====================================================================
                                 Energy                              
@@ -98,21 +98,23 @@ Band structure energy              : -9.8729055599E+01 (Ha)
 Exchange correlation energy        : -9.3497095781E+01 (Ha)
 Self and correction energy         : -4.9247542233E+02 (Ha)
 Entropy*kb*T                       : -4.1467090865E-03 (Ha)
-Fermi level                        : -1.8887317686E-01 (Ha)
+Fermi level                        : -1.8887317687E-01 (Ha)
 DFT-D3 correction                  : -1.8685839468E-02 (Ha)
-Average force                      :  5.5018745447E-03 (Ha/Bohr)
-Maximum force                      :  5.5041233269E-03 (Ha/Bohr)
-Time for force calculation         :  2.431 (sec)
+Average force                      :  5.5018745445E-03 (Ha/Bohr)
+Maximum force                      :  5.5041233288E-03 (Ha/Bohr)
+Time for force calculation         :  2.433 (sec)
 ***************************************************************************
                                Timing info                                 
 ***************************************************************************
-Total walltime                     :  816.935 sec
+Total walltime                     :  808.835 sec
 ___________________________________________________________________________
 
 ***************************************************************************
 *             Material Physics & Mechanics Group, Georgia Tech            *
 *                       PI: Phanish Suryanarayana                         *
-*                Main Developers: Qimen Xu, Abhiraj Sharma                *
-*     Acknowledgements: U.S. DOE (DE-SC0019410); NSF (1333500,1553212)    *
+*               List of contributors: See the documentation               *
+*         Citation: See README.md or the documentation for details        *
+*               Acknowledgements: U.S. DOE SC (DE-SC0019410)              *
+*      {Preliminary developments: U.S. NSF (1333500,1553212)}             *
 ***************************************************************************
                                                                            
