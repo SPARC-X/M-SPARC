@@ -99,7 +99,10 @@ If you publish work using/regarding M-SPARC, please cite some of the following a
 * **Atomic forces**: https://doi.org/10.1016/j.cpc.2016.09.020, https://doi.org/10.1016/j.cpc.2017.02.019
 * **Mixing**: https://doi.org/10.1016/j.cplett.2016.01.033, https://doi.org/10.1016/j.cplett.2015.06.029, https://doi.org/10.1016/j.cplett.2019.136983 
 
+
 ### (6) Acknowledgement:
   
-* U.S. Department of Energy, Office of Science: DE-SC0019410 
-* Preliminary developments: U.S. National Science Foundation (1333500,1553212)
+* **U.S. Department of Energy (DOE), Office of Science (SC): DE-SC0019410**
+
+  * Preliminary developments
+    * U.S. National Science Foundation: 1333500, and 1553212
