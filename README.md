@@ -89,7 +89,7 @@ The `.aimd` file contains the atomic positions, atomic velocities, atomic forces
 The `.restart` file contains information necessary to perform a restarted MD calculation. 
 
 
-### (7) Citation:
+### (6) Citation:
 
 If you publish work using/regarding M-SPARC, please cite some of the following articles, particularly those that are most relevant to your work:
 * **General**: https://doi.org/10.1016/j.softx.2020.100423
@@ -100,7 +100,7 @@ If you publish work using/regarding M-SPARC, please cite some of the following a
 * **Mixing**: https://doi.org/10.1016/j.cplett.2016.01.033, https://doi.org/10.1016/j.cplett.2015.06.029, https://doi.org/10.1016/j.cplett.2019.136983 
 
 
-### (6) Acknowledgement:
+### (7) Acknowledgement:
   
 * **U.S. Department of Energy (DOE), Office of Science (SC): DE-SC0019410**
 
