@@ -1,17 +1,27 @@
 \documentclass[xcolor=dvipsnames,t]{beamer}
-%\usepackage[utf8]{inputenc}
+% \usepackage[utf8]{inputenc}
 \usepackage{verbatim} % for comment
 \usetheme{Madrid}
 \usecolortheme{seahorse}
 \usepackage{beamerouterthemesplit}
+\usepackage{array}
+\usepackage[T1]{fontenc}
+
+
+\setbeamerfont{institute}{size=\normalsize}
 
 
 \title[] {M-SPARC  \\ {\small User guide}}
-\author{Qimen Xu, Abhiraj Sharma, Phanish Suryanarayana}
+%\author{Qimen Xu, Abhiraj Sharma, Phanish Suryanarayana}
 \institute[]
 {
-Material Physics \& Mechanics Group \\
-Georgia Institute of Technology
+Material Physics \& Mechanics Group, Georgia Tech \\
+PI: Phanish Suryanarayana \\
+\hyperlink{Contributors}{\texttt{Contributors}} \\
+\hyperlink{Citation}{\texttt{Citation}}\\
+\hyperlink{Acknowledgments}{\texttt{Acknowledgements}}\\
+%Collaborators: J.E. Pask (LLNL), A.J. Medford (GT), E. Chow (GT) \\
+%Georgia Institute of Technology
 }
 
 \date{}
@@ -90,6 +100,26 @@ Matlab-Simulation Package for Ab-initio Real-space Calculations (M-SPARC) is a r
 
 \end{frame}
 
+\begin{frame}[allowframebreaks]{\textbf{Contributors}} \label{Contributors}
+  %\begin{itemize}
+      %\item U.S. Department of Energy, Office of Science: DE-SC0019410
+      %\item U.S. National Science Foundation: 1333500 and 1553212
+  %\end{itemize}
+
+	\begin{itemize}
+	\item \textbf{Phanish Suryanarayana} (PI)
+	\begin{itemize}
+ 	\item \textbf{Qimen Xu}: Code infrastructure, SCF, Energy, Force, LDA \\  
+ 	\item \textbf{Abhiraj Sharma}: Code infrastructure, k-points, PBE, Stress, Non-orthogonal, Relaxation \\   
+ 	\item \textbf{Boqin Zhang}: vdW-DF, DFT-D3, SCAN \\  
+ 	\item \textbf{Xin Jing}: Hybrid, SOC \\  
+ 	\item \textbf{Shashikant Kumar}: Testing framework, NLCC \\  
+ 	\end{itemize}
+ 	\end{itemize}
+
+
+  
+\end{frame}
 
 
 \begin{frame}[allowframebreaks]{\textbf{Citation}} \label{Citation}
@@ -106,14 +136,23 @@ If you publish work using/regarding M-SPARC, please cite some of the following a
 
 
 
-\begin{frame}[allowframebreaks]{\textbf{Acknowledgments}} \label{Acknowledgments}
+  \begin{frame}[allowframebreaks]{\textbf{Acknowledgments}} \label{Acknowledgments}
+  
   \begin{itemize}
-      \item U.S. Department of Energy, Office of Science: DE-SC0019410
-      \item U.S. National Science Foundation: 1333500 and 1553212
+      \item \textbf{U.S. Department of Energy (DOE), Office of Science (SC): DE-SC0019410} \\
+
+      \vspace{10pt}
+      \begin{itemize}
+          \item Preliminary developments
+          \begin{itemize}
+              \item U.S. National Science Foundation: 1333500, and 1553212
+          \end{itemize}
+      \end{itemize}
+      
+      
   \end{itemize}
   
-\end{frame}
-
+  \end{frame}
 
 
 \begin{frame}[allowframebreaks,fragile]{\textbf{Installation}} \label{Installation}

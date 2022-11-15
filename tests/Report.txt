@@ -1,0 +1,552 @@
+*************************************************************************** 
+*                   TEST REPORT (Version 10 Nov 2022)                    *
+*                      Date:  11/13/2022, 22:55:04                        * 
+*************************************************************************** 
+Tests Passed: 47/47
+Tests Failed: 0/47
+Average error in energy (Ha/atom): 2.12765957854e-08
+*************************************************************************** 
+*************************************************************************** 
+                    Details for the Passed systems               
+-------------------------- 
+Test Result: Passed 
+System name: BaTiO3
+Single Point Calculation 
+Energy error (Ha/atom): 0.0
+Force error (Ha/Bohr): 0.00e+00
+Stress (%) error: 0.00e+00
+Number of SCF iteration error: 0.0
+walltime error (%): 0.00e+00
+-------------------------- 
+
+-------------------------- 
+Test Result: Passed 
+System name: CuSi7
+Single Point Calculation 
+Energy error (Ha/atom): 0.0
+Force error (Ha/Bohr): 0.00e+00
+Stress (%) error: 0.00e+00
+Number of SCF iteration error: 0.0
+walltime error (%): 0.00e+00
+-------------------------- 
+
+-------------------------- 
+Test Result: Passed 
+System name: Fe_spin
+Single Point Calculation 
+Energy error (Ha/atom): 0.0
+Force error (Ha/Bohr): 0.00e+00
+Stress (%) error: 0.00e+00
+Number of SCF iteration error: 0.0
+walltime error (%): 0.00e+00
+Spin polarized calculation: 
+Error in net magnetization: 0.0
+-------------------------- 
+
+-------------------------- 
+Test Result: Passed 
+System name: H2O_sheet
+Single Point Calculation 
+Energy error (Ha/atom): 9.81100000352e-07
+Force error (Ha/Bohr): 0.00e+00
+Stress (%) error: 0.00e+00
+Number of SCF iteration error: 0.0
+walltime error (%): 0.00e+00
+-------------------------- 
+
+-------------------------- 
+Test Result: Passed 
+System name: H2O_wire
+Single Point Calculation 
+Energy error (Ha/atom): 4.90000040543e-09
+Force error (Ha/Bohr): 0.00e+00
+Stress (%) error: 0.00e+00
+Number of SCF iteration error: 0.0
+walltime error (%): 0.00e+00
+-------------------------- 
+
+-------------------------- 
+Test Result: Passed 
+System name: O2_spin
+Single Point Calculation 
+Energy error (Ha/atom): 0.0
+Force error (Ha/Bohr): 0.00e+00
+Stress (%) error: 0.00e+00
+Number of SCF iteration error: 0.0
+walltime error (%): 0.00e+00
+Spin polarized calculation: 
+Error in net magnetization: 0.0
+-------------------------- 
+
+-------------------------- 
+Test Result: Passed 
+System name: Si_cell_geopt
+CELL relaxation
+Error in energy in the final relaxed position (Ha/atom): 0.00e+00  
+Error in the final relaxed Cell (Bohr): 0.00e+00  
+Number of SCF iteration error: 0.0
+walltime error (%): 0.00e+00
+-------------------------- 
+
+-------------------------- 
+Test Result: Passed 
+System name: Si8_atom_geopt
+Atom position relaxation
+Error in energy in the final relaxed position (Ha/atom): 0.00e+00  
+Error in the final relaxed atom position (Bohr): 0.00e+00  
+Number of SCF iteration error: 0.0
+walltime error (%): 0.00e+00
+-------------------------- 
+
+-------------------------- 
+Test Result: Passed 
+System name: Si8_kpt
+Single Point Calculation 
+Energy error (Ha/atom): 0.0
+Force error (Ha/Bohr): 0.00e+00
+Stress (%) error: 0.00e+00
+Number of SCF iteration error: 0.0
+walltime error (%): 0.00e+00
+-------------------------- 
+
+-------------------------- 
+Test Result: Passed 
+System name: Si8
+Single Point Calculation 
+Energy error (Ha/atom): 0.0
+Force error (Ha/Bohr): 0.00e+00
+Stress (%) error: 0.00e+00
+Number of SCF iteration error: 0.0
+walltime error (%): 0.00e+00
+-------------------------- 
+
+-------------------------- 
+Test Result: Passed 
+System name: SiH4
+Single Point Calculation 
+Energy error (Ha/atom): 0.0
+Force error (Ha/Bohr): 0.00e+00
+Stress (%) error: 0.00e+00
+Number of SCF iteration error: 0.0
+walltime error (%): 0.00e+00
+-------------------------- 
+
+-------------------------- 
+Test Result: Passed 
+System name: BaTiO3_quick
+Single Point Calculation 
+Energy error (Ha/atom): 0.0
+Force error (Ha/Bohr): 0.00e+00
+Stress (%) error: 0.00e+00
+Number of SCF iteration error: 0.0
+walltime error (%): 0.00e+00
+-------------------------- 
+
+-------------------------- 
+Test Result: Passed 
+System name: H2O_sheet_quick
+Single Point Calculation 
+Energy error (Ha/atom): 0.0
+Force error (Ha/Bohr): 0.00e+00
+Stress (%) error: 0.00e+00
+Number of SCF iteration error: 0.0
+walltime error (%): 0.00e+00
+-------------------------- 
+
+-------------------------- 
+Test Result: Passed 
+System name: H2O_wire_quick
+Single Point Calculation 
+Energy error (Ha/atom): 0.0
+Force error (Ha/Bohr): 0.00e+00
+Stress (%) error: 0.00e+00
+Number of SCF iteration error: 0.0
+walltime error (%): 0.00e+00
+-------------------------- 
+
+-------------------------- 
+Test Result: Passed 
+System name: SiH4_quick
+Single Point Calculation 
+Energy error (Ha/atom): 0.0
+Force error (Ha/Bohr): 0.00e+00
+Stress (%) error: 0.00e+00
+Number of SCF iteration error: 0.0
+walltime error (%): 0.00e+00
+-------------------------- 
+
+-------------------------- 
+Test Result: Passed 
+System name: Au_fcc211
+Single Point Calculation 
+Energy error (Ha/atom): 0.0
+Force error (Ha/Bohr): 0.00e+00
+Stress (%) error: 0.00e+00
+Number of SCF iteration error: 0.0
+walltime error (%): 0.00e+00
+-------------------------- 
+
+-------------------------- 
+Test Result: Passed 
+System name: MgO
+Single Point Calculation 
+Energy error (Ha/atom): 0.0
+Force error (Ha/Bohr): 0.00e+00
+Stress (%) error: 0.00e+00
+Number of SCF iteration error: 0.0
+walltime error (%): 0.00e+00
+-------------------------- 
+
+-------------------------- 
+Test Result: Passed 
+System name: MoS2
+Single Point Calculation 
+Energy error (Ha/atom): 1.40000011584e-08
+Force error (Ha/Bohr): 0.00e+00
+Stress (%) error: 0.00e+00
+Number of SCF iteration error: 0.0
+walltime error (%): 0.00e+00
+-------------------------- 
+
+-------------------------- 
+Test Result: Passed 
+System name: He16_NVE
+MD Simulation
+MD step    Energy Error (Ha/atom)   Ionic KE error (Ha/atom)     Force Error (Ha/Bohr)      Stress error (%)
+Number of SCF iteration) error: 0.0
+0   	     0.00e+00   			     0.00e+00   			     0.00e+00	   	 		   0.00e+00
+1   	     0.00e+00   			     0.00e+00   			     0.00e+00	   	 		   0.00e+00
+2   	     0.00e+00   			     0.00e+00   			     0.00e+00	   	 		   0.00e+00
+3   	     0.00e+00   			     0.00e+00   			     0.00e+00	   	 		   0.00e+00
+4   	     0.00e+00   			     0.00e+00   			     0.00e+00	   	 		   0.00e+00
+walltime error (%): 0.0
+-------------------------- 
+
+-------------------------- 
+Test Result: Passed 
+System name: TiNi_monoclinic
+Single Point Calculation 
+Energy error (Ha/atom): 0.0
+Force error (Ha/Bohr): 0.00e+00
+Stress (%) error: 0.00e+00
+Number of SCF iteration error: 0.0
+walltime error (%): 0.00e+00
+-------------------------- 
+
+-------------------------- 
+Test Result: Passed 
+System name: P_triclinic
+Single Point Calculation 
+Energy error (Ha/atom): 0.0
+Force error (Ha/Bohr): 0.00e+00
+Stress (%) error: 0.00e+00
+Number of SCF iteration error: 0.0
+walltime error (%): 0.00e+00
+-------------------------- 
+
+-------------------------- 
+Test Result: Passed 
+System name: AlSi_orthogonal_quick_scf
+Single Point Calculation 
+Energy error (Ha/atom): 0.0
+Force error (Ha/Bohr): 0.00e+00
+Stress (%) error: 0.00e+00
+Number of SCF iteration error: 0.0
+walltime error (%): 0.00e+00
+-------------------------- 
+
+-------------------------- 
+Test Result: Passed 
+System name: AlSi_primitive_quick_relax
+Atom position relaxation
+Error in energy in the final relaxed position (Ha/atom): 0.00e+00  
+Error in the final relaxed atom position (Bohr): 0.00e+00  
+Number of SCF iteration error: 0.0
+walltime error (%): 0.00e+00
+-------------------------- 
+
+-------------------------- 
+Test Result: Passed 
+System name: BN_primitive_quick_md
+MD Simulation
+MD step    Energy Error (Ha/atom)   Ionic KE error (Ha/atom)     Force Error (Ha/Bohr)      Stress error (%)
+Number of SCF iteration) error: 0.0
+0   	     0.00e+00   			     0.00e+00   			     0.00e+00	   	 		   0.00e+00
+1   	     0.00e+00   			     0.00e+00   			     0.00e+00	   	 		   0.00e+00
+2   	     0.00e+00   			     0.00e+00   			     0.00e+00	   	 		   0.00e+00
+3   	     0.00e+00   			     0.00e+00   			     0.00e+00	   	 		   0.00e+00
+4   	     0.00e+00   			     0.00e+00   			     0.00e+00	   	 		   0.00e+00
+walltime error (%): 0.0
+-------------------------- 
+
+-------------------------- 
+Test Result: Passed 
+System name: LiNbO2_primitive_quick_scf
+Single Point Calculation 
+Energy error (Ha/atom): 0.0
+Force error (Ha/Bohr): 0.00e+00
+Stress (%) error: 0.00e+00
+Number of SCF iteration error: 0.0
+walltime error (%): 0.00e+00
+-------------------------- 
+
+-------------------------- 
+Test Result: Passed 
+System name: SiC_orthogonal_quick_relax
+Atom position relaxation
+Error in energy in the final relaxed position (Ha/atom): 0.00e+00  
+Error in the final relaxed atom position (Bohr): 0.00e+00  
+Number of SCF iteration error: 0.0
+walltime error (%): 0.00e+00
+-------------------------- 
+
+-------------------------- 
+Test Result: Passed 
+System name: TiO2_orthogonal_quick_md
+MD Simulation
+MD step    Energy Error (Ha/atom)   Ionic KE error (Ha/atom)     Force Error (Ha/Bohr)      Stress error (%)
+Number of SCF iteration) error: 0.0
+0   	     0.00e+00   			     0.00e+00   			     0.00e+00	   	 		   0.00e+00
+1   	     0.00e+00   			     0.00e+00   			     0.00e+00	   	 		   0.00e+00
+2   	     0.00e+00   			     0.00e+00   			     0.00e+00	   	 		   0.00e+00
+3   	     0.00e+00   			     0.00e+00   			     0.00e+00	   	 		   0.00e+00
+4   	     0.00e+00   			     0.00e+00   			     0.00e+00	   	 		   0.00e+00
+walltime error (%): 0.0
+-------------------------- 
+
+-------------------------- 
+Test Result: Passed 
+System name: Au_wire_d3
+Single Point Calculation 
+Energy error (Ha/atom): 0.0
+Force error (Ha/Bohr): 0.00e+00
+Stress (%) error: 0.00e+00
+Number of SCF iteration error: 0.0
+walltime error (%): 0.00e+00
+-------------------------- 
+
+-------------------------- 
+Test Result: Passed 
+System name: BaTiO3_scan
+Single Point Calculation 
+Energy error (Ha/atom): 0.0
+Force error (Ha/Bohr): 0.00e+00
+Stress (%) error: 0.00e+00
+Number of SCF iteration error: 0.0
+walltime error (%): 0.00e+00
+-------------------------- 
+
+-------------------------- 
+Test Result: Passed 
+System name: BaTiO3_vdWDF1
+Single Point Calculation 
+Energy error (Ha/atom): 0.0
+Force error (Ha/Bohr): 0.00e+00
+Stress (%) error: 0.00e+00
+Number of SCF iteration error: 0.0
+walltime error (%): 0.00e+00
+-------------------------- 
+
+-------------------------- 
+Test Result: Passed 
+System name: BaTiO3_vdWDF2
+Single Point Calculation 
+Energy error (Ha/atom): 0.0
+Force error (Ha/Bohr): 0.00e+00
+Stress (%) error: 0.00e+00
+Number of SCF iteration error: 0.0
+walltime error (%): 0.00e+00
+-------------------------- 
+
+-------------------------- 
+Test Result: Passed 
+System name: C_HSE_aux
+Single Point Calculation 
+Energy error (Ha/atom): 0.0
+Force error (Ha/Bohr): 0.00e+00
+Stress (%) error: 0.00e+00
+Number of SCF iteration error: 0.0
+walltime error (%): 0.00e+00
+-------------------------- 
+
+-------------------------- 
+Test Result: Passed 
+System name: Fe2_spin_gamma_ortho_vdWDF1
+Single Point Calculation 
+Energy error (Ha/atom): 0.0
+Force error (Ha/Bohr): 0.00e+00
+Stress (%) error: 0.00e+00
+Number of SCF iteration error: 0.0
+walltime error (%): 0.00e+00
+Spin polarized calculation: 
+Error in net magnetization: 0.0
+-------------------------- 
+
+-------------------------- 
+Test Result: Passed 
+System name: Fe2_spin_kpt_nonOrtho_vdWDF2
+Single Point Calculation 
+Energy error (Ha/atom): 0.0
+Force error (Ha/Bohr): 0.00e+00
+Stress (%) error: 0.00e+00
+Number of SCF iteration error: 0.0
+walltime error (%): 0.00e+00
+Spin polarized calculation: 
+Error in net magnetization: 0.0
+-------------------------- 
+
+-------------------------- 
+Test Result: Passed 
+System name: Fe2_spin_scan_gamma
+Single Point Calculation 
+Energy error (Ha/atom): 0.0
+Force error (Ha/Bohr): 0.00e+00
+Stress (%) error: 0.00e+00
+Number of SCF iteration error: 0.0
+walltime error (%): 0.00e+00
+Spin polarized calculation: 
+Error in net magnetization: 0.0
+-------------------------- 
+
+-------------------------- 
+Test Result: Passed 
+System name: Fe2_spin_scan_kpt
+Single Point Calculation 
+Energy error (Ha/atom): 0.0
+Force error (Ha/Bohr): 0.00e+00
+Stress (%) error: 0.00e+00
+Number of SCF iteration error: 0.0
+walltime error (%): 0.00e+00
+Spin polarized calculation: 
+Error in net magnetization: 0.0
+-------------------------- 
+
+-------------------------- 
+Test Result: Passed 
+System name: MoS2_surface_d3
+Single Point Calculation 
+Energy error (Ha/atom): 0.0
+Force error (Ha/Bohr): 0.00e+00
+Stress (%) error: 0.00e+00
+Number of SCF iteration error: 0.0
+walltime error (%): 0.00e+00
+-------------------------- 
+
+-------------------------- 
+Test Result: Passed 
+System name: NaCl_PBE0
+Single Point Calculation 
+Energy error (Ha/atom): 0.0
+Force error (Ha/Bohr): 0.00e+00
+Stress (%) error: 0.00e+00
+Number of SCF iteration error: 0.0
+walltime error (%): 0.00e+00
+-------------------------- 
+
+-------------------------- 
+Test Result: Passed 
+System name: O2_spin_HSE
+Single Point Calculation 
+Energy error (Ha/atom): 0.0
+Force error (Ha/Bohr): 0.00e+00
+Stress (%) error: 0.00e+00
+Number of SCF iteration error: 0.0
+walltime error (%): 0.00e+00
+Spin polarized calculation: 
+Error in net magnetization: 0.0
+-------------------------- 
+
+-------------------------- 
+Test Result: Passed 
+System name: PtAu_SOC
+Single Point Calculation 
+Energy error (Ha/atom): 0.0
+Force error (Ha/Bohr): 0.00e+00
+Stress (%) error: 0.00e+00
+Number of SCF iteration error: 0.0
+walltime error (%): 0.00e+00
+-------------------------- 
+
+-------------------------- 
+Test Result: Passed 
+System name: Si2_kpt_PBE0
+Single Point Calculation 
+Energy error (Ha/atom): 0.0
+Force error (Ha/Bohr): 0.00e+00
+Stress (%) error: 0.00e+00
+Number of SCF iteration error: 0.0
+walltime error (%): 0.00e+00
+-------------------------- 
+
+-------------------------- 
+Test Result: Passed 
+System name: Si4_kpt_vdWDF1
+Single Point Calculation 
+Energy error (Ha/atom): 0.0
+Force error (Ha/Bohr): 0.00e+00
+Stress (%) error: 0.00e+00
+Number of SCF iteration error: 0.0
+walltime error (%): 0.00e+00
+-------------------------- 
+
+-------------------------- 
+Test Result: Passed 
+System name: Si4_kpt_vdWDF2
+Single Point Calculation 
+Energy error (Ha/atom): 0.0
+Force error (Ha/Bohr): 0.00e+00
+Stress (%) error: 0.00e+00
+Number of SCF iteration error: 0.0
+walltime error (%): 0.00e+00
+-------------------------- 
+
+-------------------------- 
+Test Result: Passed 
+System name: Si4_kpt_scan
+Single Point Calculation 
+Energy error (Ha/atom): 0.0
+Force error (Ha/Bohr): 0.00e+00
+Stress (%) error: 0.00e+00
+Number of SCF iteration error: 0.0
+walltime error (%): 0.00e+00
+-------------------------- 
+
+-------------------------- 
+Test Result: Passed 
+System name: Si8_atom_geopt_d3
+Atom position relaxation
+Error in energy in the final relaxed position (Ha/atom): 0.00e+00  
+Error in the final relaxed atom position (Bohr): 0.00e+00  
+Number of SCF iteration error: 0.0
+walltime error (%): 0.00e+00
+-------------------------- 
+
+-------------------------- 
+Test Result: Passed 
+System name: Si8_cell_geopt_d3
+CELL relaxation
+Error in energy in the final relaxed position (Ha/atom): 0.00e+00  
+Error in the final relaxed Cell (Bohr): 0.00e+00  
+Number of SCF iteration error: 0.0
+walltime error (%): 0.00e+00
+-------------------------- 
+
+-------------------------- 
+Test Result: Passed 
+System name: SnO_bulk_d3
+Single Point Calculation 
+Energy error (Ha/atom): 0.0
+Force error (Ha/Bohr): 0.00e+00
+Stress (%) error: 0.00e+00
+Number of SCF iteration error: 0.0
+walltime error (%): 0.00e+00
+-------------------------- 
+
+                    End for the Passed systems               
+*************************************************************************** 
+
+
+*************************************************************************** 
+                    Details for the Failed systems               
+                    End for the Failed systems               
+*************************************************************************** 

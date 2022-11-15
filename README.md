@@ -50,7 +50,7 @@ S = msparc('filename',parallel_switch);
 ```
 If `parallel_switch = 1`, M-SPARC will start using the parallel pool, and if `parallel_switch = 0`, M-SPARC will not use the parallel pool, which is the default. Only turn on parallel pool if k-points or spin are present.
 
-A suite of test systems is provided in the 'tests/' directory. The test systems are arranged in a hierarchal systems of directories. Input and reference output files for each test system is stored in separate folders with the same name. A python script named 'test.py' is also provided to launch the tests on a cluster. Details on how to use the Python script can be found in 'ReadMe' file in the 'tests\' folder.
+A suite of test systems is provided in the 'tests/' directory. The test systems are arranged in a hierarchal systems of directories. Input and reference output files for each test system is stored in separate folders with the same name. A python script named 'MSPARC_testing_script.py' is also provided to launch the tests on a cluster. Details on how to use the Python script can be found in 'ReadMe.md' file in the 'tests\' folder.
 
 ### (5) Output:
 
@@ -89,7 +89,7 @@ The `.aimd` file contains the atomic positions, atomic velocities, atomic forces
 The `.restart` file contains information necessary to perform a restarted MD calculation. 
 
 
-### (7) Citation:
+### (6) Citation:
 
 If you publish work using/regarding M-SPARC, please cite some of the following articles, particularly those that are most relevant to your work:
 * **General**: https://doi.org/10.1016/j.softx.2020.100423
@@ -99,7 +99,10 @@ If you publish work using/regarding M-SPARC, please cite some of the following a
 * **Atomic forces**: https://doi.org/10.1016/j.cpc.2016.09.020, https://doi.org/10.1016/j.cpc.2017.02.019
 * **Mixing**: https://doi.org/10.1016/j.cplett.2016.01.033, https://doi.org/10.1016/j.cplett.2015.06.029, https://doi.org/10.1016/j.cplett.2019.136983 
 
-### (6) Acknowledgement:
+
+### (7) Acknowledgement:
   
-* U.S. Department of Energy, Office of Science: DE-SC0019410 
-* U.S. National Science Foundation: 1333500 and 1553212
+* **U.S. Department of Energy (DOE), Office of Science (SC): DE-SC0019410**
+
+  * Preliminary developments
+    * U.S. National Science Foundation: 1333500, and 1553212

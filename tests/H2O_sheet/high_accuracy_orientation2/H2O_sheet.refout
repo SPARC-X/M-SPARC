@@ -2,7 +2,7 @@
 *                      M-SPARC v1.0.0 (Oct 26, 2022)                      *
 *   Copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech   *
 *           Distributed under GNU General Public License 3 (GPL)          *
-*                Date: 06-Nov-2022  Start time: 19:15:19                  *
+*                Date: 13-Nov-2022  Start time: 12:41:14                  *
 ***************************************************************************
                            Input parameters                                
 ***************************************************************************
@@ -75,51 +75,53 @@ Estimated total memory usage       :  2.37 GB
                     Self Consistent Field (SCF#1)                     
 =====================================================================
 Iteration     Free Energy (Ha/atom)   SCF Error        Timing (sec)
-1            -5.8245041163E+00        4.965E-01        83.346
-2            -5.8732337429E+00        8.899E-02        90.118
-3            -5.8740887065E+00        6.938E-02        89.534
-4            -5.8742398834E+00        4.101E-02        86.381
-5            -5.8742676573E+00        1.954E-02        71.563
-6            -5.8742749264E+00        4.262E-03        78.478
-7            -5.8742763570E+00        2.313E-03        75.813
-8            -5.8742765587E+00        6.155E-04        63.778
-9            -5.8742765662E+00        1.574E-04        62.195
-10           -5.8742765688E+00        1.291E-04        56.368
-11           -5.8742765684E+00        1.775E-05        44.840
-12           -5.8742765734E+00        8.030E-06        40.462
-13           -5.8742765817E+00        1.115E-06        35.710
-14           -5.8742765867E+00        5.191E-07        34.866
+1            -5.8245041163E+00        4.965E-01        105.419
+2            -5.8732337429E+00        8.899E-02        99.531
+3            -5.8740887065E+00        6.938E-02        101.400
+4            -5.8742398834E+00        4.101E-02        97.669
+5            -5.8742676573E+00        1.954E-02        81.945
+6            -5.8742749264E+00        4.262E-03        89.175
+7            -5.8742763570E+00        2.313E-03        86.576
+8            -5.8742765587E+00        6.155E-04        72.598
+9            -5.8742765662E+00        1.574E-04        70.065
+10           -5.8742765688E+00        1.291E-04        63.893
+11           -5.8742765684E+00        1.775E-05        51.875
+12           -5.8742765734E+00        8.030E-06        47.103
+13           -5.8742765817E+00        1.115E-06        42.268
+14           -5.8742765867E+00        5.191E-07        38.238
 Total number of SCF: 14    
 ====================================================================
                                 Energy                              
 ====================================================================
 Free energy per atom               : -5.8742765867E+00 (Ha/atom)
 Total free energy                  : -1.7622829760E+01 (Ha)
-Band structure energy              : -4.0593489530E+00 (Ha)
-Exchange correlation energy        : -4.9328631090E+00 (Ha)
+Band structure energy              : -4.0593489539E+00 (Ha)
+Exchange correlation energy        : -4.9328631091E+00 (Ha)
 Self and correction energy         : -2.6913674999E+01 (Ha)
-Entropy*kb*T                       : -1.6932813621E-07 (Ha)
-Fermi level                        : -1.8892890827E-01 (Ha)
-Average force                      :  2.4095008581E-02 (Ha/Bohr)
-Maximum force                      :  2.9038027391E-02 (Ha/Bohr)
-Time for force calculation         :  7.551 (sec)
+Entropy*kb*T                       : -1.6932813637E-07 (Ha)
+Fermi level                        : -1.8892890839E-01 (Ha)
+Average force                      :  2.4095008693E-02 (Ha/Bohr)
+Maximum force                      :  2.9038027472E-02 (Ha/Bohr)
+Time for force calculation         :  7.688 (sec)
 Stress (GPa):
-   -161.4541441574       0.0004385024       0.0000133827
-      0.0004385024     143.1892416172      -0.0003457117
-      0.0000133827      -0.0003457117    -174.2003052193
-Pressure                           :  6.4155069253E+01 (GPa)
-Maximum stress                     :  1.7420030522E+02 (GPa)
-Time for stress calculation        :  16.601 (sec)
+   -161.4541443554       0.0004385040       0.0000133816
+      0.0004385040     143.1892414195      -0.0003457069
+      0.0000133816      -0.0003457069    -174.2003053776
+Pressure                           :  6.4155069438E+01 (GPa)
+Maximum stress                     :  1.7420030538E+02 (GPa)
+Time for stress calculation        :  16.973 (sec)
 ***************************************************************************
                                Timing info                                 
 ***************************************************************************
-Total walltime                     :  1070.658 sec
+Total walltime                     :  1212.449 sec
 ___________________________________________________________________________
 
 ***************************************************************************
 *             Material Physics & Mechanics Group, Georgia Tech            *
 *                       PI: Phanish Suryanarayana                         *
-*                Main Developers: Qimen Xu, Abhiraj Sharma                *
-*     Acknowledgements: U.S. DOE (DE-SC0019410); NSF (1333500,1553212)    *
+*               List of contributors: See the documentation               *
+*         Citation: See README.md or the documentation for details        *
+*               Acknowledgements: U.S. DOE SC (DE-SC0019410)              *
+*      {Preliminary developments: U.S. NSF (1333500,1553212)}             *
 ***************************************************************************
                                                                            

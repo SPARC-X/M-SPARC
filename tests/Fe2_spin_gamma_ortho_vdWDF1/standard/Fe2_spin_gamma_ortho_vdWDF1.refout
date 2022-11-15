@@ -2,7 +2,7 @@
 *                      M-SPARC v1.0.0 (Oct 26, 2022)                      *
 *   Copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech   *
 *           Distributed under GNU General Public License 3 (GPL)          *
-*                Date: 10-Nov-2022  Start time: 12:26:45                  *
+*                Date: 13-Nov-2022  Start time: 12:15:02                  *
 ***************************************************************************
                            Input parameters                                
 ***************************************************************************
@@ -75,15 +75,15 @@ Estimated total memory usage       :  34.06 MB
                             Self Consistent Field (SCF#1)                     
 ========================================================================================
 Iteration     Free Energy (Ha/atom)    Magnetization     SCF Error        Timing (sec)
-1            -1.1414931422E+02         2.0000E+00        6.689E-02        8.327
-2            -1.1415345227E+02         2.0000E+00        4.302E-02        2.414
-3            -1.1415648265E+02         2.0000E+00        5.976E-03        2.364
-4            -1.1415650825E+02         2.0000E+00        3.188E-03        2.167
-5            -1.1415651916E+02         2.0000E+00        4.276E-04        2.408
-6            -1.1415651943E+02         2.0000E+00        5.003E-05        2.511
-7            -1.1415651944E+02         2.0000E+00        1.886E-05        2.103
-8            -1.1415651944E+02         2.0000E+00        1.001E-05        2.231
-9            -1.1415651944E+02         2.0000E+00        1.669E-06        2.342
+1            -1.1414931422E+02         2.0000E+00        6.689E-02        9.001
+2            -1.1415345227E+02         2.0000E+00        4.302E-02        2.489
+3            -1.1415648265E+02         2.0000E+00        5.976E-03        2.445
+4            -1.1415650825E+02         2.0000E+00        3.188E-03        2.368
+5            -1.1415651916E+02         2.0000E+00        4.276E-04        2.488
+6            -1.1415651943E+02         2.0000E+00        5.003E-05        2.565
+7            -1.1415651944E+02         2.0000E+00        1.886E-05        2.347
+8            -1.1415651944E+02         2.0000E+00        1.001E-05        2.298
+9            -1.1415651944E+02         2.0000E+00        1.669E-06        2.388
 Total number of SCF: 9     
 ====================================================================
                                 Energy                              
@@ -99,24 +99,26 @@ vdWDF energy                       :  9.0227478365E-02 (Ha)
 Net Magnetization                  :  2.0000004332E+00 
 Average force                      :  1.2370839948E+00 (Ha/Bohr)
 Maximum force                      :  1.2370839948E+00 (Ha/Bohr)
-Time for force calculation         :  4.098 (sec)
+Time for force calculation         :  4.189 (sec)
 Stress (GPa):
  -15266.2274409335    1717.1410207230   -1717.2593119547
    1717.1410207230  -15626.7542109206   -1179.4542363888
   -1717.2593119547   -1179.4542363888  -15626.7059849836
 Pressure                           :  1.5506562546E+04 (GPa)
 Maximum stress                     :  1.5626754211E+04 (GPa)
-Time for stress calculation        :  8.951 (sec)
+Time for stress calculation        :  9.230 (sec)
 ***************************************************************************
                                Timing info                                 
 ***************************************************************************
-Total walltime                     :  238.626 sec
+Total walltime                     :  248.891 sec
 ___________________________________________________________________________
 
 ***************************************************************************
 *             Material Physics & Mechanics Group, Georgia Tech            *
 *                       PI: Phanish Suryanarayana                         *
-*                Main Developers: Qimen Xu, Abhiraj Sharma                *
-*     Acknowledgements: U.S. DOE (DE-SC0019410); NSF (1333500,1553212)    *
+*               List of contributors: See the documentation               *
+*         Citation: See README.md or the documentation for details        *
+*               Acknowledgements: U.S. DOE SC (DE-SC0019410)              *
+*      {Preliminary developments: U.S. NSF (1333500,1553212)}             *
 ***************************************************************************
                                                                            

@@ -2,7 +2,7 @@
 *                      M-SPARC v1.0.0 (Oct 26, 2022)                      *
 *   Copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech   *
 *           Distributed under GNU General Public License 3 (GPL)          *
-*                Date: 10-Nov-2022  Start time: 12:24:49                  *
+*                Date: 13-Nov-2022  Start time: 12:12:55                  *
 ***************************************************************************
                            Input parameters                                
 ***************************************************************************
@@ -81,17 +81,17 @@ Estimated total memory usage       :  117.55 MB
                     Self Consistent Field (SCF#1)                     
 =====================================================================
 Iteration     Free Energy (Ha/atom)   SCF Error        Timing (sec)
-1            -4.3594481645E+01        1.044E-01        40.760
-2            -4.3566274241E+01        3.585E-02        11.728
-3            -4.3562837625E+01        2.290E-02        10.927
-4            -4.3562474890E+01        7.014E-03        11.150
-5            -4.3562487345E+01        5.399E-03        11.109
-6            -4.3562437193E+01        1.467E-03        11.118
-7            -4.3562440242E+01        2.743E-04        11.050
-8            -4.3562441048E+01        1.723E-04        10.961
-9            -4.3562441496E+01        5.443E-05        12.018
-10           -4.3562441451E+01        2.515E-05        10.773
-11           -4.3562441298E+01        5.597E-06        10.791
+1            -4.3594481645E+01        1.044E-01        39.845
+2            -4.3566274241E+01        3.585E-02        11.311
+3            -4.3562837625E+01        2.290E-02        10.628
+4            -4.3562474890E+01        7.014E-03        10.591
+5            -4.3562487345E+01        5.399E-03        10.736
+6            -4.3562437193E+01        1.467E-03        10.750
+7            -4.3562440242E+01        2.743E-04        10.626
+8            -4.3562441048E+01        1.723E-04        10.613
+9            -4.3562441496E+01        5.443E-05        11.697
+10           -4.3562441451E+01        2.515E-05        10.442
+11           -4.3562441298E+01        5.597E-06        10.419
 Total number of SCF: 11    
 ====================================================================
                                 Energy                              
@@ -106,24 +106,26 @@ Fermi level                        :  1.6715188541E-01 (Ha)
 DFT-D3 correction                  : -1.6286771082E-02 (Ha)
 Average force                      :  1.1413555677E-02 (Ha/Bohr)
 Maximum force                      :  2.1747977997E-02 (Ha/Bohr)
-Time for force calculation         :  1.554 (sec)
+Time for force calculation         :  1.459 (sec)
 Stress (GPa):
       3.0829188856       0.0497080853      -0.0046771417
       0.0497080853       3.0829227830      -0.0046344797
      -0.0046771417      -0.0046344797       3.9155598784
 Pressure                           : -3.3604671823E+00 (GPa)
 Maximum stress                     :  3.9155598784E+00 (GPa)
-Time for stress calculation        :  3.422 (sec)
+Time for stress calculation        :  3.219 (sec)
 ***************************************************************************
                                Timing info                                 
 ***************************************************************************
-Total walltime                     :  181.150 sec
+Total walltime                     :  174.908 sec
 ___________________________________________________________________________
 
 ***************************************************************************
 *             Material Physics & Mechanics Group, Georgia Tech            *
 *                       PI: Phanish Suryanarayana                         *
-*                Main Developers: Qimen Xu, Abhiraj Sharma                *
-*     Acknowledgements: U.S. DOE (DE-SC0019410); NSF (1333500,1553212)    *
+*               List of contributors: See the documentation               *
+*         Citation: See README.md or the documentation for details        *
+*               Acknowledgements: U.S. DOE SC (DE-SC0019410)              *
+*      {Preliminary developments: U.S. NSF (1333500,1553212)}             *
 ***************************************************************************
                                                                            
