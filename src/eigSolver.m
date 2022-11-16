@@ -18,18 +18,14 @@ function [upper_bound_guess_vecs,psi,EigVal,a0,bup,lambda_cutoff] = eigSolver(S,
 % @copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech
 %
 
-if S.ForceCount > 1
-	S.rhoTrigger = 1;
-end
-
 if S.parallel ~= 1
     for ks = 1:S.tnkpt*S.nspin
-		if ks <= S.tnkpt
-			kpt = ks;
-			spin = 1;
-		else
-			kpt = ks - S.tnkpt;
-			spin = 2;
+        if ks <= S.tnkpt
+            kpt = ks;
+            spin = 1;
+        else
+            kpt = ks - S.tnkpt;
+            spin = 2;
         end
 %         S.spinFlag = spin; % to be used in h_nonlocal_vectro_mult, to decide which col of VxcScan3 will be used
 		% Heff = spdiags(S.Veff(:,spin),0,S.N,S.N);
@@ -70,7 +66,7 @@ if S.parallel ~= 1
 			%lambda_cutoff(ks) = 0.5 * (bup(ks) + a0(ks));
 		else
 			% For subsequent steps
-			if (count > S.rhoTrigger)
+            if count > S.rhoTrigger
 				if S.chefsibound_flag == 1 || ((S.xc == 4) && (count == S.rhoTrigger + 1))
 					% for metaGGA: since 1st SCF of SCAN is GGA_PBE, it is
                     % necessary to make another Lanczos in 2nd SCF
@@ -82,7 +78,7 @@ if S.parallel ~= 1
 				end
 				% Lower bound
 				a0(ks) = min(S.EigVal(:,ks));
-			end
+            end
 			% Set the filter cut off
 			%S.lambda_f + log10(1e6-1)/S.bet + 0.5; 
 			%lambda_cutoff(ks) = max(S.EigVal(:,ks)) + 0.10; 
@@ -124,7 +120,7 @@ if S.parallel ~= 1
 else 
 	% Before getting into parfor, set to use only one thread
 	LASTN = maxNumCompThreads(1);
-	parfor (ks = 1:S.tnkpt*S.nspin, S.num_worker_heuristic)
+    parfor (ks = 1:S.tnkpt*S.nspin, S.num_worker_heuristic)
 		if ks <= S.tnkpt
 			kpt = ks;
 			spin = 1;
