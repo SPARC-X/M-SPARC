@@ -561,8 +561,7 @@ if S.Nev < 0
 end
 
 % SCF_tol
-if S.SCF_tol < 0
-	log10_neatom = log10(S.Nelectron / S.n_atm);
+if S.SCF_tol < 0	
 	target_force_accuracy = -1.0;
 	target_energy_accuracy = -1.0;
 	if S.accuracy_level >= 0
@@ -581,13 +580,13 @@ if S.SCF_tol < 0
 	
 	% choose SCF tol based on the desired accuracy
 	if target_force_accuracy > 0
-		a = 1.03;
-		b = -0.33145 + 1.1761 * log10_neatom;
-		S.SCF_tol = 10^((log10(target_force_accuracy) - b)/a);
+		a = 0.9090;
+		b = -0.9347;
+		S.SCF_tol = exp((log(target_force_accuracy) - b)/a);
 	elseif target_energy_accuracy > 0
-		a = 2.02;
-		b = -0.25440 + 1.0000 * log10_neatom;
-		S.SCF_tol = 10^((log10(target_energy_accuracy) - b)/a);
+		a = 1.4312;
+		b = -1.5225;
+		S.SCF_tol = exp((log(target_energy_accuracy) - b)/a);
 	end
 	fprintf('## Based on the desired accuracy, SCF_tol is set to: %.3e\n',S.SCF_tol);
 end
@@ -1179,7 +1178,7 @@ S.hyb_range_fock = -1;
 S.hyb_range_pbe = -1;
 S.ExxMethod = '';
 S.SCF_tol_init = -1;
-S.ACEFlag = 0;
+S.ACEFlag = 1;
 S.EXXACEVal_state = 3;
 S.exx_downsampling = [1 1 1];
 S.ExxDivMethod = '';
@@ -1214,7 +1213,7 @@ end
 
 start_time = fix(clock);
 fprintf(fileID,'***************************************************************************\n');
-fprintf(fileID,'*                      M-SPARC v1.0.0 (Nov 10, 2022)                      *\n');
+fprintf(fileID,'*                      M-SPARC v1.0.0 (Nov 16, 2022)                      *\n');
 fprintf(fileID,'*   Copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech   *\n');
 fprintf(fileID,'*           Distributed under GNU General Public License 3 (GPL)          *\n');
 fprintf(fileID,'*                Date: %s  Start time: %02d:%02d:%02d                  *\n',date,start_time(4),start_time(5),start_time(6));
@@ -1876,11 +1875,14 @@ function [S] = Generate_kpts(S)
 end
 
 function [S] = set_D3_coefficients(S)
-	if ispc % windows
-		addpath('vdW\d3\');
-	else % max/linux
-		addpath('vdW/d3/');
-	end
+    if ispc % windows
+        addpath('vdW\d3\');
+    else % max/linux
+        addpath('vdW/d3/');
+    end
+    if S.d3Rthr < S.d3Cn_thr
+        error("D3_RTHR should not be smaller than D3_CN_THR. Please reset these two radius!");
+    end
 	scaledR2R4=...
 	[2.00734898,  1.56637132,  5.01986934,  3.85379032,  3.64446594,...
 	 3.10492822,  2.71175247,  2.59361680,  2.38825250,  2.21522516,...

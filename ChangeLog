@@ -1,3 +1,12 @@
+
+----------------
+Nov16, 2022
+Name: Xin Jing
+* Update force and stress expression
+* Update default TOL_SCF model for energy and force accuracy
+* Update testsuite
+* Add one error message in d3 initialization
+
   ----------------
 +Nov 14, 2022
 +Name: Shashikant Kumar
