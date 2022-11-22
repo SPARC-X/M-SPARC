@@ -1,6 +1,12 @@
 
+--------------
+Nov 22, 2022
+Name: Shashikant Kumar
+Changes: (psps/)
+* Updated the SPMS pseudopotential (with new citation)
+
 ----------------
-Nov16, 2022
+Nov 16, 2022
 Name: Xin Jing
 * Update force and stress expression
 * Update default TOL_SCF model for energy and force accuracy
