@@ -127,17 +127,6 @@ while(count_Exx <= S.MAXIT_FOCK)
     % Calculate estimation of Exact Exchange energy
     S = evaluateExactExchangeEnergy(S);
     
-    if count_Exx > 1
-        err_Exx = abs(S.Eex - Eexx_pre)/S.n_atm;        
-        fprintf(' Exx outer loop error: %.4e \n',err_Exx) ;
-        fileID = fopen(S.outfname,'a');
-        fprintf(fileID, 'Exx outer loop error: %.4e \n', err_Exx);
-        fclose(fileID);
-
-        if err_Exx < S.FOCK_TOL && count_Exx > S.MINIT_FOCK
-            break;
-        end
-    end
     Eexx_pre = S.Eex;
     
     fileID = fopen(S.outfname,'a');
@@ -146,10 +135,7 @@ while(count_Exx <= S.MAXIT_FOCK)
     
     % Start SCF with hybrid functional
     S = scf_loop(S,S.SCF_tol,count_Exx);
-    count_Exx = count_Exx + 1;
-end % end of Vxx loop
-
-if count_Exx == S.MAXIT_FOCK
+    
     % update exact exchange energy
     S.Etotal = S.Etotal + 2*S.Eex;
     S.Exc = S.Exc - S.Eex;
@@ -158,7 +144,19 @@ if count_Exx == S.MAXIT_FOCK
     % update exact exchange energy
     S.Etotal = S.Etotal - 2*S.Eex;
     S.Exc = S.Exc + S.Eex;
-end
+    
+    err_Exx = abs(S.Eex - Eexx_pre)/S.n_atm;        
+    fprintf(' Exx outer loop error: %.4e \n',err_Exx) ;
+    fileID = fopen(S.outfname,'a');
+    fprintf(fileID, 'Exx outer loop error: %.4e \n', err_Exx);
+    fclose(fileID);
+
+    if err_Exx < S.FOCK_TOL && count_Exx >= S.MINIT_FOCK
+        break;
+    end
+
+    count_Exx = count_Exx + 1;
+end % end of Vxx loop
 
 fprintf('\n Finished outer loop in %d steps!\n', (count_Exx - 1));
 fprintf(' ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ \n');
