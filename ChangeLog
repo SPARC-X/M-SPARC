@@ -1,3 +1,10 @@
+----------------
+Nov 23, 2022
+Name: Xin Jing
+* Fix the issue in hybrid outer loop for creating ACE operator for additional time
+* Update testsuite
+* Change MINIT_SCF to 2
+
 
 --------------
 Nov 22, 2022
