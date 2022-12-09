@@ -85,16 +85,17 @@ filecolor=pink,
 
 
 \begin{frame}[allowframebreaks]{\textbf{Introduction}} \label{Introduction}
-Matlab-Simulation Package for Ab-initio Real-space Calculations (M-SPARC) is a real-space code for performing electronic structure calculations based on Kohn-Sham Density Functional Theory (DFT). Its primary purpose is the rapid development and testing of new algorithms and methods within DFT. The main features of M-SPARC v1.0.0 include
+Matlab-Simulation Package for Ab-initio Real-space Calculations (M-SPARC) is a real-space code for performing electronic structure calculations based on Kohn-Sham Density Functional Theory (DFT). Its primary purpose is the rapid development and testing of new algorithms and methods within DFT. The main features of M-SPARC include
 \begin{itemize}
   \item Applicable to isolated systems such as molecules as well as extended systems such as crystals, surfaces, and wires.
-  \item Local, semilocal, and nonlocal (including hybrid) exchange-correlation functionals.
-  \item Standard ONCV pseudopotentials, including nonlinear core corrections.
+  \item Local, semilocal (GGA/meta-GGA), and nonlocal (hybrid) exchange-correlation functionals.
+  \item Standard ONCV pseudopotentials, including nonlinear core corrections (NLCC).
   \item Calculation of ground state energy, atomic forces, and stress tensor.
-  \item Structural relaxation and ab initio molecular dynamics (NVE, NVT, and NPT).
+  \item Structural relaxation and ab initio molecular dynamics (NVE).
   \item Spin polarized and unpolarized calculations.
-  \item Spin-orbit coupling.
+  \item Spin-orbit coupling (SOC).
   \item Dispersion interactions through DFT-D3, vdW-DF1, and vdW-DF2.
+  \item Soft and transferable table of SPMS pseudopotentials
 \end{itemize}
 % Additional details regarding the formulation and implementation of M-SPARC can be found in the accompanying paper. Please direct any questions and report any bugs to Prof.~Phanish Suryanarayana.
 
@@ -110,9 +111,9 @@ Matlab-Simulation Package for Ab-initio Real-space Calculations (M-SPARC) is a r
 	\item \textbf{Phanish Suryanarayana} (PI)
 	\begin{itemize}
  	\item \textbf{Qimen Xu}: Code infrastructure, SCF, Energy, Force, LDA \\  
- 	\item \textbf{Abhiraj Sharma}: Code infrastructure, k-points, PBE, Stress, Non-orthogonal, Relaxation \\   
- 	\item \textbf{Boqin Zhang}: vdW-DF, DFT-D3, SCAN \\  
- 	\item \textbf{Xin Jing}: Hybrid, SOC \\  
+ 	\item \textbf{Abhiraj Sharma}: Code infrastructure, k-points, PBE, Stress, Non-orthogonal, Relaxation, NLCC \\   
+ 	\item \textbf{Boqin Zhang}: vdW-DF, DFT-D3, meta-GGA (SCAN) \\  
+ 	\item \textbf{Xin Jing}: Hybrid functionals, SOC \\  
  	\item \textbf{Shashikant Kumar}: Testing framework, NLCC \\  
  	\end{itemize}
  	\end{itemize}
@@ -131,6 +132,7 @@ If you publish work using/regarding M-SPARC, please cite some of the following a
     \item Stress tensor/pressure: \url{https://doi.org/10.1063/1.5057355}
     \item Atomic forces: \url{https://doi.org/10.1016/j.cpc.2016.09.020}, \url{https://doi.org/10.1016/j.cpc.2017.02.019}
     \item Mixing: \url{https://doi.org/10.1016/j.cplett.2016.01.033}, \url{https://doi.org/10.1016/j.cplett.2015.06.029}, \url{https://doi.org/10.1016/j.cplett.2019.136983}
+    \item SPMS pseudopotentials: \url{https://doi.org/10.1016/j.cpc.2022.108594}
 \end{itemize}
 \end{frame}
 

@@ -3,13 +3,14 @@
 Matlab-Simulation Package for Ab-initio Real-space Calculations (M-SPARC) is a real-space code for performing electronic structure calculations based on Kohn-Sham Density Functional Theory (DFT). Its primary purpose is the rapid development and testing of new algorithms and methods within DFT. The main features of the current version of M-SPARC include  
 
 * Applicable to isolated systems such as molecules as well as extended systems such as crystals, surfaces, and wires.
-* Local, semilocal, and nonlocal (including hybrid) exchange-correlation functionals.
-* Standard ONCV pseudopotentials, including nonlinear core corrections.
+* Local, semilocal (GGA/meta-GGA), and nonlocal (hybrid) exchange-correlation functionals.
+* Standard ONCV pseudopotentials, including nonlinear core corrections (NLCC).
 * Calculation of ground state energy, atomic forces, and stress tensor.
-* Structural relaxation and ab initio molecular dynamics (NVE, NVT, and NPT).
+* Structural relaxation and ab initio molecular dynamics (NVE).
 * Spin polarized and unpolarized calculations.
-* Spin-orbit coupling.
+* Spin-orbit coupling (SOC).
 * Dispersion interactions through DFT-D3, vdW-DF1, and vdW-DF2.
+* Soft and transferable table of SPMS pseudopotentials
 
 
 ### (2) Installation:
@@ -98,6 +99,7 @@ If you publish work using/regarding M-SPARC, please cite some of the following a
 * **Stress tensor/pressure**: https://doi.org/10.1063/1.5057355
 * **Atomic forces**: https://doi.org/10.1016/j.cpc.2016.09.020, https://doi.org/10.1016/j.cpc.2017.02.019
 * **Mixing**: https://doi.org/10.1016/j.cplett.2016.01.033, https://doi.org/10.1016/j.cplett.2015.06.029, https://doi.org/10.1016/j.cplett.2019.136983 
+* **SPMS pseudopotentials:**: https://doi.org/10.1016/j.cpc.2022.108594
 
 
 ### (7) Acknowledgement:
