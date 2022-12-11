@@ -4,7 +4,7 @@
 #SBATCH -phive
 #SBATCH -N 1 --ntasks-per-node=1
 #SBATCH --mem-per-cpu=30G
-#SBATCH -t13:00:00
+#SBATCH -t15:00:00
 
 
 cd $SLURM_SUBMIT_DIR
