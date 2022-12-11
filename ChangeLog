@@ -1,4 +1,10 @@
 ----------------
+Dec 11, 2022
+Name: Shashikant Kumar
+* Updated the version number printing on the top of .out file to be same as SPARC
+* Updated test suite reference files
+
+----------------
 Nov 23, 2022
 Name: Xin Jing
 * Fix the issue in hybrid outer loop for creating ACE operator for additional time
