@@ -62,6 +62,7 @@ In addtion to the tags listed above, there are some tags which can be used to ru
  * `VHQ`: run with high accuracy.
  * `update_reference`: update the reference files. 
  * `clean_temp`: deletes the files in the temp folder generated during the test
+ * `run_local`: run on the local machine where matlab is installed and is in the PATH environment variable
 
 ### (4) Add new test system:
 
