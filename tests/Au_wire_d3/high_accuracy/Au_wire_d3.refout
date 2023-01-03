@@ -1,0 +1,120 @@
+***************************************************************************
+*                      M-SPARC (version Nov 16, 2022)                      *
+*   Copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech   *
+*           Distributed under GNU General Public License 3 (GPL)          *
+*                Date: 14-Nov-2022  Start time: 23:21:51                  *
+***************************************************************************
+                           Input parameters                                
+***************************************************************************
+LATVEC_SCALE: 7.710083 22.676714 22.676714 
+LATVEC:
+1.000000000000000 0.000000000000000 0.000000000000000 
+0.000000000000000 1.000000000000000 0.000000000000000 
+0.000000000000000 0.000000000000000 1.000000000000000 
+FD_GRID: 26 76 76
+FD_ORDER: 12
+BC: P D D
+KPOINT_GRID: 2 1 1
+KPOINT_SHIFT: 5.000000e-01 0 0
+ELEC_TEMP_TYPE: gaussian
+SMEARING: 0.003674925
+CHEB_DEGREE: 26
+NSTATES: 51
+EXCHANGE_CORRELATION: GGA_PBE
+CALC_STRESS: 0
+CALC_PRES: 0
+MAXIT_SCF: 100
+TOL_SCF: 1.00E-06
+TOL_POISSON: 1.00E-08
+TOL_LANCZOS: 1.00E-02
+TOL_PSEUDOCHARGE: 1.00E-08
+MIXING_VARIABLE: density
+MIXING_PRECOND: none
+MIXING_PARAMETER: 0.30
+MIXING_HISTORY: 7
+PULAY_FREQUENCY: 1
+PULAY_RESTART: 0
+REFERENCE_CUTOFF: 0.50
+RHO_TRIGGER: 4
+FIX_RAND: 0
+PRINT_FORCES: 1
+PRINT_ATOMS: 1
+PRINT_EIGEN: 0
+PRINT_DENSITY: 0
+OUTPUT_FILE: Au_wire_d3.out
+D3_FLAG: 1
+D3_RTHR: 9000.000000
+D3_CN_THR: 1600.000000
+***************************************************************************
+                                Cell                                       
+***************************************************************************
+Lattice vectors:
+7.710082593414668 0.000000000000000 0.000000000000000 
+0.000000000000000 22.676713510043140 0.000000000000000 
+0.000000000000000 0.000000000000000 22.676713510043140 
+Volume                  :  3.9647814899E+03 (Bohr^3)
+***************************************************************************
+                             Initialization                                
+***************************************************************************
+Mesh spacing in x-direction        :  0.296542 (Bohr)
+Mesh spacing in y-direction        :  0.298378 (Bohr)
+Mesh spacing in z direction        :  0.298378 (Bohr)
+Number of symmetry adapted k-points:  1
+Output printed to                  :  Au_wire_d3.out
+Total number of atom types         :  1
+Total number of atoms              :  4
+Total number of electrons          :  76
+Atom type 1  (valence electrons)   :  Au 19
+Pseudopotential                    :  ../../../psps/79_Au_19_2.4_2.5_pbe_n_v1.0.psp8
+lloc                               :  4
+Pseudocharge radii of atom type 1  :  6.23 6.27 6.27
+Number of atoms of type 1          :  4
+Estimated total memory usage       :  670.38 MB
+=====================================================================
+                    Self Consistent Field (SCF#1)                     
+=====================================================================
+Iteration     Free Energy (Ha/atom)   SCF Error        Timing (sec)
+1            -1.4345448711E+02        3.143E-02        182.262
+2            -1.4345626399E+02        8.836E-03        182.264
+3            -1.4345646567E+02        5.195E-03        48.034
+4            -1.4345633703E+02        3.623E-03        47.463
+5            -1.4345625840E+02        1.835E-03        47.281
+6            -1.4345625604E+02        1.402E-03        47.103
+7            -1.4345623739E+02        3.249E-04        46.710
+8            -1.4345623779E+02        2.371E-04        47.102
+9            -1.4345623760E+02        3.968E-05        46.772
+10           -1.4345623760E+02        1.864E-05        46.148
+11           -1.4345623760E+02        6.579E-06        46.100
+12           -1.4345623759E+02        2.465E-06        45.677
+13           -1.4345623760E+02        1.715E-06        45.275
+14           -1.4345623760E+02        6.604E-07        44.932
+Total number of SCF: 14    
+====================================================================
+                                Energy                              
+====================================================================
+Free energy per atom               : -1.4346090906E+02 (Ha/atom)
+Total free energy                  : -5.7384363622E+02 (Ha)
+Band structure energy              : -9.8729055599E+01 (Ha)
+Exchange correlation energy        : -9.3497095781E+01 (Ha)
+Self and correction energy         : -4.9247542233E+02 (Ha)
+Entropy*kb*T                       : -4.1467090865E-03 (Ha)
+Fermi level                        : -1.8887317687E-01 (Ha)
+DFT-D3 correction                  : -1.8685839468E-02 (Ha)
+Average force                      :  5.5012503413E-03 (Ha/Bohr)
+Maximum force                      :  5.5017562434E-03 (Ha/Bohr)
+Time for force calculation         :  2.429 (sec)
+***************************************************************************
+                               Timing info                                 
+***************************************************************************
+Total walltime                     :  798.617 sec
+___________________________________________________________________________
+
+***************************************************************************
+*             Material Physics & Mechanics Group, Georgia Tech            *
+*                       PI: Phanish Suryanarayana                         *
+*               List of contributors: See the documentation               *
+*         Citation: See README.md or the documentation for details        *
+*               Acknowledgements: U.S. DOE SC (DE-SC0019410)              *
+*      {Preliminary developments: U.S. NSF (1333500,1553212)}             *
+***************************************************************************
+                                                                           

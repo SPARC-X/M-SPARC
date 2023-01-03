@@ -42,7 +42,7 @@ SYSTEMS = { "systemname": ['BaTiO3'],
 SYSTEMS["systemname"].append('CuSi7')
 SYSTEMS["Tags"].append(['bulk', 'lda', 'denmix', 'kerker', 'gamma', 'orth', 'smear_gauss','fast'])
 SYSTEMS["Tols"].append([tols["E_tol"], 3e-5, tols["stress_tol"]]) # E_tol(Ha/atom), F_tol(Ha/Bohr), stress_tol(%)
-################################################################################################################
+###############################################################################################################
 SYSTEMS["systemname"].append('Fe_spin')
 SYSTEMS["Tags"].append(['bulk', 'gga', 'denmix', 'kerker', 'kpt', 'spin','orth','smear_fd'])
 SYSTEMS["Tols"].append([tols["E_tol"], tols["F_tol"], tols["stress_tol"]]) # E_tol(Ha/atom), F_tol(Ha/Bohr), stress_tol(%)
@@ -2474,7 +2474,7 @@ def WriteReport(data_info, systems, isparallel, ifVHQ, isorient):
   ################### Printing #############################################################
 	f_report = open("Report.txt",'w')
 	f_report.write("*************************************************************************** \n")
-	f_report.write("*                   TEST REPORT (Version 14 Nov 2022)                    *\n*                      Date:  "+date_time+"                        * \n")
+	f_report.write("*                   TEST REPORT (Version 02 Jan 2023)                    *\n*                      Date:  "+date_time+"                        * \n")
 	f_report.write("*************************************************************************** \n")
 	f_report.write("Tests Passed: "+str(passtests)+"/"+str(passtests+failtests)+"\n")
 	f_report.write("Tests Failed: "+str(failtests)+"/"+str(passtests+failtests)+"\n")
@@ -2873,8 +2873,6 @@ if __name__ == '__main__':
 	if isAuto == False and temp_result == False:
 		jobID = launchsystems(systems,memcheck,procs_sys,ismempbs, ifVHQ, isorient, not isparallel)
 
-
-	############################## Monitoring #########################################################################
 		syst_temp = []
 		isorient_temp=[]
 		for i in range(len(systems)):
@@ -2901,6 +2899,87 @@ if __name__ == '__main__':
 				time.sleep(3)
 
 		print('\n')
+
+	elif isAuto == True and temp_result == False:
+		countrun=0
+		for systs in systems:
+			print(str(countrun)+": "+systs+" started running")
+			os.chdir(systs)
+			if isorient[countrun] == False:
+				if os.path.exists("temp_run"):
+					os.system("rm -r temp_run")
+					os.system("mkdir temp_run")
+					os.system("cp standard/*.inpt ./temp_run/")
+					os.system("cp standard/*.ion ./temp_run/")
+				else:
+					os.system("mkdir temp_run")
+					os.system("cp standard/*.inpt ./temp_run/")
+					os.system("cp standard/*.ion ./temp_run/")
+				os.chdir("temp_run")
+				fid = open('launch_matlab.m','w')
+				fid.write(" clear all \n close all \n addpath(genpath('./../../../src')) \n msparc('"+systs+"') \n exit \n")
+				fid.close()
+				# print("started matlab\n")
+				# os.system("matlab -nodisplay -nodesktop -r 'launch_matlab' > run.log")
+				subprocess.call("matlab -nodisplay -nodesktop -r 'launch_matlab' > run.log",shell=True)
+				# print("finished running \n");
+			else:
+				if os.path.exists("temp_run1"):
+					os.system("rm -r temp_run1")
+					os.system("mkdir temp_run1")
+					os.system("cp standard_orientation1/*.inpt ./temp_run1/")
+					os.system("cp standard_orientation1/*.ion ./temp_run1/")
+				else:
+					os.system("mkdir temp_run1")
+					os.system("cp standard_orientation1/*.inpt ./temp_run1/")
+					os.system("cp standard_orientation1/*.ion ./temp_run1/")
+				os.chdir("temp_run1")
+				fid = open('launch_matlab.m','w')
+				fid.write(" clear all \n close all \n addpath(genpath('./../../../src')) \n msparc('"+systs+"') \n exit\n")
+				fid.close()
+				# os.system("matlab -nodisplay -nodesktop -r 'launch_matlab' > run.log")
+				subprocess.call("matlab -nodisplay -nodesktop -r 'launch_matlab' > run.log",shell=True)
+				os.chdir("./..")
+
+				if os.path.exists("temp_run2"):
+					os.system("rm -r temp_run2")
+					os.system("mkdir temp_run2")
+					os.system("cp standard_orientation2/*.inpt ./temp_run2/")
+					os.system("cp standard_orientation2/*.ion ./temp_run2/")
+				else:
+					os.system("mkdir temp_run2")
+					os.system("cp standard_orientation2/*.inpt ./temp_run2/")
+					os.system("cp standard_orientation2/*.ion ./temp_run2/")
+				os.chdir("temp_run2")
+				fid = open('launch_matlab.m','w')
+				fid.write(" clear all \n close all \n addpath(genpath('./../../../src')) \n msparc('"+systs+"') \n exit\n")
+				fid.close()
+				# os.system("matlab -nodisplay -nodesktop -r 'launch_matlab' > run.log")
+				subprocess.call("matlab -nodisplay -nodesktop -r 'launch_matlab' > run.log",shell=True)
+				os.chdir("./..")
+
+				if os.path.exists("temp_run3"):
+					os.system("rm -r temp_run3")
+					os.system("mkdir temp_run3")
+					os.system("cp standard_orientation3/*.inpt ./temp_run3/")
+					os.system("cp standard_orientation3/*.ion ./temp_run3/")
+				else:
+					os.system("mkdir temp_run3")
+					os.system("cp standard_orientation3/*.inpt ./temp_run3/")
+					os.system("cp standard_orientation3/*.ion ./temp_run3/")
+				os.chdir("temp_run3")
+				fid = open('launch_matlab.m','w')
+				fid.write(" clear all \n close all \n addpath(genpath('./../../../src')) \n msparc('"+systs+"') \n exit\n")
+				fid.close()
+				# os.system("matlab -nodisplay -nodesktop -r 'launch_matlab' > run.log")
+				subprocess.call("matlab -nodisplay -nodesktop -r 'launch_matlab' > run.log",shell=True)
+			countrun=countrun+1
+			print(str(countrun)+": "+systs+" has finished running")
+			os.chdir("./../..")
+
+
+	############################## Monitoring #########################################################################
+		
 
 	# print(len(systems))
 	#######################################################################################################################

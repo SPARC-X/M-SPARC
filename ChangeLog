@@ -1,4 +1,10 @@
 ----------------
+Jan 02, 2023
+Name: Shashikant Kumar
+* Added 'run_local' feature in the testing framework
+
+
+----------------
 Dec 11, 2022
 Name: Shashikant Kumar
 * Updated the version number printing on the top of .out file to be same as SPARC
