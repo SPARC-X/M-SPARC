@@ -93,7 +93,7 @@ The `.restart` file contains information necessary to perform a restarted MD cal
 ### (6) Citation:
 
 If you publish work using/regarding M-SPARC, please cite some of the following articles, particularly those that are most relevant to your work:
-* **General**: https://doi.org/10.1016/j.softx.2020.100423
+* **General**: https://doi.org/10.1016/j.softx.2022.101295 (v2.0.0), https://doi.org/10.1016/j.softx.2020.100423 (v1.0.0)
 * **Non-orthogonal systems**: https://doi.org/10.1016/j.cplett.2018.04.018
 * **Linear solvers**: https://doi.org/10.1016/j.cpc.2018.07.007, https://doi.org/10.1016/j.jcp.2015.11.018
 * **Stress tensor/pressure**: https://doi.org/10.1063/1.5057355
