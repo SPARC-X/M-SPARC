@@ -1,4 +1,10 @@
 ----------------
+Jan 23, 2023
+Name: Xin Jing, Shashikant Kumar
+* Change the pseudocharge rb upper bound and the default TOL_PSEUDOCHARGE to 1E-3 * TOL_SCF
+* update testsuite and documentation
+
+----------------
 Jan 02, 2023
 Name: Shashikant Kumar
 * Added 'run_local' feature in the testing framework
