@@ -1,4 +1,11 @@
 ----------------
+Jan 29, 2023
+Name: Xin Jing, Shashikant Kumar
+* Change r_core from value in pseudopotential file to actual r where projectors are below < 1E-8
+* fix SCF time in output file and change name format of output format as SPARC
+* update testsuite
+
+----------------
 Jan 23, 2023
 Name: Xin Jing, Shashikant Kumar
 * Change the pseudocharge rb upper bound and the default TOL_PSEUDOCHARGE to 1E-3 * TOL_SCF

@@ -118,19 +118,36 @@ else
 end
 
 uu = zeros(mmax,1);
-size = [5,mmax];
-A = fscanf(fid,'%d %g %g %g %g',size);
+asize = [5,mmax];
+A = fscanf(fid,'%d %g %g %g %g',asize);
 uu(1:end,1) = A(3,:)/(4*pi);
 rho_isolated_guess = uu;
 
 frewind(fid);
 fscanf(fid,'%s',3);
 rc = 0 ;
-for i=1:lmax+1
-	a = fscanf(fid,'%g',1) ;
-	if a > rc 
-		rc = a ;
-	end
+for l = 0:lmax
+    if l == lloc
+        continue;
+    end
+	r_core_read = fscanf(fid,'%g',1);
+    rc_max = r_core_read;
+    % check if r_core is large enough s.t. |proj| < 1E-8
+    r_indx = find(r < r_core_read,1,'last');
+    for i = 1:size(Pot(l+1).proj,2)
+        try
+            rc_temp = r(r_indx + find(abs(Pot(l+1).proj(r_indx+1:end,i)) < 1E-8,1) - 1);
+        catch
+            rc_temp = r(end);
+        end
+        if rc_temp > rc_max
+            rc_max = rc_temp;
+        end
+    end
+    fprintf("atom type %d, l = %d, r_core read %.5f, change to rmax where |UdV| < 1E-8, %.5f.\n", ityp, l, r_core_read, rc_max);
+    if rc_max > rc 
+		rc = rc_max;
+    end
 end
 
 r_grid_vloc = r;
