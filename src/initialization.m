@@ -1192,7 +1192,7 @@ function S = Write_output_init(S, filename)
 outfname = strcat(filename,'.out'); 
 i = 1;
 while exist(outfname,'file')
-	outfname = sprintf('%s.out_%d',filename,i);
+	outfname = sprintf('%s.out_%02d',filename,i);
 	i = i + 1;
 end
 
@@ -1547,7 +1547,7 @@ fclose(fileID);
 if ((S.PrintAtomPosFlag == 1 || S.PrintForceFlag == 1) && S.MDFlag == 0 && S.RelaxFlag == 0)
 	staticfname = strcat(filename,'.static'); 
 	if suffixNum > 0
-		staticfname = sprintf('%s.static_%d',filename,suffixNum);
+		staticfname = sprintf('%s.static_%02d',filename,suffixNum);
 	end
 	% open file
 	fid = fopen(staticfname,'w') ;
