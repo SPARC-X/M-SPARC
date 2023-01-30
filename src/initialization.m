@@ -50,11 +50,11 @@ if (S.cell_typ == 1 || S.cell_typ == 2)
 	pos_atm_x = 0; % atom location in x-direction
 	pos_atm_y = 0; % atom location in y-direction
 	pos_atm_z = 0; % atom location in z-direction
-	rb_up_x = 12;
+	rb_up_x = (S.dx < 1.5) * (10+10*S.dx) + (S.dx >=1.5) * (20*S.dx-9.5);
+	rb_up_y = (S.dy < 1.5) * (10+10*S.dy) + (S.dy >=1.5) * (20*S.dy-9.5);
+	rb_up_z = (S.dz < 1.5) * (10+10*S.dz) + (S.dz >=1.5) * (20*S.dz-9.5);
 	f_rby = @(y) y;
-	rb_up_y = f_rby(12);
-	rb_up_z = 12;
-	
+    
 elseif (S.cell_typ == 3 || S.cell_typ == 4 || S.cell_typ == 5)
 	pos_atm_x = S.xmax_at; % maximum R coordinate of any atom
 	pos_atm_y = 0; % atom location in theta-direction
@@ -601,7 +601,7 @@ end
 % pseudocharge_tol
 if S.pseudocharge_tol < 0
 	fprintf('## Pseudocharge tolerance not provided, choosing pseudocharge_tol ...\n')
-	S.pseudocharge_tol = S.SCF_tol * 0.01;
+	S.pseudocharge_tol = S.SCF_tol * 0.001;
 	fprintf('## pseudocharge_tol is set to: %.3e\n',S.pseudocharge_tol);
 end
 
@@ -1192,7 +1192,7 @@ function S = Write_output_init(S, filename)
 outfname = strcat(filename,'.out'); 
 i = 1;
 while exist(outfname,'file')
-	outfname = sprintf('%s.out_%d',filename,i);
+	outfname = sprintf('%s.out_%02d',filename,i);
 	i = i + 1;
 end
 
@@ -1213,7 +1213,7 @@ end
 
 start_time = fix(clock);
 fprintf(fileID,'***************************************************************************\n');
-fprintf(fileID,'*                      M-SPARC (version Nov 16, 2022)                     *\n');
+fprintf(fileID,'*                      M-SPARC (version Jan 29, 2023)                     *\n');
 fprintf(fileID,'*   Copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech   *\n');
 fprintf(fileID,'*           Distributed under GNU General Public License 3 (GPL)          *\n');
 fprintf(fileID,'*                Date: %s  Start time: %02d:%02d:%02d                  *\n',date,start_time(4),start_time(5),start_time(6));
@@ -1547,7 +1547,7 @@ fclose(fileID);
 if ((S.PrintAtomPosFlag == 1 || S.PrintForceFlag == 1) && S.MDFlag == 0 && S.RelaxFlag == 0)
 	staticfname = strcat(filename,'.static'); 
 	if suffixNum > 0
-		staticfname = sprintf('%s.static_%d',filename,suffixNum);
+		staticfname = sprintf('%s.static_%02d',filename,suffixNum);
 	end
 	% open file
 	fid = fopen(staticfname,'w') ;
