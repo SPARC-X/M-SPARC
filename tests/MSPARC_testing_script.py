@@ -2474,7 +2474,7 @@ def WriteReport(data_info, systems, isparallel, ifVHQ, isorient):
   ################### Printing #############################################################
 	f_report = open("Report.txt",'w')
 	f_report.write("*************************************************************************** \n")
-	f_report.write("*                   TEST REPORT (Version 02 Jan 2023)                    *\n*                      Date:  "+date_time+"                        * \n")
+	f_report.write("*                   TEST REPORT (Version 01 Feb 2023)                    *\n*                      Date:  "+date_time+"                        * \n")
 	f_report.write("*************************************************************************** \n")
 	f_report.write("Tests Passed: "+str(passtests)+"/"+str(passtests+failtests)+"\n")
 	f_report.write("Tests Failed: "+str(failtests)+"/"+str(passtests+failtests)+"\n")
@@ -2666,7 +2666,6 @@ if __name__ == '__main__':
 					tags.remove('VHQ')
 				if "run_local" in tags:
 					isAuto =  True
-					ifVHQ = False
 					isparallel = False
 					tags.remove('run_local')
 				if tags == []:
@@ -2909,12 +2908,20 @@ if __name__ == '__main__':
 				if os.path.exists("temp_run"):
 					os.system("rm -r temp_run")
 					os.system("mkdir temp_run")
-					os.system("cp standard/*.inpt ./temp_run/")
-					os.system("cp standard/*.ion ./temp_run/")
+					if ifVHQ:
+						os.system("cp high_accuracy/*.inpt ./temp_run/")
+						os.system("cp high_accuracy/*.ion ./temp_run/")
+					else:
+						os.system("cp standard/*.inpt ./temp_run/")
+						os.system("cp standard/*.ion ./temp_run/")
 				else:
 					os.system("mkdir temp_run")
-					os.system("cp standard/*.inpt ./temp_run/")
-					os.system("cp standard/*.ion ./temp_run/")
+					if ifVHQ:
+						os.system("cp high_accuracy/*.inpt ./temp_run/")
+						os.system("cp high_accuracy/*.ion ./temp_run/")
+					else:
+						os.system("cp standard/*.inpt ./temp_run/")
+						os.system("cp standard/*.ion ./temp_run/")
 				os.chdir("temp_run")
 				fid = open('launch_matlab.m','w')
 				fid.write(" clear all \n close all \n addpath(genpath('./../../../src')) \n msparc('"+systs+"') \n exit \n")
@@ -2927,12 +2934,20 @@ if __name__ == '__main__':
 				if os.path.exists("temp_run1"):
 					os.system("rm -r temp_run1")
 					os.system("mkdir temp_run1")
-					os.system("cp standard_orientation1/*.inpt ./temp_run1/")
-					os.system("cp standard_orientation1/*.ion ./temp_run1/")
+					if ifVHQ:
+						os.system("cp high_accuracy_orientation1/*.inpt ./temp_run1/")
+						os.system("cp high_accuracy_orientation1/*.ion ./temp_run1/")
+					else:
+						os.system("cp standard_orientation1/*.inpt ./temp_run1/")
+						os.system("cp standard_orientation1/*.ion ./temp_run1/")
 				else:
 					os.system("mkdir temp_run1")
-					os.system("cp standard_orientation1/*.inpt ./temp_run1/")
-					os.system("cp standard_orientation1/*.ion ./temp_run1/")
+					if ifVHQ:
+						os.system("cp high_accuracy_orientation1/*.inpt ./temp_run1/")
+						os.system("cp high_accuracy_orientation1/*.ion ./temp_run1/")
+					else:
+						os.system("cp standard_orientation1/*.inpt ./temp_run1/")
+						os.system("cp standard_orientation1/*.ion ./temp_run1/")
 				os.chdir("temp_run1")
 				fid = open('launch_matlab.m','w')
 				fid.write(" clear all \n close all \n addpath(genpath('./../../../src')) \n msparc('"+systs+"') \n exit\n")
@@ -2944,12 +2959,20 @@ if __name__ == '__main__':
 				if os.path.exists("temp_run2"):
 					os.system("rm -r temp_run2")
 					os.system("mkdir temp_run2")
-					os.system("cp standard_orientation2/*.inpt ./temp_run2/")
-					os.system("cp standard_orientation2/*.ion ./temp_run2/")
+					if ifVHQ:
+						os.system("cp high_accuracy_orientation2/*.inpt ./temp_run2/")
+						os.system("cp high_accuracy_orientation2/*.ion ./temp_run2/")
+					else:
+						os.system("cp standard_orientation2/*.inpt ./temp_run2/")
+						os.system("cp standard_orientation2/*.ion ./temp_run2/")
 				else:
 					os.system("mkdir temp_run2")
-					os.system("cp standard_orientation2/*.inpt ./temp_run2/")
-					os.system("cp standard_orientation2/*.ion ./temp_run2/")
+					if ifVHQ:
+						os.system("cp high_accuracy_orientation2/*.inpt ./temp_run2/")
+						os.system("cp high_accuracy_orientation2/*.ion ./temp_run2/")
+					else:
+						os.system("cp standard_orientation2/*.inpt ./temp_run2/")
+						os.system("cp standard_orientation2/*.ion ./temp_run2/")
 				os.chdir("temp_run2")
 				fid = open('launch_matlab.m','w')
 				fid.write(" clear all \n close all \n addpath(genpath('./../../../src')) \n msparc('"+systs+"') \n exit\n")
@@ -2961,12 +2984,20 @@ if __name__ == '__main__':
 				if os.path.exists("temp_run3"):
 					os.system("rm -r temp_run3")
 					os.system("mkdir temp_run3")
-					os.system("cp standard_orientation3/*.inpt ./temp_run3/")
-					os.system("cp standard_orientation3/*.ion ./temp_run3/")
+					if ifVHQ:
+						os.system("cp high_accuracy_orientation3/*.inpt ./temp_run3/")
+						os.system("cp high_accuracy_orientation3/*.ion ./temp_run3/")
+					else:
+						os.system("cp standard_orientation3/*.inpt ./temp_run3/")
+						os.system("cp standard_orientation3/*.ion ./temp_run3/")
 				else:
 					os.system("mkdir temp_run3")
-					os.system("cp standard_orientation3/*.inpt ./temp_run3/")
-					os.system("cp standard_orientation3/*.ion ./temp_run3/")
+					if ifVHQ:
+						os.system("cp high_accuracy_orientation3/*.inpt ./temp_run3/")
+						os.system("cp high_accuracy_orientation3/*.ion ./temp_run3/")
+					else:
+						os.system("cp standard_orientation3/*.inpt ./temp_run3/")
+						os.system("cp standard_orientation3/*.ion ./temp_run3/")
 				os.chdir("temp_run3")
 				fid = open('launch_matlab.m','w')
 				fid.write(" clear all \n close all \n addpath(genpath('./../../../src')) \n msparc('"+systs+"') \n exit\n")

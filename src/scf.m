@@ -414,25 +414,21 @@ while count_SCF <= S.MAXIT_SCF
     if (fileID == -1) 
         error('\n Cannot open file "%s"\n',S.outfname);
     end
-    if t_SCF == 0
-        t_SCF = toc(tic_cheb);
-    end
-
-    if S.nspin == 1
-        fprintf(fileID,'%-6d      %18.10E        %.3E        %.3f\n', ...
-                count_SCF, S.Etotal/S.n_atm, err, t_SCF);
-    else
-        fprintf(fileID,'%-6d      %18.10E        %11.4E        %.3E        %.3f\n', ...
-                count_SCF, S.Etotal/S.n_atm, S.netM, err, t_SCF);
-    end
-    t_SCF = 0; % reset SCF timer
-    fclose(fileID);
-    count_SCF = count_SCF + 1 ;
-	
-	scf_runtime = toc(tic_cheb);
+    
+    scf_runtime = toc(tic_cheb);
 	t_SCF = t_SCF + scf_runtime; % add chebyshev filtering time to SCF time
 	S_Debug.relax(S.Relax_iter).scf_runtime(count_SCF,1) = scf_runtime;
 	fprintf(' This SCF iteration took %.3f s.\n\n', scf_runtime);	
+
+    if S.nspin == 1
+        fprintf(fileID,'%-6d      %18.10E        %.3E        %.3f\n', ...
+                count_SCF, S.Etotal/S.n_atm, err, scf_runtime);
+    else
+        fprintf(fileID,'%-6d      %18.10E        %11.4E        %.3E        %.3f\n', ...
+                count_SCF, S.Etotal/S.n_atm, S.netM, err, scf_runtime);
+    end
+    fclose(fileID);
+    count_SCF = count_SCF + 1 ;
     
     if err < scf_tol && count_SCF > S.MINIT_SCF
         break;
