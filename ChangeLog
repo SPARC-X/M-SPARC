@@ -1,5 +1,5 @@
 ----------------
-Jan 29, 2023
+Feb 1, 2023
 Name: Xin Jing, Shashikant Kumar
 * Change r_core from value in pseudopotential file to actual r where projectors are below < 1E-8
 * fix SCF time in output file and change name format of output format as SPARC
