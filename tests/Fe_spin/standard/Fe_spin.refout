@@ -1,8 +1,8 @@
 ***************************************************************************
-*                      M-SPARC (version Jan 29, 2023)                     *
+*                      M-SPARC (version Feb 03, 2023)                     *
 *   Copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech   *
 *           Distributed under GNU General Public License 3 (GPL)          *
-*                Date: 30-Jan-2023  Start time: 18:10:32                  *
+*                Date: 03-Feb-2023  Start time: 15:28:11                  *
 ***************************************************************************
                            Input parameters                                
 ***************************************************************************
@@ -11,7 +11,7 @@ LATVEC:
 1.000000000000000 0.000000000000000 0.000000000000000 
 0.000000000000000 1.000000000000000 0.000000000000000 
 0.000000000000000 0.000000000000000 1.000000000000000 
-FD_GRID: 27 27 27
+FD_GRID: 28 28 28
 FD_ORDER: 12
 BC: P P P
 KPOINT_GRID: 2 2 2
@@ -19,7 +19,7 @@ KPOINT_SHIFT: 5.000000e-01 5.000000e-01 5.000000e-01
 SPIN_TYP: 1
 ELEC_TEMP_TYPE: fermi-dirac
 SMEARING: 0.009999933
-CHEB_DEGREE: 35
+CHEB_DEGREE: 36
 NSTATES: 35
 EXCHANGE_CORRELATION: GGA_PBE
 CALC_STRESS: 1
@@ -31,7 +31,7 @@ TOL_PSEUDOCHARGE: 1.00E-09
 MIXING_VARIABLE: density
 MIXING_PRECOND: kerker
 MIXING_PRECOND_MAG: kerker
-TOL_PRECOND: 4.03E-05
+TOL_PRECOND: 3.75E-05
 PRECOND_KERKER_KTF: 1.00
 PRECOND_KERKER_THRESH: 0.10
 PRECOND_KERKER_KTF_MAG: 1.00
@@ -60,7 +60,7 @@ Volume                  :  1.5922008800E+02 (Bohr^3)
 ***************************************************************************
                              Initialization                                
 ***************************************************************************
-Mesh spacing                       :  0.200741 (Bohr)
+Mesh spacing                       :  0.193571 (Bohr)
 Number of symmetry adapted k-points:  4
 Output printed to                  :  Fe_spin.out
 Total number of atom types         :  1
@@ -69,54 +69,55 @@ Total number of electrons          :  32
 Atom type 1  (valence electrons)   :  Fe 16
 Pseudopotential                    :  ../../../psps/26_Fe_16_2.0_2.5_pbe_n_v1.0.psp8
 lloc                               :  4
-Pseudocharge radii of atom type 1  :  7.03 7.03 7.03
+Pseudocharge radii of atom type 1  :  6.97 6.97 6.97
 Number of atoms of type 1          :  2
-Estimated total memory usage       :  391.34 MB
+Estimated total memory usage       :  436.45 MB
 ========================================================================================
                             Self Consistent Field (SCF#1)                     
 ========================================================================================
 Iteration     Free Energy (Ha/atom)    Magnetization     SCF Error        Timing (sec)
-1            -1.1712915489E+02         4.2159E+00        8.919E-02        270.646
-2            -1.1713378557E+02         4.0548E+00        6.105E-02        63.012
-3            -1.1713778456E+02         4.0678E+00        2.598E-02        62.893
-4            -1.1713973094E+02         4.1042E+00        6.034E-03        62.920
-5            -1.1713979046E+02         4.0864E+00        7.414E-03        63.112
-6            -1.1713967724E+02         4.0816E+00        2.837E-03        62.949
-7            -1.1713974550E+02         4.0682E+00        8.309E-04        62.876
-8            -1.1713974646E+02         4.0640E+00        3.392E-04        62.969
-9            -1.1713974819E+02         4.0638E+00        1.064E-04        62.869
-10           -1.1713974819E+02         4.0634E+00        4.964E-05        62.888
-11           -1.1713974821E+02         4.0634E+00        9.949E-06        62.934
-12           -1.1713974821E+02         4.0634E+00        7.073E-06        63.133
-13           -1.1713974821E+02         4.0635E+00        2.493E-06        63.206
-14           -1.1713974821E+02         4.0635E+00        1.670E-06        62.968
-15           -1.1713974821E+02         4.0635E+00        9.531E-07        62.921
-Total number of SCF: 15    
+1            -1.1712912544E+02         4.2160E+00        8.918E-02        309.914
+2            -1.1713376555E+02         4.0548E+00        6.104E-02        72.720
+3            -1.1713776623E+02         4.0678E+00        2.598E-02        72.784
+4            -1.1713969996E+02         4.1043E+00        5.589E-03        72.786
+5            -1.1713965103E+02         4.0832E+00        3.101E-03        72.579
+6            -1.1713972128E+02         4.0770E+00        3.750E-03        72.726
+7            -1.1713972867E+02         4.0678E+00        8.208E-04        72.766
+8            -1.1713972926E+02         4.0641E+00        3.406E-04        72.676
+9            -1.1713973097E+02         4.0637E+00        9.373E-05        74.478
+10           -1.1713973097E+02         4.0634E+00        4.928E-05        73.227
+11           -1.1713973099E+02         4.0635E+00        9.929E-06        73.411
+12           -1.1713973097E+02         4.0634E+00        7.064E-06        73.401
+13           -1.1713973099E+02         4.0635E+00        2.539E-06        74.416
+14           -1.1713973098E+02         4.0635E+00        1.218E-06        72.693
+15           -1.1713973099E+02         4.0635E+00        1.697E-06        72.657
+16           -1.1713973099E+02         4.0635E+00        3.378E-07        72.587
+Total number of SCF: 16    
 ====================================================================
                                 Energy                              
 ====================================================================
-Free energy per atom               : -1.1713974821E+02 (Ha/atom)
-Total free energy                  : -2.3427949642E+02 (Ha)
-Band structure energy              : -2.9632869299E+01 (Ha)
-Exchange correlation energy        : -3.1146578528E+01 (Ha)
-Self and correction energy         : -2.3312277491E+02 (Ha)
-Entropy*kb*T                       : -2.0531137416E-02 (Ha)
-Fermi level                        :  2.3836996266E-01 (Ha)
-Net Magnetization                  :  4.0634570301E+00 
-Average force                      :  8.4887232653E-09 (Ha/Bohr)
-Maximum force                      :  8.4887232653E-09 (Ha/Bohr)
-Time for force calculation         :  3.324 (sec)
+Free energy per atom               : -1.1713973099E+02 (Ha/atom)
+Total free energy                  : -2.3427946197E+02 (Ha)
+Band structure energy              : -2.9632828444E+01 (Ha)
+Exchange correlation energy        : -3.1146576339E+01 (Ha)
+Self and correction energy         : -2.3312279967E+02 (Ha)
+Entropy*kb*T                       : -2.0530979343E-02 (Ha)
+Fermi level                        :  2.3837117025E-01 (Ha)
+Net Magnetization                  :  4.0634653012E+00 
+Average force                      :  3.2225313692E-09 (Ha/Bohr)
+Maximum force                      :  3.2225313692E-09 (Ha/Bohr)
+Time for force calculation         :  3.615 (sec)
 Stress (GPa):
-     15.5724580814      -0.0000014018      -0.0000042184
-     -0.0000014018      15.5724546728       0.0000031403
-     -0.0000042184       0.0000031403      15.5724569581
-Pressure                           : -1.5572456571E+01 (GPa)
-Maximum stress                     :  1.5572458081E+01 (GPa)
-Time for stress calculation        :  8.391 (sec)
+     15.5667816505      -0.0000001545      -0.0000011308
+     -0.0000001545      15.5667816385      -0.0000013734
+     -0.0000011308      -0.0000013734      15.5667819555
+Pressure                           : -1.5566781748E+01 (GPa)
+Maximum stress                     :  1.5566781955E+01 (GPa)
+Time for stress calculation        :  9.376 (sec)
 ***************************************************************************
                                Timing info                                 
 ***************************************************************************
-Total walltime                     :  1169.291 sec
+Total walltime                     :  1423.060 sec
 ___________________________________________________________________________
 
 ***************************************************************************
