@@ -1,16 +1,15 @@
 #!/bin/bash
-#SBATCH -JMSPARCtesting_suite
-#SBATCH --account=hive-phanish6
-#SBATCH -phive-interact
+#SBATCH -JMLFF_train_spacegroup
+#SBATCH --account=gts-phanish6-coda20
+#SBATCH -p inferno
 #SBATCH -N 1 --ntasks-per-node=1
-#SBATCH --mem-per-cpu=15G
-#SBATCH -t1:00:00
-
-
+#SBATCH --mem-per-cpu=25G
+#SBATCH -t10:00:00
+#SBATCH --exclude=atl1-1-02-007-27-2,atl1-1-02-007-28-1
 cd $SLURM_SUBMIT_DIR
-
 module load matlab
-
+##module load intel
+##module load mvapich2
 echo $PWD 
 
 

@@ -1,3 +1,22 @@
+--------------
+Feb 05, 2023
+Name: Xin Jing
+* Change rounding convenction of mesh size to use ceil rather than round
+* Update testsuite
+
+----------------
+Feb 1, 2023
+Name: Xin Jing, Shashikant Kumar
+* Change r_core from value in pseudopotential file to actual r where projectors are below < 1E-8
+* fix SCF time in output file and change name format of output format as SPARC
+* update testsuite
+
+----------------
+Jan 23, 2023
+Name: Xin Jing, Shashikant Kumar
+* Change the pseudocharge rb upper bound and the default TOL_PSEUDOCHARGE to 1E-3 * TOL_SCF
+* update testsuite and documentation
+
 ----------------
 Jan 02, 2023
 Name: Shashikant Kumar
