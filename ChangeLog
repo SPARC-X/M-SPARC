@@ -1,7 +1,8 @@
 --------------
-Feb 05, 2023
-Name: Xin Jing
+Feb 06, 2023
+Name: Xin Jing, Shashikant Kumar
 * Change rounding convenction of mesh size to use ceil rather than round
+* Update SPMS psps list
 * Update testsuite
 
 ----------------
