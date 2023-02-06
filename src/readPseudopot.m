@@ -127,24 +127,23 @@ frewind(fid);
 fscanf(fid,'%s',3);
 rc = 0 ;
 for l = 0:lmax
-    if l == lloc
-        continue;
-    end
 	r_core_read = fscanf(fid,'%g',1);
     rc_max = r_core_read;
-    % check if r_core is large enough s.t. |proj| < 1E-8
-    r_indx = find(r < r_core_read,1,'last');
-    for i = 1:size(Pot(l+1).proj,2)
-        try
-            rc_temp = r(r_indx + find(abs(Pot(l+1).proj(r_indx+1:end,i)) < 1E-8,1) - 1);
-        catch
-            rc_temp = r(end);
+    if l ~= lloc
+        % check if r_core is large enough s.t. |proj| < 1E-8
+        r_indx = find(r < r_core_read,1,'last');
+        for i = 1:size(Pot(l+1).proj,2)
+            try
+                rc_temp = r(r_indx + find(abs(Pot(l+1).proj(r_indx+1:end,i)) < 1E-8,1) - 1);
+            catch
+                rc_temp = r(end);
+            end
+            if rc_temp > rc_max
+                rc_max = rc_temp;
+            end
         end
-        if rc_temp > rc_max
-            rc_max = rc_temp;
-        end
+        fprintf("atom type %d, l = %d, r_core read %.5f, change to rmax where |UdV| < 1E-8, %.5f.\n", ityp, l, r_core_read, rc_max);
     end
-    fprintf("atom type %d, l = %d, r_core read %.5f, change to rmax where |UdV| < 1E-8, %.5f.\n", ityp, l, r_core_read, rc_max);
     if rc_max > rc 
 		rc = rc_max;
     end

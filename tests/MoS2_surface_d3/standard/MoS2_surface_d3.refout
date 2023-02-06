@@ -1,8 +1,8 @@
 ***************************************************************************
-*                      M-SPARC (version Jan 29, 2023)                     *
+*                      M-SPARC (version Feb 05, 2023)                     *
 *   Copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech   *
 *           Distributed under GNU General Public License 3 (GPL)          *
-*                Date: 30-Jan-2023  Start time: 18:13:07                  *
+*                Date: 05-Feb-2023  Start time: 13:29:38                  *
 ***************************************************************************
                            Input parameters                                
 ***************************************************************************
@@ -11,7 +11,7 @@ LATVEC:
 1.000000000000000 0.000000000000000 0.000000000000000 
 -0.500033990000000 0.866005779000000 0.000000000000000 
 0.000000000000000 0.000000000000000 1.000000000000000 
-FD_GRID: 30 30 57
+FD_GRID: 31 31 57
 FD_ORDER: 12
 BC: P P D
 KPOINT_GRID: 1 1 1
@@ -30,7 +30,7 @@ TOL_LANCZOS: 1.00E-02
 TOL_PSEUDOCHARGE: 1.00E-08
 MIXING_VARIABLE: density
 MIXING_PRECOND: kerker
-TOL_PRECOND: 1.61E-04
+TOL_PRECOND: 1.54E-04
 PRECOND_KERKER_KTF: 1.00
 PRECOND_KERKER_THRESH: 0.10
 MIXING_PARAMETER: 0.10
@@ -59,8 +59,8 @@ Volume                  :  2.8597889160E+03 (Bohr^3)
 ***************************************************************************
                              Initialization                                
 ***************************************************************************
-Mesh spacing in x-direction        :  0.402263 (Bohr)
-Mesh spacing in y-direction        :  0.402236 (Bohr)
+Mesh spacing in x-direction        :  0.389287 (Bohr)
+Mesh spacing in y-direction        :  0.389260 (Bohr)
 Mesh spacing in z direction        :  0.397837 (Bohr)
 Number of symmetry adapted k-points:  1
 Output printed to                  :  MoS2_surface_d3.out
@@ -70,62 +70,61 @@ Total number of electrons          :  104
 Atom type 1  (valence electrons)   :  Mo 14
 Pseudopotential                    :  ../../../psps/42_Mo_14_2.0_2.6_pbe_n_v1.0.psp8
 lloc                               :  4
-Pseudocharge radii of atom type 1  :  7.64 7.64 7.56
+Pseudocharge radii of atom type 1  :  8.18 8.35 8.35
 Number of atoms of type 1          :  4
 Atom type 2  (valence electrons)   :  S 6
 Pseudopotential                    :  ../../../psps/16_S_6_1.8_1.9_pbe_n_v1.0.psp8
 lloc                               :  4
-Pseudocharge radii of atom type 2  :  8.05 8.05 7.96
+Pseudocharge radii of atom type 2  :  8.18 8.35 8.35
 Number of atoms of type 2          :  8
-Estimated total memory usage       :  252.49 MB
+Estimated total memory usage       :  269.61 MB
 =====================================================================
                     Self Consistent Field (SCF#1)                     
 =====================================================================
 Iteration     Free Energy (Ha/atom)   SCF Error        Timing (sec)
-1            -3.0730833385E+01        1.232E-01        38.477
-2            -3.0730850335E+01        9.759E-02        11.498
-3            -3.0718061790E+01        3.266E-02        10.784
-4            -3.0718398050E+01        2.856E-02        12.040
-5            -3.0718053049E+01        1.741E-02        11.239
-6            -3.0717761985E+01        7.440E-03        11.403
-7            -3.0717740167E+01        5.099E-03        10.368
-8            -3.0717726299E+01        3.854E-03        11.003
-9            -3.0717718912E+01        1.782E-03        10.765
-10           -3.0717717521E+01        1.081E-03        10.789
-11           -3.0717717298E+01        5.469E-04        9.995
-12           -3.0717717366E+01        3.048E-04        11.195
-13           -3.0717717035E+01        1.303E-04        9.779
-14           -3.0717716913E+01        1.159E-04        9.934
-15           -3.0717716876E+01        7.892E-05        10.115
-16           -3.0717717275E+01        5.266E-05        10.042
-17           -3.0717716580E+01        3.905E-05        9.940
-18           -3.0717716228E+01        3.085E-05        10.035
-19           -3.0717716195E+01        2.472E-05        9.931
-20           -3.0717716072E+01        2.167E-05        10.372
-21           -3.0717715980E+01        1.546E-05        9.714
-22           -3.0717715839E+01        1.410E-05        9.996
-23           -3.0717715998E+01        1.308E-05        10.119
-24           -3.0717715876E+01        1.018E-05        10.104
-25           -3.0717715990E+01        9.048E-06        10.172
-Total number of SCF: 25    
+1            -3.0730863332E+01        1.226E-01        42.360
+2            -3.0731592968E+01        9.763E-02        12.660
+3            -3.0718486709E+01        3.166E-02        12.415
+4            -3.0718668366E+01        2.832E-02        13.499
+5            -3.0718286451E+01        1.780E-02        11.794
+6            -3.0717934715E+01        6.734E-03        12.227
+7            -3.0717925090E+01        5.258E-03        11.073
+8            -3.0717904145E+01        3.707E-03        12.212
+9            -3.0717896949E+01        1.723E-03        11.591
+10           -3.0717893945E+01        9.987E-04        11.867
+11           -3.0717894363E+01        5.376E-04        11.015
+12           -3.0717894262E+01        2.906E-04        12.116
+13           -3.0717894144E+01        1.637E-04        11.149
+14           -3.0717894532E+01        1.210E-04        11.615
+15           -3.0717894235E+01        8.325E-05        10.557
+16           -3.0717893895E+01        7.611E-05        11.112
+17           -3.0717893437E+01        4.025E-05        10.701
+18           -3.0717893529E+01        3.072E-05        10.965
+19           -3.0717893314E+01        2.373E-05        10.795
+20           -3.0717893424E+01        2.027E-05        11.085
+21           -3.0717893113E+01        1.387E-05        10.633
+22           -3.0717893275E+01        1.267E-05        10.945
+23           -3.0717893228E+01        1.030E-05        10.940
+24           -3.0717893139E+01        8.651E-06        10.659
+Total number of SCF: 24    
 ====================================================================
                                 Energy                              
 ====================================================================
-Free energy per atom               : -3.0723600313E+01 (Ha/atom)
-Total free energy                  : -3.6868320375E+02 (Ha)
-Band structure energy              : -8.3206331527E+01 (Ha)
-Exchange correlation energy        : -6.6003492291E+01 (Ha)
-Self and correction energy         : -7.0495009851E+02 (Ha)
-Entropy*kb*T                       : -2.7039197472E-07 (Ha)
-Fermi level                        : -1.4143147578E-01 (Ha)
+Free energy per atom               : -3.0723777461E+01 (Ha/atom)
+Total free energy                  : -3.6868532954E+02 (Ha)
+Band structure energy              : -8.3204715807E+01 (Ha)
+Exchange correlation energy        : -6.6003693280E+01 (Ha)
+Self and correction energy         : -7.0493665207E+02 (Ha)
+Entropy*kb*T                       : -2.4818714505E-07 (Ha)
+Fermi level                        : -1.4156618274E-01 (Ha)
 DFT-D3 correction                  : -7.0611867877E-02 (Ha)
-Average force                      :  5.3437865922E-03 (Ha/Bohr)
-Maximum force                      :  8.0164829917E-03 (Ha/Bohr)
-Time for force calculation         :  3.437 (sec)
+Average force                      :  5.3547322947E-03 (Ha/Bohr)
+Maximum force                      :  8.0820591499E-03 (Ha/Bohr)
+Time for force calculation         :  4.453 (sec)
 ***************************************************************************
                                Timing info                                 
 ***************************************************************************
-Total walltime                     :  309.608 sec
+Total walltime                     :  328.943 sec
 ___________________________________________________________________________
 
 ***************************************************************************

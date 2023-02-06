@@ -376,16 +376,16 @@ if S.Nx > 0 && S.Ny > 0 && S.Nz > 0
 	S.dz = S.L3 / S.Nz;
 elseif S.ecut > 0
 	S.mesh_spacing = Ecut2h(S.ecut, S.FDn);
-	S.Nx = max(round(S.L1/S.mesh_spacing),1);
-	S.Ny = max(round(S.L2/S.mesh_spacing),1);
-	S.Nz = max(round(S.L3/S.mesh_spacing),1);
+	S.Nx = max(ceil(S.L1/S.mesh_spacing),1);
+	S.Ny = max(ceil(S.L2/S.mesh_spacing),1);
+	S.Nz = max(ceil(S.L3/S.mesh_spacing),1);
 	S.dx = S.L1 / S.Nx;
 	S.dy = S.L2 / S.Ny;
 	S.dz = S.L3 / S.Nz;
 elseif S.mesh_spacing > 0
-	S.Nx = max(round(S.L1/S.mesh_spacing),1);
-	S.Ny = max(round(S.L2/S.mesh_spacing),1);
-	S.Nz = max(round(S.L3/S.mesh_spacing),1);
+	S.Nx = max(ceil(S.L1/S.mesh_spacing),1);
+	S.Ny = max(ceil(S.L2/S.mesh_spacing),1);
+	S.Nz = max(ceil(S.L3/S.mesh_spacing),1);
 	S.dx = S.L1 / S.Nx;
 	S.dy = S.L2 / S.Ny;
 	S.dz = S.L3 / S.Nz;
@@ -1213,7 +1213,7 @@ end
 
 start_time = fix(clock);
 fprintf(fileID,'***************************************************************************\n');
-fprintf(fileID,'*                      M-SPARC (version Feb 1, 2023)                     *\n');
+fprintf(fileID,'*                      M-SPARC (version Feb 06, 2023)                     *\n');
 fprintf(fileID,'*   Copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech   *\n');
 fprintf(fileID,'*           Distributed under GNU General Public License 3 (GPL)          *\n');
 fprintf(fileID,'*                Date: %s  Start time: %02d:%02d:%02d                  *\n',date,start_time(4),start_time(5),start_time(6));
