@@ -212,5 +212,11 @@ disp(S.Atoms);
 %disp(S.mvAtmConstraint);
 
 fclose(fid1);
+
+% find total mass
+S.TotalMass = 0;
+for ityp = 1:S.n_typ
+	S.TotalMass = S.TotalMass + S.Atm(ityp).Mass * S.Atm(ityp).n_atm_typ;
+end
 end
 

@@ -1,4 +1,9 @@
 --------------
+Feb 07, 2023
+Name: Xin Jing
+* Add density in .out file
+
+----------------
 Feb 06, 2023
 Name: Xin Jing, Shashikant Kumar
 * Change rounding convenction of mesh size to use ceil rather than round
