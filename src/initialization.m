@@ -1463,7 +1463,9 @@ fprintf(fileID,'Lattice vectors:\n');
 fprintf(fileID,'%.15f %.15f %.15f \n',S.lat_uvec(1,:)*S.L1);
 fprintf(fileID,'%.15f %.15f %.15f \n',S.lat_uvec(2,:)*S.L2);
 fprintf(fileID,'%.15f %.15f %.15f \n',S.lat_uvec(3,:)*S.L3);
-fprintf(fileID,'Volume                  :%18.10E (Bohr^3)\n',S.L1*S.L2*S.L3*S.Jacb);
+fprintf(fileID,'Volume :%18.10E (Bohr^3)\n',S.L1*S.L2*S.L3*S.Jacb);
+fprintf(fileID,'Density :%18.10E (amu/Bohr^3), %18.10E (g/cc)\n',...
+			S.TotalMass/(S.L1*S.L2*S.L3*S.Jacb), S.TotalMass/(S.L1*S.L2*S.L3*S.Jacb)*11.2058730627683);
 
 % fprintf(fileID,'***************************************************************************\n');
 % fprintf(fileID,'                           Parallelization                                 \n');
