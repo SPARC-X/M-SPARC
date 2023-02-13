@@ -1523,9 +1523,7 @@ for ityp = 1:S.n_typ
 	fprintf(fileID,'Atom type %-2d (valence electrons)   :  %s %d\n',ityp,S.Atm(ityp).typ, S.Atm(ityp).Z);
 	fprintf(fileID,'Pseudopotential                    :  %s\n',S.Atm(ityp).psdfname);     
 	fprintf(fileID,'lloc                               :  %d\n',S.Atm(ityp).lloc);    
-	if (S.MDFlag == 1)
-		fprintf(fileID,'Atomic mass                        :  %.15f\n',S.Atm(ityp).Mass);
-	end
+	fprintf(fileID,'Atomic mass                        :  %.15f\n',S.Atm(ityp).Mass);
 	fprintf(fileID,'Pseudocharge radii of atom type %-2d :  %.2f %.2f %.2f\n',ityp,S.Atm(ityp).rb_x,S.Atm(ityp).rb_y,S.Atm(ityp).rb_z);
 	fprintf(fileID,'Number of atoms of type %-2d         :  %d\n',ityp,S.Atm(ityp).n_atm_typ);
 	% if (S.PrintAtomPosFlag == 1 && S.MDFlag == 0 && S.RelaxFlag == 0)
