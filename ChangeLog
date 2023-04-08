@@ -1,5 +1,13 @@
 
 --------------
+Apr 08, 2023
+Name: Xin Jing
+* Change the default SCF tolerance for 1E-5 Ha/atom energy accuracy in single point calculation.
+* Change the default SCF tolerance for 1E-3 Ha/bohr force accuracy in MD context.
+* Change the default SCF tolerance for TOL_RELAX/5 Ha/bohr force accuracy in relaxation context.
+* Update documentation.
+
+--------------
 Feb 12, 2023
 Name: Xin Jing
 * Always print atomic mass in .out file

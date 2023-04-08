@@ -562,33 +562,48 @@ end
 
 % SCF_tol
 if S.SCF_tol < 0	
-	target_force_accuracy = -1.0;
-	target_energy_accuracy = -1.0;
-	if S.accuracy_level >= 0
-		target_force_accuracy = 10^(S.accuracy_level + 1);
-	elseif S.target_force_accuracy > 0
-		target_force_accuracy = S.target_force_accuracy;
-	elseif S.target_energy_accuracy > 0
-		target_energy_accuracy = S.target_energy_accuracy;
-	end
-	
-	% if none of the accuracy levels are specified, set force_accuracy to
-	% 1e-3
-	if target_force_accuracy < 0  && target_energy_accuracy < 0 
-		target_force_accuracy = 1e-3;
-	end
-	
-	% choose SCF tol based on the desired accuracy
-	if target_force_accuracy > 0
-		a = 0.9090;
-		b = -0.9347;
-		S.SCF_tol = exp((log(target_force_accuracy) - b)/a);
-	elseif target_energy_accuracy > 0
-		a = 1.4312;
-		b = -1.5225;
-		S.SCF_tol = exp((log(target_energy_accuracy) - b)/a);
-	end
-	fprintf('## Based on the desired accuracy, SCF_tol is set to: %.3e\n',S.SCF_tol);
+    if S.MDFlag 
+        % in case of MD, using 1E-3 Ha/Bohr force accuracy as target
+        target_force_accuracy = 1E-3;
+        a = 1.025;
+	    b = 1.368;
+	    S.SCF_tol = exp((log(target_force_accuracy) - b)/a);
+    elseif S.RelaxFlag
+        % in case of relaxation, using TOL_RELAX/5 force accuracy as target
+        target_force_accuracy = S.TOL_RELAX/5;
+        a = 1.025;
+	    b = 1.468;
+	    S.SCF_tol = exp((log(target_force_accuracy) - b)/a);
+    else
+        % in case of single point calculation, using 1E-5 Ha/atom energy accuracy as target
+	    target_force_accuracy = -1.0;
+	    target_energy_accuracy = -1.0;
+	    if S.accuracy_level >= 0
+		    target_force_accuracy = 10^(S.accuracy_level + 1);
+	    elseif S.target_force_accuracy > 0
+		    target_force_accuracy = S.target_force_accuracy;
+	    elseif S.target_energy_accuracy > 0
+		    target_energy_accuracy = S.target_energy_accuracy;
+	    end
+	    
+	    % if none of the accuracy levels are specified, set energy_accuracy to
+        % 1e-5
+	    if target_force_accuracy < 0  && target_energy_accuracy < 0 
+		    target_energy_accuracy = 1e-5;
+	    end
+	    
+	    % choose SCF tol based on the desired accuracy
+	    if target_energy_accuracy > 0
+		    a = 1.502;
+		    b = 1.165;
+		    S.SCF_tol = exp((log(target_energy_accuracy) - b)/a);
+	    elseif target_force_accuracy > 0
+		    a = 1.025;
+		    b = 1.368;
+		    S.SCF_tol = exp((log(target_force_accuracy) - b)/a);
+	    end
+    end
+    fprintf('## Based on the desired accuracy, SCF_tol is set to: %.3e\n',S.SCF_tol);
 end
 
 % poisson_tol
@@ -1213,7 +1228,7 @@ end
 
 start_time = fix(clock);
 fprintf(fileID,'***************************************************************************\n');
-fprintf(fileID,'*                      M-SPARC (version Feb 06, 2023)                     *\n');
+fprintf(fileID,'*                      M-SPARC (version Apr 08, 2023)                     *\n');
 fprintf(fileID,'*   Copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech   *\n');
 fprintf(fileID,'*           Distributed under GNU General Public License 3 (GPL)          *\n');
 fprintf(fileID,'*                Date: %s  Start time: %02d:%02d:%02d                  *\n',date,start_time(4),start_time(5),start_time(6));
