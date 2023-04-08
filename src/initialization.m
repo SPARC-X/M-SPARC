@@ -830,7 +830,7 @@ fd_order = S.FDn * 2;
 N_ex = (S.Nx+fd_order) * (S.Ny+fd_order) * (S.Nz+fd_order);
 
 % orbitals (dominant)
-ncpy_orbitals = 4; % 4 copies required during chebyshev filtering
+ncpy_orbitals = 3; % 4 copies required during chebyshev filtering
 if S.nspin ~= 1, ncpy_orbitals = ncpy_orbitals * 2; end
 % for kpoints, the factor 2 is for complex entries
 if S.tnkpt ~= 1, ncpy_orbitals = ncpy_orbitals * 2 * S.tnkpt; end
@@ -1213,7 +1213,7 @@ end
 
 start_time = fix(clock);
 fprintf(fileID,'***************************************************************************\n');
-fprintf(fileID,'*                      M-SPARC (version Feb 06, 2023)                     *\n');
+fprintf(fileID,'*                      M-SPARC (version Apr 03, 2023)                     *\n');
 fprintf(fileID,'*   Copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech   *\n');
 fprintf(fileID,'*           Distributed under GNU General Public License 3 (GPL)          *\n');
 fprintf(fileID,'*                Date: %s  Start time: %02d:%02d:%02d                  *\n',date,start_time(4),start_time(5),start_time(6));
