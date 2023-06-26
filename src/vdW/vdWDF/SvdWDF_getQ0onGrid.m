@@ -1,4 +1,4 @@
-function [S] = SvdWDF_getQ0onGrid(S, ecPW, v_cPW)
+function [S] = SvdWDF_getQ0onGrid(S, rho, ecPW, v_cPW)
 % @file    SvdWDF_getQ0onGrid.m
 % @brief   This file contains the functions computing the energy ratio q0(x)
 % @authors Boqin Zhang <bzhang376@gatech.edu>
@@ -22,14 +22,7 @@ function [S] = SvdWDF_getQ0onGrid(S, ecPW, v_cPW)
     S.vdWDF_q0 = ones(nnr,1)*q_cut;
     S.vdWDF_Dq0Drho = zeros(nnr, 2); % up and down
     S.vdWDF_Dq0Dgradrho = zeros(nnr, 2); % up and down
-    rho = S.rho;
     epsr = 1.0E-12;
-    if S.NLCC_flag 
-        rho(:,2) = rho(:,2)+S.rho_Tilde_at * 0.5;
-        rho(:,3) = rho(:,3)+S.rho_Tilde_at * 0.5;
-    end
-    rho(rho < S.xc_rhotol) = S.xc_rhotol;
-	rho(:,1) = rho(:,2) + rho(:,3);
     
     boolRhoGepsr = rho(:, 1) > epsr;
     boolRhoUpGepsr = (rho(:, 2) > epsr/2.0) & boolRhoGepsr;

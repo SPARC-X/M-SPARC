@@ -58,25 +58,33 @@ end
 % apply Anderson extrapolation every p iters
 if Pulay_mixing_flag
 	% find weighted averages x_wavg, f_wavg
-	[x_wavg, f_wavg] = andersonWtdAvg(x_k, f_k, S.X, S.F);
+	[x_wavg, f_wavg] = andersonWtdAvg(x_k, f_k, S.X, S.F,S.nspden,S.MixingVariable);
 else 
 	% simple mixing
 	x_wavg = x_k; f_wavg = f_k;
 end
 
-sum_f_tot = 0.0;
-sum_f_mag = 0.0;
-if S.spin_typ ~= 0
+if S.spin_typ == 0
+    f_tot = f_wavg; % for spin-unpolarized calculations, f_tot is just f_wavg
+    % f_mag is N/A for spin-unporlaized calculations
+elseif S.spin_typ == 1
     f_tot = f_wavg(1:S.N) + f_wavg(S.N+1:2*S.N);
     f_mag = f_wavg(1:S.N) - f_wavg(S.N+1:2*S.N);
     sum_f_tot = sum(f_tot);
     sum_f_mag = sum(f_mag);
-else
-    f_tot = f_wavg; % for spin-unpolarized calculations, f_tot is just f_wavg
-    % f_mag is N/A for spin-unporlaized calculations
+elseif S.spin_typ == 2
+    f_tot = f_wavg(1:S.N);
+    f_magx = f_wavg(1+S.N:2*S.N);
+    f_magy = f_wavg(1+2*S.N:3*S.N);
+    f_magz = f_wavg(1+3*S.N:4*S.N);
+    sum_f_tot = sum(f_tot);
+    sum_f_magx = sum(f_magx);
+    sum_f_magy = sum(f_magy);
+    sum_f_magz = sum(f_magz);
 end
 
-Pf = zeros(S.N,S.nspin);
+% TODO: change it for non-collinear
+Pf = zeros(S.N,S.nspden);
 % apply preconditioner to the weighted residual
 if S.MixingPrecond > 0
     % precondition total density
@@ -91,7 +99,7 @@ else
     Pf(:,1) = amix * f_tot;     % mixing param is included in Pf
 end
 
-if S.spin_typ ~= 0
+if S.spin_typ == 1
     if S.MixingPrecondMag ~= 0
         if S.MixingPrecondMag == 1
             k_TF_mag = S.precond_kerker_kTF_mag;
@@ -101,9 +109,21 @@ if S.spin_typ ~= 0
     else
         Pf(:,2) = amix_mag * f_mag;     % mixing param is included in Pf
     end
+elseif S.spin_typ == 2
+    if S.MixingPrecondMag ~= 0
+        if S.MixingPrecondMag == 1
+            k_TF_mag = S.precond_kerker_kTF_mag;
+            idiemac_mag = S.precond_kerker_thresh_mag;
+            Pf(:,2) = Kerker_Precond(S, f_magx, amix, k_TF_mag, idiemac_mag, S.precond_tol, 1000, zeros(S.N,1));
+            Pf(:,3) = Kerker_Precond(S, f_magy, amix, k_TF_mag, idiemac_mag, S.precond_tol, 1000, zeros(S.N,1));
+            Pf(:,4) = Kerker_Precond(S, f_magz, amix, k_TF_mag, idiemac_mag, S.precond_tol, 1000, zeros(S.N,1));
+        end
+    else
+        Pf(:,2:4) = amix_mag * [f_magx f_magy f_magz];     % mixing param is included in Pf
+    end
 end
 
-if S.spin_typ ~= 0
+if S.spin_typ == 1
     sum_Pf_tot = sum(Pf(:,1));
     shift_Pf_tot = (sum_f_tot - sum_Pf_tot)/S.N;
     Pf(:,1) = Pf(:,1) + shift_Pf_tot;
@@ -111,13 +131,31 @@ if S.spin_typ ~= 0
     sum_Pf_mag = sum(Pf(:,2));
     shift_Pf_mag = (sum_f_mag - sum_Pf_mag)/S.N;
     Pf(:,2) = Pf(:,2) + shift_Pf_mag;
+elseif S.spin_typ == 2
+    sum_Pf_tot = sum(Pf(:,1));
+    shift_Pf_tot = (sum_f_tot - sum_Pf_tot)/S.N;
+    Pf(:,1) = Pf(:,1) + shift_Pf_tot;
+    
+    sum_Pf_magx = sum(Pf(:,2));
+    shift_Pf_magx = (sum_f_magx - sum_Pf_magx)/S.N;
+    Pf(:,2) = Pf(:,2) + shift_Pf_magx;
+
+    sum_Pf_magy = sum(Pf(:,3));
+    shift_Pf_magy = (sum_f_magy - sum_Pf_magy)/S.N;
+    Pf(:,3) = Pf(:,3) + shift_Pf_magy;
+
+    sum_Pf_magz = sum(Pf(:,4));
+    shift_Pf_magz = (sum_f_magz - sum_Pf_magz)/S.N;
+    Pf(:,4) = Pf(:,4) + shift_Pf_magz;
 end
 
 % x_kp1 = x_wavg + mix_param * f_wavg;
 if S.spin_typ == 0
     x_kp1 = x_wavg + Pf;
-else
+elseif S.spin_typ == 1
     x_kp1 = x_wavg + vertcat(Pf(:,1) + Pf(:,2), Pf(:,1) - Pf(:,2))/2;
+elseif S.spin_typ == 2
+    x_kp1 = x_wavg + reshape(Pf,[],1);
 end
 
 
@@ -126,7 +164,23 @@ if S.MixingVariable == 0
 	% slightly inaccuate integral
 	if S.MixingPrecond ~= 0
 		% scale the density
-		x_kp1 = x_kp1 * (-S.NegCharge/sum(S.W'*reshape(x_kp1,S.N,S.nspin),2));
+        if S.spin_typ == 2
+            negrho_count = sum(x_kp1(1:S.N) < 0);
+            if (negrho_count > 0)
+                fprintf('\nDensity got negative\n\n');                
+            end
+            x_kp1(x_kp1(1:S.N) < 0) = 0;
+            integral = S.W'*(x_kp1(1:S.N));
+            x_kp1(1:S.N) = x_kp1(1:S.N) * (-S.NegCharge/integral);
+        else
+            negrho_count = sum(x_kp1 < 0);
+            if (negrho_count > 0)
+                fprintf('\nDensity got negative\n\n');                
+            end
+            x_kp1(x_kp1 < 0) = 0;
+            integral = sum(S.W'*reshape(x_kp1,S.N,S.nspin),2);
+            x_kp1 = x_kp1 * (-S.NegCharge/integral);
+        end
 	end
 end
 

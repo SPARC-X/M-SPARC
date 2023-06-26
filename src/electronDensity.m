@@ -5,42 +5,47 @@ function S = electronDensity(S)
 %
 % @authors  Qimen Xu <qimenxu@gatech.edu>
 %           Abhiraj Sharma <asharma424@gatech.edu>
+%           Xin Jing <xjing30@gatech.edu>
 %           Phanish Suryanarayana <phanish.suryanarayana@ce.gatech.edu>
 %
 % @copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech
 %
-S.rho = 0 * S.rho;
 
-if S.nspinor == 1
-    if S.nspin == 1
-        for kpt =1:S.tnkpt
-            S.rho = S.rho + 2*S.wkpt(kpt)* sum( bsxfun(@times,S.psi(:,:,kpt).*conj(S.psi(:,:,kpt)),S.occ(:,kpt)'),2);
-        end
-        S.rho = real(S.rho);
+rho_d = zeros(S.N,S.nspinor);
+for spinor = 1:S.nspinor
+    ndrange = (1+(spinor-1)*S.N:spinor*S.N);
+    if S.spin_typ == 1
+        nsrange = (1+(spinor-1)*S.Nev:spinor*S.Nev);
     else
-        ks = 1;
-        for spin =1:S.nspin
-            for kpt =1:S.tnkpt
-                S.rho(:,spin+1) = S.rho(:,spin+1) + S.wkpt(kpt)* sum( bsxfun(@times,S.psi(:,:,ks).*conj(S.psi(:,:,ks)),S.occ(:,ks)'),2);
-                ks = ks + 1;
-            end
-        end
-        S.rho(:,2:3) = real(S.rho(:,2:3));
-        S.rho(:,1) = S.rho(:,2) + S.rho(:,3);
+        nsrange = (1:S.Nev);
     end
-    
-elseif S.nspinor == 2
-    
-    if S.spin_typ == 0
-        for kpt =1:S.tnkpt
-             S.rho = S.rho + sum(reshape(S.wkpt(kpt)* sum( bsxfun(@times,S.psi(:,:,kpt).*conj(S.psi(:,:,kpt)),S.occ(:,kpt)'),2),S.N,[]),2);
-        end
-        S.rho = real(S.rho);
-    elseif S.spin_typ == 1
-        error('Not implemented yet!');	
-    elseif S.spin_typ == 2
-        error('Not implemented yet!');	
+    for kpt =1:S.tnkpt
+         rho_d(:,spinor) = rho_d(:,spinor) + S.occfac*S.wkpt(kpt)* sum( S.psi(ndrange,:,kpt).*conj(S.psi(ndrange,:,kpt)).*S.occ(nsrange,kpt)',2);
     end
 end
-	
+rho_d = real(rho_d);
+rhotot = sum(rho_d,2);
+
+if S.spin_typ == 0
+    S.rho = rhotot;
+elseif S.spin_typ == 1
+    S.rho = [rhotot rho_d];
+    S.mag = rho_d(:,1) - rho_d(:,2);
+elseif S.spin_typ == 2
+    spinor1 = (1:S.N);
+    spinor2 = (S.N+1:2*S.N);
+    rho_od = zeros(S.N,1);
+    for kpt =1:S.tnkpt
+         rho_od = rho_od + S.occfac*S.wkpt(kpt)* sum( S.psi(spinor1,:,kpt).*conj(S.psi(spinor2,:,kpt)).*S.occ(:,kpt)',2);
+    end
+    mx = 2*real(rho_od);
+    my = -2*imag(rho_od);
+    mz = rho_d(:,1) - rho_d(:,2);
+    magnorm = sqrt(mx.^2 + my.^2 + mz.^2);
+    S.rho = [rhotot 0.5*(rhotot+magnorm)  0.5*(rhotot-magnorm)];
+    S.mag = [mx my mz magnorm];
 end
+
+end
+
+

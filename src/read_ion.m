@@ -63,7 +63,7 @@ while (~feof(fid1))
 		S.Atm(typcnt).Mass   = 1e9; % set the default later
 		S.Atm(typcnt).lloc   = 4; % default is 4 for oncv
 		S.Atm(typcnt).psptyp = 1; % default is psp8 format
-		S.Atm(typcnt).mag    = zeros(S.Atm(typcnt).n_atm_typ,1);
+		S.Atm(typcnt).mag    = zeros(S.Atm(typcnt).n_atm_typ,3);
 		textscan(fid1,'%s',1,'delimiter','\n','MultipleDelimsAsOne',0);  
 		n_atom = n_atom + S.Atm(typcnt).n_atm_typ ;
 		atmcnt_cum(typcnt+1) = n_atom;
@@ -162,8 +162,19 @@ while (~feof(fid1))
 		typ_atm_count = 0; % atom count for this type
 		for i = 1:S.Atm(typcnt).n_atm_typ
 			typ_atm_count = typ_atm_count + 1; 
-			C_param = textscan(fid1,'%f %f %f',1,'delimiter',' ','MultipleDelimsAsOne',1);
-			S.Atm(typcnt).mag(typ_atm_count) = C_param{1};
+            C_param = textscan(fid1,'%f %f %f',1,'delimiter',' ','MultipleDelimsAsOne',1);
+            num_non_nan = sum(cellfun(@(x) sum(~isnan(x)), C_param));
+            if num_non_nan == 1
+                S.Atm(typcnt).mag(typ_atm_count,1) = 0;
+                S.Atm(typcnt).mag(typ_atm_count,2) = 0;
+                S.Atm(typcnt).mag(typ_atm_count,3) = C_param{1};
+            elseif num_non_nan == 3
+                S.Atm(typcnt).mag(typ_atm_count,1) = C_param{1};
+                S.Atm(typcnt).mag(typ_atm_count,2) = C_param{2};
+                S.Atm(typcnt).mag(typ_atm_count,3) = C_param{3};
+            else
+                error("Please specify either spin in Z direction or spin in x, y, z directions.");
+            end
 			textscan(fid1,'%s',1,'delimiter','\n','MultipleDelimsAsOne',0);  % skip current line
 		end
 		S.IsSpin(typcnt) = 1;

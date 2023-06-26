@@ -122,32 +122,24 @@ if S.NLCC_flag
             % Calculate xc 2nd term stress components
             [II_rb,JJ_rb,KK_rb] = ndgrid(ii_s:ii_e,jj_s:jj_e,kk_s:kk_e);
             Rowcount_rb = (KK_rb-1)*S.Nx*S.Ny + (JJ_rb-1)*S.Nx + II_rb;
-            %x0temp = [x0_i y0_i z0_i]*S.grad_T;
-            %x0_i = x0temp(1); y0_i = x0temp(2); z0_i = x0temp(3);
             [xr,yr,zr] = ndgrid((ii_s-1:ii_e-1)*S.dx - x0_i,(jj_s-1:jj_e-1)*S.dy - y0_i,(kk_s-1:kk_e-1)*S.dz - z0_i) ;
             x1 = S_T(1,1)*xr + S_T(1,2)*yr + S_T(1,3)*zr;
             y1 = S_T(2,1)*xr + S_T(2,2)*yr + S_T(2,3)*zr;
             z1 = S_T(3,1)*xr + S_T(3,2)*yr + S_T(3,3)*zr;
-            if S.nspin==1
+            if S.spin_typ == 0
                 stress(1,1) = stress(1,1) + sum(sum(sum( drho_Tilde_at_1(II,JJ,KK) .* x1 .* ( S.Vxc(Rowcount_rb) ) .* S.W(Rowcount_rb) )));
                 stress(1,2) = stress(1,2) + sum(sum(sum( drho_Tilde_at_1(II,JJ,KK) .* y1 .* ( S.Vxc(Rowcount_rb) ) .* S.W(Rowcount_rb) )));
                 stress(1,3) = stress(1,3) + sum(sum(sum( drho_Tilde_at_1(II,JJ,KK) .* z1 .* ( S.Vxc(Rowcount_rb) ) .* S.W(Rowcount_rb) )));
-                %stress(2,1) = stress(2,1) + sum(sum(sum( drho_Tilde_at_2(II,JJ,KK) .* x1 .* ( S.Vxc(Rowcount_rb) ) .* S.W(Rowcount_rb) )));
                 stress(2,2) = stress(2,2) + sum(sum(sum( drho_Tilde_at_2(II,JJ,KK) .* y1 .* ( S.Vxc(Rowcount_rb) ) .* S.W(Rowcount_rb) )));
                 stress(2,3) = stress(2,3) + sum(sum(sum( drho_Tilde_at_2(II,JJ,KK) .* z1 .* ( S.Vxc(Rowcount_rb) ) .* S.W(Rowcount_rb) )));
-                %stress(3,1) = stress(3,1) + sum(sum(sum( drho_Tilde_at_3(II,JJ,KK) .* x1 .* ( S.Vxc(Rowcount_rb) ) .* S.W(Rowcount_rb) )));
-                %stress(3,2) = stress(3,2) + sum(sum(sum( drho_Tilde_at_3(II,JJ,KK) .* y1 .* ( S.Vxc(Rowcount_rb) ) .* S.W(Rowcount_rb) )));
                 stress(3,3) = stress(3,3) + sum(sum(sum( drho_Tilde_at_3(II,JJ,KK) .* z1 .* ( S.Vxc(Rowcount_rb) ) .* S.W(Rowcount_rb) )));
             else
                 vxc = S.Vxc(:,1)+S.Vxc(:,2);
                 stress(1,1) = stress(1,1) + sum(sum(sum( 0.5*drho_Tilde_at_1(II,JJ,KK) .* x1 .* ( vxc(Rowcount_rb)  ) .* S.W(Rowcount_rb) )));
                 stress(1,2) = stress(1,2) + sum(sum(sum( 0.5*drho_Tilde_at_1(II,JJ,KK) .* y1 .* ( vxc(Rowcount_rb)  ) .* S.W(Rowcount_rb) )));
                 stress(1,3) = stress(1,3) + sum(sum(sum( 0.5*drho_Tilde_at_1(II,JJ,KK) .* z1 .* (  vxc(Rowcount_rb)  ) .* S.W(Rowcount_rb) )));
-                %stress(2,1) = stress(2,1) + sum(sum(sum( 0.5*drho_Tilde_at_2(II,JJ,KK) .* x1 .* (  vxc(Rowcount_rb)  ) .* S.W(Rowcount_rb) )));
                 stress(2,2) = stress(2,2) + sum(sum(sum( 0.5*drho_Tilde_at_2(II,JJ,KK) .* y1 .* (  vxc(Rowcount_rb)  ) .* S.W(Rowcount_rb) )));
                 stress(2,3) = stress(2,3) + sum(sum(sum( 0.5*drho_Tilde_at_2(II,JJ,KK) .* z1 .* (  vxc(Rowcount_rb)  ) .* S.W(Rowcount_rb) )));
-                %stress(3,1) = stress(3,1) + sum(sum(sum( 0.5*drho_Tilde_at_3(II,JJ,KK) .* x1 .* (  vxc(Rowcount_rb)  ) .* S.W(Rowcount_rb) )));
-                %stress(3,2) = stress(3,2) + sum(sum(sum( 0.5*drho_Tilde_at_3(II,JJ,KK) .* y1 .* (  vxc(Rowcount_rb)  ) .* S.W(Rowcount_rb) )));
                 stress(3,3) = stress(3,3) + sum(sum(sum( 0.5*drho_Tilde_at_3(II,JJ,KK) .* z1 .* (  vxc(Rowcount_rb)  ) .* S.W(Rowcount_rb) )));
             end
          end
@@ -163,94 +155,45 @@ if S.NLCC_flag
 end
     
 % Stress contribution from Kinetic component
-if S.nspinor == 1
-    ks = 1;
-    for spin = 1:S.nspin
-        for kpt = 1:S.tnkpt
-            kpt_vec = S.kptgrid(kpt,:);
-
-            Dpsi_x = blochGradient(S,kpt_vec,1)*S.psi(:,:,ks);
-            Dpsi_y = blochGradient(S,kpt_vec,2)*S.psi(:,:,ks);
-            Dpsi_z = blochGradient(S,kpt_vec,3)*S.psi(:,:,ks);
-
-            TDpsi_1 = S.grad_T(1,1)*Dpsi_x + S.grad_T(2,1)*Dpsi_y + S.grad_T(3,1)*Dpsi_z;
-            TDpsi_2 = S.grad_T(1,2)*Dpsi_x + S.grad_T(2,2)*Dpsi_y + S.grad_T(3,2)*Dpsi_z;
-            TDpsi_3 = S.grad_T(1,3)*Dpsi_x + S.grad_T(2,3)*Dpsi_y + S.grad_T(3,3)*Dpsi_z;
-            TDcpsi_1 = conj(TDpsi_1);
-            TDcpsi_2 = conj(TDpsi_2);
-            TDcpsi_3 = conj(TDpsi_3);
-
-            stress(1,1) = stress(1,1) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
-                          (TDcpsi_1.*TDpsi_1)) * S.occ(:,ks));
-            stress(1,2) = stress(1,2) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
-                          (TDcpsi_1.*TDpsi_2)) * S.occ(:,ks));
-            stress(1,3) = stress(1,3) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
-                          (TDcpsi_1.*TDpsi_3)) * S.occ(:,ks));    
-    % 		stress(2,1) = stress(2,1) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
-    % 					  (TDcpsi_2.*TDpsi_1)) * S.occ(:,ks));
-            stress(2,2) = stress(2,2) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
-                          (TDcpsi_2.*TDpsi_2)) * S.occ(:,ks));
-            stress(2,3) = stress(2,3) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
-                          (TDcpsi_2.*TDpsi_3)) * S.occ(:,ks));
-    % 		stress(3,1) = stress(3,1) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
-    % 					  (TDcpsi_3.*TDpsi_1)) * S.occ(:,ks));
-    % 		stress(3,2) = stress(3,2) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
-    % 					  (TDcpsi_3.*TDpsi_2)) * S.occ(:,ks));
-            stress(3,3) = stress(3,3) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
-                          (TDcpsi_3.*TDpsi_3)) * S.occ(:,ks));
-
-            ks = ks + 1;           
-        end
-    end
+for kpt = 1:S.tnkpt
+    kpt_vec = S.kptgrid(kpt,:);
     
-elseif S.nspinor == 2
-    
-    ks = 1;
-    for spin = 1:S.nspin
-        for kpt = 1:S.tnkpt
-            kpt_vec = S.kptgrid(kpt,:);
-            
-            for spinor = 1:S.nspinor
-                ndrange = (1+(spinor-1)*S.N:spinor*S.N); 
-
-                Dpsi_x = blochGradient(S,kpt_vec,1)*S.psi(ndrange,:,ks);
-                Dpsi_y = blochGradient(S,kpt_vec,2)*S.psi(ndrange,:,ks);
-                Dpsi_z = blochGradient(S,kpt_vec,3)*S.psi(ndrange,:,ks);
-
-                TDpsi_1 = S.grad_T(1,1)*Dpsi_x + S.grad_T(2,1)*Dpsi_y + S.grad_T(3,1)*Dpsi_z;
-                TDpsi_2 = S.grad_T(1,2)*Dpsi_x + S.grad_T(2,2)*Dpsi_y + S.grad_T(3,2)*Dpsi_z;
-                TDpsi_3 = S.grad_T(1,3)*Dpsi_x + S.grad_T(2,3)*Dpsi_y + S.grad_T(3,3)*Dpsi_z;
-                TDcpsi_1 = conj(TDpsi_1);
-                TDcpsi_2 = conj(TDpsi_2);
-                TDcpsi_3 = conj(TDpsi_3);
-
-                stress(1,1) = stress(1,1) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
-                              (TDcpsi_1.*TDpsi_1)) * S.occ(:,ks));
-                stress(1,2) = stress(1,2) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
-                              (TDcpsi_1.*TDpsi_2)) * S.occ(:,ks));
-                stress(1,3) = stress(1,3) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
-                              (TDcpsi_1.*TDpsi_3)) * S.occ(:,ks));    
-        % 		stress(2,1) = stress(2,1) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
-        % 					  (TDcpsi_2.*TDpsi_1)) * S.occ(:,ks));
-                stress(2,2) = stress(2,2) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
-                              (TDcpsi_2.*TDpsi_2)) * S.occ(:,ks));
-                stress(2,3) = stress(2,3) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
-                              (TDcpsi_2.*TDpsi_3)) * S.occ(:,ks));
-        % 		stress(3,1) = stress(3,1) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
-        % 					  (TDcpsi_3.*TDpsi_1)) * S.occ(:,ks));
-        % 		stress(3,2) = stress(3,2) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
-        % 					  (TDcpsi_3.*TDpsi_2)) * S.occ(:,ks));
-                stress(3,3) = stress(3,3) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
-                              (TDcpsi_3.*TDpsi_3)) * S.occ(:,ks));
-            end
-
-            ks = ks + 1;           
+    for spinor = 1:S.nspinor
+        ndrange = (1+(spinor-1)*S.N:spinor*S.N); 
+        if S.spin_typ == 1
+            nsrange = (1+(spinor-1)*S.Nev:spinor*S.Nev);
+        else
+            nsrange = (1:S.Nev);
         end
+
+        Dpsi_x = blochGradient(S,kpt_vec,1)*S.psi(ndrange,:,kpt);
+        Dpsi_y = blochGradient(S,kpt_vec,2)*S.psi(ndrange,:,kpt);
+        Dpsi_z = blochGradient(S,kpt_vec,3)*S.psi(ndrange,:,kpt);
+
+        TDpsi_1 = S.grad_T(1,1)*Dpsi_x + S.grad_T(2,1)*Dpsi_y + S.grad_T(3,1)*Dpsi_z;
+        TDpsi_2 = S.grad_T(1,2)*Dpsi_x + S.grad_T(2,2)*Dpsi_y + S.grad_T(3,2)*Dpsi_z;
+        TDpsi_3 = S.grad_T(1,3)*Dpsi_x + S.grad_T(2,3)*Dpsi_y + S.grad_T(3,3)*Dpsi_z;
+        TDcpsi_1 = conj(TDpsi_1);
+        TDcpsi_2 = conj(TDpsi_2);
+        TDcpsi_3 = conj(TDpsi_3);
+
+        stress(1,1) = stress(1,1) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
+                      (TDcpsi_1.*TDpsi_1)) * S.occ(nsrange,kpt));
+        stress(1,2) = stress(1,2) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
+                      (TDcpsi_1.*TDpsi_2)) * S.occ(nsrange,kpt));
+        stress(1,3) = stress(1,3) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
+                      (TDcpsi_1.*TDpsi_3)) * S.occ(nsrange,kpt));    
+        stress(2,2) = stress(2,2) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
+                      (TDcpsi_2.*TDpsi_2)) * S.occ(nsrange,kpt));
+        stress(2,3) = stress(2,3) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
+                      (TDcpsi_2.*TDpsi_3)) * S.occ(nsrange,kpt));
+        stress(3,3) = stress(3,3) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
+                      (TDcpsi_3.*TDpsi_3)) * S.occ(nsrange,kpt));
     end
 end
 
 % Stress contribution from exchange-correlation and energy terms from electrostatics
-if S.nspin == 1
+if S.spin_typ == 0
     Drho_x = S.grad_1 * (S.rho+S.rho_Tilde_at);
     Drho_y = S.grad_2 * (S.rho+S.rho_Tilde_at);
     Drho_z = S.grad_3 * (S.rho+S.rho_Tilde_at);
@@ -264,7 +207,7 @@ else
     Drho_z = S.grad_3*rho;
 end
 
-if S.nspin == 1
+if S.spin_typ == 0
     for alpha = 1:3
 		for beta = 1:3
 			Drho_alpha = S.grad_T(1,alpha)*Drho_x + S.grad_T(2,alpha)*Drho_y + S.grad_T(3,alpha)*Drho_z ;
@@ -275,16 +218,18 @@ if S.nspin == 1
 		end
     end
 else
+    rho = S.rho;
 	for alpha = 1:3
 		for beta = 1:3
 			Drho_alpha = S.grad_T(1,alpha)*Drho_x + S.grad_T(2,alpha)*Drho_y + S.grad_T(3,alpha)*Drho_z ;
 			Drho_beta = S.grad_T(1,beta)*Drho_x + S.grad_T(2,beta)*Drho_y + S.grad_T(3,beta)*Drho_z ;
-			stress(alpha,beta) = stress(alpha,beta) + (alpha == beta) * ( S.Exc - sum(S.W'*(S.Vxc.*S.rho(:,2:3))))  + ...
+			stress(alpha,beta) = stress(alpha,beta) + (alpha == beta) * ( S.Exc - sum(S.W'*(S.Vxc.*rho(:,2:3))))  + ...
 								-sum(S.W' * (S.dvxcdgrho .* Drho_alpha .* Drho_beta)) +...
 								 (alpha == beta) * ( 0.5 * sum( S.W .* (S.b - S.rho(:,1)) .* S.phi ) - S.Eself + S.E_corr )  ;
 		end
 	end
 end
+
 if (S.countPotential > 0) &&(S.xc == 4) % add metaGGA stress term
     for alpha = 1:3
         if S.nspin == 1
@@ -293,50 +238,45 @@ if (S.countPotential > 0) &&(S.xc == 4) % add metaGGA stress term
             stress(alpha,alpha) = stress(alpha,alpha) - sum(sum(S.W .* S.VxcScan3 .* S.tau(:, 2:3)));
         end
     end
-    ks = 1;
-    for spin = 1:S.nspin
-        if S.nspin == 1
-            VxcScan3 = S.VxcScan3;
-        else
-            VxcScan3 = S.VxcScan3(:, spin);
-        end
-        for kpt = 1:S.tnkpt
-            kpt_vec = S.kptgrid(kpt,:);
 
-		    Dpsi_x = blochGradient(S,kpt_vec,1)*S.psi(:,:,ks);
-		    Dpsi_y = blochGradient(S,kpt_vec,2)*S.psi(:,:,ks);
-		    Dpsi_z = blochGradient(S,kpt_vec,3)*S.psi(:,:,ks);
+    for kpt = 1:S.tnkpt
+        kpt_vec = S.kptgrid(kpt,:);
+        
+        for spinor = 1:S.nspinor 
+            ndrange = (1+(spinor-1)*S.N:spinor*S.N); 
+            if S.spin_typ == 1
+                nsrange = (1+(spinor-1)*S.Nev:spinor*S.Nev);
+            else
+                nsrange = (1:S.Nev);
+            end
 
-		    TDpsi_1 = S.grad_T(1,1)*Dpsi_x + S.grad_T(2,1)*Dpsi_y + S.grad_T(3,1)*Dpsi_z;
-		    TDpsi_2 = S.grad_T(1,2)*Dpsi_x + S.grad_T(2,2)*Dpsi_y + S.grad_T(3,2)*Dpsi_z;
-		    TDpsi_3 = S.grad_T(1,3)*Dpsi_x + S.grad_T(2,3)*Dpsi_y + S.grad_T(3,3)*Dpsi_z;
-		    TDcpsi_1 = conj(TDpsi_1);
-		    TDcpsi_2 = conj(TDpsi_2);
-		    TDcpsi_3 = conj(TDpsi_3);
+            VxcScan3 = S.VxcScan3(:,spinor);
+	        Dpsi_x = blochGradient(S,kpt_vec,1)*S.psi(ndrange,:,kpt);
+	        Dpsi_y = blochGradient(S,kpt_vec,2)*S.psi(ndrange,:,kpt);
+	        Dpsi_z = blochGradient(S,kpt_vec,3)*S.psi(ndrange,:,kpt);
+    
+	        TDpsi_1 = S.grad_T(1,1)*Dpsi_x + S.grad_T(2,1)*Dpsi_y + S.grad_T(3,1)*Dpsi_z;
+	        TDpsi_2 = S.grad_T(1,2)*Dpsi_x + S.grad_T(2,2)*Dpsi_y + S.grad_T(3,2)*Dpsi_z;
+	        TDpsi_3 = S.grad_T(1,3)*Dpsi_x + S.grad_T(2,3)*Dpsi_y + S.grad_T(3,3)*Dpsi_z;
+	        TDcpsi_1 = conj(TDpsi_1);
+	        TDcpsi_2 = conj(TDpsi_2);
+	        TDcpsi_3 = conj(TDpsi_3);
             stress(1,1) = stress(1,1) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
-					  (VxcScan3.*TDcpsi_1.*TDpsi_1)) * S.occ(:,ks));
-		    stress(1,2) = stress(1,2) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
-					  (VxcScan3.*TDcpsi_1.*TDpsi_2)) * S.occ(:,ks));
-		    stress(1,3) = stress(1,3) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
-					  (VxcScan3.*TDcpsi_1.*TDpsi_3)) * S.occ(:,ks));    
-% 		        stress(2,1) = stress(2,1) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
-% 					  (S.VxcScan3.*TDcpsi_2.*TDpsi_1)) * S.occ(:,ks));
-		    stress(2,2) = stress(2,2) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
-					  (VxcScan3.*TDcpsi_2.*TDpsi_2)) * S.occ(:,ks));
-		    stress(2,3) = stress(2,3) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
-					  (VxcScan3.*TDcpsi_2.*TDpsi_3)) * S.occ(:,ks));
-% 		        stress(3,1) = stress(3,1) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
-% 					  (S.VxcScan3.*TDcpsi_3.*TDpsi_1)) * S.occ(:,ks));
-% 		        stress(3,2) = stress(3,2) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
-% 					  (S.VxcScan3.*TDcpsi_3.*TDpsi_2)) * S.occ(:,ks));
-		    stress(3,3) = stress(3,3) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
-					  (VxcScan3.*TDcpsi_3.*TDpsi_3)) * S.occ(:,ks));
-		
-		    ks = ks + 1;           
+				      (VxcScan3.*TDcpsi_1.*TDpsi_1)) * S.occ(nsrange,kpt));
+	        stress(1,2) = stress(1,2) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
+				      (VxcScan3.*TDcpsi_1.*TDpsi_2)) * S.occ(nsrange,kpt));
+	        stress(1,3) = stress(1,3) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
+				      (VxcScan3.*TDcpsi_1.*TDpsi_3)) * S.occ(nsrange,kpt));    
+	        stress(2,2) = stress(2,2) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
+				      (VxcScan3.*TDcpsi_2.*TDpsi_2)) * S.occ(nsrange,kpt));
+	        stress(2,3) = stress(2,3) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
+				      (VxcScan3.*TDcpsi_2.*TDpsi_3)) * S.occ(nsrange,kpt));
+	        stress(3,3) = stress(3,3) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
+				      (VxcScan3.*TDcpsi_3.*TDpsi_3)) * S.occ(nsrange,kpt));
         end
     end
-%         fprintf("The metaGGA stress term is computed.\n");
 end
+
 
 % Stress contribution from remaining terms in electrostatics
 Dphi_x = S.grad_1*(S.phi);
@@ -349,11 +289,8 @@ TDphi_3 = S.grad_T(1,3)*Dphi_x + S.grad_T(2,3)*Dphi_y + S.grad_T(3,3)*Dphi_z ;
 stress(1,1) = stress(1,1) + (1/4/pi) * sum( TDphi_1.*TDphi_1.*S.W);
 stress(1,2) = stress(1,2) + (1/4/pi) * sum( TDphi_1.*TDphi_2.*S.W);
 stress(1,3) = stress(1,3) + (1/4/pi) * sum( TDphi_1.*TDphi_3.*S.W);
-% stress(2,1) = stress(2,1) + (1/4/pi) * sum( TDphi_2.*TDphi_1.*S.W);
 stress(2,2) = stress(2,2) + (1/4/pi) * sum( TDphi_2.*TDphi_2.*S.W);
 stress(2,3) = stress(2,3) + (1/4/pi) * sum( TDphi_2.*TDphi_3.*S.W);
-% stress(3,1) = stress(3,1) + (1/4/pi) * sum( TDphi_3.*TDphi_1.*S.W);
-% stress(3,2) = stress(3,2) + (1/4/pi) * sum( TDphi_3.*TDphi_2.*S.W);
 stress(3,3) = stress(3,3) + (1/4/pi) * sum( TDphi_3.*TDphi_3.*S.W);
 
 %psdfilepath = sprintf('%s/PseudopotFiles',S.inputfile_path);
@@ -517,21 +454,15 @@ for JJ_a = 1:S.n_atm % loop over all the atoms
 		stress(1,1) = stress(1,1) + sum(sum(sum( dVJ_1(II,JJ,KK) .* x1 .* ( - 0.5*bJ(II,JJ,KK) ) .* S.W(Rowcount_rb) )));
 		stress(1,2) = stress(1,2) + sum(sum(sum( dVJ_1(II,JJ,KK) .* y1 .* ( - 0.5*bJ(II,JJ,KK) ) .* S.W(Rowcount_rb) )));
 		stress(1,3) = stress(1,3) + sum(sum(sum( dVJ_1(II,JJ,KK) .* z1 .* ( - 0.5*bJ(II,JJ,KK) ) .* S.W(Rowcount_rb) )));
-% 		stress(2,1) = stress(2,1) + sum(sum(sum( dVJ_2(II,JJ,KK) .* x1 .* ( - 0.5*bJ(II,JJ,KK) ) .* S.W(Rowcount_rb) )));
 		stress(2,2) = stress(2,2) + sum(sum(sum( dVJ_2(II,JJ,KK) .* y1 .* ( - 0.5*bJ(II,JJ,KK) ) .* S.W(Rowcount_rb) )));
 		stress(2,3) = stress(2,3) + sum(sum(sum( dVJ_2(II,JJ,KK) .* z1 .* ( - 0.5*bJ(II,JJ,KK) ) .* S.W(Rowcount_rb) )));
-% 		stress(3,1) = stress(3,1) + sum(sum(sum( dVJ_3(II,JJ,KK) .* x1 .* ( - 0.5*bJ(II,JJ,KK) ) .* S.W(Rowcount_rb) )));
-% 		stress(3,2) = stress(3,2) + sum(sum(sum( dVJ_3(II,JJ,KK) .* y1 .* ( - 0.5*bJ(II,JJ,KK) ) .* S.W(Rowcount_rb) )));
 		stress(3,3) = stress(3,3) + sum(sum(sum( dVJ_3(II,JJ,KK) .* z1 .* ( - 0.5*bJ(II,JJ,KK) ) .* S.W(Rowcount_rb) )));
 
 		stress(1,1) = stress(1,1) + sum(sum(sum( dbJ_1(II,JJ,KK) .* x1 .* ( S.phi(Rowcount_rb) - 0.5*V_PS(II,JJ,KK) ) .* S.W(Rowcount_rb) )));
 		stress(1,2) = stress(1,2) + sum(sum(sum( dbJ_1(II,JJ,KK) .* y1 .* ( S.phi(Rowcount_rb) - 0.5*V_PS(II,JJ,KK) ) .* S.W(Rowcount_rb) )));
 		stress(1,3) = stress(1,3) + sum(sum(sum( dbJ_1(II,JJ,KK) .* z1 .* ( S.phi(Rowcount_rb) - 0.5*V_PS(II,JJ,KK) ) .* S.W(Rowcount_rb) )));
-% 		stress(2,1) = stress(2,1) + sum(sum(sum( dbJ_2(II,JJ,KK) .* x1 .* ( S.phi(Rowcount_rb) - 0.5*V_PS(II,JJ,KK) ) .* S.W(Rowcount_rb) )));
 		stress(2,2) = stress(2,2) + sum(sum(sum( dbJ_2(II,JJ,KK) .* y1 .* ( S.phi(Rowcount_rb) - 0.5*V_PS(II,JJ,KK) ) .* S.W(Rowcount_rb) )));
 		stress(2,3) = stress(2,3) + sum(sum(sum( dbJ_2(II,JJ,KK) .* z1 .* ( S.phi(Rowcount_rb) - 0.5*V_PS(II,JJ,KK) ) .* S.W(Rowcount_rb) )));
-% 		stress(3,1) = stress(3,1) + sum(sum(sum( dbJ_3(II,JJ,KK) .* x1 .* ( S.phi(Rowcount_rb) - 0.5*V_PS(II,JJ,KK) ) .* S.W(Rowcount_rb) )));
-% 		stress(3,2) = stress(3,2) + sum(sum(sum( dbJ_3(II,JJ,KK) .* y1 .* ( S.phi(Rowcount_rb) - 0.5*V_PS(II,JJ,KK) ) .* S.W(Rowcount_rb) )));
 		stress(3,3) = stress(3,3) + sum(sum(sum( dbJ_3(II,JJ,KK) .* z1 .* ( S.phi(Rowcount_rb) - 0.5*V_PS(II,JJ,KK) ) .* S.W(Rowcount_rb) )));
 
 		stress(1,1) = stress(1,1) + 0.5 * sum(sum(sum( ( dbJ_1(II,JJ,KK) .* ( S.V_c(Rowcount_rb) + V_PS(II,JJ,KK) ) + ...
@@ -546,10 +477,6 @@ for JJ_a = 1:S.n_atm % loop over all the atoms
 			dbJ_ref_1(II,JJ,KK) .* ( S.V_c(Rowcount_rb) - V_PS_ref(II,JJ,KK) ) + ...
 			dVJ_ref_1(II,JJ,KK) .* ( S.b(Rowcount_rb) + S.b_ref(Rowcount_rb) - bJ_ref(II,JJ,KK)) - ...
 			dVJ_1(II,JJ,KK) .* ( S.b(Rowcount_rb) + S.b_ref(Rowcount_rb) - bJ(II,JJ,KK)) ) .* z1 .* S.W(Rowcount_rb) )));
-% 		stress(2,1) = stress(2,1) + 0.5 * sum(sum(sum( ( dbJ_2(II,JJ,KK) .* ( S.V_c(Rowcount_rb) + V_PS(II,JJ,KK) ) + ...
-% 			dbJ_ref_2(II,JJ,KK) .* ( S.V_c(Rowcount_rb) - V_PS_ref(II,JJ,KK) ) + ...
-% 			dVJ_ref_2(II,JJ,KK) .* ( S.b(Rowcount_rb) + S.b_ref(Rowcount_rb) - bJ_ref(II,JJ,KK)) - ...
-% 			dVJ_2(II,JJ,KK) .* ( S.b(Rowcount_rb) + S.b_ref(Rowcount_rb) - bJ(II,JJ,KK)) ) .* x1 .* S.W(Rowcount_rb) )));
 		stress(2,2) = stress(2,2) + 0.5 * sum(sum(sum( ( dbJ_2(II,JJ,KK) .* ( S.V_c(Rowcount_rb) + V_PS(II,JJ,KK) ) + ...
 			dbJ_ref_2(II,JJ,KK) .* ( S.V_c(Rowcount_rb) - V_PS_ref(II,JJ,KK) ) + ...
 			dVJ_ref_2(II,JJ,KK) .* ( S.b(Rowcount_rb) + S.b_ref(Rowcount_rb) - bJ_ref(II,JJ,KK)) - ...
@@ -558,14 +485,6 @@ for JJ_a = 1:S.n_atm % loop over all the atoms
 			dbJ_ref_2(II,JJ,KK) .* ( S.V_c(Rowcount_rb) - V_PS_ref(II,JJ,KK) ) + ...
 			dVJ_ref_2(II,JJ,KK) .* ( S.b(Rowcount_rb) + S.b_ref(Rowcount_rb) - bJ_ref(II,JJ,KK)) - ...
 			dVJ_2(II,JJ,KK) .* ( S.b(Rowcount_rb) + S.b_ref(Rowcount_rb) - bJ(II,JJ,KK)) ) .* z1 .* S.W(Rowcount_rb) )));
-% 		stress(3,1) = stress(3,1) + 0.5 * sum(sum(sum( ( dbJ_3(II,JJ,KK) .* ( S.V_c(Rowcount_rb) + V_PS(II,JJ,KK) ) + ...
-% 			dbJ_ref_3(II,JJ,KK) .* ( S.V_c(Rowcount_rb) - V_PS_ref(II,JJ,KK) ) + ...
-% 			dVJ_ref_3(II,JJ,KK) .* ( S.b(Rowcount_rb) + S.b_ref(Rowcount_rb) - bJ_ref(II,JJ,KK)) - ...
-% 			dVJ_3(II,JJ,KK) .* ( S.b(Rowcount_rb) + S.b_ref(Rowcount_rb) - bJ(II,JJ,KK)) ) .* x1 .* S.W(Rowcount_rb) )));
-% 		stress(3,2) = stress(3,2) + 0.5 * sum(sum(sum( ( dbJ_3(II,JJ,KK) .* ( S.V_c(Rowcount_rb) + V_PS(II,JJ,KK) ) + ...
-% 			dbJ_ref_3(II,JJ,KK) .* ( S.V_c(Rowcount_rb) - V_PS_ref(II,JJ,KK) ) + ...
-% 			dVJ_ref_3(II,JJ,KK) .* ( S.b(Rowcount_rb) + S.b_ref(Rowcount_rb) - bJ_ref(II,JJ,KK)) - ...
-% 			dVJ_3(II,JJ,KK) .* ( S.b(Rowcount_rb) + S.b_ref(Rowcount_rb) - bJ(II,JJ,KK)) ) .* y1 .* S.W(Rowcount_rb) )));
 		stress(3,3) = stress(3,3) + 0.5 * sum(sum(sum( ( dbJ_3(II,JJ,KK) .* ( S.V_c(Rowcount_rb) + V_PS(II,JJ,KK) ) + ...
 			dbJ_ref_3(II,JJ,KK) .* ( S.V_c(Rowcount_rb) - V_PS_ref(II,JJ,KK) ) + ...
 			dVJ_ref_3(II,JJ,KK) .* ( S.b(Rowcount_rb) + S.b_ref(Rowcount_rb) - bJ_ref(II,JJ,KK)) - ...
@@ -588,58 +507,105 @@ end % end of loop over atoms
 %**********************************************************************
 %*                   Stress contribution from nonlocal          *
 %**********************************************************************
-if S.nspinor == 1
-    
-    for ks = 1:S.tnkpt*S.nspin
-        if ks <= S.tnkpt
-            kpt = ks;
-        else
-            kpt = ks - S.tnkpt;
+for kpt = 1:S.tnkpt
+    fac = 1.0i;
+    kpt_vec = S.kptgrid(kpt,:);
+
+    Dpsi_x = zeros(S.nspinor *S.N,S.Nev);
+    Dpsi_y = zeros(S.nspinor *S.N,S.Nev);
+    Dpsi_z = zeros(S.nspinor *S.N,S.Nev);
+    for spinor = 1:S.nspinor
+        ndrange = (1+(spinor-1)*S.N:spinor*S.N); 
+        Dpsi_x(ndrange,:) = blochGradient(S,kpt_vec,1)*S.psi(ndrange,:,kpt);
+        Dpsi_y(ndrange,:) = blochGradient(S,kpt_vec,2)*S.psi(ndrange,:,kpt);
+        Dpsi_z(ndrange,:) = blochGradient(S,kpt_vec,3)*S.psi(ndrange,:,kpt);
+    end
+
+    TDpsi_1 = S.grad_T(1,1)*Dpsi_x + S.grad_T(2,1)*Dpsi_y + S.grad_T(3,1)*Dpsi_z ;
+    TDpsi_2 = S.grad_T(1,2)*Dpsi_x + S.grad_T(2,2)*Dpsi_y + S.grad_T(3,2)*Dpsi_z ;
+    TDpsi_3 = S.grad_T(1,3)*Dpsi_x + S.grad_T(2,3)*Dpsi_y + S.grad_T(3,3)*Dpsi_z ;
+
+    for JJ_a = 1:S.n_atm % loop over all atoms            
+        for spinor = 1:S.nspinor
+            sigma = (-1)^(spinor-1);
+            shift = (spinor-1)*S.N;         % for selecting each spinor, spinor=1 shift = 0, spinor=2, shift = S.N
+            if S.spin_typ == 1
+                nsrange = (1+(spinor-1)*S.Nev:spinor*S.Nev);
+            else
+                nsrange = (1:S.Nev);
+            end
+            
+            % Nonlocal scalar relativisic energy
+            Chi_X_mult1 = zeros(S.Atom(JJ_a).angnum,S.Nev);
+            for img = 1:S.Atom(JJ_a).n_image_rc
+                phase_fac = (exp(dot(kpt_vec,(S.Atoms(JJ_a,:)-S.Atom(JJ_a).rcImage(img).coordinates)*fac)));
+                Chi_X_mult1 = Chi_X_mult1 + transpose(bsxfun(@times, conj(S.Atom(JJ_a).rcImage(img).Chi_mat), S.W(S.Atom(JJ_a).rcImage(img).rc_pos))) * S.psi(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:,kpt) * phase_fac ;
+            end
+            
+            Enl_sc_sigma_k = S.occfac * S.wkpt(kpt) * transpose(S.Atom(JJ_a).gamma_Jl) * (Chi_X_mult1.*conj(Chi_X_mult1)) * S.occ(nsrange,kpt);
+            stress(1,1) = stress(1,1) - Enl_sc_sigma_k ;
+            stress(2,2) = stress(2,2) - Enl_sc_sigma_k ;
+            stress(3,3) = stress(3,3) - Enl_sc_sigma_k ;
+            
+            % Nonlocal spin-orbit coupling term1 energy
+            if S.Atm(S.Atom(JJ_a).count_typ).pspsoc == 1
+                ncol_term1 = S.Atom(JJ_a).ncol_term1;
+                soindx = S.Atom(JJ_a).term1_index_so(1:ncol_term1);
+                Chiso_X_mult1 = zeros(ncol_term1,S.Nev);
+                for img = 1:S.Atom(JJ_a).n_image_rc
+                    phase_fac = (exp(dot(kpt_vec,(S.Atoms(JJ_a,:)-S.Atom(JJ_a).rcImage(img).coordinates)*fac)));
+                    Chiso_X_mult1 = Chiso_X_mult1 + transpose(bsxfun(@times, conj(S.Atom(JJ_a).rcImage(img).Chiso_mat(:,soindx)), S.W(S.Atom(JJ_a).rcImage(img).rc_pos))) * S.psi(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:,kpt) * phase_fac ;
+                end
+
+                Enl_so1_sigma_k = S.occfac * S.wkpt(kpt) * transpose(sigma*S.Atom(JJ_a).term1_gammaso_Jl(1:ncol_term1)) * (Chiso_X_mult1.*conj(Chiso_X_mult1)) * S.occ(:,kpt) ;
+                stress(1,1) = stress(1,1) - Enl_so1_sigma_k ;
+                stress(2,2) = stress(2,2) - Enl_so1_sigma_k ;
+                stress(3,3) = stress(3,3) - Enl_so1_sigma_k ;
+            end
         end
+        
+        % Nonlocal spin-orbit coupling term2 energy
+        if S.Atm(S.Atom(JJ_a).count_typ).pspsoc == 1
+            ncol_term2 = S.Atom(JJ_a).ncol_term2;
+            Chiso_Jlmp1n_psios_mult = zeros(ncol_term2,S.Nev);
+            Chiso_Jlmn_psi_mult = zeros(ncol_term2,S.Nev);
 
-        if (kpt(1) == 0 && kpt(2) == 0 && kpt(3) == 0)
-            fac = 1.0;
-        else
-            fac = 1.0i;
+            soindx1 = S.Atom(JJ_a).term2_index_so(1:ncol_term2)+1;
+            soindx2 = S.Atom(JJ_a).term2_index_so(1:ncol_term2);
+
+            for img = 1:S.Atom(JJ_a).n_image_rc
+                phase_fac = (exp(dot(kpt_vec,(S.Atoms(JJ_a,:)-S.Atom(JJ_a).rcImage(img).coordinates)*fac)));
+                Chiso_Jlmp1n_psios_mult = Chiso_Jlmp1n_psios_mult + transpose(bsxfun(@times, conj(S.Atom(JJ_a).rcImage(img).Chiso_mat(:,soindx1)), S.W(S.Atom(JJ_a).rcImage(img).rc_pos))) * S.psi(S.Atom(JJ_a).rcImage(img).rc_pos+S.N,:,kpt) * phase_fac ;
+                Chiso_Jlmn_psi_mult = Chiso_Jlmn_psi_mult +         transpose(bsxfun(@times, S.Atom(JJ_a).rcImage(img).Chiso_mat(:,soindx2), S.W(S.Atom(JJ_a).rcImage(img).rc_pos))) * conj(S.psi(S.Atom(JJ_a).rcImage(img).rc_pos,:,kpt)) * conj(phase_fac) ;
+            end
+            Enl_so2_k = S.occfac * S.wkpt(kpt) * transpose(S.Atom(JJ_a).term2_gammaso_Jl(1:ncol_term2)) * 2 * real(Chiso_Jlmp1n_psios_mult.*Chiso_Jlmn_psi_mult) * S.occ(:,kpt) ;
+
+            stress(1,1) = stress(1,1) - Enl_so2_k ;
+            stress(2,2) = stress(2,2) - Enl_so2_k ;
+            stress(3,3) = stress(3,3) - Enl_so2_k ;
         end
+        
+        % stress due to scalar relativistic 
+        for spinor = 1:S.nspinor
+            shift = (spinor-1)*S.N;         % for selecting each spinor, spinor=1 shift = 0, spinor=2, shift = S.N
+            if S.spin_typ == 1
+                nsrange = (1+(spinor-1)*S.Nev:spinor*S.Nev);
+            else
+                nsrange = (1:S.Nev);
+            end
 
-        kpt_vec = S.kptgrid(kpt,:);
-
-        Dpsi_x = blochGradient(S,kpt_vec,1)*S.psi(:,:,ks);
-        Dpsi_y = blochGradient(S,kpt_vec,2)*S.psi(:,:,ks);
-        Dpsi_z = blochGradient(S,kpt_vec,3)*S.psi(:,:,ks);
-
-        TDpsi_1 = S.grad_T(1,1)*Dpsi_x + S.grad_T(2,1)*Dpsi_y + S.grad_T(3,1)*Dpsi_z ;
-        TDpsi_2 = S.grad_T(1,2)*Dpsi_x + S.grad_T(2,2)*Dpsi_y + S.grad_T(3,2)*Dpsi_z ;
-        TDpsi_3 = S.grad_T(1,3)*Dpsi_x + S.grad_T(2,3)*Dpsi_y + S.grad_T(3,3)*Dpsi_z ;
-
-        for JJ_a = 1:S.n_atm % loop over all atoms
             integral_1 = zeros(S.Atom(JJ_a).angnum,S.Nev);
             integral_2_xx = zeros(S.Atom(JJ_a).angnum,S.Nev);
             integral_2_xy = zeros(S.Atom(JJ_a).angnum,S.Nev);
             integral_2_xz = zeros(S.Atom(JJ_a).angnum,S.Nev);
-    % 		integral_2_yx = zeros(S.Atom(JJ_a).angnum,S.Nev);
             integral_2_yy = zeros(S.Atom(JJ_a).angnum,S.Nev);
             integral_2_yz = zeros(S.Atom(JJ_a).angnum,S.Nev);
-    % 		integral_2_zx = zeros(S.Atom(JJ_a).angnum,S.Nev);
-    % 		integral_2_zy = zeros(S.Atom(JJ_a).angnum,S.Nev);
             integral_2_zz = zeros(S.Atom(JJ_a).angnum,S.Nev);
-
-            Chi_X_mult1 = zeros(S.Atom(JJ_a).angnum,S.Nev);
-
-            for img = 1:S.Atom(JJ_a).n_image_rc
-                phase_fac = (exp(dot(kpt_vec,(S.Atoms(JJ_a,:)-S.Atom(JJ_a).rcImage(img).coordinates)*fac)));
-                Chi_X_mult1 = Chi_X_mult1 + transpose(bsxfun(@times, conj(S.Atom(JJ_a).rcImage(img).Chi_mat), S.W(S.Atom(JJ_a).rcImage(img).rc_pos))) * S.psi(S.Atom(JJ_a).rcImage(img).rc_pos,:,ks) * phase_fac ;
-            end
-
-            stress(1,1) = stress(1,1) - S.occfac * S.wkpt(kpt) * transpose(S.Atom(JJ_a).gamma_Jl) * (Chi_X_mult1.*conj(Chi_X_mult1)) * S.occ(:,ks) ;
-            stress(2,2) = stress(2,2) - S.occfac * S.wkpt(kpt) * transpose(S.Atom(JJ_a).gamma_Jl) * (Chi_X_mult1.*conj(Chi_X_mult1)) * S.occ(:,ks) ;
-            stress(3,3) = stress(3,3) - S.occfac * S.wkpt(kpt) * transpose(S.Atom(JJ_a).gamma_Jl) * (Chi_X_mult1.*conj(Chi_X_mult1)) * S.occ(:,ks) ;
 
             for img = 1:S.Atom(JJ_a).n_image_rc
                 phase_fac = (exp(dot(kpt_vec,(S.Atoms(JJ_a,:)-S.Atom(JJ_a).rcImage(img).coordinates)*fac)));
                 ChiW = transpose(bsxfun(@times, conj(S.Atom(JJ_a).rcImage(img).Chi_mat), S.W(S.Atom(JJ_a).rcImage(img).rc_pos)));
-                integral_1 = integral_1 + conj(ChiW) * conj(S.psi(S.Atom(JJ_a).rcImage(img).rc_pos,:,ks)) * conj(phase_fac);
+                integral_1 = integral_1 + conj(ChiW) * conj(S.psi(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:,kpt)) * conj(phase_fac);
                 xr =(S.Atom(JJ_a).rcImage(img).rc_pos_ii-1)*S.dx - S.Atom(JJ_a).rcImage(img).coordinates(1) ;
                 yr =(S.Atom(JJ_a).rcImage(img).rc_pos_jj-1)*S.dy - S.Atom(JJ_a).rcImage(img).coordinates(2) ;
                 zr =(S.Atom(JJ_a).rcImage(img).rc_pos_kk-1)*S.dz - S.Atom(JJ_a).rcImage(img).coordinates(3) ;
@@ -648,320 +614,174 @@ if S.nspinor == 1
                 z_1 = S_T(3,1)*xr + S_T(3,2)*yr + S_T(3,3)*zr;
 
                 integral_2_xx = integral_2_xx + ChiW * ...
-                    ((TDpsi_1(S.Atom(JJ_a).rcImage(img).rc_pos,:)).*repmat(x_1,1,S.Nev)) * phase_fac ;
+                    ((TDpsi_1(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:)).*repmat(x_1,1,S.Nev)) * phase_fac ;
 
                 integral_2_xy = integral_2_xy + ChiW * ...
-                    ((TDpsi_1(S.Atom(JJ_a).rcImage(img).rc_pos,:)).*repmat(y_1,1,S.Nev)) * phase_fac ;
+                    ((TDpsi_1(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:)).*repmat(y_1,1,S.Nev)) * phase_fac ;
 
                 integral_2_xz = integral_2_xz + ChiW * ...
-                    ((TDpsi_1(S.Atom(JJ_a).rcImage(img).rc_pos,:)).*repmat(z_1,1,S.Nev)) * phase_fac ;
-
-    % 			integral_2_yx = integral_2_yx + ChiW * ...
-    % 				((TDpsi_2(S.Atom(JJ_a).rcImage(img).rc_pos,:)).*repmat(x_1,1,S.Nev)) * phase_fac ;
+                    ((TDpsi_1(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:)).*repmat(z_1,1,S.Nev)) * phase_fac ;
 
                 integral_2_yy = integral_2_yy + ChiW * ...
-                    ((TDpsi_2(S.Atom(JJ_a).rcImage(img).rc_pos,:)).*repmat(y_1,1,S.Nev)) * phase_fac ;
+                    ((TDpsi_2(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:)).*repmat(y_1,1,S.Nev)) * phase_fac ;
 
                 integral_2_yz = integral_2_yz + ChiW * ...
-                    ((TDpsi_2(S.Atom(JJ_a).rcImage(img).rc_pos,:)).*repmat(z_1,1,S.Nev)) * phase_fac ;
-
-    % 			integral_2_zx = integral_2_zx + ChiW * ...
-    % 				((TDpsi_3(S.Atom(JJ_a).rcImage(img).rc_pos,:)).*repmat(x_1,1,S.Nev)) * phase_fac ;
-    % 			
-    % 			integral_2_zy = integral_2_zy + ChiW * ...
-    % 				((TDpsi_3(S.Atom(JJ_a).rcImage(img).rc_pos,:)).*repmat(y_1,1,S.Nev)) * phase_fac ;
+                    ((TDpsi_2(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:)).*repmat(z_1,1,S.Nev)) * phase_fac ;
 
                 integral_2_zz = integral_2_zz + ChiW * ...
-                    ((TDpsi_3(S.Atom(JJ_a).rcImage(img).rc_pos,:)).*repmat(z_1,1,S.Nev)) * phase_fac ;
+                    ((TDpsi_3(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:)).*repmat(z_1,1,S.Nev)) * phase_fac ;
 
             end
-            tf_xx = transpose(S.Atom(JJ_a).gamma_Jl) * real(integral_1.*integral_2_xx) * S.occ(:,ks);
-            tf_xy = transpose(S.Atom(JJ_a).gamma_Jl) * real(integral_1.*integral_2_xy) * S.occ(:,ks);
-            tf_xz = transpose(S.Atom(JJ_a).gamma_Jl) * real(integral_1.*integral_2_xz) * S.occ(:,ks);
-    % 		tf_yx = transpose(S.Atom(JJ_a).gamma_Jl) * real(integral_1.*integral_2_yx) * S.occ(:,ks);
-            tf_yy = transpose(S.Atom(JJ_a).gamma_Jl) * real(integral_1.*integral_2_yy) * S.occ(:,ks);
-            tf_yz = transpose(S.Atom(JJ_a).gamma_Jl) * real(integral_1.*integral_2_yz) * S.occ(:,ks);
-    % 		tf_zx = transpose(S.Atom(JJ_a).gamma_Jl) * real(integral_1.*integral_2_zx) * S.occ(:,ks);
-    % 		tf_zy = transpose(S.Atom(JJ_a).gamma_Jl) * real(integral_1.*integral_2_zy) * S.occ(:,ks);
-            tf_zz = transpose(S.Atom(JJ_a).gamma_Jl) * real(integral_1.*integral_2_zz) * S.occ(:,ks);
+            tf_xx = transpose(S.Atom(JJ_a).gamma_Jl) * real(integral_1.*integral_2_xx) * S.occ(nsrange,kpt);
+            tf_xy = transpose(S.Atom(JJ_a).gamma_Jl) * real(integral_1.*integral_2_xy) * S.occ(nsrange,kpt);
+            tf_xz = transpose(S.Atom(JJ_a).gamma_Jl) * real(integral_1.*integral_2_xz) * S.occ(nsrange,kpt);
+            tf_yy = transpose(S.Atom(JJ_a).gamma_Jl) * real(integral_1.*integral_2_yy) * S.occ(nsrange,kpt);
+            tf_yz = transpose(S.Atom(JJ_a).gamma_Jl) * real(integral_1.*integral_2_yz) * S.occ(nsrange,kpt);
+            tf_zz = transpose(S.Atom(JJ_a).gamma_Jl) * real(integral_1.*integral_2_zz) * S.occ(nsrange,kpt);
             stress(1,1) = stress(1,1) - 2 * S.occfac * S.wkpt(kpt) * tf_xx;
             stress(1,2) = stress(1,2) - 2 * S.occfac * S.wkpt(kpt) * tf_xy;
             stress(1,3) = stress(1,3) - 2 * S.occfac * S.wkpt(kpt) * tf_xz;
-    % 		stress(2,1) = stress(2,1) - 2 * S.occfac * S.wkpt(kpt) * tf_yx;
             stress(2,2) = stress(2,2) - 2 * S.occfac * S.wkpt(kpt) * tf_yy;
             stress(2,3) = stress(2,3) - 2 * S.occfac * S.wkpt(kpt) * tf_yz;
-    % 		stress(3,1) = stress(3,1) - 2 * S.occfac * S.wkpt(kpt) * tf_zx;
-    % 		stress(3,2) = stress(3,2) - 2 * S.occfac * S.wkpt(kpt) * tf_zy;
             stress(3,3) = stress(3,3) - 2 * S.occfac * S.wkpt(kpt) * tf_zz;
-
-        end % end of loop over atoms
-    end
-
-elseif S.nspinor == 2
-    
-    for ks = 1:S.tnkpt*S.nspin
-        if ks <= S.tnkpt
-            kpt = ks;
-        else
-            kpt = ks - S.tnkpt;
-        end
-
-        fac = 1.0i;
-        kpt_vec = S.kptgrid(kpt,:);
+            
+        end % end of loop over spinor for sigma_SC
         
-        Dpsi_x = zeros(S.nspinor *S.N,S.Nev);
-        Dpsi_y = zeros(S.nspinor *S.N,S.Nev);
-        Dpsi_z = zeros(S.nspinor *S.N,S.Nev);
-        for spinor = 1:S.nspinor
-            ndrange = (1+(spinor-1)*S.N:spinor*S.N); 
-            Dpsi_x(ndrange,:) = blochGradient(S,kpt_vec,1)*S.psi(ndrange,:,ks);
-            Dpsi_y(ndrange,:) = blochGradient(S,kpt_vec,2)*S.psi(ndrange,:,ks);
-            Dpsi_z(ndrange,:) = blochGradient(S,kpt_vec,3)*S.psi(ndrange,:,ks);
+        % below are all terms related to soc
+        if S.Atm(S.Atom(JJ_a).count_typ).pspsoc == 0
+            continue;
         end
-
-        TDpsi_1 = S.grad_T(1,1)*Dpsi_x + S.grad_T(2,1)*Dpsi_y + S.grad_T(3,1)*Dpsi_z ;
-        TDpsi_2 = S.grad_T(1,2)*Dpsi_x + S.grad_T(2,2)*Dpsi_y + S.grad_T(3,2)*Dpsi_z ;
-        TDpsi_3 = S.grad_T(1,3)*Dpsi_x + S.grad_T(2,3)*Dpsi_y + S.grad_T(3,3)*Dpsi_z ;
-
-        for JJ_a = 1:S.n_atm % loop over all atoms            
-            for spinor = 1:S.nspinor
-                sigma = (-1)^(spinor-1);
-                shift = (spinor-1)*S.N;         % for selecting each spinor, spinor=1 shift = 0, spinor=2, shift = S.N
-                
-                % Nonlocal scalar relativisic energy
-                Chi_X_mult1 = zeros(S.Atom(JJ_a).angnum,S.Nev);
-                for img = 1:S.Atom(JJ_a).n_image_rc
-                    phase_fac = (exp(dot(kpt_vec,(S.Atoms(JJ_a,:)-S.Atom(JJ_a).rcImage(img).coordinates)*fac)));
-                    Chi_X_mult1 = Chi_X_mult1 + transpose(bsxfun(@times, conj(S.Atom(JJ_a).rcImage(img).Chi_mat), S.W(S.Atom(JJ_a).rcImage(img).rc_pos))) * S.psi(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:,ks) * phase_fac ;
-                end
-                
-                Enl_sc_sigma_k = S.occfac * S.wkpt(kpt) * transpose(S.Atom(JJ_a).gamma_Jl) * (Chi_X_mult1.*conj(Chi_X_mult1)) * S.occ(:,ks);
-                stress(1,1) = stress(1,1) - Enl_sc_sigma_k ;
-                stress(2,2) = stress(2,2) - Enl_sc_sigma_k ;
-                stress(3,3) = stress(3,3) - Enl_sc_sigma_k ;
-                
-                % Nonlocal spin-orbit coupling term1 energy
-                ncol_term1 = S.Atom(JJ_a).ncol_term1;
-                soindx = S.Atom(JJ_a).term1_index_so(1:ncol_term1);
-                Chiso_X_mult1 = zeros(ncol_term1,S.Nev);
-                for img = 1:S.Atom(JJ_a).n_image_rc
-                    phase_fac = (exp(dot(kpt_vec,(S.Atoms(JJ_a,:)-S.Atom(JJ_a).rcImage(img).coordinates)*fac)));
-                    Chiso_X_mult1 = Chiso_X_mult1 + transpose(bsxfun(@times, conj(S.Atom(JJ_a).rcImage(img).Chiso_mat(:,soindx)), S.W(S.Atom(JJ_a).rcImage(img).rc_pos))) * S.psi(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:,ks) * phase_fac ;
-                end
-                
-                Enl_so1_sigma_k = S.occfac * S.wkpt(kpt) * transpose(sigma*S.Atom(JJ_a).term1_gammaso_Jl(1:ncol_term1)) * (Chiso_X_mult1.*conj(Chiso_X_mult1)) * S.occ(:,ks) ;
-                stress(1,1) = stress(1,1) - Enl_so1_sigma_k ;
-                stress(2,2) = stress(2,2) - Enl_so1_sigma_k ;
-                stress(3,3) = stress(3,3) - Enl_so1_sigma_k ;
-            end
-            
-            % Nonlocal spin-orbit coupling term2 energy
-            ncol_term2 = S.Atom(JJ_a).ncol_term2;
-            Chiso_Jlmp1n_psios_mult = zeros(ncol_term2,S.Nev);
-            Chiso_Jlmn_psi_mult = zeros(ncol_term2,S.Nev);
-            
-            soindx1 = S.Atom(JJ_a).term2_index_so(1:ncol_term2)+1;
-            soindx2 = S.Atom(JJ_a).term2_index_so(1:ncol_term2);
+        
+        % stress due to spin-orbit coupling term 1
+        ncol_term1 = S.Atom(JJ_a).ncol_term1;
+        soindx = S.Atom(JJ_a).term1_index_so(1:ncol_term1);
+        for spinor = 1:S.nspinor
+            sigma = (-1)^(spinor-1);
+            shift = (spinor-1)*S.N;         % for selecting each spinor, spinor=1 shift = 0, spinor=2, shift = S.N
+            integral_1 = zeros(ncol_term1,S.Nev);
+            integral_2_xx = zeros(ncol_term1,S.Nev);
+            integral_2_xy = zeros(ncol_term1,S.Nev);
+            integral_2_xz = zeros(ncol_term1,S.Nev);
+            integral_2_yy = zeros(ncol_term1,S.Nev);
+            integral_2_yz = zeros(ncol_term1,S.Nev);
+            integral_2_zz = zeros(ncol_term1,S.Nev);
 
             for img = 1:S.Atom(JJ_a).n_image_rc
                 phase_fac = (exp(dot(kpt_vec,(S.Atoms(JJ_a,:)-S.Atom(JJ_a).rcImage(img).coordinates)*fac)));
-                Chiso_Jlmp1n_psios_mult = Chiso_Jlmp1n_psios_mult + transpose(bsxfun(@times, conj(S.Atom(JJ_a).rcImage(img).Chiso_mat(:,soindx1)), S.W(S.Atom(JJ_a).rcImage(img).rc_pos))) * S.psi(S.Atom(JJ_a).rcImage(img).rc_pos+S.N,:,ks) * phase_fac ;
-                Chiso_Jlmn_psi_mult = Chiso_Jlmn_psi_mult +         transpose(bsxfun(@times, S.Atom(JJ_a).rcImage(img).Chiso_mat(:,soindx2), S.W(S.Atom(JJ_a).rcImage(img).rc_pos))) * conj(S.psi(S.Atom(JJ_a).rcImage(img).rc_pos,:,ks)) * conj(phase_fac) ;
+                ChisoW = transpose(bsxfun(@times, conj(S.Atom(JJ_a).rcImage(img).Chiso_mat(:,soindx)), S.W(S.Atom(JJ_a).rcImage(img).rc_pos)));
+                integral_1 = integral_1 + conj(ChisoW) * conj(S.psi(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:,kpt)) * conj(phase_fac);
+                xr =(S.Atom(JJ_a).rcImage(img).rc_pos_ii-1)*S.dx - S.Atom(JJ_a).rcImage(img).coordinates(1) ;
+                yr =(S.Atom(JJ_a).rcImage(img).rc_pos_jj-1)*S.dy - S.Atom(JJ_a).rcImage(img).coordinates(2) ;
+                zr =(S.Atom(JJ_a).rcImage(img).rc_pos_kk-1)*S.dz - S.Atom(JJ_a).rcImage(img).coordinates(3) ;
+                x_1 = S_T(1,1)*xr + S_T(1,2)*yr + S_T(1,3)*zr;
+                y_1 = S_T(2,1)*xr + S_T(2,2)*yr + S_T(2,3)*zr;
+                z_1 = S_T(3,1)*xr + S_T(3,2)*yr + S_T(3,3)*zr;
+
+                integral_2_xx = integral_2_xx + ChisoW * ...
+                    ((TDpsi_1(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:)).*repmat(x_1,1,S.Nev)) * phase_fac ;
+
+                integral_2_xy = integral_2_xy + ChisoW * ...
+                    ((TDpsi_1(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:)).*repmat(y_1,1,S.Nev)) * phase_fac ;
+
+                integral_2_xz = integral_2_xz + ChisoW * ...
+                    ((TDpsi_1(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:)).*repmat(z_1,1,S.Nev)) * phase_fac ;
+
+                integral_2_yy = integral_2_yy + ChisoW * ...
+                    ((TDpsi_2(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:)).*repmat(y_1,1,S.Nev)) * phase_fac ;
+
+                integral_2_yz = integral_2_yz + ChisoW * ...
+                    ((TDpsi_2(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:)).*repmat(z_1,1,S.Nev)) * phase_fac ;
+
+                integral_2_zz = integral_2_zz + ChisoW * ...
+                    ((TDpsi_3(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:)).*repmat(z_1,1,S.Nev)) * phase_fac ;
+
             end
-            Enl_so2_k = S.occfac * S.wkpt(kpt) * transpose(S.Atom(JJ_a).term2_gammaso_Jl(1:ncol_term2)) * 2 * real(Chiso_Jlmp1n_psios_mult.*Chiso_Jlmn_psi_mult) * S.occ(:,ks) ;
+            tf_xx = transpose(sigma*S.Atom(JJ_a).term1_gammaso_Jl(1:ncol_term1)) * real(integral_1.*integral_2_xx) * S.occ(:,kpt);
+            tf_xy = transpose(sigma*S.Atom(JJ_a).term1_gammaso_Jl(1:ncol_term1)) * real(integral_1.*integral_2_xy) * S.occ(:,kpt);
+            tf_xz = transpose(sigma*S.Atom(JJ_a).term1_gammaso_Jl(1:ncol_term1)) * real(integral_1.*integral_2_xz) * S.occ(:,kpt);
+            tf_yy = transpose(sigma*S.Atom(JJ_a).term1_gammaso_Jl(1:ncol_term1)) * real(integral_1.*integral_2_yy) * S.occ(:,kpt);
+            tf_yz = transpose(sigma*S.Atom(JJ_a).term1_gammaso_Jl(1:ncol_term1)) * real(integral_1.*integral_2_yz) * S.occ(:,kpt);
+            tf_zz = transpose(sigma*S.Atom(JJ_a).term1_gammaso_Jl(1:ncol_term1)) * real(integral_1.*integral_2_zz) * S.occ(:,kpt);
+            stress(1,1) = stress(1,1) - 2 * S.occfac * S.wkpt(kpt) * tf_xx;
+            stress(1,2) = stress(1,2) - 2 * S.occfac * S.wkpt(kpt) * tf_xy;
+            stress(1,3) = stress(1,3) - 2 * S.occfac * S.wkpt(kpt) * tf_xz;
+            stress(2,2) = stress(2,2) - 2 * S.occfac * S.wkpt(kpt) * tf_yy;
+            stress(2,3) = stress(2,3) - 2 * S.occfac * S.wkpt(kpt) * tf_yz;
+            stress(3,3) = stress(3,3) - 2 * S.occfac * S.wkpt(kpt) * tf_zz;
             
-            stress(1,1) = stress(1,1) - Enl_so2_k ;
-            stress(2,2) = stress(2,2) - Enl_so2_k ;
-            stress(3,3) = stress(3,3) - Enl_so2_k ;
+        end % end of loop over spinor for sigma_SO1
+        
+        % stress due to spin-orbit coupling term 2
+        ncol_term2 = S.Atom(JJ_a).ncol_term2;
+        for spinor = 1:S.nspinor
+            shift = (spinor-1)*S.N;         % for selecting each spinor, spinor=1 shift = 0, spinor=2, shift = S.N
+            shift2 = (2-spinor)*S.N;        % for selecting the other spin channel, spinor=1 shift2 = S.N, spinor=2,shift2=0  
             
-            % stress due to scalar relativistic 
-            for spinor = 1:S.nspinor
-                shift = (spinor-1)*S.N;         % for selecting each spinor, spinor=1 shift = 0, spinor=2, shift = S.N
-                integral_1 = zeros(S.Atom(JJ_a).angnum,S.Nev);
-                integral_2_xx = zeros(S.Atom(JJ_a).angnum,S.Nev);
-                integral_2_xy = zeros(S.Atom(JJ_a).angnum,S.Nev);
-                integral_2_xz = zeros(S.Atom(JJ_a).angnum,S.Nev);
-                integral_2_yy = zeros(S.Atom(JJ_a).angnum,S.Nev);
-                integral_2_yz = zeros(S.Atom(JJ_a).angnum,S.Nev);
-                integral_2_zz = zeros(S.Atom(JJ_a).angnum,S.Nev);
+            if spinor == 1
+                soindx1 = S.Atom(JJ_a).term2_index_so(1:ncol_term2)+1;
+                soindx2 = S.Atom(JJ_a).term2_index_so(1:ncol_term2);
+            else 
+                soindx1 = S.Atom(JJ_a).term2_index_so(1:ncol_term2);
+                soindx2 = S.Atom(JJ_a).term2_index_so(1:ncol_term2)+1;
+            end
+        
+            integral_1 = zeros(ncol_term2,S.Nev);
+            integral_2_xx = zeros(ncol_term2,S.Nev);
+            integral_2_xy = zeros(ncol_term2,S.Nev);
+            integral_2_xz = zeros(ncol_term2,S.Nev);
+            integral_2_yy = zeros(ncol_term2,S.Nev);
+            integral_2_yz = zeros(ncol_term2,S.Nev);
+            integral_2_zz = zeros(ncol_term2,S.Nev); 
 
-                for img = 1:S.Atom(JJ_a).n_image_rc
-                    phase_fac = (exp(dot(kpt_vec,(S.Atoms(JJ_a,:)-S.Atom(JJ_a).rcImage(img).coordinates)*fac)));
-                    ChiW = transpose(bsxfun(@times, conj(S.Atom(JJ_a).rcImage(img).Chi_mat), S.W(S.Atom(JJ_a).rcImage(img).rc_pos)));
-                    integral_1 = integral_1 + conj(ChiW) * conj(S.psi(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:,ks)) * conj(phase_fac);
-                    xr =(S.Atom(JJ_a).rcImage(img).rc_pos_ii-1)*S.dx - S.Atom(JJ_a).rcImage(img).coordinates(1) ;
-                    yr =(S.Atom(JJ_a).rcImage(img).rc_pos_jj-1)*S.dy - S.Atom(JJ_a).rcImage(img).coordinates(2) ;
-                    zr =(S.Atom(JJ_a).rcImage(img).rc_pos_kk-1)*S.dz - S.Atom(JJ_a).rcImage(img).coordinates(3) ;
-                    x_1 = S_T(1,1)*xr + S_T(1,2)*yr + S_T(1,3)*zr;
-                    y_1 = S_T(2,1)*xr + S_T(2,2)*yr + S_T(2,3)*zr;
-                    z_1 = S_T(3,1)*xr + S_T(3,2)*yr + S_T(3,3)*zr;
+            for img = 1:S.Atom(JJ_a).n_image_rc
+                phase_fac = (exp(dot(kpt_vec,(S.Atoms(JJ_a,:)-S.Atom(JJ_a).rcImage(img).coordinates)*fac)));
+                ChisoW1 = transpose(bsxfun(@times, S.Atom(JJ_a).rcImage(img).Chiso_mat(:,soindx1), S.W(S.Atom(JJ_a).rcImage(img).rc_pos)));
+                ChisoW2 = transpose(bsxfun(@times, conj(S.Atom(JJ_a).rcImage(img).Chiso_mat(:,soindx2)), S.W(S.Atom(JJ_a).rcImage(img).rc_pos)));
 
-                    integral_2_xx = integral_2_xx + ChiW * ...
-                        ((TDpsi_1(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:)).*repmat(x_1,1,S.Nev)) * phase_fac ;
+                integral_1 = integral_1 + ChisoW1 * conj(S.psi(S.Atom(JJ_a).rcImage(img).rc_pos+shift2,:,kpt)) * conj(phase_fac);
 
-                    integral_2_xy = integral_2_xy + ChiW * ...
-                        ((TDpsi_1(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:)).*repmat(y_1,1,S.Nev)) * phase_fac ;
+                xr =(S.Atom(JJ_a).rcImage(img).rc_pos_ii-1)*S.dx - S.Atom(JJ_a).rcImage(img).coordinates(1) ;
+                yr =(S.Atom(JJ_a).rcImage(img).rc_pos_jj-1)*S.dy - S.Atom(JJ_a).rcImage(img).coordinates(2) ;
+                zr =(S.Atom(JJ_a).rcImage(img).rc_pos_kk-1)*S.dz - S.Atom(JJ_a).rcImage(img).coordinates(3) ;
+                x_1 = S_T(1,1)*xr + S_T(1,2)*yr + S_T(1,3)*zr;
+                y_1 = S_T(2,1)*xr + S_T(2,2)*yr + S_T(2,3)*zr;
+                z_1 = S_T(3,1)*xr + S_T(3,2)*yr + S_T(3,3)*zr;
 
-                    integral_2_xz = integral_2_xz + ChiW * ...
-                        ((TDpsi_1(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:)).*repmat(z_1,1,S.Nev)) * phase_fac ;
+                integral_2_xx = integral_2_xx + ChisoW2 * ...
+                    (TDpsi_1(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:).*repmat(x_1,1,S.Nev)) * phase_fac ;
 
-                    integral_2_yy = integral_2_yy + ChiW * ...
-                        ((TDpsi_2(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:)).*repmat(y_1,1,S.Nev)) * phase_fac ;
+                integral_2_xy = integral_2_xy + ChisoW2 * ...
+                    (TDpsi_1(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:).*repmat(y_1,1,S.Nev)) * phase_fac ;
 
-                    integral_2_yz = integral_2_yz + ChiW * ...
-                        ((TDpsi_2(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:)).*repmat(z_1,1,S.Nev)) * phase_fac ;
+                integral_2_xz = integral_2_xz + ChisoW2 * ...
+                    (TDpsi_1(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:).*repmat(z_1,1,S.Nev)) * phase_fac ;
 
-                    integral_2_zz = integral_2_zz + ChiW * ...
-                        ((TDpsi_3(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:)).*repmat(z_1,1,S.Nev)) * phase_fac ;
+                integral_2_yy = integral_2_yy + ChisoW2 * ...
+                    (TDpsi_2(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:).*repmat(y_1,1,S.Nev)) * phase_fac ;
 
-                end
-                tf_xx = transpose(S.Atom(JJ_a).gamma_Jl) * real(integral_1.*integral_2_xx) * S.occ(:,ks);
-                tf_xy = transpose(S.Atom(JJ_a).gamma_Jl) * real(integral_1.*integral_2_xy) * S.occ(:,ks);
-                tf_xz = transpose(S.Atom(JJ_a).gamma_Jl) * real(integral_1.*integral_2_xz) * S.occ(:,ks);
-                tf_yy = transpose(S.Atom(JJ_a).gamma_Jl) * real(integral_1.*integral_2_yy) * S.occ(:,ks);
-                tf_yz = transpose(S.Atom(JJ_a).gamma_Jl) * real(integral_1.*integral_2_yz) * S.occ(:,ks);
-                tf_zz = transpose(S.Atom(JJ_a).gamma_Jl) * real(integral_1.*integral_2_zz) * S.occ(:,ks);
-                stress(1,1) = stress(1,1) - 2 * S.occfac * S.wkpt(kpt) * tf_xx;
-                stress(1,2) = stress(1,2) - 2 * S.occfac * S.wkpt(kpt) * tf_xy;
-                stress(1,3) = stress(1,3) - 2 * S.occfac * S.wkpt(kpt) * tf_xz;
-                stress(2,2) = stress(2,2) - 2 * S.occfac * S.wkpt(kpt) * tf_yy;
-                stress(2,3) = stress(2,3) - 2 * S.occfac * S.wkpt(kpt) * tf_yz;
-                stress(3,3) = stress(3,3) - 2 * S.occfac * S.wkpt(kpt) * tf_zz;
-                
-            end % end of loop over spinor for sigma_SC
+                integral_2_yz = integral_2_yz + ChisoW2 * ...
+                    (TDpsi_2(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:).*repmat(z_1,1,S.Nev)) * phase_fac ;
 
-            % stress due to spin-orbit coupling term 1
-            ncol_term1 = S.Atom(JJ_a).ncol_term1;
-            soindx = S.Atom(JJ_a).term1_index_so(1:ncol_term1);
-            for spinor = 1:S.nspinor
-                sigma = (-1)^(spinor-1);
-                shift = (spinor-1)*S.N;         % for selecting each spinor, spinor=1 shift = 0, spinor=2, shift = S.N
-                integral_1 = zeros(ncol_term1,S.Nev);
-                integral_2_xx = zeros(ncol_term1,S.Nev);
-                integral_2_xy = zeros(ncol_term1,S.Nev);
-                integral_2_xz = zeros(ncol_term1,S.Nev);
-                integral_2_yy = zeros(ncol_term1,S.Nev);
-                integral_2_yz = zeros(ncol_term1,S.Nev);
-                integral_2_zz = zeros(ncol_term1,S.Nev);
+                integral_2_zz = integral_2_zz + ChisoW2 * ...
+                    (TDpsi_3(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:).*repmat(z_1,1,S.Nev)) * phase_fac ;
 
-                for img = 1:S.Atom(JJ_a).n_image_rc
-                    phase_fac = (exp(dot(kpt_vec,(S.Atoms(JJ_a,:)-S.Atom(JJ_a).rcImage(img).coordinates)*fac)));
-                    ChisoW = transpose(bsxfun(@times, conj(S.Atom(JJ_a).rcImage(img).Chiso_mat(:,soindx)), S.W(S.Atom(JJ_a).rcImage(img).rc_pos)));
-                    integral_1 = integral_1 + conj(ChisoW) * conj(S.psi(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:,ks)) * conj(phase_fac);
-                    xr =(S.Atom(JJ_a).rcImage(img).rc_pos_ii-1)*S.dx - S.Atom(JJ_a).rcImage(img).coordinates(1) ;
-                    yr =(S.Atom(JJ_a).rcImage(img).rc_pos_jj-1)*S.dy - S.Atom(JJ_a).rcImage(img).coordinates(2) ;
-                    zr =(S.Atom(JJ_a).rcImage(img).rc_pos_kk-1)*S.dz - S.Atom(JJ_a).rcImage(img).coordinates(3) ;
-                    x_1 = S_T(1,1)*xr + S_T(1,2)*yr + S_T(1,3)*zr;
-                    y_1 = S_T(2,1)*xr + S_T(2,2)*yr + S_T(2,3)*zr;
-                    z_1 = S_T(3,1)*xr + S_T(3,2)*yr + S_T(3,3)*zr;
-
-                    integral_2_xx = integral_2_xx + ChisoW * ...
-                        ((TDpsi_1(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:)).*repmat(x_1,1,S.Nev)) * phase_fac ;
-
-                    integral_2_xy = integral_2_xy + ChisoW * ...
-                        ((TDpsi_1(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:)).*repmat(y_1,1,S.Nev)) * phase_fac ;
-
-                    integral_2_xz = integral_2_xz + ChisoW * ...
-                        ((TDpsi_1(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:)).*repmat(z_1,1,S.Nev)) * phase_fac ;
-
-                    integral_2_yy = integral_2_yy + ChisoW * ...
-                        ((TDpsi_2(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:)).*repmat(y_1,1,S.Nev)) * phase_fac ;
-
-                    integral_2_yz = integral_2_yz + ChisoW * ...
-                        ((TDpsi_2(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:)).*repmat(z_1,1,S.Nev)) * phase_fac ;
-
-                    integral_2_zz = integral_2_zz + ChisoW * ...
-                        ((TDpsi_3(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:)).*repmat(z_1,1,S.Nev)) * phase_fac ;
-
-                end
-                tf_xx = transpose(sigma*S.Atom(JJ_a).term1_gammaso_Jl(1:ncol_term1)) * real(integral_1.*integral_2_xx) * S.occ(:,ks);
-                tf_xy = transpose(sigma*S.Atom(JJ_a).term1_gammaso_Jl(1:ncol_term1)) * real(integral_1.*integral_2_xy) * S.occ(:,ks);
-                tf_xz = transpose(sigma*S.Atom(JJ_a).term1_gammaso_Jl(1:ncol_term1)) * real(integral_1.*integral_2_xz) * S.occ(:,ks);
-                tf_yy = transpose(sigma*S.Atom(JJ_a).term1_gammaso_Jl(1:ncol_term1)) * real(integral_1.*integral_2_yy) * S.occ(:,ks);
-                tf_yz = transpose(sigma*S.Atom(JJ_a).term1_gammaso_Jl(1:ncol_term1)) * real(integral_1.*integral_2_yz) * S.occ(:,ks);
-                tf_zz = transpose(sigma*S.Atom(JJ_a).term1_gammaso_Jl(1:ncol_term1)) * real(integral_1.*integral_2_zz) * S.occ(:,ks);
-                stress(1,1) = stress(1,1) - 2 * S.occfac * S.wkpt(kpt) * tf_xx;
-                stress(1,2) = stress(1,2) - 2 * S.occfac * S.wkpt(kpt) * tf_xy;
-                stress(1,3) = stress(1,3) - 2 * S.occfac * S.wkpt(kpt) * tf_xz;
-                stress(2,2) = stress(2,2) - 2 * S.occfac * S.wkpt(kpt) * tf_yy;
-                stress(2,3) = stress(2,3) - 2 * S.occfac * S.wkpt(kpt) * tf_yz;
-                stress(3,3) = stress(3,3) - 2 * S.occfac * S.wkpt(kpt) * tf_zz;
-                
-            end % end of loop over spinor for sigma_SO1
+            end
+            tf_xx = transpose(S.Atom(JJ_a).term2_gammaso_Jl(1:ncol_term2)) * 2*real(integral_1.*integral_2_xx) * S.occ(:,kpt);
+            tf_xy = transpose(S.Atom(JJ_a).term2_gammaso_Jl(1:ncol_term2)) * 2*real(integral_1.*integral_2_xy) * S.occ(:,kpt);
+            tf_xz = transpose(S.Atom(JJ_a).term2_gammaso_Jl(1:ncol_term2)) * 2*real(integral_1.*integral_2_xz) * S.occ(:,kpt);
+            tf_yy = transpose(S.Atom(JJ_a).term2_gammaso_Jl(1:ncol_term2)) * 2*real(integral_1.*integral_2_yy) * S.occ(:,kpt);
+            tf_yz = transpose(S.Atom(JJ_a).term2_gammaso_Jl(1:ncol_term2)) * 2*real(integral_1.*integral_2_yz) * S.occ(:,kpt);
+            tf_zz = transpose(S.Atom(JJ_a).term2_gammaso_Jl(1:ncol_term2)) * 2*real(integral_1.*integral_2_zz) * S.occ(:,kpt);
+            stress(1,1) = stress(1,1) - S.occfac * S.wkpt(kpt) * tf_xx;
+            stress(1,2) = stress(1,2) - S.occfac * S.wkpt(kpt) * tf_xy;
+            stress(1,3) = stress(1,3) - S.occfac * S.wkpt(kpt) * tf_xz;
+            stress(2,2) = stress(2,2) - S.occfac * S.wkpt(kpt) * tf_yy;
+            stress(2,3) = stress(2,3) - S.occfac * S.wkpt(kpt) * tf_yz;
+            stress(3,3) = stress(3,3) - S.occfac * S.wkpt(kpt) * tf_zz;
             
-            % stress due to spin-orbit coupling term 2
-            ncol_term2 = S.Atom(JJ_a).ncol_term2;
-            for spinor = 1:S.nspinor
-                shift = (spinor-1)*S.N;         % for selecting each spinor, spinor=1 shift = 0, spinor=2, shift = S.N
-                shift2 = (2-spinor)*S.N;        % for selecting the other spin channel, spinor=1 shift2 = S.N, spinor=2,shift2=0  
-                
-                if spinor == 1
-                    soindx1 = S.Atom(JJ_a).term2_index_so(1:ncol_term2)+1;
-                    soindx2 = S.Atom(JJ_a).term2_index_so(1:ncol_term2);
-                else 
-                    soindx1 = S.Atom(JJ_a).term2_index_so(1:ncol_term2);
-                    soindx2 = S.Atom(JJ_a).term2_index_so(1:ncol_term2)+1;
-                end
-            
-                integral_1 = zeros(ncol_term2,S.Nev);
-                integral_2_xx = zeros(ncol_term2,S.Nev);
-                integral_2_xy = zeros(ncol_term2,S.Nev);
-                integral_2_xz = zeros(ncol_term2,S.Nev);
-                integral_2_yy = zeros(ncol_term2,S.Nev);
-                integral_2_yz = zeros(ncol_term2,S.Nev);
-                integral_2_zz = zeros(ncol_term2,S.Nev); 
-
-                for img = 1:S.Atom(JJ_a).n_image_rc
-                    phase_fac = (exp(dot(kpt_vec,(S.Atoms(JJ_a,:)-S.Atom(JJ_a).rcImage(img).coordinates)*fac)));
-                    ChisoW1 = transpose(bsxfun(@times, S.Atom(JJ_a).rcImage(img).Chiso_mat(:,soindx1), S.W(S.Atom(JJ_a).rcImage(img).rc_pos)));
-                    ChisoW2 = transpose(bsxfun(@times, conj(S.Atom(JJ_a).rcImage(img).Chiso_mat(:,soindx2)), S.W(S.Atom(JJ_a).rcImage(img).rc_pos)));
-
-                    integral_1 = integral_1 + ChisoW1 * conj(S.psi(S.Atom(JJ_a).rcImage(img).rc_pos+shift2,:,ks)) * conj(phase_fac);
-
-                    xr =(S.Atom(JJ_a).rcImage(img).rc_pos_ii-1)*S.dx - S.Atom(JJ_a).rcImage(img).coordinates(1) ;
-                    yr =(S.Atom(JJ_a).rcImage(img).rc_pos_jj-1)*S.dy - S.Atom(JJ_a).rcImage(img).coordinates(2) ;
-                    zr =(S.Atom(JJ_a).rcImage(img).rc_pos_kk-1)*S.dz - S.Atom(JJ_a).rcImage(img).coordinates(3) ;
-                    x_1 = S_T(1,1)*xr + S_T(1,2)*yr + S_T(1,3)*zr;
-                    y_1 = S_T(2,1)*xr + S_T(2,2)*yr + S_T(2,3)*zr;
-                    z_1 = S_T(3,1)*xr + S_T(3,2)*yr + S_T(3,3)*zr;
-
-                    integral_2_xx = integral_2_xx + ChisoW2 * ...
-                        (TDpsi_1(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:).*repmat(x_1,1,S.Nev)) * phase_fac ;
-
-                    integral_2_xy = integral_2_xy + ChisoW2 * ...
-                        (TDpsi_1(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:).*repmat(y_1,1,S.Nev)) * phase_fac ;
-
-                    integral_2_xz = integral_2_xz + ChisoW2 * ...
-                        (TDpsi_1(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:).*repmat(z_1,1,S.Nev)) * phase_fac ;
-
-                    integral_2_yy = integral_2_yy + ChisoW2 * ...
-                        (TDpsi_2(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:).*repmat(y_1,1,S.Nev)) * phase_fac ;
-
-                    integral_2_yz = integral_2_yz + ChisoW2 * ...
-                        (TDpsi_2(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:).*repmat(z_1,1,S.Nev)) * phase_fac ;
-
-                    integral_2_zz = integral_2_zz + ChisoW2 * ...
-                        (TDpsi_3(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:).*repmat(z_1,1,S.Nev)) * phase_fac ;
-
-                end
-                tf_xx = transpose(S.Atom(JJ_a).term2_gammaso_Jl(1:ncol_term2)) * 2*real(integral_1.*integral_2_xx) * S.occ(:,ks);
-                tf_xy = transpose(S.Atom(JJ_a).term2_gammaso_Jl(1:ncol_term2)) * 2*real(integral_1.*integral_2_xy) * S.occ(:,ks);
-                tf_xz = transpose(S.Atom(JJ_a).term2_gammaso_Jl(1:ncol_term2)) * 2*real(integral_1.*integral_2_xz) * S.occ(:,ks);
-                tf_yy = transpose(S.Atom(JJ_a).term2_gammaso_Jl(1:ncol_term2)) * 2*real(integral_1.*integral_2_yy) * S.occ(:,ks);
-                tf_yz = transpose(S.Atom(JJ_a).term2_gammaso_Jl(1:ncol_term2)) * 2*real(integral_1.*integral_2_yz) * S.occ(:,ks);
-                tf_zz = transpose(S.Atom(JJ_a).term2_gammaso_Jl(1:ncol_term2)) * 2*real(integral_1.*integral_2_zz) * S.occ(:,ks);
-                stress(1,1) = stress(1,1) - S.occfac * S.wkpt(kpt) * tf_xx;
-                stress(1,2) = stress(1,2) - S.occfac * S.wkpt(kpt) * tf_xy;
-                stress(1,3) = stress(1,3) - S.occfac * S.wkpt(kpt) * tf_xz;
-                stress(2,2) = stress(2,2) - S.occfac * S.wkpt(kpt) * tf_yy;
-                stress(2,3) = stress(2,3) - S.occfac * S.wkpt(kpt) * tf_yz;
-                stress(3,3) = stress(3,3) - S.occfac * S.wkpt(kpt) * tf_zz;
-                
-            end % end of loop over spinor for sigma_SO2
-            
-        end % end of loop over atoms
-    end
-    
+        end % end of loop over spinor for sigma_SO2
+        
+    end % end of loop over atoms
 end
     
 
