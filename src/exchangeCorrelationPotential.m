@@ -54,6 +54,8 @@ if S.spin_typ == 0
             [ex,vx,v2x] = rPW86x(rho,sigma);
         case 4
             [ex,vx,v2x,v3x] = scanx(rho,sigma,S.tau); 
+        case 6
+            [ex,vx,v2x,v3x] = r2scanx(rho,sigma,S.tau); 
         otherwise
             ex = zeros(size(rho));
             vx = zeros(size(rho));
@@ -71,6 +73,8 @@ if S.spin_typ == 0
             [ec,vc,v2c] = pbec(rho,sigma,S.xc_option(2));
         case 4
             [ec,vc,v2c,v3c] = scanc(rho,sigma,S.tau); 
+        case 6
+            [ec,vc,v2c,v3c] = r2scanc(rho,sigma,S.tau); 
         otherwise
             ec = zeros(size(rho));
             vc = zeros(size(rho));
@@ -97,7 +101,11 @@ if S.spin_typ == 0
     % imeta
     if S.ixc(3) == 1 
         if S.countPotential == -1 % compute potential before SCF by GGA_PBE, there is no psi yet
-            S.ixc = [4 4 1 0]; % restore the labels
+            if strcmp(S.XC, 'SCAN')
+                S.ixc = [4 4 1 0]; % restore the labels
+            else
+                S.ixc = [6 6 1 0]; % restore the labels
+            end
         else
             S.VxcScan3 = v3x + v3c;
         end
@@ -198,6 +206,8 @@ else
             [ex,vx,v2x] = rPW86x_spin(rho,sigma);
         case 4
             [ex,vx,v2x,v3x] = scanx_spin(rho,sigma,S.tau); 
+        case 6
+            [ex,vx,v2x,v3x] = r2scanx_spin(rho,sigma,S.tau); 
         otherwise
             ex = zeros(S.N,1);
             vx = zeros(S.N,2);
@@ -215,6 +225,8 @@ else
             [ec,vc,v2c] = pbec_spin(rho,sigma,S.xc_option(2));
         case 4
             [ec,vc,v2c,v3c] = scanc_spin(rho,sigma,S.tau); 
+        case 6
+            [ec,vc,v2c,v3c] = r2scanc_spin(rho,sigma,S.tau); 
         otherwise
             ec = zeros(S.N,1);
             vc = zeros(S.N,2);
@@ -242,7 +254,11 @@ else
     % imeta
     if S.ixc(3) == 1
         if S.countPotential == -1 % compute potential before SCF by GGA_PBE, there is no psi yet
-            S.ixc = [4 4 1 0]; % restore the labels
+            if strcmp(S.XC, 'SCAN')
+                S.ixc = [4 4 1 0]; % restore the labels
+            else % r2SCAN
+                S.ixc = [6 6 1 0]; % restore the labels
+            end
         else
             S.VxcScan3 = v3x + v3c;
         end

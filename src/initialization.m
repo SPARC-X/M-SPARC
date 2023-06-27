@@ -222,6 +222,15 @@ elseif strcmp(S.XC, 'SCAN')
     S.xc = 4;
 	S.ixc = [4 4 1 0]; % 4: scanx; 4: scanc; 1: need kinetic energy density; 0: no vdWDF
     S.isgradient = 1;
+elseif strcmp(S.XC, 'R2SCAN')
+    if ispc % windows
+		addpath('mgga\');
+	else % max/linux
+		addpath('mgga/');
+    end
+    S.xc = 4;
+	S.ixc = [6 6 1 0]; % 6: r2scanx; 6: r2scanc; 1: need kinetic energy density; 0: no vdWDF
+    S.isgradient = 1;
 elseif strcmp(S.XC, 'HF')
 	S.xc = 40;
     S.usefock = 1;
@@ -258,6 +267,10 @@ if S.d3Flag == 1
 	else
 		S = set_D3_coefficients(S);
 	end
+end
+
+if (S.ixc(3) == 1 && S.NLCC_flag == 1)
+		error('ERROR: Currently metaGGA functionals (SCAN, R2SCAN) do not support nonlinear core correction pseudopotential.\n');
 end
 
 % calculate Nelectron
@@ -1287,7 +1300,7 @@ end
 
 start_time = fix(clock);
 fprintf(fileID,'***************************************************************************\n');
-fprintf(fileID,'*                      M-SPARC (version Jun 26, 2023)                     *\n');
+fprintf(fileID,'*                      M-SPARC (version Jun 27, 2023)                     *\n');
 fprintf(fileID,'*   Copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech   *\n');
 fprintf(fileID,'*           Distributed under GNU General Public License 3 (GPL)          *\n');
 fprintf(fileID,'*                Date: %s  Start time: %02d:%02d:%02d                  *\n',date,start_time(4),start_time(5),start_time(6));

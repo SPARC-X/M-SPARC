@@ -1,0 +1,124 @@
+***************************************************************************
+*                      M-SPARC (version Jun 26, 2023)                     *
+*   Copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech   *
+*           Distributed under GNU General Public License 3 (GPL)          *
+*                Date: 27-Jun-2023  Start time: 15:42:46                  *
+***************************************************************************
+                           Input parameters                                
+***************************************************************************
+LATVEC_SCALE: 2.840052 2.840052 2.840052 
+LATVEC:
+1.000000000000000 0.000000000000000 0.000000000000000 
+0.000000000000000 1.000000000000000 0.000000000000000 
+0.000000000000000 0.000000000000000 1.000000000000000 
+FD_GRID: 36 36 36
+FD_ORDER: 12
+BC: P P P
+KPOINT_GRID: 3 2 2
+KPOINT_SHIFT: 0 5.000000e-01 5.000000e-01
+SPIN_TYP: 1
+ELEC_TEMP_TYPE: fermi-dirac
+SMEARING: 0.001000000
+CHEB_DEGREE: 54
+NSTATES: 24
+EXCHANGE_CORRELATION: R2SCAN
+CALC_STRESS: 1
+MAXIT_SCF: 100
+TOL_SCF: 1.00E-05
+TOL_POISSON: 1.00E-08
+TOL_LANCZOS: 1.00E-02
+TOL_PSEUDOCHARGE: 1.00E-08
+MIXING_VARIABLE: potential
+MIXING_PRECOND: kerker
+MIXING_PRECOND_MAG: none
+TOL_PRECOND: 6.22E-06
+PRECOND_KERKER_KTF: 1.00
+PRECOND_KERKER_THRESH: 0.10
+MIXING_PARAMETER: 0.30
+MIXING_PARAMETER_MAG: 0.30
+MIXING_HISTORY: 7
+PULAY_FREQUENCY: 1
+PULAY_RESTART: 0
+REFERENCE_CUTOFF: 0.50
+RHO_TRIGGER: 4
+FIX_RAND: 0
+PRINT_FORCES: 1
+PRINT_ATOMS: 1
+PRINT_EIGEN: 0
+PRINT_DENSITY: 0
+OUTPUT_FILE: Fe2.out
+***************************************************************************
+                                Cell                                       
+***************************************************************************
+Lattice vectors:
+2.840052000000000 0.000000000000000 0.000000000000000 
+0.000000000000000 2.840052000000000 0.000000000000000 
+0.000000000000000 0.000000000000000 2.840052000000000 
+Volume :  2.2907562257E+01 (Bohr^3)
+Density :  4.8756824820E+00 (amu/Bohr^3),   5.4636278988E+01 (g/cc)
+***************************************************************************
+                             Initialization                                
+***************************************************************************
+Mesh spacing                       :  0.078890 (Bohr)
+Number of symmetry adapted k-points:  6
+Output printed to                  :  Fe2.out
+Total number of atom types         :  1
+Total number of atoms              :  2
+Total number of electrons          :  32
+Atom type 1  (valence electrons)   :  Fe 16
+Pseudopotential                    :  ../Fe.pot
+lloc                               :  4
+Atomic mass                        :  55.844999999999999
+Pseudocharge radii of atom type 1  :  6.31 6.31 6.31
+Number of atoms of type 1          :  2
+Estimated total memory usage       :  1.33 GB
+========================================================================================
+                            Self Consistent Field (SCF#1)                     
+========================================================================================
+Iteration     Free Energy (Ha/atom)    Magnetization     SCF Error        Timing (sec)
+1            -1.1577686363E+02         6.6667E-01        1.067E-01        1152.864
+2            -1.1409901365E+02         6.6482E-01        5.376E-02        608.634
+3            -1.1408250022E+02         6.6663E-01        2.577E-02        531.595
+4            -1.1408395122E+02         6.6667E-01        4.906E-03        520.106
+5            -1.1408819387E+02         6.6667E-01        9.608E-04        531.339
+6            -1.1408814359E+02         6.6667E-01        3.566E-04        525.298
+7            -1.1408821104E+02         6.6667E-01        4.007E-05        523.648
+8            -1.1408821144E+02         6.6667E-01        2.341E-05        524.674
+9            -1.1408821254E+02         6.6667E-01        4.192E-06        514.434
+Total number of SCF: 9     
+====================================================================
+                                Energy                              
+====================================================================
+Free energy per atom               : -1.1408821254E+02 (Ha/atom)
+Total free energy                  : -2.2817642507E+02 (Ha)
+Band structure energy              :  2.6613931362E+00 (Ha)
+Exchange correlation energy        : -3.1069781338E+01 (Ha)
+Self and correction energy         : -2.4219100518E+02 (Ha)
+Entropy*kb*T                       : -5.5857366198E-05 (Ha)
+Fermi level                        :  1.8503660486E+00 (Ha)
+Net Magnetization                  :  6.6666645906E-01 
+Average force                      :  6.6167766957E-01 (Ha/Bohr)
+Maximum force                      :  6.6167766957E-01 (Ha/Bohr)
+Time for force calculation         :  15.434 (sec)
+Stress (GPa):
+ -22542.0052191843       5.4394464203      -5.4393708024
+      5.4394464203  -22776.2493638877     -13.8085594331
+     -5.4393708024     -13.8085594331  -22776.2494089623
+Pressure                           :  2.2698167997E+04 (GPa)
+Maximum stress                     :  2.2776249409E+04 (GPa)
+Time for stress calculation        :  45.170 (sec)
+***************************************************************************
+                               Timing info                                 
+***************************************************************************
+Total walltime                     :  5509.423 sec
+___________________________________________________________________________
+
+***************************************************************************
+*             Material Physics & Mechanics Group, Georgia Tech            *
+*                       PI: Phanish Suryanarayana                         *
+*               List of contributors: See the documentation               *
+*         Citation: See README.md or the documentation for details        *
+*               Acknowledgements: U.S. DOE SC (DE-SC0019410)              *
+*      {Preliminary developments: U.S. NSF (1333500,1553212)}             *
+***************************************************************************
+                                                                           
