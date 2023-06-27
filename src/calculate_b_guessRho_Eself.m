@@ -18,9 +18,12 @@ fprintf('\n Starting pseudocharge generation and self energy calculation...\n');
 S.b = zeros(S.N,1);
 S.b_ref = zeros(S.N,1);
 S.rho_at = zeros(S.N,1);
-if S.nspin == 2
-	rho_at_up = zeros(S.N,1);
-	rho_at_dn = zeros(S.N,1);
+if S.spin_typ == 1
+	mz = zeros(S.N,1);
+elseif S.spin_typ == 2
+    mx = zeros(S.N,1);
+    my = zeros(S.N,1);
+    mz = zeros(S.N,1);
 end
 S.Eself = 0;
 S.Eself_ref = 0;
@@ -147,9 +150,12 @@ for JJ_a = 1:S.n_atm % loop over all the atoms
 		S.b_ref(Rowcount_rb) = S.b_ref(Rowcount_rb) + reshape(bJ_ref(II,JJ,KK),sz);
 		rho_add = reshape(rho_isolated_atom(II,JJ,KK),sz);
 		S.rho_at(Rowcount_rb) = S.rho_at(Rowcount_rb) + rho_add;
-		if(S.nspin == 2)
-			rho_at_up(Rowcount_rb) = rho_at_up(Rowcount_rb) + (S.Atm(count_typ).Z + S.Atm(count_typ).mag(count_typ_atms))/(2 * S.Atm(count_typ).Z) * rho_add;
-			rho_at_dn(Rowcount_rb) = rho_at_dn(Rowcount_rb) + (S.Atm(count_typ).Z - S.Atm(count_typ).mag(count_typ_atms))/(2 * S.Atm(count_typ).Z) * rho_add;
+		if S.spin_typ == 1
+            mz(Rowcount_rb) = mz(Rowcount_rb) + S.Atm(count_typ).mag(count_typ_atms,3)/S.Atm(count_typ).Z * rho_add;
+        elseif S.spin_typ == 2
+            mx(Rowcount_rb) = mx(Rowcount_rb) + S.Atm(count_typ).mag(count_typ_atms,1)/S.Atm(count_typ).Z * rho_add;
+            my(Rowcount_rb) = my(Rowcount_rb) + S.Atm(count_typ).mag(count_typ_atms,2)/S.Atm(count_typ).Z * rho_add;
+            mz(Rowcount_rb) = mz(Rowcount_rb) + S.Atm(count_typ).mag(count_typ_atms,3)/S.Atm(count_typ).Z * rho_add;
 		end
 		S.Eself = S.Eself + 0.5 * sum(sum(sum(bJ(II,JJ,KK).*V_PS(II,JJ,KK).*S.W(Rowcount_rb) )));
 		S.Eself_ref = S.Eself_ref + 0.5 * sum(sum(sum(bJ_ref(II,JJ,KK).*V_PS_ref(II,JJ,KK).*S.W(Rowcount_rb) )));
@@ -190,19 +196,24 @@ fprintf(' Integration b_ref = %.12f\n\n',abs(dot(S.W,S.b_ref)));
 %*                    Designate rho_at                       *
 %*************************************************************
 % Guess for electron density
-if S.nspin == 2
-	S.rho_at = horzcat(S.rho_at,rho_at_up,rho_at_dn);
+if S.spin_typ == 1
+    S.mag = mz;
+	S.rho_at = [S.rho_at 0.5*(S.rho_at+mz) 0.5*(S.rho_at-mz)];
+elseif S.spin_typ == 2
+    magnorm = sqrt(mx.^2 + my.^2 + mz.^2);
+    S.mag = [mx my mz magnorm];
+    S.rho_at = [S.rho_at 0.5*(S.rho_at+magnorm) 0.5*(S.rho_at-magnorm)];
 end
 
-%rho_scal = (S.Nelectron/dot(S.W,S.rho_at(:,1)));
-%rho_scal = (-dot(S.W,S.b)/dot(S.W,S.rho_at(:,1)));
 rho_scal = abs(S.NegCharge/dot(S.W,S.rho_at(:,1)));
 S.rho_at = rho_scal*S.rho_at;
 
-if S.nspin == 2
-	netM = dot(S.W,S.rho_at(:,2)) - dot(S.W,S.rho_at(:,3));
+if S.spin_typ ~= 0
+	S.netM = sum(S.mag)*S.dV;
 	fprintf('======================================\n');
-	fprintf(' Net initial magnetization is: % .15f \n', netM);
+    fprintf(' Net initial magnetization is: ');
+    fprintf('%.6f ', S.netM);
+    fprintf('\n');
 	fprintf('======================================\n\n');
 end
 

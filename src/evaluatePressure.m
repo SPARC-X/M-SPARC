@@ -17,15 +17,11 @@ Dphi_y = S.grad_2*(S.phi);
 Dphi_z = S.grad_3*(S.phi);
 
 P_eng = 0.0;
-ks = 1;
-for spin = 1:S.nspin
-	for kpt = 1:S.tnkpt
-		P_eng = P_eng - S.occfac*2*S.wkpt(kpt)*sum(S.EigVal(:,ks).*S.occ(:,ks)) ;
-		ks = ks + 1;
-	end
+for kpt = 1:S.tnkpt
+	P_eng = P_eng - S.occfac*2*S.wkpt(kpt)*sum(S.EigVal(:,kpt).*S.occ(:,kpt)) ;
 end
 
-if S.nspin == 1
+if S.spin_typ == 0
 	Drho_x = S.grad_1 * (S.rho+S.rho_Tilde_at);
 	Drho_y = S.grad_2 * (S.rho+S.rho_Tilde_at);
 	Drho_z = S.grad_3 * (S.rho+S.rho_Tilde_at);
@@ -159,7 +155,7 @@ if S.NLCC_flag
             x1 = S_T(1,1)*xr + S_T(1,2)*yr + S_T(1,3)*zr;
             y1 = S_T(2,1)*xr + S_T(2,2)*yr + S_T(2,3)*zr;
             z1 = S_T(3,1)*xr + S_T(3,2)*yr + S_T(3,3)*zr;
-            if S.nspin==1
+            if S.spin_typ == 0
                 P_nlcc = P_nlcc + sum(sum(sum( drho_Tilde_at_1(II,JJ,KK) .* x1 .* ( S.Vxc(Rowcount_rb) ) .* S.W(Rowcount_rb) )));
                 P_nlcc = P_nlcc + sum(sum(sum( drho_Tilde_at_2(II,JJ,KK) .* y1 .* ( S.Vxc(Rowcount_rb) ) .* S.W(Rowcount_rb) )));
                 P_nlcc = P_nlcc + sum(sum(sum( drho_Tilde_at_3(II,JJ,KK) .* z1 .* ( S.Vxc(Rowcount_rb) ) .* S.W(Rowcount_rb) )));
@@ -182,19 +178,18 @@ if S.NLCC_flag
 end
 
 % Contribution from exchange-correlation
-if S.nspin == 1
+if S.spin_typ == 0
 	P_eng = P_eng - sum(S.rho .* S.Vxc .* S.W) + (3*S.Exc) + ...
 			- S.W' * (S.dvxcdgrho .* (S.lapc_T(1,1)*Drho_x.*Drho_x + S.lapc_T(2,2)*Drho_y.*Drho_y + S.lapc_T(3,3)*Drho_z.*Drho_z +...
 										 S.lapc_T(1,2)*Drho_x.*Drho_y + S.lapc_T(2,3)*Drho_y.*Drho_z + S.lapc_T(1,3)*Drho_z.*Drho_x ));
     if (S.countPotential > 0) &&(S.xc == 4) % add metaGGA pressure term
 		P_eng = P_eng - sum(S.W .* S.VxcScan3 .* S.tau);
-        ks = 1;
         for kpt = 1:S.tnkpt
 			kpt_vec = S.kptgrid(kpt,:);
 
-		    Dpsi_x = blochGradient(S,kpt_vec,1)*S.psi(:,:,ks);
-		    Dpsi_y = blochGradient(S,kpt_vec,2)*S.psi(:,:,ks);
-		    Dpsi_z = blochGradient(S,kpt_vec,3)*S.psi(:,:,ks);
+		    Dpsi_x = blochGradient(S,kpt_vec,1)*S.psi(:,:,kpt);
+		    Dpsi_y = blochGradient(S,kpt_vec,2)*S.psi(:,:,kpt);
+		    Dpsi_z = blochGradient(S,kpt_vec,3)*S.psi(:,:,kpt);
 
 		    TDpsi_1 = S.grad_T(1,1)*Dpsi_x + S.grad_T(2,1)*Dpsi_y + S.grad_T(3,1)*Dpsi_z;
 		    TDpsi_2 = S.grad_T(1,2)*Dpsi_x + S.grad_T(2,2)*Dpsi_y + S.grad_T(3,2)*Dpsi_z;
@@ -204,17 +199,16 @@ if S.nspin == 1
 		    TDcpsi_3 = conj(TDpsi_3);
 
 			P_eng = P_eng - real(S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
-				(S.VxcScan3.*TDcpsi_1.*TDpsi_1)) * S.occ(:,ks));
+				(S.VxcScan3.*TDcpsi_1.*TDpsi_1)) * S.occ(:,kpt));
 			P_eng = P_eng - real(S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
-				(S.VxcScan3.*TDcpsi_2.*TDpsi_2)) * S.occ(:,ks));
+				(S.VxcScan3.*TDcpsi_2.*TDpsi_2)) * S.occ(:,kpt));
 			P_eng = P_eng - real(S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
-				(S.VxcScan3.*TDcpsi_3.*TDpsi_3)) * S.occ(:,ks));
-
-            ks = ks + 1;
+				(S.VxcScan3.*TDcpsi_3.*TDpsi_3)) * S.occ(:,kpt));
         end
     end
 else
-	P_eng = P_eng - sum(sum(S.Vxc.*S.rho(:,2:3),2).*S.W) + (3*S.Exc) + ...
+    rho = S.rho;
+	P_eng = P_eng - sum(sum(S.Vxc.*rho(:,2:3),2).*S.W) + (3*S.Exc) + ...
 			- sum(S.W' * (S.dvxcdgrho .* (S.lapc_T(1,1)*Drho_x.*Drho_x + S.lapc_T(2,2)*Drho_y.*Drho_y + S.lapc_T(3,3)*Drho_z.*Drho_z +...
 											 S.lapc_T(1,2)*Drho_x.*Drho_y + S.lapc_T(2,3)*Drho_y.*Drho_z + S.lapc_T(1,3)*Drho_z.*Drho_x )));
 end
@@ -437,230 +431,185 @@ end % end of loop over atoms
 %**********************************************************************
 %Type-I (gradient on psi rather than on Chi)
 
-P_nl = 0;
-if S.nspinor == 1
-    for ks = 1:S.tnkpt*S.nspin
-        if ks <= S.tnkpt
-            kpt = ks;
-        else
-            kpt = ks - S.tnkpt;
-        end
+P_nl = 0;    
+for kpt = 1:S.tnkpt
+    fac = 1.0i;
+    kpt_vec = S.kptgrid(kpt,:);
+    Dpsi_x = zeros(S.nspinor *S.N,S.Nev);
+    Dpsi_y = zeros(S.nspinor *S.N,S.Nev);
+    Dpsi_z = zeros(S.nspinor *S.N,S.Nev);
+    for spinor = 1:S.nspinor
+        ndrange = (1+(spinor-1)*S.N:spinor*S.N); 
+        Dpsi_x(ndrange,:) = blochGradient(S,kpt_vec,1)*S.psi(ndrange,:,kpt);
+        Dpsi_y(ndrange,:) = blochGradient(S,kpt_vec,2)*S.psi(ndrange,:,kpt);
+        Dpsi_z(ndrange,:) = blochGradient(S,kpt_vec,3)*S.psi(ndrange,:,kpt);
+    end
 
-        if (kpt(1) == 0 && kpt(2) == 0 && kpt(3) == 0)
-            fac = 1.0;
-        else
-            fac = 1.0i;
-        end
-
-        kpt_vec = S.kptgrid(kpt,:);
-        Dpsi_x = blochGradient(S,kpt_vec,1)*S.psi(:,:,ks);
-        Dpsi_y = blochGradient(S,kpt_vec,2)*S.psi(:,:,ks);
-        Dpsi_z = blochGradient(S,kpt_vec,3)*S.psi(:,:,ks);
-
-        for JJ_a = 1:S.n_atm % loop over all atoms
-            integral_1 = zeros(S.Atom(JJ_a).angnum,S.Nev);
-            integral_2_x = zeros(S.Atom(JJ_a).angnum,S.Nev);
-            integral_2_y = zeros(S.Atom(JJ_a).angnum,S.Nev);
-            integral_2_z = zeros(S.Atom(JJ_a).angnum,S.Nev);
-            Chi_X_mult1 = zeros(S.Atom(JJ_a).angnum,S.Nev);
-
-            for img = 1:S.Atom(JJ_a).n_image_rc
-                phase_fac = (exp(dot(kpt_vec,(S.Atoms(JJ_a,:)-S.Atom(JJ_a).rcImage(img).coordinates)*fac)));
-                Chi_X_mult1 = Chi_X_mult1 + (bsxfun(@times, S.Atom(JJ_a).rcImage(img).Chi_mat, S.W(S.Atom(JJ_a).rcImage(img).rc_pos)))' * S.psi(S.Atom(JJ_a).rcImage(img).rc_pos,:,ks) * phase_fac ;
-            end
-
-            P_nl = P_nl - S.occfac * S.wkpt(kpt) * transpose(S.Atom(JJ_a).gamma_Jl) * (Chi_X_mult1.*conj(Chi_X_mult1)) * S.occ(:,ks) ;       
-            %E_nl = E_nl + S.occfac * S.wkpt(kpt) * S.Atom(count_typ).gamma_Jl(l+1) * dot(S.occ(:,ks),(Chi_X_mult1.*conj(Chi_X_mult1))) ;
-
-            for img = 1:S.Atom(JJ_a).n_image_rc
-                phase_fac = (exp(dot(kpt_vec,(S.Atoms(JJ_a,:)-S.Atom(JJ_a).rcImage(img).coordinates)*fac)));
-                ChiW = transpose(bsxfun(@times, conj(S.Atom(JJ_a).rcImage(img).Chi_mat), S.W(S.Atom(JJ_a).rcImage(img).rc_pos)));
-                integral_1 = integral_1 + conj(ChiW) * conj(S.psi(S.Atom(JJ_a).rcImage(img).rc_pos,:,ks)) * conj(phase_fac);
-                xr =(S.Atom(JJ_a).rcImage(img).rc_pos_ii-1)*S.dx - S.Atom(JJ_a).rcImage(img).coordinates(1) ;
-                yr =(S.Atom(JJ_a).rcImage(img).rc_pos_jj-1)*S.dy - S.Atom(JJ_a).rcImage(img).coordinates(2) ;
-                zr =(S.Atom(JJ_a).rcImage(img).rc_pos_kk-1)*S.dz - S.Atom(JJ_a).rcImage(img).coordinates(3) ;
-                integral_2_x = integral_2_x + ChiW * ...
-                    ((Dpsi_x(S.Atom(JJ_a).rcImage(img).rc_pos,:)).*repmat(xr,1,S.Nev)) * phase_fac;
-                integral_2_y = integral_2_y + ChiW * ...
-                    ((Dpsi_y(S.Atom(JJ_a).rcImage(img).rc_pos,:)).*repmat(yr,1,S.Nev)) * phase_fac;
-                integral_2_z = integral_2_z + ChiW * ...
-                    ((Dpsi_z(S.Atom(JJ_a).rcImage(img).rc_pos,:)).*repmat(zr,1,S.Nev)) * phase_fac;
-            end
-
-            tf_x = transpose(S.Atom(JJ_a).gamma_Jl) * real(integral_1.*integral_2_x) * S.occ(:,ks);
-            tf_y = transpose(S.Atom(JJ_a).gamma_Jl) * real(integral_1.*integral_2_y) * S.occ(:,ks);
-            tf_z = transpose(S.Atom(JJ_a).gamma_Jl) * real(integral_1.*integral_2_z) * S.occ(:,ks);
-            P_nl = P_nl - 2 * S.occfac * S.wkpt(kpt) * (tf_x + tf_y + tf_z);
-        end % end of loop over atoms    
-    end 
-
-elseif S.nspinor == 2
-    
-    for ks = 1:S.tnkpt*S.nspin
-        if ks <= S.tnkpt
-            kpt = ks;
-        else
-            kpt = ks - S.tnkpt;
-        end
-        fac = 1.0i;
-
-        kpt_vec = S.kptgrid(kpt,:);
-        Dpsi_x = zeros(S.nspinor *S.N,S.Nev);
-        Dpsi_y = zeros(S.nspinor *S.N,S.Nev);
-        Dpsi_z = zeros(S.nspinor *S.N,S.Nev);
+    for JJ_a = 1:S.n_atm % loop over all atoms
         for spinor = 1:S.nspinor
-            ndrange = (1+(spinor-1)*S.N:spinor*S.N); 
-            Dpsi_x(ndrange,:) = blochGradient(S,kpt_vec,1)*S.psi(ndrange,:,ks);
-            Dpsi_y(ndrange,:) = blochGradient(S,kpt_vec,2)*S.psi(ndrange,:,ks);
-            Dpsi_z(ndrange,:) = blochGradient(S,kpt_vec,3)*S.psi(ndrange,:,ks);
-        end
-
-        for JJ_a = 1:S.n_atm % loop over all atoms
-            for spinor = 1:S.nspinor
-                sigma = (-1)^(spinor-1);
-                shift = (spinor-1)*S.N;         % for selecting each spinor, spinor=1 shift = 0, spinor=2, shift = S.N
-                
-                % Nonlocal scalar relativisic energy
-                Chi_X_mult1 = zeros(S.Atom(JJ_a).angnum,S.Nev);
-                for img = 1:S.Atom(JJ_a).n_image_rc
-                    phase_fac = (exp(dot(kpt_vec,(S.Atoms(JJ_a,:)-S.Atom(JJ_a).rcImage(img).coordinates)*fac)));
-                    Chi_X_mult1 = Chi_X_mult1 + transpose(bsxfun(@times, conj(S.Atom(JJ_a).rcImage(img).Chi_mat), S.W(S.Atom(JJ_a).rcImage(img).rc_pos))) * S.psi(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:,ks) * phase_fac ;
-                end
-                
-                P_nl = P_nl - S.occfac * S.wkpt(kpt) * transpose(S.Atom(JJ_a).gamma_Jl) * (Chi_X_mult1.*conj(Chi_X_mult1)) * S.occ(:,ks);
-                
-                % Nonlocal spin-orbit coupling term1 energy
+            sigma = (-1)^(spinor-1);
+            shift = (spinor-1)*S.N;         % for selecting each spinor, spinor=1 shift = 0, spinor=2, shift = S.N
+            if S.spin_typ == 1
+                nsrange = (1+(spinor-1)*S.Nev:spinor*S.Nev);
+            else
+                nsrange = (1:S.Nev);
+            end
+            
+            % Nonlocal scalar relativisic energy
+            Chi_X_mult1 = zeros(S.Atom(JJ_a).angnum,S.Nev);
+            for img = 1:S.Atom(JJ_a).n_image_rc
+                phase_fac = (exp(dot(kpt_vec,(S.Atoms(JJ_a,:)-S.Atom(JJ_a).rcImage(img).coordinates)*fac)));
+                Chi_X_mult1 = Chi_X_mult1 + transpose(bsxfun(@times, conj(S.Atom(JJ_a).rcImage(img).Chi_mat), S.W(S.Atom(JJ_a).rcImage(img).rc_pos))) * S.psi(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:,kpt) * phase_fac ;
+            end
+            
+            P_nl = P_nl - S.occfac * S.wkpt(kpt) * transpose(S.Atom(JJ_a).gamma_Jl) * (Chi_X_mult1.*conj(Chi_X_mult1)) * S.occ(nsrange,kpt);
+            
+            % Nonlocal spin-orbit coupling term1 energy
+            if S.Atm(S.Atom(JJ_a).count_typ).pspsoc == 1
                 ncol_term1 = S.Atom(JJ_a).ncol_term1;
                 soindx = S.Atom(JJ_a).term1_index_so(1:ncol_term1);
                 Chiso_X_mult1 = zeros(ncol_term1,S.Nev);
                 for img = 1:S.Atom(JJ_a).n_image_rc
                     phase_fac = (exp(dot(kpt_vec,(S.Atoms(JJ_a,:)-S.Atom(JJ_a).rcImage(img).coordinates)*fac)));
-                    Chiso_X_mult1 = Chiso_X_mult1 + transpose(bsxfun(@times, conj(S.Atom(JJ_a).rcImage(img).Chiso_mat(:,soindx)), S.W(S.Atom(JJ_a).rcImage(img).rc_pos))) * S.psi(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:,ks) * phase_fac ;
+                    Chiso_X_mult1 = Chiso_X_mult1 + transpose(bsxfun(@times, conj(S.Atom(JJ_a).rcImage(img).Chiso_mat(:,soindx)), S.W(S.Atom(JJ_a).rcImage(img).rc_pos))) * S.psi(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:,kpt) * phase_fac ;
                 end
-                
-                P_nl = P_nl - S.occfac * S.wkpt(kpt) * transpose(sigma*S.Atom(JJ_a).term1_gammaso_Jl(1:ncol_term1)) * (Chiso_X_mult1.*conj(Chiso_X_mult1)) * S.occ(:,ks) ;
+
+                P_nl = P_nl - S.occfac * S.wkpt(kpt) * transpose(sigma*S.Atom(JJ_a).term1_gammaso_Jl(1:ncol_term1)) * (Chiso_X_mult1.*conj(Chiso_X_mult1)) * S.occ(:,kpt) ;
             end
-            
-            % Nonlocal spin-orbit coupling term2 energy
+        end
+        
+        % Nonlocal spin-orbit coupling term2 energy
+        if S.Atm(S.Atom(JJ_a).count_typ).pspsoc == 1
             ncol_term2 = S.Atom(JJ_a).ncol_term2;
             Chiso_Jlmp1n_psios_mult = zeros(ncol_term2,S.Nev);
             Chiso_Jlmn_psi_mult = zeros(ncol_term2,S.Nev);
-            
+
             soindx1 = S.Atom(JJ_a).term2_index_so(1:ncol_term2)+1;
             soindx2 = S.Atom(JJ_a).term2_index_so(1:ncol_term2);
 
             for img = 1:S.Atom(JJ_a).n_image_rc
                 phase_fac = (exp(dot(kpt_vec,(S.Atoms(JJ_a,:)-S.Atom(JJ_a).rcImage(img).coordinates)*fac)));
-                Chiso_Jlmp1n_psios_mult = Chiso_Jlmp1n_psios_mult + transpose(bsxfun(@times, conj(S.Atom(JJ_a).rcImage(img).Chiso_mat(:,soindx1)), S.W(S.Atom(JJ_a).rcImage(img).rc_pos))) * S.psi(S.Atom(JJ_a).rcImage(img).rc_pos+S.N,:,ks) * phase_fac ;
-                Chiso_Jlmn_psi_mult = Chiso_Jlmn_psi_mult +         transpose(bsxfun(@times, S.Atom(JJ_a).rcImage(img).Chiso_mat(:,soindx2), S.W(S.Atom(JJ_a).rcImage(img).rc_pos))) * conj(S.psi(S.Atom(JJ_a).rcImage(img).rc_pos,:,ks)) * conj(phase_fac) ;
+                Chiso_Jlmp1n_psios_mult = Chiso_Jlmp1n_psios_mult + transpose(bsxfun(@times, conj(S.Atom(JJ_a).rcImage(img).Chiso_mat(:,soindx1)), S.W(S.Atom(JJ_a).rcImage(img).rc_pos))) * S.psi(S.Atom(JJ_a).rcImage(img).rc_pos+S.N,:,kpt) * phase_fac ;
+                Chiso_Jlmn_psi_mult = Chiso_Jlmn_psi_mult +         transpose(bsxfun(@times, S.Atom(JJ_a).rcImage(img).Chiso_mat(:,soindx2), S.W(S.Atom(JJ_a).rcImage(img).rc_pos))) * conj(S.psi(S.Atom(JJ_a).rcImage(img).rc_pos,:,kpt)) * conj(phase_fac) ;
             end
-            P_nl = P_nl - S.occfac * S.wkpt(kpt) * transpose(S.Atom(JJ_a).term2_gammaso_Jl(1:ncol_term2)) * 2 * real(Chiso_Jlmp1n_psios_mult.*Chiso_Jlmn_psi_mult) * S.occ(:,ks) ;
+            P_nl = P_nl - S.occfac * S.wkpt(kpt) * transpose(S.Atom(JJ_a).term2_gammaso_Jl(1:ncol_term2)) * 2 * real(Chiso_Jlmp1n_psios_mult.*Chiso_Jlmn_psi_mult) * S.occ(:,kpt) ;
+        end
+        
+        % pressure due to scalar relativistic 
+        for spinor = 1:S.nspinor
+            shift = (spinor-1)*S.N;         % for selecting each spinor, spinor=1 shift = 0, spinor=2, shift = S.N
+            if S.spin_typ == 1
+                nsrange = (1+(spinor-1)*S.Nev:spinor*S.Nev);
+            else
+                nsrange = (1:S.Nev);
+            end
+
+            integral_1 = zeros(S.Atom(JJ_a).angnum,S.Nev);
+            integral_2_x = zeros(S.Atom(JJ_a).angnum,S.Nev);
+            integral_2_y = zeros(S.Atom(JJ_a).angnum,S.Nev);
+            integral_2_z = zeros(S.Atom(JJ_a).angnum,S.Nev);
             
-            % pressure due to scalar relativistic 
-            for spinor = 1:S.nspinor
-                shift = (spinor-1)*S.N;         % for selecting each spinor, spinor=1 shift = 0, spinor=2, shift = S.N
-                integral_1 = zeros(S.Atom(JJ_a).angnum,S.Nev);
-                integral_2_x = zeros(S.Atom(JJ_a).angnum,S.Nev);
-                integral_2_y = zeros(S.Atom(JJ_a).angnum,S.Nev);
-                integral_2_z = zeros(S.Atom(JJ_a).angnum,S.Nev);
-                
-                for img = 1:S.Atom(JJ_a).n_image_rc
-                    phase_fac = (exp(dot(kpt_vec,(S.Atoms(JJ_a,:)-S.Atom(JJ_a).rcImage(img).coordinates)*fac)));
-                    ChiW = transpose(bsxfun(@times, conj(S.Atom(JJ_a).rcImage(img).Chi_mat), S.W(S.Atom(JJ_a).rcImage(img).rc_pos)));
-                    integral_1 = integral_1 + conj(ChiW) * conj(S.psi(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:,ks)) * conj(phase_fac);
-                    xr =(S.Atom(JJ_a).rcImage(img).rc_pos_ii-1)*S.dx - S.Atom(JJ_a).rcImage(img).coordinates(1) ;
-                    yr =(S.Atom(JJ_a).rcImage(img).rc_pos_jj-1)*S.dy - S.Atom(JJ_a).rcImage(img).coordinates(2) ;
-                    zr =(S.Atom(JJ_a).rcImage(img).rc_pos_kk-1)*S.dz - S.Atom(JJ_a).rcImage(img).coordinates(3) ;
-                    integral_2_x = integral_2_x + ChiW * ...
-                        ((Dpsi_x(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:)).*repmat(xr,1,S.Nev)) * phase_fac;
-                    integral_2_y = integral_2_y + ChiW * ...
-                        ((Dpsi_y(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:)).*repmat(yr,1,S.Nev)) * phase_fac;
-                    integral_2_z = integral_2_z + ChiW * ...
-                        ((Dpsi_z(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:)).*repmat(zr,1,S.Nev)) * phase_fac;
-                end
+            for img = 1:S.Atom(JJ_a).n_image_rc
+                phase_fac = (exp(dot(kpt_vec,(S.Atoms(JJ_a,:)-S.Atom(JJ_a).rcImage(img).coordinates)*fac)));
+                ChiW = transpose(bsxfun(@times, conj(S.Atom(JJ_a).rcImage(img).Chi_mat), S.W(S.Atom(JJ_a).rcImage(img).rc_pos)));
+                integral_1 = integral_1 + conj(ChiW) * conj(S.psi(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:,kpt)) * conj(phase_fac);
+                xr =(S.Atom(JJ_a).rcImage(img).rc_pos_ii-1)*S.dx - S.Atom(JJ_a).rcImage(img).coordinates(1) ;
+                yr =(S.Atom(JJ_a).rcImage(img).rc_pos_jj-1)*S.dy - S.Atom(JJ_a).rcImage(img).coordinates(2) ;
+                zr =(S.Atom(JJ_a).rcImage(img).rc_pos_kk-1)*S.dz - S.Atom(JJ_a).rcImage(img).coordinates(3) ;
+                integral_2_x = integral_2_x + ChiW * ...
+                    ((Dpsi_x(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:)).*repmat(xr,1,S.Nev)) * phase_fac;
+                integral_2_y = integral_2_y + ChiW * ...
+                    ((Dpsi_y(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:)).*repmat(yr,1,S.Nev)) * phase_fac;
+                integral_2_z = integral_2_z + ChiW * ...
+                    ((Dpsi_z(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:)).*repmat(zr,1,S.Nev)) * phase_fac;
+            end
 
-                tf_x = transpose(S.Atom(JJ_a).gamma_Jl) * real(integral_1.*integral_2_x) * S.occ(:,ks);
-                tf_y = transpose(S.Atom(JJ_a).gamma_Jl) * real(integral_1.*integral_2_y) * S.occ(:,ks);
-                tf_z = transpose(S.Atom(JJ_a).gamma_Jl) * real(integral_1.*integral_2_z) * S.occ(:,ks);
-                P_nl = P_nl - 2 * S.occfac * S.wkpt(kpt) * (tf_x + tf_y + tf_z);
+            tf_x = transpose(S.Atom(JJ_a).gamma_Jl) * real(integral_1.*integral_2_x) * S.occ(nsrange,kpt);
+            tf_y = transpose(S.Atom(JJ_a).gamma_Jl) * real(integral_1.*integral_2_y) * S.occ(nsrange,kpt);
+            tf_z = transpose(S.Atom(JJ_a).gamma_Jl) * real(integral_1.*integral_2_z) * S.occ(nsrange,kpt);
+            P_nl = P_nl - 2 * S.occfac * S.wkpt(kpt) * (tf_x + tf_y + tf_z);
+        end
+        
+        % below are all terms related to soc
+        if S.Atm(S.Atom(JJ_a).count_typ).pspsoc == 0
+            continue;
+        end
+        
+        % pressure due to spin-orbit coupling term 1
+        ncol_term1 = S.Atom(JJ_a).ncol_term1;
+        soindx = S.Atom(JJ_a).term1_index_so(1:ncol_term1);
+        for spinor = 1:S.nspinor
+            sigma = (-1)^(spinor-1);
+            shift = (spinor-1)*S.N;         % for selecting each spinor, spinor=1 shift = 0, spinor=2, shift = S.N
+            integral_1 = zeros(ncol_term1,S.Nev);
+            integral_2_x = zeros(ncol_term1,S.Nev);
+            integral_2_y = zeros(ncol_term1,S.Nev);
+            integral_2_z = zeros(ncol_term1,S.Nev);
+            
+            for img = 1:S.Atom(JJ_a).n_image_rc
+                phase_fac = (exp(dot(kpt_vec,(S.Atoms(JJ_a,:)-S.Atom(JJ_a).rcImage(img).coordinates)*fac)));
+                ChisoW = transpose(bsxfun(@times, conj(S.Atom(JJ_a).rcImage(img).Chiso_mat(:,soindx)), S.W(S.Atom(JJ_a).rcImage(img).rc_pos)));
+                integral_1 = integral_1 + conj(ChisoW) * conj(S.psi(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:,kpt)) * conj(phase_fac);
+                xr =(S.Atom(JJ_a).rcImage(img).rc_pos_ii-1)*S.dx - S.Atom(JJ_a).rcImage(img).coordinates(1) ;
+                yr =(S.Atom(JJ_a).rcImage(img).rc_pos_jj-1)*S.dy - S.Atom(JJ_a).rcImage(img).coordinates(2) ;
+                zr =(S.Atom(JJ_a).rcImage(img).rc_pos_kk-1)*S.dz - S.Atom(JJ_a).rcImage(img).coordinates(3) ;
+                integral_2_x = integral_2_x + ChisoW * ...
+                    ((Dpsi_x(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:)).*repmat(xr,1,S.Nev)) * phase_fac;
+                integral_2_y = integral_2_y + ChisoW * ...
+                    ((Dpsi_y(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:)).*repmat(yr,1,S.Nev)) * phase_fac;
+                integral_2_z = integral_2_z + ChisoW * ...
+                    ((Dpsi_z(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:)).*repmat(zr,1,S.Nev)) * phase_fac;
+            end
+
+            tf_x = transpose(sigma*S.Atom(JJ_a).term1_gammaso_Jl(1:ncol_term1)) * real(integral_1.*integral_2_x) * S.occ(:,kpt);
+            tf_y = transpose(sigma*S.Atom(JJ_a).term1_gammaso_Jl(1:ncol_term1)) * real(integral_1.*integral_2_y) * S.occ(:,kpt);
+            tf_z = transpose(sigma*S.Atom(JJ_a).term1_gammaso_Jl(1:ncol_term1)) * real(integral_1.*integral_2_z) * S.occ(:,kpt);
+            P_nl = P_nl - 2 * S.occfac * S.wkpt(kpt) * (tf_x + tf_y + tf_z);
+        end
+        
+        % pressure due to spin-orbit coupling term 2
+        ncol_term2 = S.Atom(JJ_a).ncol_term2;
+        for spinor = 1:S.nspinor
+            shift = (spinor-1)*S.N;         % for selecting each spinor, spinor=1 shift = 0, spinor=2, shift = S.N
+            shift2 = (2-spinor)*S.N;        % for selecting the other spin channel, spinor=1 shift2 = S.N, spinor=2,shift2=0  
+            if spinor == 1
+                soindx1 = S.Atom(JJ_a).term2_index_so(1:ncol_term2)+1;
+                soindx2 = S.Atom(JJ_a).term2_index_so(1:ncol_term2);
+            else 
+                soindx1 = S.Atom(JJ_a).term2_index_so(1:ncol_term2);
+                soindx2 = S.Atom(JJ_a).term2_index_so(1:ncol_term2)+1;
             end
             
-            % pressure due to spin-orbit coupling term 1
-            ncol_term1 = S.Atom(JJ_a).ncol_term1;
-            soindx = S.Atom(JJ_a).term1_index_so(1:ncol_term1);
-            for spinor = 1:S.nspinor
-                sigma = (-1)^(spinor-1);
-                shift = (spinor-1)*S.N;         % for selecting each spinor, spinor=1 shift = 0, spinor=2, shift = S.N
-                integral_1 = zeros(ncol_term1,S.Nev);
-                integral_2_x = zeros(ncol_term1,S.Nev);
-                integral_2_y = zeros(ncol_term1,S.Nev);
-                integral_2_z = zeros(ncol_term1,S.Nev);
-                
-                for img = 1:S.Atom(JJ_a).n_image_rc
-                    phase_fac = (exp(dot(kpt_vec,(S.Atoms(JJ_a,:)-S.Atom(JJ_a).rcImage(img).coordinates)*fac)));
-                    ChisoW = transpose(bsxfun(@times, conj(S.Atom(JJ_a).rcImage(img).Chiso_mat(:,soindx)), S.W(S.Atom(JJ_a).rcImage(img).rc_pos)));
-                    integral_1 = integral_1 + conj(ChisoW) * conj(S.psi(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:,ks)) * conj(phase_fac);
-                    xr =(S.Atom(JJ_a).rcImage(img).rc_pos_ii-1)*S.dx - S.Atom(JJ_a).rcImage(img).coordinates(1) ;
-                    yr =(S.Atom(JJ_a).rcImage(img).rc_pos_jj-1)*S.dy - S.Atom(JJ_a).rcImage(img).coordinates(2) ;
-                    zr =(S.Atom(JJ_a).rcImage(img).rc_pos_kk-1)*S.dz - S.Atom(JJ_a).rcImage(img).coordinates(3) ;
-                    integral_2_x = integral_2_x + ChisoW * ...
-                        ((Dpsi_x(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:)).*repmat(xr,1,S.Nev)) * phase_fac;
-                    integral_2_y = integral_2_y + ChisoW * ...
-                        ((Dpsi_y(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:)).*repmat(yr,1,S.Nev)) * phase_fac;
-                    integral_2_z = integral_2_z + ChisoW * ...
-                        ((Dpsi_z(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:)).*repmat(zr,1,S.Nev)) * phase_fac;
-                end
-
-                tf_x = transpose(sigma*S.Atom(JJ_a).term1_gammaso_Jl(1:ncol_term1)) * real(integral_1.*integral_2_x) * S.occ(:,ks);
-                tf_y = transpose(sigma*S.Atom(JJ_a).term1_gammaso_Jl(1:ncol_term1)) * real(integral_1.*integral_2_y) * S.occ(:,ks);
-                tf_z = transpose(sigma*S.Atom(JJ_a).term1_gammaso_Jl(1:ncol_term1)) * real(integral_1.*integral_2_z) * S.occ(:,ks);
-                P_nl = P_nl - 2 * S.occfac * S.wkpt(kpt) * (tf_x + tf_y + tf_z);
-            end
+            integral_1 = zeros(ncol_term2,S.Nev);
+            integral_2_x = zeros(ncol_term2,S.Nev);
+            integral_2_y = zeros(ncol_term2,S.Nev);
+            integral_2_z = zeros(ncol_term2,S.Nev);
             
-            % pressure due to spin-orbit coupling term 2
-            ncol_term2 = S.Atom(JJ_a).ncol_term2;
-            for spinor = 1:S.nspinor
-                shift = (spinor-1)*S.N;         % for selecting each spinor, spinor=1 shift = 0, spinor=2, shift = S.N
-                shift2 = (2-spinor)*S.N;        % for selecting the other spin channel, spinor=1 shift2 = S.N, spinor=2,shift2=0  
-                if spinor == 1
-                    soindx1 = S.Atom(JJ_a).term2_index_so(1:ncol_term2)+1;
-                    soindx2 = S.Atom(JJ_a).term2_index_so(1:ncol_term2);
-                else 
-                    soindx1 = S.Atom(JJ_a).term2_index_so(1:ncol_term2);
-                    soindx2 = S.Atom(JJ_a).term2_index_so(1:ncol_term2)+1;
-                end
+            for img = 1:S.Atom(JJ_a).n_image_rc
+                phase_fac = (exp(dot(kpt_vec,(S.Atoms(JJ_a,:)-S.Atom(JJ_a).rcImage(img).coordinates)*fac)));
+                ChisoW1 = transpose(bsxfun(@times, conj(S.Atom(JJ_a).rcImage(img).Chiso_mat(:,soindx1)), S.W(S.Atom(JJ_a).rcImage(img).rc_pos)));
+                ChisoW2 = transpose(bsxfun(@times, S.Atom(JJ_a).rcImage(img).Chiso_mat(:,soindx2), S.W(S.Atom(JJ_a).rcImage(img).rc_pos)));
                 
-                integral_1 = zeros(ncol_term2,S.Nev);
-                integral_2_x = zeros(ncol_term2,S.Nev);
-                integral_2_y = zeros(ncol_term2,S.Nev);
-                integral_2_z = zeros(ncol_term2,S.Nev);
-                
-                for img = 1:S.Atom(JJ_a).n_image_rc
-                    phase_fac = (exp(dot(kpt_vec,(S.Atoms(JJ_a,:)-S.Atom(JJ_a).rcImage(img).coordinates)*fac)));
-                    ChisoW1 = transpose(bsxfun(@times, conj(S.Atom(JJ_a).rcImage(img).Chiso_mat(:,soindx1)), S.W(S.Atom(JJ_a).rcImage(img).rc_pos)));
-                    ChisoW2 = transpose(bsxfun(@times, S.Atom(JJ_a).rcImage(img).Chiso_mat(:,soindx2), S.W(S.Atom(JJ_a).rcImage(img).rc_pos)));
-                    
-                    integral_1 = integral_1 + ChisoW1 * S.psi(S.Atom(JJ_a).rcImage(img).rc_pos+shift2,:,ks) * phase_fac;
+                integral_1 = integral_1 + ChisoW1 * S.psi(S.Atom(JJ_a).rcImage(img).rc_pos+shift2,:,kpt) * phase_fac;
 
-                    xr =(S.Atom(JJ_a).rcImage(img).rc_pos_ii-1)*S.dx - S.Atom(JJ_a).rcImage(img).coordinates(1) ;
-                    yr =(S.Atom(JJ_a).rcImage(img).rc_pos_jj-1)*S.dy - S.Atom(JJ_a).rcImage(img).coordinates(2) ;
-                    zr =(S.Atom(JJ_a).rcImage(img).rc_pos_kk-1)*S.dz - S.Atom(JJ_a).rcImage(img).coordinates(3) ;
-                    integral_2_x = integral_2_x + ChisoW2 * ...
-                        (conj(Dpsi_x(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:)).*repmat(xr,1,S.Nev)) * conj(phase_fac);
-                    integral_2_y = integral_2_y + ChisoW2 * ...
-                        (conj(Dpsi_y(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:)).*repmat(yr,1,S.Nev)) * conj(phase_fac);
-                    integral_2_z = integral_2_z + ChisoW2 * ...
-                        (conj(Dpsi_z(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:)).*repmat(zr,1,S.Nev)) * conj(phase_fac);
-                end
-
-                tf_x = transpose(S.Atom(JJ_a).term2_gammaso_Jl(1:ncol_term2)) * 2*real(integral_1.*integral_2_x) * S.occ(:,ks);
-                tf_y = transpose(S.Atom(JJ_a).term2_gammaso_Jl(1:ncol_term2)) * 2*real(integral_1.*integral_2_y) * S.occ(:,ks);
-                tf_z = transpose(S.Atom(JJ_a).term2_gammaso_Jl(1:ncol_term2)) * 2*real(integral_1.*integral_2_z) * S.occ(:,ks);
-                P_nl = P_nl - S.occfac * S.wkpt(kpt) * (tf_x + tf_y + tf_z);                
+                xr =(S.Atom(JJ_a).rcImage(img).rc_pos_ii-1)*S.dx - S.Atom(JJ_a).rcImage(img).coordinates(1) ;
+                yr =(S.Atom(JJ_a).rcImage(img).rc_pos_jj-1)*S.dy - S.Atom(JJ_a).rcImage(img).coordinates(2) ;
+                zr =(S.Atom(JJ_a).rcImage(img).rc_pos_kk-1)*S.dz - S.Atom(JJ_a).rcImage(img).coordinates(3) ;
+                integral_2_x = integral_2_x + ChisoW2 * ...
+                    (conj(Dpsi_x(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:)).*repmat(xr,1,S.Nev)) * conj(phase_fac);
+                integral_2_y = integral_2_y + ChisoW2 * ...
+                    (conj(Dpsi_y(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:)).*repmat(yr,1,S.Nev)) * conj(phase_fac);
+                integral_2_z = integral_2_z + ChisoW2 * ...
+                    (conj(Dpsi_z(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:)).*repmat(zr,1,S.Nev)) * conj(phase_fac);
             end
-        end % end of loop over atoms    
-    end 
-end
+
+            tf_x = transpose(S.Atom(JJ_a).term2_gammaso_Jl(1:ncol_term2)) * 2*real(integral_1.*integral_2_x) * S.occ(:,kpt);
+            tf_y = transpose(S.Atom(JJ_a).term2_gammaso_Jl(1:ncol_term2)) * 2*real(integral_1.*integral_2_y) * S.occ(:,kpt);
+            tf_z = transpose(S.Atom(JJ_a).term2_gammaso_Jl(1:ncol_term2)) * 2*real(integral_1.*integral_2_z) * S.occ(:,kpt);
+            P_nl = P_nl - S.occfac * S.wkpt(kpt) * (tf_x + tf_y + tf_z);                
+        end
+    end % end of loop over atoms    
+end 
 
 if S.usefock > 1
     pres_exx = evaluateHybridPressure(S);
@@ -694,105 +643,6 @@ if (S.vdWDFFlag == 1) || (S.vdWDFFlag == 2)
 %     end
 end
 end
-
-
-
-
-
-% % Type-II (gradient on Chi)
-
-% count_typ = 1;
-% count_typ_atms = 1;
-% %E_nl = 0;
-% P_nl = 0;
-% fac = [S.L1 S.L2 S.L3];
-% for JJ_a = 1:S.n_atm % loop over all atoms
-%     if count_typ_atms == 1
-%         filename = strcat('./Pseudopotentials/Pseudopotential_', S.Atm(count_typ).typ);
-%         load(filename) % Loads variables from the pseudopotential file
-%     end
-%     for kpt = 1:S.tnkpt
-%         kpt_vec = S.kptgrid(kpt,:);
-%
-%         for l = 0:S.Atom(JJ_a).lmax
-%             if l == S.Atom(JJ_a).lloc
-%                 continue;
-%             end
-%             for m = -l:l
-%                 integral_1 = zeros(1,S.Nev);
-%                 integral_2_x = zeros(1,S.Nev);
-%                 integral_2_y = zeros(1,S.Nev);
-%                 integral_2_z = zeros(1,S.Nev);
-%                 Chi_X_mult1 = zeros(1,S.Nev);
-%
-%                 for img = 1:S.Atom(JJ_a).n_image_rc
-%                     phase_fac = (exp(1i*2*pi*dot(kpt_vec,(S.Atoms(JJ_a,:)-S.Atom(JJ_a).rcImage(img).coordinates)./fac)));
-%                     Chi_X_mult1 = Chi_X_mult1 + (S.Atom(JJ_a).Chi(l+1).rcImage(img).Chi_mat(:,m+l+1) .* S.W(S.Atom(JJ_a).rcImage(img).rc_pos))' * S.psi(S.Atom(JJ_a).rcImage(img).rc_pos,:,kpt) * phase_fac ;
-%                 end
-%
-%                 P_nl = P_nl + 10 * S.wkpt(kpt) * S.Atom(count_typ).gamma_Jl(l+1) * dot(S.occ(:,kpt),(Chi_X_mult1.*conj(Chi_X_mult1))) ;
-%                 %               E_nl = E_nl + 2 * S.wkpt(kpt) * S.Atom(count_typ).gamma_Jl(l+1) * dot(S.occ(:,kpt),(Chi_X_mult1.*conj(Chi_X_mult1))) ;
-%
-%                 for img = 1:S.Atom(JJ_a).n_image_rc
-%                     phase_fac = (exp(1i*2*pi*dot(kpt_vec,(S.Atoms(JJ_a,:)-S.Atom(JJ_a).rcImage(img).coordinates)./fac)));
-%                     integral_1 = integral_1 + transpose(S.Atom(JJ_a).Chi(l+1).rcImage(img).Chi_mat(:,m+l+1) .* S.W(S.Atom(JJ_a).rcImage(img).rc_pos)) * conj(S.psi(S.Atom(JJ_a).rcImage(img).rc_pos,:,kpt)) * conj(phase_fac);
-%                    % X = (S.Atom(JJ_a).rcImage(img).rc_pos_ii-1)*S.dx;
-%                    % Y = (S.Atom(JJ_a).rcImage(img).rc_pos_jj-1)*S.dy;
-%                    % Z = (S.Atom(JJ_a).rcImage(img).rc_pos_kk-1)*S.dz;
-%                     xr =(S.Atom(JJ_a).rcImage(img).rc_pos_ii-1)*S.dx - S.Atom(JJ_a).rcImage(img).coordinates(1) ;
-%                     yr =(S.Atom(JJ_a).rcImage(img).rc_pos_jj-1)*S.dy - S.Atom(JJ_a).rcImage(img).coordinates(2) ;
-%                     zr =(S.Atom(JJ_a).rcImage(img).rc_pos_kk-1)*S.dz - S.Atom(JJ_a).rcImage(img).coordinates(3) ;
-%                     dd_nl = sqrt(S.metric_T(1,1)*xr.^2 + S.metric_T(1,2)*(xr.*yr) + S.metric_T(1,3)*(xr.*zr) + ...
-%                                  S.metric_T(2,1)*(yr.*xr) + S.metric_T(2,2)*yr.^2 + S.metric_T(2,3)*(yr.*zr) + ...
-%                                  S.metric_T(3,1)*(zr.*xr) + S.metric_T(3,2)*(zr.*yr) + S.metric_T(3,3)*zr.^2);
-%                     xr = xr(dd_nl > 1e-10);
-%                     yr = yr(dd_nl > 1e-10);
-%                     zr = zr(dd_nl > 1e-10);
-%                     pos = S.Atom(JJ_a).rcImage(img).rc_pos(dd_nl > 1e-10);
-%                     dd_nl = dd_nl(dd_nl > 1e-10);
-%                     [datasites,IA,IC] = unique(dd_nl,'stable');
-%
-%                     UdV_Jl = interp1(S.Atm(count_typ).r_grid_vloc,UdV(:,l+1),datasites,'spline');
-%                     Chi_spline = spline(datasites,UdV_Jl);
-%                     DChi_spline = ppval(fnder(Chi_spline,1),datasites);
-%                     Chi = UdV_Jl(IC);
-%                     DChi = DChi_spline(IC);
-%                     Ylm = sphericalHarmonics(S.lat_uvec,xr,yr,zr,l,m,'real');
-%                     [DYlm_dx,DYlm_dy,DYlm_dz] = DYlm(S.lat_uvec,xr,yr,zr,l,m);
-%
-%                     integral_2_x = integral_2_x + transpose(conj((DChi.*xr.*Ylm)./dd_nl + Chi.*DYlm_dx) .* S.W(pos)) * ...
-%                         (S.psi(pos,:,kpt).*repmat(xr,1,S.Nev)) * phase_fac;
-%                     integral_2_y = integral_2_y + transpose(conj((DChi.*yr.*Ylm)./dd_nl + Chi.*DYlm_dy) .* S.W(pos)) * ...
-%                         (S.psi(pos,:,kpt).*repmat(yr,1,S.Nev)) * phase_fac;
-%                     integral_2_z = integral_2_z + transpose(conj((DChi.*zr.*Ylm)./dd_nl + Chi.*DYlm_dz) .* S.W(pos)) * ...
-%                         (S.psi(pos,:,kpt).*repmat(zr,1,S.Nev)) * phase_fac;
-%                 end
-%
-%                 tf_x = (real(integral_1.*integral_2_x))*S.occ(:,kpt);
-%                 tf_y = (real(integral_1.*integral_2_y))*S.occ(:,kpt);
-%                 tf_z = (real(integral_1.*integral_2_z))*S.occ(:,kpt);
-%                 P_nl = P_nl + 4 * S.wkpt(kpt) * S.Atom(count_typ).gamma_Jl(l+1) * (tf_x + tf_y + tf_z);
-%             end
-%         end
-%
-%     end
-%     % Check if same type of atoms are over
-%     if count_typ_atms == S.Atm(count_typ).n_atm_typ
-%         count_typ_atms = 1;
-%         count_typ = count_typ + 1;
-%     else
-%         count_typ_atms = count_typ_atms + 1;
-%     end
-%
-%
-% end % end of loop over atoms
-% %
-
-%disp(P_nl);
-%disp(E_nl);
-
-
-
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

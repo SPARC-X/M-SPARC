@@ -3,25 +3,23 @@ if S.exxmethod == 1
     V_guess = rand(S.N,1);
 end
 
-S.Ns_occ = zeros(1,2);
+S.Ns_occ = max(sum(reshape(S.occ_outer>1e-6,S.Nev,[])));
+S.Ns_occ = min(S.Ns_occ+S.EXXACEVal_state,S.Nev);
+Ns = S.Ns_occ;
 
 if S.isgamma == 1
+    S.Xi = zeros(S.nspinor*S.N,Ns);    % For storage of W and Xi
     
-    for spin = 1:S.nspin
-        S.Ns_occ(spin) = min(sum(S.occ_outer(:,spin)>1e-6)+S.EXXACEVal_state,S.Nev);
-    end
-    S.Xi = zeros(S.N,sum(S.Ns_occ));    % For storage of W and Xi
-    
-    for spin = 1:S.nspin
-        % spin_shift = (spin-1)*S.tnkpt;
-        spin_xi_shift = (spin-1)*S.Ns_occ(1);
-        Ns = S.Ns_occ(spin);
+    for spinor = 1:S.nspinor
+        ndrange = (1+(spinor-1)*S.N:spinor*S.N); 
+        sshift = (spinor-1)*S.Nev;
+
         rhs = zeros(S.N,Ns);
         for i = 1:Ns
-            rhs(:,i:Ns) = bsxfun(@times,S.psi_outer(:,i:Ns,spin),S.psi_outer(:,i,spin));
+            rhs(:,i:Ns) = bsxfun(@times,S.psi_outer(ndrange,i:Ns),S.psi_outer(ndrange,i));
             V_i = zeros(S.N,Ns);
             for j = i:Ns
-                if (S.occ_outer(i,spin) + S.occ_outer(j,spin) > 1e-4)
+                if (S.occ_outer(i+sshift) + S.occ_outer(j+sshift) > 1e-4)
                     if S.exxmethod == 0             % solving in fourier space
                         V_i(:,j) = poissonSolve_FFT(S,rhs(:,j),[0,0,0],S.const_by_alpha);
                     else                            % solving in real space
@@ -32,27 +30,22 @@ if S.isgamma == 1
                     end
                 end
             end
-            S.Xi(:,(i+1:Ns)+spin_xi_shift) = S.Xi(:,(i+1:Ns)+spin_xi_shift) - S.occ_outer(i,spin)*bsxfun(@times,S.psi_outer(:,i,spin),V_i(:,(i+1:Ns)));
-            S.Xi(:,i+spin_xi_shift) = S.Xi(:,i+spin_xi_shift) - bsxfun(@times,S.psi_outer(:,(i:Ns),spin),V_i(:,(i:Ns))) * S.occ_outer((i:Ns),spin);
+            S.Xi(ndrange,(i+1:Ns)) = S.Xi(ndrange,(i+1:Ns)) - S.occ_outer(i+sshift)*bsxfun(@times,S.psi_outer(ndrange,i),V_i(:,(i+1:Ns)));
+            S.Xi(ndrange,i) = S.Xi(ndrange,i) - bsxfun(@times,S.psi_outer(ndrange,(i:Ns)),V_i(:,(i:Ns))) * S.occ_outer((i:Ns)+sshift);
         end
         
-        col = 1+(spin-1)*S.Ns_occ(1):S.Ns_occ(1)+(spin-1)*S.Ns_occ(2);
-        M = (transpose(S.psi_outer(:,1:Ns,spin))*S.Xi(:,col))*S.dV;
+        M = (transpose(S.psi_outer(ndrange,1:Ns))*S.Xi(ndrange,:))*S.dV;
         L = chol(-M); 
-        S.Xi(:,col) = S.Xi(:,col) * inv(L); % Do it efficiently
+        S.Xi(ndrange,:) = S.Xi(ndrange,:) / L; % Do it efficiently
     end
 else
-    for spin = 1:S.nspin
-        col = (1:S.tnkpt)+(spin-1)*S.tnkpt;
-        S.Ns_occ(spin) = min(max(sum(S.occ_outer(:,col) > 1e-6))+S.EXXACEVal_state,S.Nev);
-    end
+
+    S.Xi = zeros(S.N*S.nspinor,Ns,S.tnkpt);    % For storage of W and Xi
     
-    S.Xi = zeros(S.N,sum(S.Ns_occ),S.tnkpt);    % For storage of W and Xi
-    
-    for spin = 1:S.nspin
-        Ns = S.Ns_occ(spin);
-        spin_shift = (spin-1)*S.tnkpt;
-        xi_shift = (spin-1)*S.Ns_occ(1);
+    for spinor = 1:S.nspinor
+        ndrange = (1+(spinor-1)*S.N:spinor*S.N); 
+        sshift = (spinor-1)*S.Nev;
+        
         for k_ind = 1:S.tnkpt
             for q_ind = 1:S.tnkpthf
                 % q_ind_rd is the index in reduced kptgrid
@@ -61,18 +54,18 @@ else
                 k = S.kptgrid(k_ind,:);
                 q = S.kptgridhf(q_ind,:);
                 if S.kpthf_ind(q_ind,2)
-                    psi_q_set = S.psi_outer(:,1:Ns,q_ind_rd+spin_shift);
+                    psi_q_set = S.psi_outer(ndrange,1:Ns,q_ind_rd);
                 else
-                    psi_q_set = conj(S.psi_outer(:,1:Ns,q_ind_rd+spin_shift));
+                    psi_q_set = conj(S.psi_outer(ndrange,1:Ns,q_ind_rd));
                 end
 
                 for i = 1:Ns
-                    psi_k = S.psi_outer(:,i,k_ind+spin_shift);
+                    psi_k = S.psi_outer(ndrange,i,k_ind);
                     rhs = conj(psi_q_set) .* psi_k;
                     k_shift = k - q;
                     V_i = zeros(S.N,Ns);
                     for j = 1:Ns
-                        if S.occ_outer(j,q_ind_rd+spin_shift) > 1e-6
+                        if S.occ_outer(j+sshift,q_ind_rd) > 1e-6
                             if S.exxmethod == 0             % solving in fourier space
                                 V_i(:,j) = poissonSolve_FFT(S,rhs(:,j),k_shift,S.const_by_alpha);
                             else                            % solving in real space
@@ -84,17 +77,16 @@ else
                         end
                     end
 
-                    S.Xi(:,i+xi_shift,k_ind) = S.Xi(:,i+xi_shift,k_ind) - S.wkpthf(q_ind)*(psi_q_set.*V_i)*S.occ_outer(1:Ns,q_ind_rd+spin_shift);
+                    S.Xi(ndrange,i,k_ind) = S.Xi(ndrange,i,k_ind) - S.wkpthf(q_ind)*(psi_q_set.*V_i)*S.occ_outer((1:Ns)+sshift,q_ind_rd);
                 end
             end
             
-            col = 1+(spin-1)*S.Ns_occ(1):S.Ns_occ(1)+(spin-1)*S.Ns_occ(2);
             
-            M = S.psi_outer(:,1:Ns,k_ind+spin_shift)'*S.Xi(:,col,k_ind)*S.dV;
+            M = S.psi_outer(ndrange,1:Ns,k_ind)'*S.Xi(ndrange,:,k_ind)*S.dV;
             % to ensure M is hermitian
             M = 0.5*(M+M');
             L = chol(-M);
-            S.Xi(:,col,k_ind) = S.Xi(:,col,k_ind) * inv(L); % Do it efficiently
+            S.Xi(ndrange,:,k_ind) = S.Xi(ndrange,:,k_ind) / L; % Do it efficiently
         end
     end
 end

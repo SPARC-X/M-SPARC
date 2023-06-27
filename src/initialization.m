@@ -142,14 +142,56 @@ S.temp_tol = 1e-12;
 
 % Density tolerance for exchange-correlation
 S.xc_rhotol = 1e-14;
+S.xc_magtol = 1e-8;
+S.xc_sigmatol = 1e-24;
 
+% default including gradient
+S.isgradient = 0;
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % exchange correlation
+%   Exchange:     "nox"    none                           iexch=0
+%                 "slater" Slater (alpha=2/3)             iexch=1
+%                 "pbex"   Perdew-Burke-Ernzenhof exch    iexch=2
+%                       options: 1 -- PBE, 2 --PBEsol, 3 -- RPBE 4 --Zhang-Yang RPBE
+%                 "rPW86x"  Refitted Perdew & Wang 86     iexch=3
+%                 "scanx"  SCAN exchange                  iexch=4
+%   
+%   Correlation:  "noc"    none                           icorr=0
+%                 "pz"     Perdew-Zunger                  icorr=1 
+%                 "pw"     Perdew-Wang                    icorr=2
+%                 "pbec"   Perdew-Burke-Ernzenhof corr    icorr=3
+%                       options: 1 -- PBE, 2 --PBEsol, 3 -- RPBE
+%                 "scanc"  SCAN correlation               icorr=4
+%
+%   Meta-GGA:     "nom"    none                           imeta=0
+%                 "scan"   SCAN-Meta-GGA                  imeta=1
+%
+%   van der Waals "nov"    none                           ivdw=0
+%                 "vdw1"   vdW-DF1                        ivdw=1
+%                 "vdw2"   vdW-DF2                        ivdw=2
+
+
+% decomposition of XC, ixc = [iexch,icorr imeta ivdw]
 if strcmp(S.XC, 'LDA_PW')
 	S.xc = 0;
+    S.ixc = [1 2 0 0];
 elseif strcmp(S.XC, 'LDA_PZ')
-	S.xc = 1; % TODO: Implement PZ LDA!
-elseif strcmp(S.XC, 'GGA_PBE') || strcmp(S.XC, 'GGA_RPBE') || strcmp(S.XC, 'GGA_PBEsol')
+	S.xc = 1; 
+    S.ixc = [1 1 0 0];
+elseif strcmp(S.XC, 'GGA_PBE')
 	S.xc = 2;
+    S.ixc = [2 3 0 0];
+    S.xc_option = [1 1];
+    S.isgradient = 1;
+elseif strcmp(S.XC, 'GGA_PBEsol')
+    S.ixc = [2 3 0 0];
+    S.xc_option = [2 2];
+    S.isgradient = 1;
+elseif strcmp(S.XC, 'GGA_RPBE')
+    S.ixc = [2 3 0 0];
+    S.xc_option = [3 3];
+    S.isgradient = 1;
 elseif strcmp(S.XC, 'vdWDF1')
     if ispc % windows
 		addpath('vdW\vdWDF\');
@@ -157,7 +199,10 @@ elseif strcmp(S.XC, 'vdWDF1')
 		addpath('vdW/vdWDF/');
     end
     S.xc = -102; % Zhang-Yang revPBE
+	S.ixc = [2 2 0 1]; % 2+4: Zhang-Yang revPBE; 2: LDA_PW86 Correlation; 0: no kinetic energy density; 1: vdW-DF1 non-linear Correlation
+	S.xc_option = [4 0];
     S.vdWDFFlag = 1;
+    S.isgradient = 1;
 elseif strcmp(S.XC, 'vdWDF2')
     if ispc % windows
 		addpath('vdW\vdWDF\');
@@ -165,39 +210,46 @@ elseif strcmp(S.XC, 'vdWDF2')
 		addpath('vdW/vdWDF/');
     end
     S.xc = -108; % rPW86
+	S.ixc = [3 2 0 2]; % 3: rPW86; 2: LDA_PW86 Correlation; 0: no kinetic energy density; 2: vdW-DF2 non-linear Correlation
     S.vdWDFFlag = 2;
+    S.isgradient = 1;
 elseif strcmp(S.XC, 'SCAN')
-    if ispc
-        addpath('mgga\');
-    else
-        addpath('mgga/');
+    if ispc % windows
+		addpath('mgga\');
+	else % max/linux
+		addpath('mgga/');
     end
     S.xc = 4;
+	S.ixc = [4 4 1 0]; % 4: scanx; 4: scanc; 1: need kinetic energy density; 0: no vdWDF
+    S.isgradient = 1;
 elseif strcmp(S.XC, 'HF')
 	S.xc = 40;
     S.usefock = 1;
-    if ispc % windows
-		addpath('exx\');
-	else % max/linux
-		addpath('exx/');
-    end
+    S.ixc = [2 3 0 0];
+    S.xc_option = [1 1];
+    S.isgradient = 1;
 elseif strcmp(S.XC, 'PBE0')
 	S.xc = 41;
     S.usefock = 1;
-    if ispc % windows
-		addpath('exx\');
-	else % max/linux
-		addpath('exx/');
-    end
+    S.ixc = [2 3 0 0];
+    S.xc_option = [1 1];
+    S.isgradient = 1;
 elseif strcmp(S.XC, 'HSE')
     S.xc = 427;
     S.usefock = 1;
+    S.ixc = [2 3 0 0];
+    S.xc_option = [1 1];
+    S.isgradient = 1;
+end
+
+if S.usefock == 1
     if ispc % windows
 		addpath('exx\');
 	else % max/linux
 		addpath('exx/');
     end
 end
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 if S.d3Flag == 1 
 	if S.xc ~= 2
@@ -298,30 +350,83 @@ if S.cell_typ == 2
 	end
 end
 
+% Brillouin-Zone Sampling
+S = Generate_kpts(S);
+
 % check spin-orbit coupling
 for ityp = 1:S.n_typ
     if S.Atm(ityp).pspsoc == 1
-        S.SOC_flag = 1;
-        S.nspinor = 2;
+        S.SOC_flag = 1;        
         break;
     end
 end
 
-% Set up number of spin
+% no-spin polarized calculation
 if S.spin_typ == 0
 	S.nspin = 1;
-else
-	S.nspin = 2;
+    S.nspden = 1;
+    if S.SOC_flag == 1
+        S.nspinor = 2;
+    end
+% collinear polarized calculation
+elseif S.spin_typ == 1
+    if S.SOC_flag == 1
+        error('ERROR: Collinear spin could not be used with SOC, please use non-collinear spin (SPIN_TYP: 2)!');
+    end
+    S.nspin = 2;
+    S.nspinor = 2;
+    S.nspden = 2;
+% non-collinear polarized calculation
+elseif S.spin_typ == 2
+    error('ERROR: Non-Collinear spin is not released yet!');
+    S.nspin = 1;
+    S.nspinor = 2;
+    S.nspden = 4;
 end
+fprintf(' nspin = %d, nspinor = %d, nspden = %d\n', S.nspin, S.nspinor, S.nspden);
+
+S.occfac = 2/S.nspinor;
+S.nspinor_eig = S.nspinor/S.nspin;
+S.num_eig = S.tnkpt*S.nspin;
 
 % Provide default spin if not provided
-if S.nspin == 2
+if S.spin_typ == 1
 	rng('default');
-	for ityp = 1:S.n_typ
+    for ityp = 1:S.n_typ
 		if(S.IsSpin(ityp) == 0)
-			S.Atm(ityp).mag = -S.Atm(ityp).Z + 2 * S.Atm(ityp).Z * rand(S.Atm(ityp).n_atm_typ,1);
+			S.Atm(ityp).mag(:,3) = -S.Atm(ityp).Z + 2 * S.Atm(ityp).Z * rand(S.Atm(ityp).n_atm_typ,1);
 		end
-	end
+    end
+elseif S.spin_typ == 2
+    rng('default');
+    for ityp = 1:S.n_typ
+		if(S.IsSpin(ityp) == 0)
+			S.Atm(ityp).mag = -S.Atm(ityp).Z + 2 * S.Atm(ityp).Z * rand(S.Atm(ityp).n_atm_typ,3);
+		end
+    end
+end
+
+% check magnetization
+if S.spin_typ == 1
+    for ityp = 1:S.n_typ
+        for i = 1:S.Atm(ityp).n_atm_typ
+            if S.Atm(ityp).mag(i,1) || S.Atm(ityp).mag(i,2)
+                error('ERROR: For collinear spin, the initial spin on x and y direction should be 0.')
+            end
+            if abs(S.Atm(ityp).mag(i,3)) > S.Atm(ityp).Z
+                fprintf("WARNING: For atom type order %d, index %d, the initial magnetization is larger than zion %d.\n", ityp,i,S.Atm(ityp).Z);
+            end
+        end
+    end
+elseif S.spin_typ == 2
+    for ityp = 1:S.n_typ
+        for i = 1:S.Atm(ityp).n_atm_typ
+            mag = sqrt(sum(S.Atm(ityp).mag(i,:).*S.Atm(ityp).mag(i,:),2));
+            if mag > S.Atm(ityp).Z
+                fprintf("WARNING: For atom type order %d, index %d, the initial magnetization is larger than zion %d.\n", ityp,i,S.Atm(ityp).Z);
+            end
+        end
+    end
 end
 
 % set up default smearing if not provided
@@ -476,9 +581,6 @@ end
 % assert(abs(sum(S.W)-pi*(S.xout*S.xout-S.xin*S.xin)*S.L3/25)<1e-6, ...
 %      'Incorrect weights for spatial integration!');
 
-% Brillouin-Zone Sampling
-S = Generate_kpts(S);
-
 % Create spherical harmonics for poisson solve for isolated clusters
 if (S.BCx == 1 && S.BCy == 1 && S.BCz == 1)
 	% Calculate Spherical Harmonics with origin shifted to the center of the domain
@@ -555,7 +657,7 @@ end
 % Nev
 if S.Nev < 0
 	fprintf('## Number of states not provided, finding Nev ...\n');
-	S.Nev = S.nspinor*(floor(S.Nelectron / 2) * 1.2 + 5); 
+	S.Nev = S.nspinor_eig*(floor(S.Nelectron / 2) * 1.2 + 5); 
 	S.Nev = round(S.Nev);
 	fprintf('## Based on the number of electrons, Nev is set to: %d\n',S.Nev);
 end
@@ -706,45 +808,6 @@ elseif S.MixingPrecond == 3 % truncated kerker
 	S.precondcoeff_k         = const_temp;
 end
 
-if S.nspin == 1
-	S.occfac = 2/S.nspinor;
-else
-	S.occfac = 1/S.nspinor;
-end
-
-% Name of the relax file
-% if S.RelaxFlag == 1
-%     S.relaxfname = strcat(filename,'.geopt'); 
-%     i = 1;
-%     while exist(S.relaxfname,'file')
-%         S.relaxfname = sprintf('%s.geopt_%d',filename,i);
-%         i = i + 1;
-%     end
-% 
-%     % if there are already 100 files, then start using .geopt only
-%     OUT_MAX = 100;
-%     if i > OUT_MAX
-%         S.relaxfname = strcat(filename,'.geopt'); 
-%     end
-% end
-
-% Name of the MD file
-% if S.MDFlag == 1
-%     S.mdfname = strcat(filename,'.aimd'); 
-%     i = 1;
-%     while exist(S.mdfname,'file')
-%         S.mdfname = sprintf('%s.aimd_%d',filename,i);
-%         i = i + 1;
-%     end
-% 
-%     % if there are already 100 files, then start using .geopt only
-%     OUT_MAX = 100;
-%     if i > OUT_MAX
-%         S.mdfname = strcat(filename,'.aimd'); 
-%     end
-% end
-
-
 if (S.RelaxFlag || S.MDFlag)
 	% Name of the restart file
 	S.restartfname = strcat(filename,'.restart');
@@ -805,9 +868,6 @@ S.grad_3 = blochGradient(S,[0 0 0],3);
 
 % initialize vdWDF
 if (S.vdWDFFlag == 1) || (S.vdWDFFlag == 2) % 1: temporary flag of vdW-DF1 2: vdW-DF2
-%     if S.nspin ~= 1
-%         error('Currently vdW-DF does not support spin polarization!');
-%     end
     if S.BC ~= 2 % vdWDF can only be used in 3D periodic boundary condition because it used FFT
         error('vdW-DF can only be used in 3D periodic system!');
     end
@@ -818,10 +878,6 @@ if (S.vdWDFFlag == 1) || (S.vdWDFFlag == 2) % 1: temporary flag of vdW-DF1 2: vd
         S = vdWDFinitialize_InputKernel(S);
     end
 end
-
-% if (S.xc == 4) && (S.nspin ~= 1)
-% 	error('Currently SCAN does not support spin polarization!');
-% end
 
 fprintf(' Done. (%.3f sec)\n', toc(t1));
 
@@ -849,6 +905,7 @@ ncpy_orbitals = 3; % 4 copies required during chebyshev filtering
 if S.nspin ~= 1, ncpy_orbitals = ncpy_orbitals * 2; end
 % for kpoints, the factor 2 is for complex entries
 if S.tnkpt ~= 1, ncpy_orbitals = ncpy_orbitals * 2 * S.tnkpt; end
+if S.nspinor ~= 1, ncpy_orbitals = ncpy_orbitals * 2; end
 memory_orbitals = S.N * S.Nev * size_double * ncpy_orbitals;
 
 % sparse matrices
@@ -1091,6 +1148,7 @@ S.target_force_accuracy = -1.0;
 S.target_energy_accuracy = -1.0;
 S.TOL_RELAX = 5e-4;
 S.TOL_LANCZOS = 1e-2;
+S.StandardEigenFlag = 0;
 
 % preconditioning
 S.precond_tol = -1;
@@ -1177,6 +1235,7 @@ S.alph = 0.0;
 % SOC
 S.SOC_flag = 0;
 S.nspinor = 1;
+S.nspden = 1;
 
 % DFT-D3 parameters
 S.d3Flag = 0;
@@ -1228,7 +1287,7 @@ end
 
 start_time = fix(clock);
 fprintf(fileID,'***************************************************************************\n');
-fprintf(fileID,'*                      M-SPARC (version Apr 08, 2023)                     *\n');
+fprintf(fileID,'*                      M-SPARC (version Jun 26, 2023)                     *\n');
 fprintf(fileID,'*   Copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech   *\n');
 fprintf(fileID,'*           Distributed under GNU General Public License 3 (GPL)          *\n');
 fprintf(fileID,'*                Date: %s  Start time: %02d:%02d:%02d                  *\n',date,start_time(4),start_time(5),start_time(6));
@@ -1568,7 +1627,7 @@ if ((S.PrintAtomPosFlag == 1 || S.PrintForceFlag == 1) && S.MDFlag == 0 && S.Rel
 	fid = fopen(staticfname,'w') ;
 	assert(fid~=-1,'Error: Cannot open .static file %s',staticfname);
 
-	if(S.PrintAtomPosFlag == 1)
+    if(S.PrintAtomPosFlag == 1)
 		fprintf(fid,'***************************************************************************\n');
 		fprintf(fid,'                            Atom positions                                 \n');
 		fprintf(fid,'***************************************************************************\n');
@@ -1602,7 +1661,16 @@ if ((S.PrintAtomPosFlag == 1 || S.PrintForceFlag == 1) && S.MDFlag == 0 && S.Rel
 				end
 			end
 		end
-	end
+    end
+
+    if S.spin_typ ~= 0
+        fprintf(fileID,'Initial spin:\n');
+        for ityp = 1:S.n_typ
+            for j = 1:S.Atm(ityp).n_atm_typ
+	            fprintf(fileID,'%18.10f %18.10f %18.10f\n',S.Atm(ityp).mag(j,:));
+            end
+        end
+    end
 
 	% close file
 	fclose(fid);

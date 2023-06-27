@@ -1,6 +1,8 @@
-function Vexx = evaluateExactExchangePotential(S,X,kptvec,spin)
+function Hx = evaluateExactExchangePotential(S,X,Hx,kptvec,spinor)
 if S.ACEFlag == 0
-    spin_shift = (spin-1)*S.tnkpt;
+    ndrange = (1+(spinor-1)*S.N:spinor*S.N); 
+    sshift = (spinor-1)*S.Nev;
+    
     Vexx = zeros(S.N,size(X,2));
     V_guess = rand(S.N,1);
     for i = 1:size(X,2)
@@ -9,9 +11,9 @@ if S.ACEFlag == 0
                 % q_ind_rd is the index in reduced kptgrid
                 q_ind_rd = S.kpthf_ind(q_ind,1);
                 if S.kpthf_ind(q_ind,2)
-                    psiq = S.psi_outer(:,j,q_ind_rd+spin_shift);
+                    psiq = S.psi_outer(ndrange,j,q_ind_rd);
                 else
-                    psiq = conj(S.psi_outer(:,j,q_ind_rd +spin_shift));
+                    psiq = conj(S.psi_outer(ndrange,j,q_ind_rd ));
                 end
 
                 rhs = conj(psiq).*X(:,i);
@@ -26,21 +28,21 @@ if S.ACEFlag == 0
                     V_guess = V_ji;
                 end
 
-                Vexx(:,i) = Vexx(:,i) - S.wkpthf(q_ind)*S.occ_outer(j,q_ind_rd+spin_shift)*V_ji.*psiq;
+                Vexx(:,i) = Vexx(:,i) - S.wkpthf(q_ind)*S.occ_outer(j+sshift,q_ind_rd)*V_ji.*psiq;
             end
         end
     end
+    Hx = Hx + S.hyb_mixing*Vexx;
 else 
     if S.isgamma == 1
-        col = 1+(spin-1)*S.Ns_occ(1):S.Ns_occ(1)+(spin-1)*S.Ns_occ(2);
-        Xi_times_psi = (transpose(S.Xi(:,col))*X)*S.dV;
-        Vexx = -S.Xi(:,col)*Xi_times_psi;
+        ndrange = (1+(spinor-1)*S.N:spinor*S.N); 
+        Xi_times_psi = (transpose(S.Xi(ndrange,:))*X)*S.dV;
+        Hx = Hx - S.hyb_mixing * (S.Xi(ndrange,:)*Xi_times_psi);
     else
-        col = 1+(spin-1)*S.Ns_occ(1):S.Ns_occ(1)+(spin-1)*S.Ns_occ(2);
+        ndrange = (1+(spinor-1)*S.N:spinor*S.N); 
         k_ind = find(ismembertol(S.kptgrid,kptvec,1e-8,'ByRows',true))+0;
-        Xi_times_psi = S.Xi(:,col,k_ind)'*X*(S.dV);
-        Vexx = - S.Xi(:,col,k_ind)*Xi_times_psi;
+        Xi_times_psi = S.Xi(ndrange,:,k_ind)'*X*(S.dV);
+        Hx = Hx - S.hyb_mixing * (S.Xi(ndrange,:,k_ind)*Xi_times_psi);
     end
 end
-    
 end

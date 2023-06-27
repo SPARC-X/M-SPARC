@@ -117,8 +117,10 @@ end
 if (S.vdWDFFlag == 1) || (S.vdWDFFlag == 2)
     fprintf(fileID,'vdWDF energy                       :%18.10E (Ha)\n', S.vdWenergy);
 end
-if S.nspin ~= 1
+if S.spin_typ == 1
 	fprintf(fileID,'Net Magnetization                  :%18.10E \n', S.netM);
+elseif S.spin_typ == 2
+    fprintf(fileID,'Net Magnetization in x,y,z         :%18.10E %18.10E %18.10E\n', S.netM(1:3));
 end
 fclose(fileID);
 
@@ -277,10 +279,10 @@ else
 		S.rho(:,1) = S.rho_at(:,1) + S.delta_rho_in_tp1;
 		S.rho(S.rho(:,1) < 0,1) = S.xc_rhotol;
 		% update spin up/down densities
-		if S.nspin ~= 1
+		if S.spin_typ == 1
 			rho_mag = S.rho(:,2) - S.rho(:,3);
 			S.rho(:,2) = (S.rho(:,1) + rho_mag) * 0.5;
-			S.rho(:,3) = (S.rho(:,1) - rho_mag) * 0.5;
+			S.rho(:,3) = (S.rho(:,1) - rho_mag) * 0.5;        
 		end
 	end
 	% need to scale the density

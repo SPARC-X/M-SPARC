@@ -16,16 +16,21 @@ fileID = fopen(outfname,'a');
 if (fileID == -1) 
 	error('\n Cannot open file "%s"\n',outfname);
 end
-if(S.nspin == 1)
+if S.spin_typ == 0
 	fprintf(fileID,'=====================================================================\n');
 	fprintf(fileID,'                    Self Consistent Field (SCF#%d)                     \n',S.Relax_iter);
 	fprintf(fileID,'=====================================================================\n');
 	fprintf(fileID,'Iteration     Free Energy (Ha/atom)   SCF Error        Timing (sec)\n');
-else
+elseif S.spin_typ == 1
 	fprintf(fileID,'========================================================================================\n');
 	fprintf(fileID,'                            Self Consistent Field (SCF#%d)                     \n',S.Relax_iter);
 	fprintf(fileID,'========================================================================================\n');
 	fprintf(fileID,'Iteration     Free Energy (Ha/atom)    Magnetization     SCF Error        Timing (sec)\n');
+elseif S.spin_typ == 2
+    fprintf(fileID,'======================================================================================================================\n');
+	fprintf(fileID,'                                              Self Consistent Field (SCF#%d)                                          \n',S.Relax_iter);
+	fprintf(fileID,'======================================================================================================================\n');
+	fprintf(fileID,'Iteration     Free Energy (Ha/atom)            Magnetization (x,y,z,tot)                 SCF Error        Timing (sec)\n');
 end
 fclose(fileID);
 
@@ -38,55 +43,63 @@ S = exchangeCorrelationPotential(S);
 
 % Effective potential
 S.Veff = real(bsxfun(@plus,S.phi,S.Vxc));
+if S.spin_typ == 2
+    S.Veff_nc = S.Vxc_nc;
+    S.Veff_nc(:,1:2) = S.Veff_nc(:,1:2) + S.phi;
+end
 
 % Initialize the mixing history vectors
-S.X = zeros(S.N*S.nspin,S.MixingHistory);
-S.F = zeros(S.N*S.nspin,S.MixingHistory);
-S.mixing_hist_fkm1 = zeros(S.N*S.nspin,1);
+% TODO: change it for non-collinear
+S.X = zeros(S.N*S.nspden,S.MixingHistory);
+S.F = zeros(S.N*S.nspden,S.MixingHistory);
+S.mixing_hist_fkm1 = zeros(S.N*S.nspden,1);
 
-if S.nspin == 1
-	if S.MixingVariable == 0
+if S.spin_typ == 0
+    if S.MixingVariable == 0
 		S.mixing_hist_xkm1 = S.rho;		
 	else
 		% for potential mixing, we store the mean-0 part only
-		if S.BC == 2
-			Veff_mean = mean(S.Veff);
-		else
-			Veff_mean = 0.0;
-		end
-		S.mixing_hist_xkm1 = S.Veff - Veff_mean;		
-	end
-else
-	if S.MixingVariable == 0
-		RHO_temp = vertcat(S.rho(:,2),S.rho(:,3));
-		S.mixing_hist_xkm1 = RHO_temp;		
-	else
-		VEFF_temp = vertcat(S.Veff(:,1),S.Veff(:,2));
-		% for potential mixing, we store the mean-0 part only
-		VEFF_temp_mean = mean(VEFF_temp);
-		S.mixing_hist_xkm1 = VEFF_temp - VEFF_temp_mean;		
-	end
+		[Veff_shift] = shifting_Veff(S.Veff,S.BC,S.spin_typ);
+		S.mixing_hist_xkm1 = Veff_shift;
+    end
+elseif S.spin_typ == 1
+    if S.MixingVariable == 0		
+		S.mixing_hist_xkm1 = reshape(S.rho(:,2:3),[],1);
+    else
+        % for potential mixing, we store the mean-0 part only
+        [Veff_shift] = shifting_Veff(S.Veff,S.BC,S.spin_typ);
+		S.mixing_hist_xkm1 = Veff_shift(:);
+    end
+elseif S.spin_typ == 2
+    if S.MixingVariable == 0
+        % [rho_tot,mx,my,mz]
+		S.mixing_hist_xkm1 = [S.rho(:,1); reshape(S.mag(:,1:3),[],1)];
+    else        
+        % for potential mixing, we store the mean-0 part only
+        [Veff_shift] = shifting_Veff(S.Veff_nc,S.BC,S.spin_typ);
+		S.mixing_hist_xkm1 = Veff_shift(:);
+    end
 end
-
-% update charges
-% S.PosCharge = abs(dot(S.W, S.b));
-% S.NegCharge = -S.PosCharge + S.NetCharge;
 
 % Generate guess psi WARNING: psi is an internal matlab function
 if S.ForceCount == 1
 	rng('default'); % Initialize random number generator
 	rng(1); % Specify the seed to be 1
-	S.psi = rand(S.N*S.nspinor,S.Nev,S.tnkpt*S.nspin)-0.5;
-	S.upper_bound_guess_vecs = zeros(S.N*S.nspinor,S.tnkpt*S.nspin);
-	S.EigVal = zeros(S.Nev,S.tnkpt*S.nspin);
+	S.psi = rand(S.N*S.nspinor,S.Nev,S.tnkpt)-0.5;
+	S.upper_bound_guess_vecs = zeros(S.N*S.nspinor_eig,S.num_eig);
+	S.EigVal = zeros(S.Nev*S.nspin,S.tnkpt);
 end
-% S.EigVal = zeros(S.Nev,S.tnkpt*S.nspin);
 
 if S.usefock == 1
     scf_tol_init = S.SCF_tol_init;
 else
     scf_tol_init = S.SCF_tol;
 end
+
+
+S.rhoin = [];
+S.rhoout = [];
+S.rhomix = [];
 
 S.lambda_f = 0.0;
 S = scf_loop(S,scf_tol_init);
@@ -107,6 +120,10 @@ S = exchangeCorrelationPotential(S);
 
 % Effective potential
 S.Veff = real(bsxfun(@plus,S.phi,S.Vxc));
+if S.spin_typ == 2
+    S.Veff_nc = S.Vxc_nc;
+    S.Veff_nc(:,1:2) = S.Veff_nc(:,1:2) + S.phi;
+end
 
 % Note: No need to update mixing_hist_xk. Done in mixing of first iteration.
 
@@ -196,27 +213,32 @@ if count_Exx > 0
 end
 
 % Spectrum bounds and filter cutoff for Chebyshev filtering
-bup = zeros(S.tnkpt*S.nspin,1);
-a0 = zeros(S.tnkpt*S.nspin,1);
-lambda_cutoff = zeros(S.tnkpt*S.nspin,1);
+bup = zeros(S.num_eig,1);
+a0 = zeros(S.num_eig,1);
+lambda_cutoff = zeros(S.num_eig,1);
 
 % time for one scf
 t_SCF = 0; 
-if S.nspin == 1
+if S.spin_typ == 0
 	if S.MixingVariable == 0
 		rho_temp = S.rho;
     else
 		Veff_temp = S.Veff;
 	end
-else
-	if S.MixingVariable == 0
-        RHO_temp = vertcat(S.rho(:,2),S.rho(:,3));
-		rho_temp = S.rho;
+elseif S.spin_typ == 1
+    if S.MixingVariable == 0
+        rho_temp = S.rho(:,2:3);
     else
-        VEFF_temp = vertcat(S.Veff(:,1),S.Veff(:,2));
-		% for potential mixing, we store the mean-0 part only
-		Veff_temp = S.Veff;
-	end
+        Veff_temp = S.Veff;
+    end
+elseif S.spin_typ == 2
+    if S.MixingVariable == 0
+        rho_temp = S.rho(:,2:3); 
+        rho_nc_temp = [S.rho(:,1) S.mag(:,1:3)]; 
+    else
+        Veff_temp = S.Veff;
+        Veff_nc_temp = S.Veff_nc;
+    end
 end
 
 % start scf loop
@@ -269,13 +291,18 @@ while count_SCF <= S.MAXIT_SCF
         S = exchangeCorrelationPotential(S);
         % Effective potential
         S.Veff = real(bsxfun(@plus,S.phi,S.Vxc));
+        if S.spin_typ == 2
+            S.Veff_nc = S.Vxc_nc;
+            S.Veff_nc(:,1:2) = S.Veff_nc(:,1:2) + S.phi;
+        end
+        
         % Calculate energy
         [S.Etotal,S.Eband,S.Exc,S.Exc_dc,S.Eelec_dc,S.Eent] = evaluateTotalEnergy(S);
         % Calculate Self Consistency Correction to energy
-        if S.nspin == 1
+        if S.spin_typ == 0
             S.Escc = sum((S.Veff-Veff_temp) .* S.rho .* S.W);
         else
-            S.Escc = sum(sum((S.Veff-Veff_temp) .* S.rho(:,2:3),2) .* S.W);
+            S.Escc = sum(sum((S.Veff-Veff_temp).* S.rho(:,2:3),2) .* S.W);
         end
         fprintf(' Escc = %.8f\n', S.Escc);
         S.Etotal = S.Etotal + S.Escc;
@@ -297,39 +324,37 @@ while count_SCF <= S.MAXIT_SCF
     %%%%%%%%%%%%%%%%%%%%%%%%%   debug info %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
     % Error in SCF fixed-point iteration
-    if S.nspin == 1
+    if S.spin_typ == 0
         if S.MixingVariable == 1
             err = (norm(S.Veff - Veff_temp))/(norm(S.Veff));
         else
             err = (norm(S.rho - rho_temp))/(norm(S.rho));
         end
     else
-        S.netM = dot(S.W,S.rho(:,2)) - dot(S.W,S.rho(:,3));
+        S.netM = sum(S.mag)*S.dV;
         fprintf('======================================\n');
-        fprintf('Net magnetization in this iteration is: % .15f \n', S.netM);
+        fprintf('Net magnetization in this iteration is: ');
+        fprintf('%.6f ', S.netM);
+        fprintf('\n');
         fprintf('======================================\n');
         if S.MixingVariable == 1
-            VEFF = vertcat(S.Veff(:,1), S.Veff(:,2));
-            err = norm(VEFF - VEFF_temp)/norm(VEFF);
+            Veff = S.Veff;
+            err = norm(reshape(Veff - Veff_temp,[],1))/norm(Veff(:));
         else
-            RHO = vertcat(S.rho(:,2), S.rho(:,3));
-            err = norm(RHO - RHO_temp)/norm(RHO);
+            rho = S.rho(:,2:3);
+            err = norm(reshape(rho - rho_temp,[],1))/norm(rho(:));
         end
     end
 
     fprintf(' Error in SCF iteration: %.4e \n',err) ;
 
     % Mixing to accelerate SCF convergence    
-    if S.nspin == 1
+    if S.spin_typ == 0
         if S.MixingVariable == 1 % potential mixing
-            % shift Veff and Veff_temp so they have mean 0
-            if S.BC == 2
-                Veff_mean = mean(S.Veff); Veff_temp_mean = mean(Veff_temp);
-            else
-                Veff_mean = 0; Veff_temp_mean = 0;
-            end
-            S.Veff = S.Veff - Veff_mean;
-            Veff_temp = Veff_temp - Veff_temp_mean;
+            % shift Veff and Veff_temp so they have mean 0            
+            [S.Veff,Veff_mean] = shifting_Veff(S.Veff,S.BC,S.spin_typ);
+            [Veff_temp] = shifting_Veff(Veff_temp,S.BC,S.spin_typ);
+            
             % enter mixing
             [S,S.Veff] = mixing(S,S.Veff,Veff_temp,count_SCF);
             % shift the mean back
@@ -338,76 +363,70 @@ while count_SCF <= S.MAXIT_SCF
             % used for the next input is S.Veff 
             Veff_temp = S.Veff;
         else % density mixing
-            [S, RHO] = mixing(S,S.rho,rho_temp,count_SCF);
-            negrho_count = sum(RHO < 0);
-            if negrho_count > 0
-                fprintf('\nDensity got negative\n\n');
-                RHO(RHO < 0) = 0;
-            end
-            S.rho = RHO;
-            if negrho_count > 0
-                scal = (-S.NegCharge/dot(S.W,S.rho));
-                S.rho = scal*S.rho;
-            end
+            [S, S.rho] = mixing(S,S.rho,rho_temp,count_SCF);
             rho_temp = S.rho;
             % at this point rho_temp = S.rho, i.e., new input density
-            % update Veff
-            S = poissonSolve(S, S.poisson_tol, 1);
+        end
+    elseif S.spin_typ == 1
+        if S.MixingVariable == 1 % potential mixing
+            [Veff,Veff_mean] = shifting_Veff(Veff,S.BC,S.spin_typ);
+            [Veff_temp] = shifting_Veff(Veff_temp,S.BC,S.spin_typ);
 
-            % Exchange-correlation potential
-            S = exchangeCorrelationPotential(S);
+            % enter mixing
+            [S,Veff(:)] = mixing(S,Veff(:),Veff_temp(:),count_SCF);
 
-            % Effective potential
-            S.Veff = real(bsxfun(@plus,S.phi,S.Vxc));
+            Veff = Veff + Veff_mean; % the new veff for next input
+            S.Veff = Veff;
+            Veff_temp = Veff;
+        else
+            [S, rho(:)] = mixing(S,rho(:),rho_temp(:),count_SCF);
+            
+            S.rho(:,2:3) = rho;
+            S.rho(:,1) = S.rho(:,2) + S.rho(:,3);
+            S.mag = S.rho(:,2) - S.rho(:,3);
+            rho_temp = S.rho(:,2:3);
         end
     else
         if S.MixingVariable == 1 % potential mixing
-            % shift Veff and Veff_temp so they have mean 0
-            if S.BC == 2
-                VEFF_mean = mean(VEFF); VEFF_temp_mean = mean(VEFF_temp);
-            else
-                VEFF_mean = 0; VEFF_temp_mean = 0;
-            end
-            VEFF = VEFF - VEFF_mean;
-            VEFF_temp = VEFF_temp - VEFF_temp_mean;
+            Veff_nc = S.Veff_nc;
+            [Veff_nc,Veff_mean] = shifting_Veff(Veff_nc,S.BC,S.spin_typ);
+            [Veff_nc_temp] = shifting_Veff(Veff_nc_temp,S.BC,S.spin_typ);
+
             % enter mixing
-            [S,VEFF] = mixing(S,VEFF,VEFF_temp,count_SCF);
+            [S,Veff_nc(:)] = mixing(S,Veff_nc(:),Veff_nc_temp(:),count_SCF);
+
             % shift the mean back
-            VEFF = VEFF + VEFF_mean; % the new veff for next input
-            % note we add Veff_mean not Veff_temp_mean, since the one
-            % used for the next input is S.Veff
-            S.Veff(:,1) = VEFF(1:S.N);
-            S.Veff(:,2) = VEFF(S.N+1:end);
+            Veff_nc = Veff_nc + Veff_mean; % the new veff for next input
+            S.Veff_nc = Veff_nc;
+
+            Veff_nc_temp = Veff_nc;
             Veff_temp = S.Veff;
-            VEFF_temp = VEFF;
-        else % density mixing
-            [S, RHO] = mixing(S,RHO,RHO_temp,count_SCF);
-            negrho_count = sum(RHO < 0);
-            if (negrho_count > 0)
-                fprintf('\nDensity got negative\n\n');
-                RHO(RHO < 0) = 0;
-            end
-
-            S.rho(:,2) = RHO(1:S.N);
-            S.rho(:,3) = RHO(S.N+1:end);
-            S.rho(:,1) = S.rho(:,2) + S.rho(:,3);
-            if (negrho_count > 0)
-                scal = (-S.NegCharge/dot(S.W,S.rho(:,1)));
-                S.rho = scal*S.rho;
-            end
-            rho_temp = S.rho;
-            RHO_temp = vertcat(rho_temp(:,2),rho_temp(:,3));
-            % at this point rho_temp = S.rho, i.e., new input density
-            % update Veff
-            S = poissonSolve(S, S.poisson_tol, 1);
-
-            % Exchange-correlation potential
-            S = exchangeCorrelationPotential(S);
-
-            % Effective potential
-            S.Veff = real(bsxfun(@plus,S.phi,S.Vxc));
+        else
+            rho_nc = [S.rho(:,1) S.mag(:,1:3)];
+            [S, rho_nc(:)] = mixing(S,rho_nc(:),rho_nc_temp(:),count_SCF);
+            rho_nc_temp = rho_nc;
+            
+            S.mag(:,1:3) = rho_nc(:,2:4);
+            S.mag(:,4) = sqrt(sum(S.mag(:,1:3).*S.mag(:,1:3),2));
+            S.rho = [rho_nc(:,1) 0.5*(rho_nc(:,1)+S.mag(:,4)) 0.5*(rho_nc(:,1)-S.mag(:,4))];
+            rho_temp = S.rho(:,2:3);
         end
     end    
+    
+    if S.MixingVariable == 0
+        % update Veff
+        S = poissonSolve(S, S.poisson_tol, 1);
+
+        % Exchange-correlation potential
+        S = exchangeCorrelationPotential(S);
+
+        % Effective potential            
+        S.Veff = real(bsxfun(@plus,S.phi,S.Vxc));
+        if S.spin_typ == 2
+            S.Veff_nc = S.Vxc_nc;
+            S.Veff_nc(:,1:2) = S.Veff_nc(:,1:2) + S.phi;
+        end
+    end
 
     % write to output file
     fileID = fopen(S.outfname,'a');
@@ -420,11 +439,14 @@ while count_SCF <= S.MAXIT_SCF
 	S_Debug.relax(S.Relax_iter).scf_runtime(count_SCF,1) = scf_runtime;
 	fprintf(' This SCF iteration took %.3f s.\n\n', scf_runtime);	
 
-    if S.nspin == 1
+    if S.spin_typ == 0
         fprintf(fileID,'%-6d      %18.10E        %.3E        %.3f\n', ...
                 count_SCF, S.Etotal/S.n_atm, err, scf_runtime);
-    else
+    elseif S.spin_typ == 1
         fprintf(fileID,'%-6d      %18.10E        %11.4E        %.3E        %.3f\n', ...
+                count_SCF, S.Etotal/S.n_atm, S.netM, err, scf_runtime);
+    elseif S.spin_typ == 2
+        fprintf(fileID,'%-6d      %18.10E    %11.4E, %11.4E, %11.4E, %11.4E     %.3E        %.3f\n', ...
                 count_SCF, S.Etotal/S.n_atm, S.netM, err, scf_runtime);
     end
     fclose(fileID);
@@ -453,5 +475,26 @@ end
 fprintf(fileID,'Total number of SCF: %-6d\n',count_SCF-1);
 fclose(fileID);
 
+end
+
+
+
+function [Veff_shift,Veff_mean] = shifting_Veff(Veff,BC,spin_typ)
+ncol = size(Veff,2);
+if spin_typ ~= 2
+    if BC == 2
+        Veff_mean = mean(Veff(:));
+    else
+        Veff_mean = 0;
+    end
+    Veff_shift = reshape(Veff(:) - Veff_mean,[],ncol);
+else
+    if BC == 2
+        Veff_mean = mean(Veff);
+    else
+        Veff_mean = zeros(1,4);
+    end
+    Veff_shift = Veff - Veff_mean;
+end        
 end
 

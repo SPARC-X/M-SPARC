@@ -19,18 +19,18 @@ end
 
 	
 function f = fermiCalc(lambda_f_g, S)
-	f = 0;
-	ks = 1;
-	for spin = 1:S.nspin
-		for kpt = 1:S.tnkpt
-			if S.elec_T_type == 0 % fermi-dirac smearing
-				f = f + S.occfac * sum(S.wkpt(kpt)./(1+exp(S.bet*(S.EigVal(:,ks)-lambda_f_g)))) ;
-			else
-				f = f + S.occfac * sum(S.wkpt(kpt)*0.5*(1.0-erf(S.bet*(S.EigVal(:,ks)-lambda_f_g)))) ;
-			end
-			ks = ks + 1;
-		end
-	end
+	f = 0;    
+    for kpt = 1:S.tnkpt
+        for spin = 1:S.nspin
+            nsrange = (1:S.Nev) + (spin-1)*S.Nev;
+            if S.elec_T_type == 0 % fermi-dirac smearing
+		        f = f + S.occfac * sum(S.wkpt(kpt)./(1+exp(S.bet*(S.EigVal(nsrange,kpt)-lambda_f_g)))) ;
+	        else
+		        f = f + S.occfac * sum(S.wkpt(kpt)*0.5*(1.0-erf(S.bet*(S.EigVal(nsrange,kpt)-lambda_f_g)))) ;
+            end
+        end
+    end
+    
 	%f = f - S.Nelectron;
 	f = f + S.NegCharge;
 end
