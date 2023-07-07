@@ -193,41 +193,21 @@ elseif strcmp(S.XC, 'GGA_RPBE')
     S.xc_option = [3 3];
     S.isgradient = 1;
 elseif strcmp(S.XC, 'vdWDF1')
-    if ispc % windows
-		addpath('vdW\vdWDF\');
-	else % max/linux
-		addpath('vdW/vdWDF/');
-    end
     S.xc = -102; % Zhang-Yang revPBE
 	S.ixc = [2 2 0 1]; % 2+4: Zhang-Yang revPBE; 2: LDA_PW86 Correlation; 0: no kinetic energy density; 1: vdW-DF1 non-linear Correlation
 	S.xc_option = [4 0];
     S.vdWDFFlag = 1;
     S.isgradient = 1;
 elseif strcmp(S.XC, 'vdWDF2')
-    if ispc % windows
-		addpath('vdW\vdWDF\');
-	else % max/linux
-		addpath('vdW/vdWDF/');
-    end
     S.xc = -108; % rPW86
 	S.ixc = [3 2 0 2]; % 3: rPW86; 2: LDA_PW86 Correlation; 0: no kinetic energy density; 2: vdW-DF2 non-linear Correlation
     S.vdWDFFlag = 2;
     S.isgradient = 1;
 elseif strcmp(S.XC, 'SCAN')
-    if ispc % windows
-		addpath('mgga\');
-	else % max/linux
-		addpath('mgga/');
-    end
     S.xc = 4;
 	S.ixc = [4 4 1 0]; % 4: scanx; 4: scanc; 1: need kinetic energy density; 0: no vdWDF
     S.isgradient = 1;
 elseif strcmp(S.XC, 'R2SCAN')
-    if ispc % windows
-		addpath('mgga\');
-	else % max/linux
-		addpath('mgga/');
-    end
     S.xc = 4;
 	S.ixc = [6 6 1 0]; % 6: r2scanx; 6: r2scanc; 1: need kinetic energy density; 0: no vdWDF
     S.isgradient = 1;
@@ -251,13 +231,6 @@ elseif strcmp(S.XC, 'HSE')
     S.isgradient = 1;
 end
 
-if S.usefock == 1
-    if ispc % windows
-		addpath('exx\');
-	else % max/linux
-		addpath('exx/');
-    end
-end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 if S.d3Flag == 1 
@@ -1300,7 +1273,7 @@ end
 
 start_time = fix(clock);
 fprintf(fileID,'***************************************************************************\n');
-fprintf(fileID,'*                      M-SPARC (version Jun 27, 2023)                     *\n');
+fprintf(fileID,'*                      M-SPARC (version Jul 06, 2023)                     *\n');
 fprintf(fileID,'*   Copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech   *\n');
 fprintf(fileID,'*           Distributed under GNU General Public License 3 (GPL)          *\n');
 fprintf(fileID,'*                Date: %s  Start time: %02d:%02d:%02d                  *\n',date,start_time(4),start_time(5),start_time(6));
@@ -1971,11 +1944,6 @@ function [S] = Generate_kpts(S)
 end
 
 function [S] = set_D3_coefficients(S)
-    if ispc % windows
-        addpath('vdW\d3\');
-    else % max/linux
-        addpath('vdW/d3/');
-    end
     if S.d3Rthr < S.d3Cn_thr
         error("D3_RTHR should not be smaller than D3_CN_THR. Please reset these two radius!");
     end

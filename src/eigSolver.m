@@ -264,7 +264,7 @@ else
         end
         
         % Normalize psi, s.t. integral(psi_new' * psi_new) = 1
-        scfac = 1 ./ sqrt(sum(repmat(S.W,S.nspinor,S.Nev) .* (psi(:,:,ks) .* conj(psi(:,:,ks))),1));
+        scfac = 1 ./ sqrt(sum(repmat(S.W,S.nspinor_eig,S.Nev) .* (psi(:,:,ks) .* conj(psi(:,:,ks))),1));
         % psi(:,:,ks) = psi(:,:,ks) * diag(scfac);
         psi(:,:,ks) = bsxfun(@times, psi(:,:,ks), scfac);
     end

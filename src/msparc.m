@@ -12,6 +12,13 @@ function S = msparc(fname,varargin)
 % @copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech
 %
 
+% add path of xc folders
+[filepath, ~, ~] = fileparts(which('msparc'));
+addpath(fullfile(filepath,'xc'))
+addpath(fullfile(filepath,'xc/exx'))
+addpath(fullfile(filepath,'xc/mgga'))
+addpath(fullfile(filepath,'xc/vdw'))
+
 format long;
 fprintf('\n');
 
@@ -117,3 +124,9 @@ fprintf('\n Run-time of the program: %f seconds\n', t_wall);
 if S.parallel == 1
    LASTN_reset = maxNumCompThreads(LASTN_all_comp);
 end
+
+% remove path 
+rmpath(fullfile(filepath,'xc'))
+rmpath(fullfile(filepath,'xc/exx'))
+rmpath(fullfile(filepath,'xc/mgga'))
+rmpath(fullfile(filepath,'xc/vdw'))

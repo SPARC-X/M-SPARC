@@ -78,11 +78,6 @@ else
 end
 
 if S.d3Flag == 1
-	if ispc % windows
-		addpath('vdW\d3\');
-	else % max/linux
-		addpath('vdW/d3/');
-	end
 	S = d3EnergyGradient(S);
     S.Etotal = S.Etotal + S.d3Energy;
 end

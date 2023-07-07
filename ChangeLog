@@ -1,4 +1,10 @@
 --------------
+Jul 06, 2023
+Name: Xin Jing
+* put exx/, vdw/ and mgga/ into xc/ folder.
+* Adding path of these folders in the beginning of the code.
+
+--------------
 Jun 27, 2023
 Name: Boqin Zhang
 * Add r2scan meta-GGA functional
