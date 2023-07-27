@@ -166,6 +166,8 @@ S.isgradient = 0;
 %
 %   Meta-GGA:     "nom"    none                           imeta=0
 %                 "scan"   SCAN-Meta-GGA                  imeta=1
+%                 "rscan"  rSCAN-Meta-GGA                 imeta=1
+%                 "r2scan" r2SCAN-Meta-GGA                imeta=1
 %
 %   van der Waals "nov"    none                           ivdw=0
 %                 "vdw1"   vdW-DF1                        ivdw=1
@@ -206,6 +208,10 @@ elseif strcmp(S.XC, 'vdWDF2')
 elseif strcmp(S.XC, 'SCAN')
     S.xc = 4;
 	S.ixc = [4 4 1 0]; % 4: scanx; 4: scanc; 1: need kinetic energy density; 0: no vdWDF
+    S.isgradient = 1;
+elseif strcmp(S.XC, 'RSCAN')
+    S.xc = 4;
+	S.ixc = [5 5 1 0]; % 5: rscanx; 5: rscanc; 1: need kinetic energy density; 0: no vdWDF
     S.isgradient = 1;
 elseif strcmp(S.XC, 'R2SCAN')
     S.xc = 4;
@@ -1273,7 +1279,7 @@ end
 
 start_time = fix(clock);
 fprintf(fileID,'***************************************************************************\n');
-fprintf(fileID,'*                      M-SPARC (version Jul 06, 2023)                     *\n');
+fprintf(fileID,'*                      M-SPARC (version Jul 27, 2023)                     *\n');
 fprintf(fileID,'*   Copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech   *\n');
 fprintf(fileID,'*           Distributed under GNU General Public License 3 (GPL)          *\n');
 fprintf(fileID,'*                Date: %s  Start time: %02d:%02d:%02d                  *\n',date,start_time(4),start_time(5),start_time(6));
