@@ -54,6 +54,8 @@ if S.spin_typ == 0
             [ex,vx,v2x] = rPW86x(rho,sigma);
         case 4
             [ex,vx,v2x,v3x] = scanx(rho,sigma,S.tau); 
+        case 5
+            [ex,vx,v2x,v3x] = rscanx(rho,sigma,S.tau);
         case 6
             [ex,vx,v2x,v3x] = r2scanx(rho,sigma,S.tau); 
         otherwise
@@ -73,6 +75,8 @@ if S.spin_typ == 0
             [ec,vc,v2c] = pbec(rho,sigma,S.xc_option(2));
         case 4
             [ec,vc,v2c,v3c] = scanc(rho,sigma,S.tau); 
+        case 5
+            [ec,vc,v2c,v3c] = rscanc(rho,sigma,S.tau); 
         case 6
             [ec,vc,v2c,v3c] = r2scanc(rho,sigma,S.tau); 
         otherwise
@@ -103,6 +107,8 @@ if S.spin_typ == 0
         if S.countPotential == -1 % compute potential before SCF by GGA_PBE, there is no psi yet
             if strcmp(S.XC, 'SCAN')
                 S.ixc = [4 4 1 0]; % restore the labels
+            elseif strcmp(S.XC, 'RSCAN')
+                S.ixc = [5 5 1 0]; % restore the labels
             else
                 S.ixc = [6 6 1 0]; % restore the labels
             end
@@ -206,6 +212,8 @@ else
             [ex,vx,v2x] = rPW86x_spin(rho,sigma);
         case 4
             [ex,vx,v2x,v3x] = scanx_spin(rho,sigma,S.tau); 
+        case 5
+            [ex,vx,v2x,v3x] = rscanx_spin(rho,sigma,S.tau); 
         case 6
             [ex,vx,v2x,v3x] = r2scanx_spin(rho,sigma,S.tau); 
         otherwise
@@ -225,6 +233,8 @@ else
             [ec,vc,v2c] = pbec_spin(rho,sigma,S.xc_option(2));
         case 4
             [ec,vc,v2c,v3c] = scanc_spin(rho,sigma,S.tau); 
+        case 5
+            [ec,vc,v2c,v3c] = rscanc_spin(rho,sigma,S.tau); 
         case 6
             [ec,vc,v2c,v3c] = r2scanc_spin(rho,sigma,S.tau); 
         otherwise
@@ -256,7 +266,9 @@ else
         if S.countPotential == -1 % compute potential before SCF by GGA_PBE, there is no psi yet
             if strcmp(S.XC, 'SCAN')
                 S.ixc = [4 4 1 0]; % restore the labels
-            else % r2SCAN
+            elseif strcmp(S.XC, 'RSCAN')
+                S.ixc = [5 5 1 0]; % restore the labels
+            else
                 S.ixc = [6 6 1 0]; % restore the labels
             end
         else
