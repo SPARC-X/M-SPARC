@@ -1,4 +1,10 @@
 --------------
+Aug 04, 2023
+Name: Boqin Zhang
+* Add d3 coefficients for PBE0 and HSE
+* fix the name of rscanc function
+
+--------------
 Jul 27, 2023
 Name: Boqin Zhang
 * Add rscan meta-GGA functional

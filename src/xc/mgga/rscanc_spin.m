@@ -18,7 +18,7 @@ function [ec,vc,v2c,v3c] = rscanc_spin(rho,sigma,tau)
     normDrho = sigma.^0.5; % col1: grad of n; col2: grad of n up; col3: grad of n dn
     [s, alphaP, zeta, DsDn, DsDDn, DalphaPDnup, DalphaPDndn, DalphaPDDn, DalphaPDtau, DzetaDnup, DzetaDndn]...
         = basicsrscanvariables(rho, normDrho(:, 1), tau(:, 1));
-    [ec, vc, Vc2, Vc3] = correlationSCAN(rho(:, 1), s, alphaP, zeta, DsDn, DsDDn, DalphaPDnup, DalphaPDndn, DalphaPDDn, DalphaPDtau, DzetaDnup, DzetaDndn);
+    [ec, vc, Vc2, Vc3] = correlationrSCAN(rho(:, 1), s, alphaP, zeta, DsDn, DsDDn, DalphaPDnup, DalphaPDndn, DalphaPDDn, DalphaPDtau, DzetaDnup, DzetaDndn);
     v2c = Vc2./normDrho(:, 1);
     v3c = [Vc3, Vc3];
 end
@@ -57,7 +57,7 @@ function [s, alphaP, zeta, DsDn, DsDDn, DalphaPDnup, DalphaPDndn, DalphaPDDn, Da
     DalphaPDtau = DalphaPDalpha.*DalphaDtau;
 end
 
-function [ec, Vc1, Vc2, Vc3] = correlationSCAN(rho, s, alphaP, zeta, DsDn, DsDDn, DalphaPDnup, DalphaPDndn, DalphaPDDn, DalphaPDtau, DzetaDnup, DzetaDndn)
+function [ec, Vc1, Vc2, Vc3] = correlationrSCAN(rho, s, alphaP, zeta, DsDn, DsDDn, DalphaPDnup, DalphaPDndn, DalphaPDDn, DalphaPDtau, DzetaDnup, DzetaDndn)
 % all input variables of this function only have one column. 
 % ec has only one column; Vc1 has two columns; Vc2 and Vc3 have only one column.
     phi = ((1 + zeta).^(2/3) + (1 - zeta).^(2/3)) / 2;

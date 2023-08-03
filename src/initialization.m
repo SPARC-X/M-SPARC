@@ -1279,7 +1279,7 @@ end
 
 start_time = fix(clock);
 fprintf(fileID,'***************************************************************************\n');
-fprintf(fileID,'*                      M-SPARC (version Jul 27, 2023)                     *\n');
+fprintf(fileID,'*                      M-SPARC (version Aug 04, 2023)                     *\n');
 fprintf(fileID,'*   Copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech   *\n');
 fprintf(fileID,'*           Distributed under GNU General Public License 3 (GPL)          *\n');
 fprintf(fileID,'*                Date: %s  Start time: %02d:%02d:%02d                  *\n',date,start_time(4),start_time(5),start_time(6));
@@ -2040,10 +2040,14 @@ function [S] = set_D3_coefficients(S)
 	elseif strcmp(S.XC, 'GGA_RPBE')
 		S.d3Rs6 = 0.872;
 		S.d3S18 = 0.514;
+	elseif strcmp(S.XC, 'PBE0')
+		S.d3Rs6 = 1.287;
+		S.d3S18 = 0.928;
+	elseif strcmp(S.XC, 'HSE')
+		S.d3Rs6 = 1.129;
+		S.d3S18 = 0.109;
 	else 
-		fprintf('WARNING: Cannot find D3 coefficients for this functional. Default value is rs6 = 1.217 and s18 = 0.722.\n');
-		S.d3Rs6 = 1.217;
-		S.d3S18 = 0.722;
+		error("Cannot find D3 coefficients for this functional. DFT-D3 correction calculation canceled!");
 	end
 
 	S.c6ab = d3Copyc6();
