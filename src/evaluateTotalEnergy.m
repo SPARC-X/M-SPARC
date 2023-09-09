@@ -11,8 +11,12 @@ function [Etot,Eband,Exc,Exc_dc,Eelec_dc,Eent] = evaluateTotalEnergy(S)
 
 % Band structure energy
 Eband = 0;
-for kpt = 1:S.tnkpt
-	Eband = Eband + S.occfac * S.wkpt(kpt) * sum(S.EigVal(:,kpt).*S.occ(:,kpt)) ;
+ks = 1;
+for spin = 1:S.nspin
+	for kpt = 1:S.tnkpt
+		Eband = Eband + S.occfac * S.wkpt(kpt) * sum(S.EigVal(:,ks).*S.occ(:,ks)) ;
+		ks = ks + 1;
+	end
 end
 
 % Exchange-correlation energy
@@ -50,14 +54,18 @@ Eelec_dc = 0.5*sum((S.b-S.rho(:,1)).*S.phi.*S.W);
 
 % Electronic entropy
 Eent = 0 ;
-for kpt = 1:S.tnkpt
-	if S.elec_T_type == 0 % fermi-dirac smearing
-		Eent_v = S.occfac*(1/S.bet)*(S.occ(:,kpt).*log(S.occ(:,kpt))+(1-S.occ(:,kpt)).*log(1-S.occ(:,kpt)));
-		Eent_v(isnan(Eent_v)) = 0.0 ;
-	elseif S.elec_T_type == 1 % gaussian smearing
-		Eent_v = -S.occfac*(1/S.bet)*1/(2*sqrt(pi)) .* exp(-(S.bet * (S.EigVal(:,kpt)-S.lambda_f)).^2);
+ks = 1;
+for spin = 1:S.nspin
+	for kpt = 1:S.tnkpt
+		if S.elec_T_type == 0 % fermi-dirac smearing
+			Eent_v = S.occfac*(1/S.bet)*(S.occ(:,ks).*log(S.occ(:,ks))+(1-S.occ(:,ks)).*log(1-S.occ(:,ks)));
+			Eent_v(isnan(Eent_v)) = 0.0 ;
+		elseif S.elec_T_type == 1 % gaussian smearing
+			Eent_v = -S.occfac*(1/S.bet)*1/(2*sqrt(pi)) .* exp(-(S.bet * (S.EigVal(:,ks)-S.lambda_f)).^2);
+		end
+		Eent = Eent + S.wkpt(kpt)*sum(Eent_v);
+		ks = ks + 1;
 	end
-	Eent = Eent + S.wkpt(kpt)*sum(Eent_v);
 end
 
 % Total free energy

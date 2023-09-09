@@ -34,7 +34,7 @@ if nspden == 4
         vec1 = F(:,i);
         for j = 1:m
             vec2 = F(:,j);
-            FtF(i,j) = dotprodm_v(vec1,vec2,nspden,opt);
+            FtF(i,j) = dotprod_nc(vec1,vec2,opt);
         end
     end
 else
@@ -43,24 +43,25 @@ end
 end
 
 function Ftf = compute_Ftf(F,f,nspden,opt)
-m = size(F,2);
-Ftf = zeros(m,1);
-for i = 1:m
-    Ftf(i) = dotprodm_v(F(:,i),f,nspden,opt);
-end
-end
-
-
-function dotprod = dotprodm_v(vec1,vec2,nspden,opt)
-vec1 = reshape(vec1,[],nspden);
-vec2 = reshape(vec2,[],nspden);
 if nspden == 4
-    if opt == 1 % potential
-        dotprod = sum(sum(vec1(:,1:2).*vec2(:,1:2)) + 2*sum(vec1(:,3:4).*vec2(:,3:4)));
-    else % density
-        dotprod = 0.5*sum(vec1(:).*vec2(:));
+    m = size(F,2);
+    Ftf = zeros(m,1);
+    for i = 1:m
+        Ftf(i) = dotprod_nc(F(:,i),f,opt);
     end
 else
-    dotprod = sum(vec1(:).*vec2(:));
+    Ftf = F'*f;
+end
+end
+
+
+function dotprod = dotprod_nc(vec1,vec2,opt)
+if opt == 1 % potential
+    N = length(vec1);
+    p1 = (1:N/2);
+    p2 = (1:N/2)+N/2;
+    dotprod = sum(sum(vec1(p1).*vec2(p1)) + 2*sum(vec1(p2).*vec2(p2)));
+else % density
+    dotprod = 0.5*sum(vec1.*vec2);
 end
 end

@@ -3,7 +3,7 @@ if S.exxmethod == 1
     V_guess = rand(S.N,1);
 end
 
-S.Ns_occ = max(sum(reshape(S.occ_outer>1e-6,S.Nev,[])));
+S.Ns_occ = max(sum(S.occ_outer>1e-6));
 S.Ns_occ = min(S.Ns_occ+S.EXXACEVal_state,S.Nev);
 Ns = S.Ns_occ;
 
@@ -12,14 +12,14 @@ if S.isgamma == 1
     
     for spinor = 1:S.nspinor
         ndrange = (1+(spinor-1)*S.N:spinor*S.N); 
-        sshift = (spinor-1)*S.Nev;
+        nsshift = (spinor-1)*(S.spin_typ == 1);
 
         rhs = zeros(S.N,Ns);
         for i = 1:Ns
             rhs(:,i:Ns) = bsxfun(@times,S.psi_outer(ndrange,i:Ns),S.psi_outer(ndrange,i));
             V_i = zeros(S.N,Ns);
             for j = i:Ns
-                if (S.occ_outer(i+sshift) + S.occ_outer(j+sshift) > 1e-4)
+                if (S.occ_outer(i,1+nsshift) + S.occ_outer(j,1+nsshift) > 1e-4)
                     if S.exxmethod == 0             % solving in fourier space
                         V_i(:,j) = poissonSolve_FFT(S,rhs(:,j),[0,0,0],S.const_by_alpha);
                     else                            % solving in real space
@@ -30,8 +30,8 @@ if S.isgamma == 1
                     end
                 end
             end
-            S.Xi(ndrange,(i+1:Ns)) = S.Xi(ndrange,(i+1:Ns)) - S.occ_outer(i+sshift)*bsxfun(@times,S.psi_outer(ndrange,i),V_i(:,(i+1:Ns)));
-            S.Xi(ndrange,i) = S.Xi(ndrange,i) - bsxfun(@times,S.psi_outer(ndrange,(i:Ns)),V_i(:,(i:Ns))) * S.occ_outer((i:Ns)+sshift);
+            S.Xi(ndrange,(i+1:Ns)) = S.Xi(ndrange,(i+1:Ns)) - S.occ_outer(i,1+nsshift)*bsxfun(@times,S.psi_outer(ndrange,i),V_i(:,(i+1:Ns)));
+            S.Xi(ndrange,i) = S.Xi(ndrange,i) - bsxfun(@times,S.psi_outer(ndrange,(i:Ns)),V_i(:,(i:Ns))) * S.occ_outer((i:Ns),1+nsshift);
         end
         
         M = (transpose(S.psi_outer(ndrange,1:Ns))*S.Xi(ndrange,:))*S.dV;
@@ -44,7 +44,7 @@ else
     
     for spinor = 1:S.nspinor
         ndrange = (1+(spinor-1)*S.N:spinor*S.N); 
-        sshift = (spinor-1)*S.Nev;
+        nsshift = (spinor-1)*S.tnkpt*(S.spin_typ == 1);
         
         for k_ind = 1:S.tnkpt
             for q_ind = 1:S.tnkpthf
@@ -65,7 +65,7 @@ else
                     k_shift = k - q;
                     V_i = zeros(S.N,Ns);
                     for j = 1:Ns
-                        if S.occ_outer(j+sshift,q_ind_rd) > 1e-6
+                        if S.occ_outer(j,q_ind_rd+nsshift) > 1e-6
                             if S.exxmethod == 0             % solving in fourier space
                                 V_i(:,j) = poissonSolve_FFT(S,rhs(:,j),k_shift,S.const_by_alpha);
                             else                            % solving in real space
@@ -77,7 +77,7 @@ else
                         end
                     end
 
-                    S.Xi(ndrange,i,k_ind) = S.Xi(ndrange,i,k_ind) - S.wkpthf(q_ind)*(psi_q_set.*V_i)*S.occ_outer((1:Ns)+sshift,q_ind_rd);
+                    S.Xi(ndrange,i,k_ind) = S.Xi(ndrange,i,k_ind) - S.wkpthf(q_ind)*(psi_q_set.*V_i)*S.occ_outer((1:Ns),q_ind_rd+nsshift);
                 end
             end
             

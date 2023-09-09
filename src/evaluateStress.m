@@ -160,11 +160,7 @@ for kpt = 1:S.tnkpt
     
     for spinor = 1:S.nspinor
         ndrange = (1+(spinor-1)*S.N:spinor*S.N); 
-        if S.spin_typ == 1
-            nsrange = (1+(spinor-1)*S.Nev:spinor*S.Nev);
-        else
-            nsrange = (1:S.Nev);
-        end
+        nsshift = (spinor-1)*S.tnkpt*(S.spin_typ == 1);
 
         Dpsi_x = blochGradient(S,kpt_vec,1)*S.psi(ndrange,:,kpt);
         Dpsi_y = blochGradient(S,kpt_vec,2)*S.psi(ndrange,:,kpt);
@@ -178,17 +174,17 @@ for kpt = 1:S.tnkpt
         TDcpsi_3 = conj(TDpsi_3);
 
         stress(1,1) = stress(1,1) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
-                      (TDcpsi_1.*TDpsi_1)) * S.occ(nsrange,kpt));
+                      (TDcpsi_1.*TDpsi_1)) * S.occ(:,kpt+nsshift));
         stress(1,2) = stress(1,2) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
-                      (TDcpsi_1.*TDpsi_2)) * S.occ(nsrange,kpt));
+                      (TDcpsi_1.*TDpsi_2)) * S.occ(:,kpt+nsshift));
         stress(1,3) = stress(1,3) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
-                      (TDcpsi_1.*TDpsi_3)) * S.occ(nsrange,kpt));    
+                      (TDcpsi_1.*TDpsi_3)) * S.occ(:,kpt+nsshift));    
         stress(2,2) = stress(2,2) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
-                      (TDcpsi_2.*TDpsi_2)) * S.occ(nsrange,kpt));
+                      (TDcpsi_2.*TDpsi_2)) * S.occ(:,kpt+nsshift));
         stress(2,3) = stress(2,3) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
-                      (TDcpsi_2.*TDpsi_3)) * S.occ(nsrange,kpt));
+                      (TDcpsi_2.*TDpsi_3)) * S.occ(:,kpt+nsshift));
         stress(3,3) = stress(3,3) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
-                      (TDcpsi_3.*TDpsi_3)) * S.occ(nsrange,kpt));
+                      (TDcpsi_3.*TDpsi_3)) * S.occ(:,kpt+nsshift));
     end
 end
 
@@ -244,11 +240,7 @@ if (S.countPotential > 0) &&(S.xc == 4) % add metaGGA stress term
         
         for spinor = 1:S.nspinor 
             ndrange = (1+(spinor-1)*S.N:spinor*S.N); 
-            if S.spin_typ == 1
-                nsrange = (1+(spinor-1)*S.Nev:spinor*S.Nev);
-            else
-                nsrange = (1:S.Nev);
-            end
+            nsshift = (spinor-1)*S.tnkpt*(S.spin_typ == 1);
 
             VxcScan3 = S.VxcScan3(:,spinor);
 	        Dpsi_x = blochGradient(S,kpt_vec,1)*S.psi(ndrange,:,kpt);
@@ -262,17 +254,17 @@ if (S.countPotential > 0) &&(S.xc == 4) % add metaGGA stress term
 	        TDcpsi_2 = conj(TDpsi_2);
 	        TDcpsi_3 = conj(TDpsi_3);
             stress(1,1) = stress(1,1) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
-				      (VxcScan3.*TDcpsi_1.*TDpsi_1)) * S.occ(nsrange,kpt));
+				      (VxcScan3.*TDcpsi_1.*TDpsi_1)) * S.occ(:,kpt+nsshift));
 	        stress(1,2) = stress(1,2) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
-				      (VxcScan3.*TDcpsi_1.*TDpsi_2)) * S.occ(nsrange,kpt));
+				      (VxcScan3.*TDcpsi_1.*TDpsi_2)) * S.occ(:,kpt+nsshift));
 	        stress(1,3) = stress(1,3) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
-				      (VxcScan3.*TDcpsi_1.*TDpsi_3)) * S.occ(nsrange,kpt));    
+				      (VxcScan3.*TDcpsi_1.*TDpsi_3)) * S.occ(:,kpt+nsshift));    
 	        stress(2,2) = stress(2,2) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
-				      (VxcScan3.*TDcpsi_2.*TDpsi_2)) * S.occ(nsrange,kpt));
+				      (VxcScan3.*TDcpsi_2.*TDpsi_2)) * S.occ(:,kpt+nsshift));
 	        stress(2,3) = stress(2,3) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
-				      (VxcScan3.*TDcpsi_2.*TDpsi_3)) * S.occ(nsrange,kpt));
+				      (VxcScan3.*TDcpsi_2.*TDpsi_3)) * S.occ(:,kpt+nsshift));
 	        stress(3,3) = stress(3,3) + real(-S.occfac * S.wkpt(kpt) * (transpose(S.W) * ... 
-				      (VxcScan3.*TDcpsi_3.*TDpsi_3)) * S.occ(nsrange,kpt));
+				      (VxcScan3.*TDcpsi_3.*TDpsi_3)) * S.occ(:,kpt+nsshift));
         end
     end
 end
@@ -529,11 +521,7 @@ for kpt = 1:S.tnkpt
         for spinor = 1:S.nspinor
             sigma = (-1)^(spinor-1);
             shift = (spinor-1)*S.N;         % for selecting each spinor, spinor=1 shift = 0, spinor=2, shift = S.N
-            if S.spin_typ == 1
-                nsrange = (1+(spinor-1)*S.Nev:spinor*S.Nev);
-            else
-                nsrange = (1:S.Nev);
-            end
+            nsshift = (spinor-1)*S.tnkpt*(S.spin_typ == 1);
             
             % Nonlocal scalar relativisic energy
             Chi_X_mult1 = zeros(S.Atom(JJ_a).angnum,S.Nev);
@@ -542,7 +530,7 @@ for kpt = 1:S.tnkpt
                 Chi_X_mult1 = Chi_X_mult1 + transpose(bsxfun(@times, conj(S.Atom(JJ_a).rcImage(img).Chi_mat), S.W(S.Atom(JJ_a).rcImage(img).rc_pos))) * S.psi(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:,kpt) * phase_fac ;
             end
             
-            Enl_sc_sigma_k = S.occfac * S.wkpt(kpt) * transpose(S.Atom(JJ_a).gamma_Jl) * (Chi_X_mult1.*conj(Chi_X_mult1)) * S.occ(nsrange,kpt);
+            Enl_sc_sigma_k = S.occfac * S.wkpt(kpt) * transpose(S.Atom(JJ_a).gamma_Jl) * (Chi_X_mult1.*conj(Chi_X_mult1)) * S.occ(:,kpt+nsshift);
             stress(1,1) = stress(1,1) - Enl_sc_sigma_k ;
             stress(2,2) = stress(2,2) - Enl_sc_sigma_k ;
             stress(3,3) = stress(3,3) - Enl_sc_sigma_k ;
@@ -588,11 +576,7 @@ for kpt = 1:S.tnkpt
         % stress due to scalar relativistic 
         for spinor = 1:S.nspinor
             shift = (spinor-1)*S.N;         % for selecting each spinor, spinor=1 shift = 0, spinor=2, shift = S.N
-            if S.spin_typ == 1
-                nsrange = (1+(spinor-1)*S.Nev:spinor*S.Nev);
-            else
-                nsrange = (1:S.Nev);
-            end
+            nsshift = (spinor-1)*S.tnkpt*(S.spin_typ == 1);
 
             integral_1 = zeros(S.Atom(JJ_a).angnum,S.Nev);
             integral_2_xx = zeros(S.Atom(JJ_a).angnum,S.Nev);
@@ -632,12 +616,12 @@ for kpt = 1:S.tnkpt
                     ((TDpsi_3(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:)).*repmat(z_1,1,S.Nev)) * phase_fac ;
 
             end
-            tf_xx = transpose(S.Atom(JJ_a).gamma_Jl) * real(integral_1.*integral_2_xx) * S.occ(nsrange,kpt);
-            tf_xy = transpose(S.Atom(JJ_a).gamma_Jl) * real(integral_1.*integral_2_xy) * S.occ(nsrange,kpt);
-            tf_xz = transpose(S.Atom(JJ_a).gamma_Jl) * real(integral_1.*integral_2_xz) * S.occ(nsrange,kpt);
-            tf_yy = transpose(S.Atom(JJ_a).gamma_Jl) * real(integral_1.*integral_2_yy) * S.occ(nsrange,kpt);
-            tf_yz = transpose(S.Atom(JJ_a).gamma_Jl) * real(integral_1.*integral_2_yz) * S.occ(nsrange,kpt);
-            tf_zz = transpose(S.Atom(JJ_a).gamma_Jl) * real(integral_1.*integral_2_zz) * S.occ(nsrange,kpt);
+            tf_xx = transpose(S.Atom(JJ_a).gamma_Jl) * real(integral_1.*integral_2_xx) * S.occ(:,kpt+nsshift);
+            tf_xy = transpose(S.Atom(JJ_a).gamma_Jl) * real(integral_1.*integral_2_xy) * S.occ(:,kpt+nsshift);
+            tf_xz = transpose(S.Atom(JJ_a).gamma_Jl) * real(integral_1.*integral_2_xz) * S.occ(:,kpt+nsshift);
+            tf_yy = transpose(S.Atom(JJ_a).gamma_Jl) * real(integral_1.*integral_2_yy) * S.occ(:,kpt+nsshift);
+            tf_yz = transpose(S.Atom(JJ_a).gamma_Jl) * real(integral_1.*integral_2_yz) * S.occ(:,kpt+nsshift);
+            tf_zz = transpose(S.Atom(JJ_a).gamma_Jl) * real(integral_1.*integral_2_zz) * S.occ(:,kpt+nsshift);
             stress(1,1) = stress(1,1) - 2 * S.occfac * S.wkpt(kpt) * tf_xx;
             stress(1,2) = stress(1,2) - 2 * S.occfac * S.wkpt(kpt) * tf_xy;
             stress(1,3) = stress(1,3) - 2 * S.occfac * S.wkpt(kpt) * tf_xz;

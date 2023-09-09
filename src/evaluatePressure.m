@@ -17,8 +17,12 @@ Dphi_y = S.grad_2*(S.phi);
 Dphi_z = S.grad_3*(S.phi);
 
 P_eng = 0.0;
-for kpt = 1:S.tnkpt
-	P_eng = P_eng - S.occfac*2*S.wkpt(kpt)*sum(S.EigVal(:,kpt).*S.occ(:,kpt)) ;
+ks = 1;
+for spin = 1:S.nspin
+	for kpt = 1:S.tnkpt
+		P_eng = P_eng - S.occfac*2*S.wkpt(kpt)*sum(S.EigVal(:,ks).*S.occ(:,ks)) ;
+		ks = ks + 1;
+	end
 end
 
 if S.spin_typ == 0
@@ -449,11 +453,7 @@ for kpt = 1:S.tnkpt
         for spinor = 1:S.nspinor
             sigma = (-1)^(spinor-1);
             shift = (spinor-1)*S.N;         % for selecting each spinor, spinor=1 shift = 0, spinor=2, shift = S.N
-            if S.spin_typ == 1
-                nsrange = (1+(spinor-1)*S.Nev:spinor*S.Nev);
-            else
-                nsrange = (1:S.Nev);
-            end
+            nsshift = (spinor-1)*S.tnkpt*(S.spin_typ == 1);
             
             % Nonlocal scalar relativisic energy
             Chi_X_mult1 = zeros(S.Atom(JJ_a).angnum,S.Nev);
@@ -462,7 +462,7 @@ for kpt = 1:S.tnkpt
                 Chi_X_mult1 = Chi_X_mult1 + transpose(bsxfun(@times, conj(S.Atom(JJ_a).rcImage(img).Chi_mat), S.W(S.Atom(JJ_a).rcImage(img).rc_pos))) * S.psi(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:,kpt) * phase_fac ;
             end
             
-            P_nl = P_nl - S.occfac * S.wkpt(kpt) * transpose(S.Atom(JJ_a).gamma_Jl) * (Chi_X_mult1.*conj(Chi_X_mult1)) * S.occ(nsrange,kpt);
+            P_nl = P_nl - S.occfac * S.wkpt(kpt) * transpose(S.Atom(JJ_a).gamma_Jl) * (Chi_X_mult1.*conj(Chi_X_mult1)) * S.occ(:,kpt+nsshift);
             
             % Nonlocal spin-orbit coupling term1 energy
             if S.Atm(S.Atom(JJ_a).count_typ).pspsoc == 1
@@ -498,11 +498,7 @@ for kpt = 1:S.tnkpt
         % pressure due to scalar relativistic 
         for spinor = 1:S.nspinor
             shift = (spinor-1)*S.N;         % for selecting each spinor, spinor=1 shift = 0, spinor=2, shift = S.N
-            if S.spin_typ == 1
-                nsrange = (1+(spinor-1)*S.Nev:spinor*S.Nev);
-            else
-                nsrange = (1:S.Nev);
-            end
+            nsshift = (spinor-1)*S.tnkpt*(S.spin_typ == 1);
 
             integral_1 = zeros(S.Atom(JJ_a).angnum,S.Nev);
             integral_2_x = zeros(S.Atom(JJ_a).angnum,S.Nev);
@@ -524,9 +520,9 @@ for kpt = 1:S.tnkpt
                     ((Dpsi_z(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:)).*repmat(zr,1,S.Nev)) * phase_fac;
             end
 
-            tf_x = transpose(S.Atom(JJ_a).gamma_Jl) * real(integral_1.*integral_2_x) * S.occ(nsrange,kpt);
-            tf_y = transpose(S.Atom(JJ_a).gamma_Jl) * real(integral_1.*integral_2_y) * S.occ(nsrange,kpt);
-            tf_z = transpose(S.Atom(JJ_a).gamma_Jl) * real(integral_1.*integral_2_z) * S.occ(nsrange,kpt);
+            tf_x = transpose(S.Atom(JJ_a).gamma_Jl) * real(integral_1.*integral_2_x) * S.occ(:,kpt+nsshift);
+            tf_y = transpose(S.Atom(JJ_a).gamma_Jl) * real(integral_1.*integral_2_y) * S.occ(:,kpt+nsshift);
+            tf_z = transpose(S.Atom(JJ_a).gamma_Jl) * real(integral_1.*integral_2_z) * S.occ(:,kpt+nsshift);
             P_nl = P_nl - 2 * S.occfac * S.wkpt(kpt) * (tf_x + tf_y + tf_z);
         end
         
