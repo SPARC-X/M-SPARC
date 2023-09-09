@@ -201,7 +201,7 @@ if S.spin_typ == 1
 	S.rho_at = [S.rho_at 0.5*(S.rho_at+mz) 0.5*(S.rho_at-mz)];
 elseif S.spin_typ == 2
     magnorm = sqrt(mx.^2 + my.^2 + mz.^2);
-    S.mag = [mx my mz magnorm];
+    S.mag = [magnorm mx my mz];
     S.rho_at = [S.rho_at 0.5*(S.rho_at+magnorm) 0.5*(S.rho_at-magnorm)];
 end
 

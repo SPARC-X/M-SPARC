@@ -1,4 +1,15 @@
 --------------
+Sep 08, 2023
+Name: Xin Jing
+* release non-collinear spin 
+* integrate spin and spinor wave function cases for eigen solver, xc, force, stress, etc
+* clean and merge duplicate code
+* calculate and print magnetization of each atom
+* update references with 1E-5 tolerance
+* add testsuites for noncollinear spin
+* update documentation
+
+--------------
 Aug 04, 2023
 Name: Boqin Zhang
 * Add d3 coefficients for PBE0 and HSE

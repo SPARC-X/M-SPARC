@@ -64,28 +64,14 @@ else
 	x_wavg = x_k; f_wavg = f_k;
 end
 
-if S.spin_typ == 0
-    f_tot = f_wavg; % for spin-unpolarized calculations, f_tot is just f_wavg
-    % f_mag is N/A for spin-unporlaized calculations
-elseif S.spin_typ == 1
-    f_tot = f_wavg(1:S.N) + f_wavg(S.N+1:2*S.N);
-    f_mag = f_wavg(1:S.N) - f_wavg(S.N+1:2*S.N);
-    sum_f_tot = sum(f_tot);
-    sum_f_mag = sum(f_mag);
-elseif S.spin_typ == 2
-    f_tot = f_wavg(1:S.N);
-    f_magx = f_wavg(1+S.N:2*S.N);
-    f_magy = f_wavg(1+2*S.N:3*S.N);
-    f_magz = f_wavg(1+3*S.N:4*S.N);
-    sum_f_tot = sum(f_tot);
-    sum_f_magx = sum(f_magx);
-    sum_f_magy = sum(f_magy);
-    sum_f_magz = sum(f_magz);
+% calculate sum of all columns
+f_wavg = reshape(f_wavg,[],S.nspden);
+if S.spin_typ > 0
+    sum_f = sum(f_wavg);
 end
 
-% TODO: change it for non-collinear
 Pf = zeros(S.N,S.nspden);
-% apply preconditioner to the weighted residual
+% apply preconditioner to the residual of rho
 if S.MixingPrecond > 0
     % precondition total density
     if S.MixingPrecond == 1      % kerker precond
@@ -93,101 +79,53 @@ if S.MixingPrecond > 0
         % precondition the residual of total density/potential
         k_TF = S.precond_kerker_kTF;
         idiemac = S.precond_kerker_thresh;
-        Pf(:,1) = Kerker_Precond(S, f_tot, amix, k_TF, idiemac, S.precond_tol, 1000, zeros(S.N,1));
+        Pf(:,1) = Kerker_Precond(S, f_wavg(:,1), amix, k_TF, idiemac, S.precond_tol, 1000, zeros(S.N,1));
     end
 else
-    Pf(:,1) = amix * f_tot;     % mixing param is included in Pf
+    Pf(:,1) = amix * f_wavg(:,1);     % mixing param is included in Pf
 end
 
-if S.spin_typ == 1
-    if S.MixingPrecondMag ~= 0
-        if S.MixingPrecondMag == 1
-            k_TF_mag = S.precond_kerker_kTF_mag;
-            idiemac_mag = S.precond_kerker_thresh_mag;
-            Pf(:,2) = Kerker_Precond(S, f_mag, amix, k_TF_mag, idiemac_mag, S.precond_tol, 1000, zeros(S.N,1));
-        end
-    else
-        Pf(:,2) = amix_mag * f_mag;     % mixing param is included in Pf
+% apply preconditioner to the residual of magnetization
+if S.MixingPrecondMag == 1
+    k_TF_mag = S.precond_kerker_kTF_mag;
+    idiemac_mag = S.precond_kerker_thresh_mag;
+    for i = 2:S.nspden
+        Pf(:,i) = Kerker_Precond(S, f_wavg(:,i), amix, k_TF_mag, idiemac_mag, S.precond_tol, 1000, zeros(S.N,1));
     end
-elseif S.spin_typ == 2
-    if S.MixingPrecondMag ~= 0
-        if S.MixingPrecondMag == 1
-            k_TF_mag = S.precond_kerker_kTF_mag;
-            idiemac_mag = S.precond_kerker_thresh_mag;
-            Pf(:,2) = Kerker_Precond(S, f_magx, amix, k_TF_mag, idiemac_mag, S.precond_tol, 1000, zeros(S.N,1));
-            Pf(:,3) = Kerker_Precond(S, f_magy, amix, k_TF_mag, idiemac_mag, S.precond_tol, 1000, zeros(S.N,1));
-            Pf(:,4) = Kerker_Precond(S, f_magz, amix, k_TF_mag, idiemac_mag, S.precond_tol, 1000, zeros(S.N,1));
-        end
-    else
-        Pf(:,2:4) = amix_mag * [f_magx f_magy f_magz];     % mixing param is included in Pf
+else
+    for i = 2:S.nspden
+        Pf(:,i) = amix_mag * f_wavg(:,i);     % mixing param is included in Pf
     end
 end
 
-if S.spin_typ == 1
-    sum_Pf_tot = sum(Pf(:,1));
-    shift_Pf_tot = (sum_f_tot - sum_Pf_tot)/S.N;
-    Pf(:,1) = Pf(:,1) + shift_Pf_tot;
-    
-    sum_Pf_mag = sum(Pf(:,2));
-    shift_Pf_mag = (sum_f_mag - sum_Pf_mag)/S.N;
-    Pf(:,2) = Pf(:,2) + shift_Pf_mag;
-elseif S.spin_typ == 2
-    sum_Pf_tot = sum(Pf(:,1));
-    shift_Pf_tot = (sum_f_tot - sum_Pf_tot)/S.N;
-    Pf(:,1) = Pf(:,1) + shift_Pf_tot;
-    
-    sum_Pf_magx = sum(Pf(:,2));
-    shift_Pf_magx = (sum_f_magx - sum_Pf_magx)/S.N;
-    Pf(:,2) = Pf(:,2) + shift_Pf_magx;
-
-    sum_Pf_magy = sum(Pf(:,3));
-    shift_Pf_magy = (sum_f_magy - sum_Pf_magy)/S.N;
-    Pf(:,3) = Pf(:,3) + shift_Pf_magy;
-
-    sum_Pf_magz = sum(Pf(:,4));
-    shift_Pf_magz = (sum_f_magz - sum_Pf_magz)/S.N;
-    Pf(:,4) = Pf(:,4) + shift_Pf_magz;
+% this step makes scf converge slower when without spin
+% don't know why
+if S.spin_typ > 0
+    % recover original sum
+    sum_Pf = sum(Pf);
+    shift = (sum_f - sum_Pf)/S.N;
+    Pf = Pf + shift;
 end
 
-% x_kp1 = x_wavg + mix_param * f_wavg;
-if S.spin_typ == 0
-    x_kp1 = x_wavg + Pf;
-elseif S.spin_typ == 1
-    x_kp1 = x_wavg + vertcat(Pf(:,1) + Pf(:,2), Pf(:,1) - Pf(:,2))/2;
-elseif S.spin_typ == 2
-    x_kp1 = x_wavg + reshape(Pf,[],1);
-end
-
+% get x_kp1
+x_kp1 = x_wavg + reshape(Pf,[],1);
 
 if S.MixingVariable == 0
 	% due to inaccurate kerker solver, the density might have
-	% slightly inaccuate integral
-	if S.MixingPrecond ~= 0
-		% scale the density
-        if S.spin_typ == 2
-            negrho_count = sum(x_kp1(1:S.N) < 0);
-            if (negrho_count > 0)
-                fprintf('\nDensity got negative\n\n');                
-            end
-            x_kp1(x_kp1(1:S.N) < 0) = 0;
-            integral = S.W'*(x_kp1(1:S.N));
-            x_kp1(1:S.N) = x_kp1(1:S.N) * (-S.NegCharge/integral);
-        else
-            negrho_count = sum(x_kp1 < 0);
-            if (negrho_count > 0)
-                fprintf('\nDensity got negative\n\n');                
-            end
-            x_kp1(x_kp1 < 0) = 0;
-            integral = sum(S.W'*reshape(x_kp1,S.N,S.nspin),2);
-            x_kp1 = x_kp1 * (-S.NegCharge/integral);
-        end
-	end
+	% slightly inaccuate integral, scale the density
+    negrho_count = sum(x_kp1(1:S.N) < 0);
+    if (negrho_count > 0)
+        fprintf('\nDensity got negative\n\n');                
+    end
+    x_kp1(x_kp1(1:S.N) < 0) = 0;
+    integral = S.W'*(x_kp1(1:S.N));
+    x_kp1(1:S.N) = x_kp1(1:S.N) * (-S.NegCharge/integral);
 end
 
 % update the history vectors
 S.mixing_hist_fkm1 = f_k;
 S.mixing_hist_xkm1 = x_k;
-
+S.mixing_hist_xk = x_kp1;
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

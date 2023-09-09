@@ -17,7 +17,7 @@ function S = msparc(fname,varargin)
 addpath(fullfile(filepath,'xc'))
 addpath(fullfile(filepath,'xc/exx'))
 addpath(fullfile(filepath,'xc/mgga'))
-addpath(fullfile(filepath,'xc/vdw'))
+addpath(fullfile(filepath,'xc/vdW'))
 
 format long;
 fprintf('\n');
@@ -129,4 +129,4 @@ end
 rmpath(fullfile(filepath,'xc'))
 rmpath(fullfile(filepath,'xc/exx'))
 rmpath(fullfile(filepath,'xc/mgga'))
-rmpath(fullfile(filepath,'xc/vdw'))
+rmpath(fullfile(filepath,'xc/vdW'))

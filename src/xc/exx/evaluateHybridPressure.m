@@ -3,7 +3,7 @@ pres_exx = 0;
 if S.usefock > 0 && S.exxdivmethod ~= 0
     for spinor = 1:S.nspinor
         ndrange = (1+(spinor-1)*S.N:spinor*S.N); 
-        sshift = (spinor-1)*S.Nev;
+        nsshift = (spinor-1)*S.tnkpt*(S.spin_typ == 1);
 
         for k_ind = 1:S.tnkpt
             for q_ind = 1:S.tnkpthf
@@ -24,7 +24,7 @@ if S.usefock > 0 && S.exxdivmethod ~= 0
                         k_shift = k - q;
                         phi = poissonSolve_FFT(S,rhs,k_shift,S.const_press);
                         pres_exx = pres_exx - S.wkpt(k_ind)*S.wkpthf(q_ind)...
-                            *S.occ_outer(i+sshift,q_ind_rd)*S.occ_outer(j+sshift,k_ind)...
+                            *S.occ_outer(i,q_ind_rd+nsshift)*S.occ_outer(j,k_ind+nsshift)...
                             *real(sum(S.hyb_mixing.*conj(rhs).*phi.*S.W));
                     end
                 end

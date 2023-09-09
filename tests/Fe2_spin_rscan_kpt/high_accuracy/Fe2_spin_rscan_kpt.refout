@@ -1,8 +1,8 @@
 ***************************************************************************
-*                      M-SPARC (version Jul 27, 2023)                     *
+*                      M-SPARC (version Aug 04, 2023)                     *
 *   Copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech   *
 *           Distributed under GNU General Public License 3 (GPL)          *
-*                Date: 27-Jul-2023  Start time: 11:37:20                  *
+*                Date: 08-Sep-2023  Start time: 11:36:28                  *
 ***************************************************************************
                            Input parameters                                
 ***************************************************************************
@@ -24,7 +24,7 @@ NSTATES: 24
 EXCHANGE_CORRELATION: RSCAN
 CALC_STRESS: 1
 MAXIT_SCF: 100
-TOL_SCF: 1.00E-05
+TOL_SCF: 1.00E-06
 TOL_POISSON: 1.00E-08
 TOL_LANCZOS: 1.00E-02
 TOL_PSEUDOCHARGE: 1.00E-08
@@ -41,6 +41,7 @@ PULAY_FREQUENCY: 1
 PULAY_RESTART: 0
 REFERENCE_CUTOFF: 0.50
 RHO_TRIGGER: 4
+NUM_CHEFSI: 1
 FIX_RAND: 0
 PRINT_FORCES: 1
 PRINT_ATOMS: 1
@@ -66,7 +67,7 @@ Total number of atom types         :  1
 Total number of atoms              :  2
 Total number of electrons          :  32
 Atom type 1  (valence electrons)   :  Fe 16
-Pseudopotential                    :  ../Fe.pot
+Pseudopotential                    :  ../Fe.psp8
 lloc                               :  4
 Atomic mass                        :  55.844999999999999
 Pseudocharge radii of atom type 1  :  6.31 6.31 6.31
@@ -76,41 +77,43 @@ Estimated total memory usage       :  1.33 GB
                             Self Consistent Field (SCF#1)                     
 ========================================================================================
 Iteration     Free Energy (Ha/atom)    Magnetization     SCF Error        Timing (sec)
-1            -1.1581226288E+02         6.6667E-01        1.025E-01        1143.045
-2            -1.1415638280E+02         6.6496E-01        4.485E-02        579.301
-3            -1.1414138204E+02         6.6663E-01        2.270E-02        515.680
-4            -1.1414214303E+02         6.6667E-01        2.277E-03        512.672
-5            -1.1414621701E+02         6.6667E-01        6.507E-04        510.396
-6            -1.1414622490E+02         6.6667E-01        2.647E-04        493.160
-7            -1.1414623544E+02         6.6667E-01        2.575E-05        514.330
-8            -1.1414622872E+02         6.6667E-01        1.372E-05        513.712
-9            -1.1414622900E+02         6.6667E-01        3.942E-06        510.099
-Total number of SCF: 9     
+1            -1.1581226288E+02         6.6667E-01        1.025E-01        1130.911
+2            -1.1415642545E+02         6.6524E-01        4.458E-02        560.058
+3            -1.1414137651E+02         6.6662E-01        2.262E-02        503.572
+4            -1.1414213202E+02         6.6667E-01        2.449E-03        499.627
+5            -1.1414622277E+02         6.6667E-01        6.709E-04        495.819
+6            -1.1414623101E+02         6.6667E-01        3.475E-04        501.953
+7            -1.1414623977E+02         6.6667E-01        3.872E-05        495.505
+8            -1.1414622734E+02         6.6667E-01        1.935E-05        498.961
+9            -1.1414622914E+02         6.6667E-01        6.693E-06        505.219
+10           -1.1414623034E+02         6.6667E-01        1.523E-06        507.064
+11           -1.1414623013E+02         6.6667E-01        6.195E-07        499.539
+Total number of SCF: 11    
 ====================================================================
                                 Energy                              
 ====================================================================
-Free energy per atom               : -1.1414622900E+02 (Ha/atom)
-Total free energy                  : -2.2829245799E+02 (Ha)
-Band structure energy              :  2.5220975959E+00 (Ha)
-Exchange correlation energy        : -3.1181717308E+01 (Ha)
+Free energy per atom               : -1.1414623013E+02 (Ha/atom)
+Total free energy                  : -2.2829246026E+02 (Ha)
+Band structure energy              :  2.5221319002E+00 (Ha)
+Exchange correlation energy        : -3.1181714910E+01 (Ha)
 Self and correction energy         : -2.4219100518E+02 (Ha)
-Entropy*kb*T                       : -5.4267947819E-05 (Ha)
-Fermi level                        :  1.8451011196E+00 (Ha)
-Net Magnetization                  :  6.6666657193E-01 
-Average force                      :  6.6325536521E-01 (Ha/Bohr)
-Maximum force                      :  6.6325536521E-01 (Ha/Bohr)
-Time for force calculation         :  15.612 (sec)
+Entropy*kb*T                       : -5.4261726997E-05 (Ha)
+Fermi level                        :  1.8451021451E+00 (Ha)
+Net Magnetization                  :  6.6666657191E-01 
+Average force                      :  6.6326376009E-01 (Ha/Bohr)
+Maximum force                      :  6.6326376009E-01 (Ha/Bohr)
+Time for force calculation         :  14.222 (sec)
 Stress (GPa):
- -22479.1210492585       3.3442305849      -3.3441735476
-      3.3442305849  -22713.2264052586      -9.3712098551
-     -3.3441735476      -9.3712098551  -22713.2264252869
-Pressure                           :  2.2635191293E+04 (GPa)
-Maximum stress                     :  2.2713226425E+04 (GPa)
-Time for stress calculation        :  45.163 (sec)
+ -22479.0888322097       3.3259113209      -3.3259248830
+      3.3259113209  -22713.1671334263      -9.2946417820
+     -3.3259248830      -9.2946417820  -22713.1671336180
+Pressure                           :  2.2635141033E+04 (GPa)
+Maximum stress                     :  2.2713167134E+04 (GPa)
+Time for stress calculation        :  43.855 (sec)
 ***************************************************************************
                                Timing info                                 
 ***************************************************************************
-Total walltime                     :  5369.813 sec
+Total walltime                     :  6274.187 sec
 ___________________________________________________________________________
 
 ***************************************************************************

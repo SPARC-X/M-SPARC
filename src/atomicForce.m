@@ -140,7 +140,7 @@ if S.NLCC_flag
                 force_xc(JJ_a,1) = force_xc(JJ_a,1) + sum(sum(sum( drho_Tilde_at_x(II,JJ,KK) .* ( S.Vxc(Rowcount_rb) ) .* S.W(Rowcount_rb) )));
                 force_xc(JJ_a,2) = force_xc(JJ_a,2) + sum(sum(sum( drho_Tilde_at_y(II,JJ,KK) .* ( S.Vxc(Rowcount_rb) ) .* S.W(Rowcount_rb) )));
                 force_xc(JJ_a,3) = force_xc(JJ_a,3) + sum(sum(sum( drho_Tilde_at_z(II,JJ,KK) .* ( S.Vxc(Rowcount_rb) ) .* S.W(Rowcount_rb) )));
-            elseif S.spin_typ == 1
+            else
                 vxc = S.Vxc(:,1)+S.Vxc(:,2);
                 force_xc(JJ_a,1) = force_xc(JJ_a,1) + sum(sum(sum( 0.5*drho_Tilde_at_x(II,JJ,KK) .* (vxc(Rowcount_rb) ) .* S.W(Rowcount_rb) )));
                 force_xc(JJ_a,2) = force_xc(JJ_a,2) + sum(sum(sum( 0.5*drho_Tilde_at_y(II,JJ,KK) .* (vxc(Rowcount_rb) ) .* S.W(Rowcount_rb) )));
@@ -403,11 +403,7 @@ for kpt = 1:S.tnkpt
         sigma = (-1)^(spinor-1);
         shift = (spinor-1)*S.N;         % for selecting each spinor, spinor=1 shift = 0, spinor=2, shift = S.N
         shift2 = (2-spinor)*S.N;        % for selecting the other spin channel, spinor=1 shift2 = S.N, spinor=2,shift2=0  
-        if S.spin_typ == 1
-            nsrange = (1+(spinor-1)*S.Nev:spinor*S.Nev);
-        else
-            nsrange = (1:S.Nev);
-        end
+        nsshift = (spinor-1)*S.tnkpt*(S.spin_typ == 1);
 
         % scalar relativistic part
         force_atm = zeros(S.n_atm,3);
@@ -426,9 +422,9 @@ for kpt = 1:S.tnkpt
                 integral_2_y = integral_2_y + ChiW * (Dpsi_y(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:)) * (phase_fac);
                 integral_2_z = integral_2_z + ChiW * (Dpsi_z(S.Atom(JJ_a).rcImage(img).rc_pos+shift,:)) * (phase_fac);
             end
-            tf_x = transpose(S.Atom(JJ_a).gamma_Jl) * real(integral_1.*integral_2_x) * S.occ(nsrange,kpt);
-            tf_y = transpose(S.Atom(JJ_a).gamma_Jl) * real(integral_1.*integral_2_y) * S.occ(nsrange,kpt);
-            tf_z = transpose(S.Atom(JJ_a).gamma_Jl) * real(integral_1.*integral_2_z) * S.occ(nsrange,kpt);
+            tf_x = transpose(S.Atom(JJ_a).gamma_Jl) * real(integral_1.*integral_2_x) * S.occ(:,kpt+nsshift);
+            tf_y = transpose(S.Atom(JJ_a).gamma_Jl) * real(integral_1.*integral_2_y) * S.occ(:,kpt+nsshift);
+            tf_z = transpose(S.Atom(JJ_a).gamma_Jl) * real(integral_1.*integral_2_z) * S.occ(:,kpt+nsshift);
             force_atm(JJ_a,:) = force_atm(JJ_a,:) + [tf_x tf_y tf_z];
         end
         force_nloc = force_nloc - S.occfac*2*S.wkpt(kpt)*force_atm;

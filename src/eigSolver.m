@@ -21,13 +21,13 @@ function [upper_bound_guess_vecs,psi,EigVal,a0,bup,lambda_cutoff] = eigSolver(S,
 % eigen problem size
 N = S.N*S.nspinor_eig; 
 % reorganize psi, EigVal to make each chunk of data for one eigen problem
+% while S.psi remains original format
 if S.spin_typ == 1
     psi = cat(3,psi(1:S.N,:,:),psi(1+S.N:2*S.N,:,:));
-    EigVal = cat(2,EigVal(1:S.Nev,:),EigVal(1+S.Nev:2*S.Nev,:));
 end
 
 if S.parallel ~= 1
-    for ks = 1:S.num_eig
+    for ks = 1:S.tnkpt*S.nspin
         if ks <= S.tnkpt
             kpt = ks;
             spin = 1;
@@ -37,7 +37,7 @@ if S.parallel ~= 1
         end
         % get Veff 
         if S.spin_typ == 2
-            Veff = S.Veff_nc;
+            Veff = S.Veff;
         else
             Veff = S.Veff(:,spin);
         end
@@ -149,7 +149,7 @@ if S.parallel ~= 1
 else 
 	% Before getting into parfor, set to use only one thread
 	LASTN = maxNumCompThreads(1);
-    parfor (ks = 1:S.num_eig, S.num_worker_heuristic)
+    parfor (ks = 1:S.tnkpt*S.nspin, S.num_worker_heuristic)
         if ks <= S.tnkpt
             kpt = ks;
             spin = 1;
@@ -159,7 +159,7 @@ else
         end
         % get Veff 
         if S.spin_typ == 2
-            Veff = S.Veff_nc;
+            Veff = S.Veff;
         else
             Veff = S.Veff(:,spin);
         end
@@ -274,7 +274,6 @@ end
 
 % restore the storage of psi, EigVal
 if S.spin_typ == 1
-    psi = cat(1,psi(:,:,1:S.tnkpt),psi(:,:,1+S.tnkpt:2*S.tnkpt));
-    EigVal = cat(1,EigVal(:,1:S.tnkpt),EigVal(:,1+S.tnkpt:2*S.tnkpt));
+    psi = cat(1,psi(:,:,1:S.tnkpt),psi(:,:,1+S.tnkpt:2*S.tnkpt));    
 end
 end

@@ -81,8 +81,6 @@ if S.d3Flag == 1
 	S = d3EnergyGradient(S);
     S.Etotal = S.Etotal + S.d3Energy;
 end
-	
-% Etotal = evaluateTotalEnergy(EigVal,occ,rho,S.b,phi,Vxc,S.W,S.bet,S.Eself,S.E_corr,1) ;
 
 fprintf('\n');
 fprintf(' **********************************************************\n');
@@ -151,6 +149,10 @@ disp(max(S.abs_force));
 t_force = toc(tic_force);
 fprintf('\n Time for calculating forces: %f s.\n', t_force);
 
+if S.spin_typ > 0
+    S.atomMag = Calculate_atom_mag(S);
+end
+
 % write forces into .static file if required
 if (S.PrintForceFlag == 1 && S.MDFlag == 0 && S.RelaxFlag == 0) 
 	staticfname = S.staticfname;
@@ -160,6 +162,14 @@ if (S.PrintForceFlag == 1 && S.MDFlag == 0 && S.RelaxFlag == 0)
 	end
 	fprintf(fileID, 'Atomic forces (Ha/Bohr):\n');
 	fprintf(fileID, '%18.10f %18.10f %18.10f\n', S.force');
+    if S.spin_typ == 1
+        fprintf(fileID, 'Atomic magnetization along Z-dir within Radius 2 Bohr: (Bohr magneton)\n');
+        fprintf(fileID, '%18.10f\n', S.atomMag');
+    end
+    if S.spin_typ == 2
+        fprintf(fileID, 'Atomic magnetization along X,Y,Z-dir within Radius 2 Bohr: (Bohr magneton)\n');
+        fprintf(fileID, '%18.10f %18.10f %18.10f\n', S.atomMag');
+    end
 	fclose(fileID);
 end
 
@@ -274,10 +284,9 @@ else
 		S.rho(:,1) = S.rho_at(:,1) + S.delta_rho_in_tp1;
 		S.rho(S.rho(:,1) < 0,1) = S.xc_rhotol;
 		% update spin up/down densities
-		if S.spin_typ == 1
-			rho_mag = S.rho(:,2) - S.rho(:,3);
-			S.rho(:,2) = (S.rho(:,1) + rho_mag) * 0.5;
-			S.rho(:,3) = (S.rho(:,1) - rho_mag) * 0.5;        
+		if S.spin_typ > 0
+            S.rho(:,2) = (S.rho(:,1) + S.mag(:,1)) * 0.5;
+			S.rho(:,3) = (S.rho(:,1) - S.mag(:,1)) * 0.5; 
 		end
 	end
 	% need to scale the density
@@ -336,9 +345,100 @@ dd = calculateDistance(p1(:,1),p1(:,2),p1(:,3),p2(:,1),p2(:,2),p2(:,3),S);
 nndis = min(dd);
 end
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+function atomMag = Calculate_atom_mag(S)
+rc = 2.0; % TODO: add an input option 
+if S.spin_typ == 1
+    atomMag = zeros(S.n_atm,1);
+elseif S.spin_typ == 2
+    atomMag = zeros(S.n_atm,3);
+end
 
+for JJ_a = 1:S.n_atm % loop over all the atoms
+	% Atom position of atom JJ_a
+	x0 = S.Atoms(JJ_a,1);
+	y0 = S.Atoms(JJ_a,2);
+	z0 = S.Atoms(JJ_a,3);
+	
+	% Note the S.dx, S.dy, S.dz terms are to ensure the image rc-region overlap w/ fund. domain
+	if S.BCx == 0
+		n_image_xl = floor((x0 + rc)/S.L1);
+		n_image_xr = floor((S.L1 - x0+rc-S.dx)/S.L1);
+	else
+		n_image_xl = 0;
+		n_image_xr = 0;
+	end
+	
+	if S.BCy == 0
+		n_image_yl = floor((y0 + rc)/S.L2);
+		n_image_yr = floor((S.L2 - y0+rc-S.dy)/S.L2);
+	else
+		n_image_yl = 0;
+		n_image_yr = 0;
+	end
+	
+	if S.BCz == 0
+		n_image_zl = floor((z0 + rc)/S.L3);
+		n_image_zr = floor((S.L3 - z0+rc-S.dz)/S.L3);
+	else
+		n_image_zl = 0;
+		n_image_zr = 0;
+	end
+	
+	% Total No. of images of atom JJ_a (including atom JJ_a)
+	n_image_total = (n_image_xl+n_image_xr+1) * (n_image_yl+n_image_yr+1) * (n_image_zl+n_image_zr+1);
 
-
-
-
-
+	% Find the coordinates for all the images
+	xx_img = (-n_image_xl : n_image_xr) * S.L1 + x0;
+	yy_img = (-n_image_yl : n_image_yr) * S.L2 + y0;
+	zz_img = (-n_image_zl : n_image_zr) * S.L3 + z0;
+	[XX_IMG_3D,YY_IMG_3D,ZZ_IMG_3D] = ndgrid(xx_img,yy_img,zz_img);
+			
+	% Loop over all image(s) of atom JJ_a (including atom JJ_a)
+    for count_image = 1:n_image_total
+        % Atom position of the image
+		x0_i = XX_IMG_3D(count_image);
+		y0_i = YY_IMG_3D(count_image);
+		z0_i = ZZ_IMG_3D(count_image);
+        
+        % Check if the rc-region of the image has influence in the fund. domain
+		isImgRc_x = ((x0_i-S.xin)-S.L1+S.dx <= rc) || (abs(x0_i-S.xin) <= rc);
+		isImgRc_y = ((y0_i-S.yin)-S.L2+S.dy <= rc) || (abs(y0_i-S.yin) <= rc);
+		isImgRc_z = ((z0_i-S.zin)-S.L3+S.dz <= rc) || (abs(z0_i-S.zin) <= rc);
+		isImgRc = isImgRc_x && isImgRc_y && isImgRc_z;
+        
+        if ~isImgRc
+            continue;
+        end
+        
+        % Starting and ending indices of the nonlocal rc-region
+        ii_rc_s = max(ceil( (x0_i - rc)/S.dx) + 1,1);
+        ii_rc_e = min(floor((x0_i + rc)/S.dx) + 1,S.Nx);
+        jj_rc_s = max(ceil( (y0_i - rc)/S.dy) + 1,1);
+        jj_rc_e = min(floor((y0_i + rc)/S.dy) + 1,S.Ny);
+        kk_rc_s = max(ceil( (z0_i - rc)/S.dz) + 1,1);
+        kk_rc_e = min(floor((z0_i + rc)/S.dz) + 1,S.Nz);
+           
+        for kk=kk_rc_s:kk_rc_e
+            zz = (kk - 1) * S.dz;            
+            for jj=jj_rc_s:jj_rc_e
+                yy = (jj - 1) * S.dy;                
+                for ii=ii_rc_s:ii_rc_e
+                    xx = S.xin + (ii - 1) * S.dx;                    
+                    dis = calculateDistance(xx,yy,zz,x0_i,y0_i,z0_i,S);
+                    if dis <= rc
+                        indx = ii+(jj-1)*S.Nx+(kk-1)*S.Nx*S.Ny;
+                        if S.spin_typ == 1
+                            atomMag(JJ_a) = atomMag(JJ_a) + S.mag(indx);
+                        end
+                        if S.spin_typ == 2
+                            atomMag(JJ_a,:) = atomMag(JJ_a,:) + S.mag(indx,2:4);
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+atomMag = atomMag * S.dV;
+end

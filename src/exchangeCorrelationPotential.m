@@ -158,19 +158,19 @@ else
             drho_3 = S.grad_3 * rho;
             sigma = compute_norm(S,drho_1,drho_2,drho_3);
         else
-            gt0 = (S.mag(:,end) > S.xc_magtol);
+            gt0 = (S.mag(:,1) > S.xc_magtol);
             drhot_1 = S.grad_1 * rho(:,1);
             drhot_2 = S.grad_2 * rho(:,1);
             drhot_3 = S.grad_3 * rho(:,1);
-            dm_1 = S.grad_1 * S.mag(:,1:3);
-            dm_2 = S.grad_2 * S.mag(:,1:3);
-            dm_3 = S.grad_3 * S.mag(:,1:3);
+            dm_1 = S.grad_1 * S.mag(:,2:4);
+            dm_2 = S.grad_2 * S.mag(:,2:4);
+            dm_3 = S.grad_3 * S.mag(:,2:4);
             dmnorm_1 = zeros(S.N,1);
             dmnorm_2 = zeros(S.N,1);
             dmnorm_3 = zeros(S.N,1);
-            dmnorm_1(gt0) = sum(dm_1(gt0,:) .* S.mag(gt0,1:3),2)./S.mag(gt0,end);
-            dmnorm_2(gt0) = sum(dm_2(gt0,:) .* S.mag(gt0,1:3),2)./S.mag(gt0,end);
-            dmnorm_3(gt0) = sum(dm_3(gt0,:) .* S.mag(gt0,1:3),2)./S.mag(gt0,end);
+            dmnorm_1(gt0) = sum(dm_1(gt0,:) .* S.mag(gt0,2:4),2)./S.mag(gt0,1);
+            dmnorm_2(gt0) = sum(dm_2(gt0,:) .* S.mag(gt0,2:4),2)./S.mag(gt0,1);
+            dmnorm_3(gt0) = sum(dm_3(gt0,:) .* S.mag(gt0,2:4),2)./S.mag(gt0,1);
             
             drho_up_1 = 0.5*(drhot_1 + dmnorm_1);
             drho_up_2 = 0.5*(drhot_2 + dmnorm_2);
@@ -312,18 +312,18 @@ if S.spin_typ == 2
     % in order [V11,V22,real(V12),imag(V12)]
     S.Vxc_nc = zeros(S.N,S.nspden);
     range = (1:S.N);
-    nonz = range(S.mag(:,end) > S.xc_magtol);    
-    isze = range(~(S.mag(:,end) > S.xc_magtol));
+    nonz = range(S.mag(:,1) > S.xc_magtol);    
+    isze = range(~(S.mag(:,1) > S.xc_magtol));
     % V11
-    S.Vxc_nc(nonz,1) = 0.5*V11pV22(nonz) + 0.5*S.mag(nonz,3)./S.mag(nonz,4).*V11mV22(nonz);
+    S.Vxc_nc(nonz,1) = 0.5*V11pV22(nonz) + 0.5*S.mag(nonz,4)./S.mag(nonz,1).*V11mV22(nonz);
     S.Vxc_nc(isze,1) = 0.5*V11pV22(isze);
     % V22
-    S.Vxc_nc(nonz,2) = 0.5*V11pV22(nonz) - 0.5*S.mag(nonz,3)./S.mag(nonz,4).*V11mV22(nonz);
+    S.Vxc_nc(nonz,2) = 0.5*V11pV22(nonz) - 0.5*S.mag(nonz,4)./S.mag(nonz,1).*V11mV22(nonz);
     S.Vxc_nc(isze,2) = 0.5*V11pV22(isze);
     % real(V12)
-    S.Vxc_nc(nonz,3) = 0.5*V11mV22(nonz)./S.mag(nonz,4).* S.mag(nonz,1);
+    S.Vxc_nc(nonz,3) = 0.5*V11mV22(nonz)./S.mag(nonz,1).* S.mag(nonz,2);
     % imag(V12)
-    S.Vxc_nc(nonz,4) = -0.5*V11mV22(nonz)./S.mag(nonz,4).* S.mag(nonz,2);    
+    S.Vxc_nc(nonz,4) = -0.5*V11mV22(nonz)./S.mag(nonz,1).* S.mag(nonz,3);    
 end
 end
 %--------------------------------------------------------------------------
@@ -345,11 +345,7 @@ function [tau] = kineticDensity(S, rho)
         kpt_vec = S.kptgrid(kpt,:);
         for spinor = 1:S.nspinor
             ndrange = (1+(spinor-1)*S.N:spinor*S.N); 
-            if S.spin_typ == 1
-                nsrange = (1+(spinor-1)*S.Nev:spinor*S.Nev);
-            else
-                nsrange = (1:S.Nev);
-            end
+            nsshift = (spinor-1)*S.tnkpt*(S.spin_typ == 1);
 
             psiTheKpt = reshape(S.psi(ndrange,:,kpt), S.N, S.Nev);
     
@@ -366,13 +362,13 @@ function [tau] = kineticDensity(S, rho)
                 dpsiTheKptMLapT_1 = reshape(dpsiTheKptMLapT_theWaveFun(:, 1), S.N, S.Nev);
                 dpsiTheKptMLapT_2 = reshape(dpsiTheKptMLapT_theWaveFun(:, 2), S.N, S.Nev);
                 dpsiTheKptMLapT_3 = reshape(dpsiTheKptMLapT_theWaveFun(:, 3), S.N, S.Nev);
-                tau(:,spinor) = tau(:,spinor) + 0.5 * S.occfac*S.wkpt(kpt)*(conj(dpsiTheKpt_1) .* dpsiTheKptMLapT_1)*S.occ(nsrange,kpt);
-                tau(:,spinor) = tau(:,spinor) + 0.5 * S.occfac*S.wkpt(kpt)*(conj(dpsiTheKpt_2) .* dpsiTheKptMLapT_2)*S.occ(nsrange,kpt);
-                tau(:,spinor) = tau(:,spinor) + 0.5 * S.occfac*S.wkpt(kpt)*(conj(dpsiTheKpt_3) .* dpsiTheKptMLapT_3)*S.occ(nsrange,kpt);
+                tau(:,spinor) = tau(:,spinor) + 0.5 * S.occfac*S.wkpt(kpt)*(conj(dpsiTheKpt_1) .* dpsiTheKptMLapT_1)*S.occ(:,kpt+nsshift);
+                tau(:,spinor) = tau(:,spinor) + 0.5 * S.occfac*S.wkpt(kpt)*(conj(dpsiTheKpt_2) .* dpsiTheKptMLapT_2)*S.occ(:,kpt+nsshift);
+                tau(:,spinor) = tau(:,spinor) + 0.5 * S.occfac*S.wkpt(kpt)*(conj(dpsiTheKpt_3) .* dpsiTheKptMLapT_3)*S.occ(:,kpt+nsshift);
             else % orthogonal cell
-                tau(:,spinor) = tau(:,spinor) + 0.5 * S.occfac*S.wkpt(kpt)*(conj(dpsiTheKpt_1) .* (dpsiTheKpt_1))*S.occ(nsrange,kpt); % multiply occupation, then sum over NSTATES
-                tau(:,spinor) = tau(:,spinor) + 0.5 * S.occfac*S.wkpt(kpt)*(conj(dpsiTheKpt_2) .* (dpsiTheKpt_2))*S.occ(nsrange,kpt);
-                tau(:,spinor) = tau(:,spinor) + 0.5 * S.occfac*S.wkpt(kpt)*(conj(dpsiTheKpt_3) .* (dpsiTheKpt_3))*S.occ(nsrange,kpt);
+                tau(:,spinor) = tau(:,spinor) + 0.5 * S.occfac*S.wkpt(kpt)*(conj(dpsiTheKpt_1) .* (dpsiTheKpt_1))*S.occ(:,kpt+nsshift); % multiply occupation, then sum over NSTATES
+                tau(:,spinor) = tau(:,spinor) + 0.5 * S.occfac*S.wkpt(kpt)*(conj(dpsiTheKpt_2) .* (dpsiTheKpt_2))*S.occ(:,kpt+nsshift);
+                tau(:,spinor) = tau(:,spinor) + 0.5 * S.occfac*S.wkpt(kpt)*(conj(dpsiTheKpt_3) .* (dpsiTheKpt_3))*S.occ(:,kpt+nsshift);
             end
         end
     end

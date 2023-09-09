@@ -2,9 +2,9 @@ function [S] = evaluateExactExchangeEnergy(S)
 S.Eex = 0;
 if S.ACEFlag == 0
     V_guess = rand(S.N,1);
-    for spin = 1:S.nspinor
+    for spinor = 1:S.nspinor
         ndrange = (1+(spinor-1)*S.N:spinor*S.N); 
-        sshift = (spinor-1)*S.Nev;
+        nsshift = (spinor-1)*S.tnkpt*(S.spin_typ == 1);
         for k_ind = 1:S.tnkpt
             for q_ind = 1:S.tnkpthf
                 % q_ind_rd is the index in reduced kptgrid
@@ -31,7 +31,7 @@ if S.ACEFlag == 0
                             V_guess = gij;    
                         end
 
-                        S.Eex = S.Eex + S.wkpt(k_ind)*S.wkpthf(q_ind)*S.occ_outer(i+sshift,q_ind_rd)*S.occ_outer(j+sshift,k_ind)*real(sum(conj(rhs).*gij.*S.W));
+                        S.Eex = S.Eex + S.wkpt(k_ind)*S.wkpthf(q_ind)*S.occ_outer(i,q_ind_rd+nsshift)*S.occ_outer(j,k_ind+nsshift)*real(sum(conj(rhs).*gij.*S.W));
                     end
                 end
             end
@@ -42,20 +42,20 @@ else
     if S.isgamma == 1
         for spinor = 1:S.nspinor
             ndrange = (1+(spinor-1)*S.N:spinor*S.N); 
-            sshift = (spinor-1)*S.Nev;
+            nsshift = (spinor-1)*S.tnkpt*(S.spin_typ == 1);
             Ns = S.Ns_occ;
             psi_times_Xi = transpose(S.psi(ndrange,1:Ns))*S.Xi(ndrange,:);
-            S.Eex = S.Eex + (transpose(S.occ_outer((1:Ns)+sshift))*sum(psi_times_Xi.*psi_times_Xi,2))*(S.dV)^2;
+            S.Eex = S.Eex + (transpose(S.occ_outer(1:Ns,1+nsshift))*sum(psi_times_Xi.*psi_times_Xi,2))*(S.dV)^2;
         end
     else
         for spinor = 1:S.nspinor
             ndrange = (1+(spinor-1)*S.N:spinor*S.N); 
-            sshift = (spinor-1)*S.Nev;
+            nsshift = (spinor-1)*S.tnkpt*(S.spin_typ == 1);
             Ns = S.Ns_occ;
             for k_ind = 1:S.tnkpt
                 psi_k = S.psi(ndrange,1:Ns,k_ind);
                 psi_times_Xi = psi_k'*S.Xi(ndrange,:,k_ind);
-                S.Eex = S.Eex + S.wkpt(k_ind)*(transpose(S.occ_outer((1:Ns)+sshift,k_ind))*sum(conj(psi_times_Xi).*psi_times_Xi,2))*(S.dV)^2;
+                S.Eex = S.Eex + S.wkpt(k_ind)*(transpose(S.occ_outer(1:Ns,k_ind+nsshift))*sum(conj(psi_times_Xi).*psi_times_Xi,2))*(S.dV)^2;
             end
         end
     end 

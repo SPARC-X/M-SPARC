@@ -370,7 +370,6 @@ elseif S.spin_typ == 1
     S.nspden = 2;
 % non-collinear polarized calculation
 elseif S.spin_typ == 2
-    error('ERROR: Non-Collinear spin is not released yet!');
     S.nspin = 1;
     S.nspinor = 2;
     S.nspden = 4;
@@ -379,7 +378,6 @@ fprintf(' nspin = %d, nspinor = %d, nspden = %d\n', S.nspin, S.nspinor, S.nspden
 
 S.occfac = 2/S.nspinor;
 S.nspinor_eig = S.nspinor/S.nspin;
-S.num_eig = S.tnkpt*S.nspin;
 
 % Provide default spin if not provided
 if S.spin_typ == 1
@@ -473,16 +471,16 @@ if S.Nx > 0 && S.Ny > 0 && S.Nz > 0
 	S.dz = S.L3 / S.Nz;
 elseif S.ecut > 0
 	S.mesh_spacing = Ecut2h(S.ecut, S.FDn);
-	S.Nx = max(ceil(S.L1/S.mesh_spacing),1);
-	S.Ny = max(ceil(S.L2/S.mesh_spacing),1);
-	S.Nz = max(ceil(S.L3/S.mesh_spacing),1);
+	S.Nx = max(ceil(S.L1/S.mesh_spacing),S.FDn);
+	S.Ny = max(ceil(S.L2/S.mesh_spacing),S.FDn);
+	S.Nz = max(ceil(S.L3/S.mesh_spacing),S.FDn);
 	S.dx = S.L1 / S.Nx;
 	S.dy = S.L2 / S.Ny;
 	S.dz = S.L3 / S.Nz;
 elseif S.mesh_spacing > 0
-	S.Nx = max(ceil(S.L1/S.mesh_spacing),1);
-	S.Ny = max(ceil(S.L2/S.mesh_spacing),1);
-	S.Nz = max(ceil(S.L3/S.mesh_spacing),1);
+	S.Nx = max(ceil(S.L1/S.mesh_spacing),S.FDn);
+	S.Ny = max(ceil(S.L2/S.mesh_spacing),S.FDn);
+	S.Nz = max(ceil(S.L3/S.mesh_spacing),S.FDn);
 	S.dx = S.L1 / S.Nx;
 	S.dy = S.L2 / S.Ny;
 	S.dz = S.L3 / S.Nz;
@@ -819,6 +817,14 @@ if (S.RelaxFlag || S.MDFlag)
 	S.Atoms_old     = S.Atoms_init;
 end
 
+if S.rhoTrigger < 0
+    if S.spin_typ == 2
+        S.rhoTrigger = 6;
+    else
+        S.rhoTrigger = 4;
+    end
+end
+
 S.Relax_iter = 1;
 S.ForceCount = 1;
 S.amu2au = 1822.888485332371; % 1 au = 9.10938356e-31 Kg; 1 amu =  1.660539040e-27 Kg;
@@ -1130,7 +1136,8 @@ S.nspin = 1; % spin
 S.CheFSI_Optmz = 0;
 S.chefsibound_flag = 0;
 S.FixRandSeed = 0;
-S.rhoTrigger = 4;
+S.rhoTrigger = -1;
+S.nchefsi = 1;
 S.NetCharge = 0;
 S.MAXIT_SCF = 100;
 S.MINIT_SCF = 2;
@@ -1279,7 +1286,7 @@ end
 
 start_time = fix(clock);
 fprintf(fileID,'***************************************************************************\n');
-fprintf(fileID,'*                      M-SPARC (version Aug 04, 2023)                     *\n');
+fprintf(fileID,'*                      M-SPARC (version Sep 08, 2023)                     *\n');
 fprintf(fileID,'*   Copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech   *\n');
 fprintf(fileID,'*           Distributed under GNU General Public License 3 (GPL)          *\n');
 fprintf(fileID,'*                Date: %s  Start time: %02d:%02d:%02d                  *\n',date,start_time(4),start_time(5),start_time(6));
@@ -1467,6 +1474,7 @@ fprintf(fileID,'PULAY_FREQUENCY: %d\n',S.PulayFrequency);
 fprintf(fileID,'PULAY_RESTART: %d\n',S.PulayRestartFlag);
 fprintf(fileID,'REFERENCE_CUTOFF: %.2f\n',S.rc_ref);
 fprintf(fileID,'RHO_TRIGGER: %d\n',S.rhoTrigger);
+fprintf(fileID,'NUM_CHEFSI: %d\n',S.nchefsi);
 fprintf(fileID,'FIX_RAND: %d\n',S.FixRandSeed);
 fprintf(fileID,'PRINT_FORCES: %d\n',S.PrintForceFlag);
 fprintf(fileID,'PRINT_ATOMS: %d\n',S.PrintAtomPosFlag);

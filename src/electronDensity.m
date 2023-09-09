@@ -14,13 +14,9 @@ function S = electronDensity(S)
 rho_d = zeros(S.N,S.nspinor);
 for spinor = 1:S.nspinor
     ndrange = (1+(spinor-1)*S.N:spinor*S.N);
-    if S.spin_typ == 1
-        nsrange = (1+(spinor-1)*S.Nev:spinor*S.Nev);
-    else
-        nsrange = (1:S.Nev);
-    end
+    nsshift = (spinor-1)*S.tnkpt*(S.spin_typ == 1);
     for kpt =1:S.tnkpt
-         rho_d(:,spinor) = rho_d(:,spinor) + S.occfac*S.wkpt(kpt)* sum( S.psi(ndrange,:,kpt).*conj(S.psi(ndrange,:,kpt)).*S.occ(nsrange,kpt)',2);
+         rho_d(:,spinor) = rho_d(:,spinor) + S.occfac*S.wkpt(kpt)* sum( S.psi(ndrange,:,kpt).*conj(S.psi(ndrange,:,kpt)).*S.occ(:,kpt+nsshift)',2);
     end
 end
 rho_d = real(rho_d);
@@ -43,7 +39,7 @@ elseif S.spin_typ == 2
     mz = rho_d(:,1) - rho_d(:,2);
     magnorm = sqrt(mx.^2 + my.^2 + mz.^2);
     S.rho = [rhotot 0.5*(rhotot+magnorm)  0.5*(rhotot-magnorm)];
-    S.mag = [mx my mz magnorm];
+    S.mag = [magnorm mx my mz];
 end
 
 end

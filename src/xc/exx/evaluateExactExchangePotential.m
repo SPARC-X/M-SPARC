@@ -1,7 +1,7 @@
 function Hx = evaluateExactExchangePotential(S,X,Hx,kptvec,spinor)
 if S.ACEFlag == 0
     ndrange = (1+(spinor-1)*S.N:spinor*S.N); 
-    sshift = (spinor-1)*S.Nev;
+    nsshift = (spinor-1)*S.tnkpt*(S.spin_typ == 1);
     
     Vexx = zeros(S.N,size(X,2));
     V_guess = rand(S.N,1);
@@ -28,7 +28,7 @@ if S.ACEFlag == 0
                     V_guess = V_ji;
                 end
 
-                Vexx(:,i) = Vexx(:,i) - S.wkpthf(q_ind)*S.occ_outer(j+sshift,q_ind_rd)*V_ji.*psiq;
+                Vexx(:,i) = Vexx(:,i) - S.wkpthf(q_ind)*S.occ_outer(j,q_ind_rd+nsshift)*V_ji.*psiq;
             end
         end
     end

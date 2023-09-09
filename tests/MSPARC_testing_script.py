@@ -248,6 +248,18 @@ SYSTEMS["systemname"].append('SnO_bulk_d3')
 SYSTEMS["Tags"].append(['bulk', 'gga','d3','fast'])
 SYSTEMS["Tols"].append([tols["E_tol"], 3e-4, 5]) # E_tol(Ha/atom), F_tol(Ha/Bohr), stress_tol(%)
 ################################################################################################################
+SYSTEMS["systemname"].append('Fe3_noncollinear')
+SYSTEMS["Tags"].append(['molecule', 'gga','noncollinear'])
+SYSTEMS["Tols"].append([tols["E_tol"], tols["F_tol"], tols["stress_tol"]]) # E_tol(Ha/atom), F_tol(Ha/Bohr), stress_tol(%)
+##################################################################################################################
+SYSTEMS["systemname"].append('FePt_noncollinear')
+SYSTEMS["Tags"].append(['bulk', 'gga','noncollinear'])
+SYSTEMS["Tols"].append([tols["E_tol"], tols["F_tol"], tols["stress_tol"]]) # E_tol(Ha/atom), F_tol(Ha/Bohr), stress_tol(%)
+##################################################################################################################
+SYSTEMS["systemname"].append('MnAu_noncollinear')
+SYSTEMS["Tags"].append(['bulk', 'gga','noncollinear'])
+SYSTEMS["Tols"].append([tols["E_tol"], tols["F_tol"], tols["stress_tol"]]) # E_tol(Ha/atom), F_tol(Ha/Bohr), stress_tol(%)
+##################################################################################################################
 
 						# < Uncomment 3 lines below and fill in the details for the new systems>
 # SYSTEMS["systemname"].append('??type the system name??')
