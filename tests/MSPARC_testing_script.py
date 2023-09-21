@@ -249,15 +249,15 @@ SYSTEMS["Tags"].append(['bulk', 'gga','d3','fast'])
 SYSTEMS["Tols"].append([tols["E_tol"], 3e-4, 5]) # E_tol(Ha/atom), F_tol(Ha/Bohr), stress_tol(%)
 ################################################################################################################
 SYSTEMS["systemname"].append('Fe3_noncollinear')
-SYSTEMS["Tags"].append(['molecule', 'gga','noncollinear'])
+SYSTEMS["Tags"].append(['molecule', 'gga','noncollinear','spin'])
 SYSTEMS["Tols"].append([tols["E_tol"], tols["F_tol"], tols["stress_tol"]]) # E_tol(Ha/atom), F_tol(Ha/Bohr), stress_tol(%)
 ##################################################################################################################
 SYSTEMS["systemname"].append('FePt_noncollinear')
-SYSTEMS["Tags"].append(['bulk', 'gga','noncollinear'])
+SYSTEMS["Tags"].append(['bulk', 'gga','noncollinear','spin'])
 SYSTEMS["Tols"].append([tols["E_tol"], tols["F_tol"], tols["stress_tol"]]) # E_tol(Ha/atom), F_tol(Ha/Bohr), stress_tol(%)
 ##################################################################################################################
 SYSTEMS["systemname"].append('MnAu_noncollinear')
-SYSTEMS["Tags"].append(['bulk', 'gga','noncollinear'])
+SYSTEMS["Tags"].append(['bulk', 'gga','noncollinear','spin'])
 SYSTEMS["Tols"].append([tols["E_tol"], tols["F_tol"], tols["stress_tol"]]) # E_tol(Ha/atom), F_tol(Ha/Bohr), stress_tol(%)
 ##################################################################################################################
 
@@ -2265,7 +2265,14 @@ def WriteReport(data_info, systems, isparallel, ifVHQ, isorient):
 				if info_run["isorient"] == False:
 					magnetization_ref = info_ref["magnetization"]
 					magnetization_run = info_run["magnetization"]
-					errspin = abs(magnetization_run - magnetization_ref)
+					# errspin = abs(magnetization_run - magnetization_ref)
+					if (type(magnetization_ref) == list):
+						errspin = 0.0;
+						for mm in range(len(magnetization_run)):
+							if (abs(magnetization_run[mm] - magnetization_ref[mm])>errspin):
+								errspin = abs(magnetization_run[mm] - magnetization_ref[mm])
+					else:
+						errspin = abs(magnetization_run - magnetization_ref)
 					text3 = "Spin polarized calculation: \n"+"Error in net magnetization: " + str(errspin)+"\n"
 
 					if isabinit == True:
