@@ -7,6 +7,19 @@ function force = atomicForce(S)
 % @copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech
 %==========================================================================
 
+if S.hubbard_flag == 1
+    % addpath
+    [filepath, ~, ~] = fileparts(which('msparc'));
+
+    if ispc % Windows system
+        addpath(fullfile(filepath,'xc\hubbard\dudarev\'));
+        fprintf('Hubbard path added.\n')
+    else % Mac/Linux
+        addpath(fullfile(filepath,'xc/hubbard/dudarev/'));
+        fprintf('Hubbard path added.\n')
+    end
+end
+
 fprintf('\n Starting atomic force calculation ... \n');
 
 % Calculate local forces
@@ -504,6 +517,19 @@ end
 % Total force
 
 force = force_local + force_corr + force_nloc + force_xc;
+
+% Hubbard force correction
+if S.hubbard_flag == 1
+    force_hub = atomicForce_hubbard(S);
+    fprintf('===========================================\n')
+    fprintf('Hubbard contribution to forces (ha/Bohr):\n')
+    fprintf('===========================================\n')
+    for JJ_a = 1 : S.n_atm
+        fprintf('% 2.10f % 2.10f % 2.10f\n',force_hub(JJ_a,:));
+    end
+    fprintf('===========================================\n')
+    force = force + force_hub;
+end
 % force_local
 % force_corr
 % force_nloc

@@ -66,6 +66,28 @@ else
     S.mixing_hist_xk = S.mixing_hist_xkm1;
 end
 
+% Hubbard Part
+if S.hubbard_flag == 1
+    S = occupationMatrix(S);
+
+    % Store complete rho
+    for J = 1 : S.n_atm_U
+        angnum = S.AtomU(J).angnum;
+        rho_mn = zeros(angnum*angnum*S.nspinor,1);
+        for spinor_occ = 1 : S.nspinor
+            shift = (spinor_occ-1)*angnum*angnum;
+            copy_rho_mn = S.AtomU(J).rho_mn(:,:,spinor_occ);
+            rho_mn(shift+1:shift+angnum*angnum) = copy_rho_mn(:);
+        end
+        S.AtomU(J).X = zeros(size(rho_mn,1),S.MixingHistory);
+        S.AtomU(J).F = zeros(size(rho_mn,1),S.MixingHistory);
+        S.AtomU(J).mixing_hist_xkm1 = rho_mn;
+        S.AtomU(J).mixing_hist_fkm1 = zeros(size(rho_mn));
+        S.AtomU(J).mixing_hist_xk = rho_mn;
+    end
+    
+    S.useHubbard = S.useHubbard+1;
+end
 
 % Generate guess psi WARNING: psi is an internal matlab function
 if S.ForceCount == 1
@@ -165,6 +187,7 @@ end
 
 % make sure next scf starts with normal scf
 S.usefock = S.usefock+1;
+
 end
 
 
@@ -185,6 +208,7 @@ count_SCF = 1;
 if S.ForceCount > 1 || S.usefock > 1    
     S.rhoTrigger = 1;
 end
+
 if count_Exx > 0
     S.MINIT_SCF = 1;
 end
@@ -235,18 +259,28 @@ while count_SCF <= S.MAXIT_SCF
             fprintf(' Relaxation iteration: %2d\n SCF iteration number:  1, Chebyshev cycle: %d \n',S.Relax_iter,count);
             fprintf(' ============================================= \n');
         end
-    
+
         [S.upper_bound_guess_vecs,S.psi,S.EigVal,a0,bup,lambda_cutoff] = ...
         eigSolver(S,count,S.upper_bound_guess_vecs,S.psi,S.EigVal,a0,bup,lambda_cutoff);
-
+        
         % Solve for Fermi energy S.lambda_f and occupations
         S = occupations(S);
         count = count + 1;
     end
-    
+
+    % Print occupation matrix if Hubbard
+    if S.useHubbard > 1
+        print_Occ_mat(S);
+    end
+
     % for density mixing, us rho_in to estimate total energy
     if S.MixingVariable == 0
-        [S.Etotal,S.Eband,S.Exc,S.Exc_dc,S.Eelec_dc,S.Eent] = evaluateTotalEnergy(S);
+        [S.Etotal,S.Eband,S.Exc,S.Exc_dc,S.Eelec_dc,S.Eent,S.E_Hub_HF,S.E_Hub] = evaluateTotalEnergy(S);
+    end
+
+    % Calculate occupation matrix if Hubbard calculation
+    if S.useHubbard > 1
+        S = occupationMatrix(S);
     end
     
     % Electron density
@@ -262,7 +296,7 @@ while count_SCF <= S.MAXIT_SCF
         S = calculate_effective_potential(S);
         
         % Calculate energy
-        [S.Etotal,S.Eband,S.Exc,S.Exc_dc,S.Eelec_dc,S.Eent] = evaluateTotalEnergy(S);
+        [S.Etotal,S.Eband,S.Exc,S.Exc_dc,S.Eelec_dc,S.Eent,S.E_Hub] = evaluateTotalEnergy(S);
         % Calculate Self Consistency Correction to energy
         if S.spin_typ == 0
             S.Escc = sum((S.Veff-Veff_in) .* S.rho .* S.W);
@@ -353,7 +387,12 @@ while count_SCF <= S.MAXIT_SCF
         % update
         S.Veff = reshape(Veff_out,[],S.nspden);
     end
-    
+
+    % Hubbard Mixing
+    if S.useHubbard > 1
+        S = mixingHubbard(S, count_SCF);
+    end
+
     if S.MixingVariable == 0
         % update Veff
         S = poissonSolve(S, S.poisson_tol, 1);

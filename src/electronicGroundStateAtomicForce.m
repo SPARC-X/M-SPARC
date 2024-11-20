@@ -62,6 +62,16 @@ S = initElectrondensity(S);
 % Calculate nonlocal projectors	
 S.Atom = calculate_nloc_projector(S);
 
+% Hubbard
+if (S.hubbard_flag == 1)
+    S = find_rc_loc_orbitals(S);
+    S.AtomU = calculate_loc_orbitals(S);
+    % needed for magnetic cases
+    if S.spin_typ > 0
+        S.atomMag = Calculate_atom_mag(S);
+    end
+end
+
 % Self-consistent Field (SCF) method
 S = scf(S);
 	
@@ -101,6 +111,9 @@ fprintf(fileID,'Free energy per atom               :%18.10E (Ha/atom)\n', S.Etot
 fprintf(fileID,'Total free energy                  :%18.10E (Ha)\n', S.Etotal);
 fprintf(fileID,'Band structure energy              :%18.10E (Ha)\n', S.Eband);
 fprintf(fileID,'Exchange correlation energy        :%18.10E (Ha)\n', S.Exc);
+if S.hubbard_flag
+    fprintf(fileID,'Hubbard energy                     :%18.10E (Ha)\n', S.E_Hub);
+end
 fprintf(fileID,'Self and correction energy         :%18.10E (Ha)\n', S.E_corr-S.Eself);
 fprintf(fileID,'Entropy*kb*T                       :%18.10E (Ha)\n', S.Eent);
 fprintf(fileID,'Fermi level                        :%18.10E (Ha)\n', S.lambda_f);

@@ -18,6 +18,15 @@ addpath(fullfile(filepath,'xc'))
 addpath(fullfile(filepath,'xc/exx'))
 addpath(fullfile(filepath,'xc/mgga'))
 addpath(fullfile(filepath,'xc/vdW'))
+addpath(fullfile(filepath,'atom'))
+
+if ispc % Windows system
+    addpath(fullfile(filepath,'xc\hubbard'))
+    addpath(fullfile(filepath,'xc\hubbard/dudarev'))
+else % Mac/Linux
+    addpath(fullfile(filepath,'xc/hubbard'))
+    addpath(fullfile(filepath,'xc/hubbard/dudarev'))
+end
 
 format long;
 fprintf('\n');

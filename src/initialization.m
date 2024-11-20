@@ -9,6 +9,7 @@ function S = initialization(filename)
 %           Phanish Suryanarayana <phanish.suryanarayana@ce.gatech.edu>
 %
 % @copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech
+%===============================================================================
 
 % Set up inpt defaults
 S = inpt_defaults();
@@ -33,6 +34,20 @@ end
 
 % Set up more defaults based on input files
 S = setup_defaults(S, filename);
+
+% Store orbitals if U flag on for any atom type
+n_Uatm_typ = 1;
+for ityp = 1:S.n_typ
+    if S.U_typ_flags(ityp) == 1
+        spin_Flag = 0; % For now dont solve spin-polarized
+        S.AtmU = OneAtomSolver(S.Atm(ityp),n_Uatm_typ,S.NLCC_flag,...
+            spin_Flag, S.XC, S.usefock,S.AtmU); 
+        n_Uatm_typ = n_Uatm_typ + 1;
+    end
+    if n_Uatm_typ > S.n_typ_U
+        break;
+    end
+end
 
 % Calculate rb
 S = Calculate_rb(S);
@@ -329,17 +344,32 @@ if S.cell_typ == 2
 
 	count_prev = 0;
 	count = 0;
-	for ityp = 1:S.n_typ
-		if(S.IsFrac(ityp) == 0)
-			S.Atm(ityp).coords = transpose(S.grad_T * transpose(S.Atm(ityp).coords));
-			count = count + S.Atm(ityp).n_atm_typ;
-			S.Atoms(count_prev+1:count,:) = S.Atm(ityp).coords;
-			count_prev = count;
-		else
-			count = count + S.Atm(ityp).n_atm_typ;
-			count_prev = count;
-		end
-	end
+    for ityp = 1:S.n_typ
+        if(S.IsFrac(ityp) == 0)
+            S.Atm(ityp).coords = transpose(S.grad_T * transpose(S.Atm(ityp).coords));
+            count = count + S.Atm(ityp).n_atm_typ;
+            S.Atoms(count_prev+1:count,:) = S.Atm(ityp).coords;
+            count_prev = count;
+        else
+            count = count + S.Atm(ityp).n_atm_typ;
+            count_prev = count;
+        end
+    end
+
+    if S.hubbard_flag == 1 % Hubbard
+        count = 0; count_prev = 0;
+        for ityp = 1 : S.n_typ_U
+            if(S.IsFracU(ityp) == 0)
+                S.AtmU(ityp).coords = transpose(S.grad_T * transpose(S.AtmU(ityp).coords));
+                count = count + S.AtmU(ityp).n_atm_typ;
+                S.AtomsU(count_prev+1:count,:) = S.AtmU(ityp).coords;
+                count_prev = count;
+            else
+                count = count + S.AtmU(ityp).n_atm_typ;
+                count_prev = count;
+            end
+        end
+    end
 end
 
 % Brillouin-Zone Sampling
@@ -886,6 +916,17 @@ if S.usefock == 1
     S = exx_initialization(S);
 end
 
+if S.hubbard_flag == 1
+    if S.spin_typ == 2
+        error("Hubbard DFT has not been implemented with non-colinear spin.")
+    elseif S.SOC_flag == 1
+        error("Hubbard DFT has not been implemented with spin-orbit coupling.")
+    elseif S.MixingVariable == 1
+        error("Hubbard DFT is not compatible with potential mixing.")
+    end
+    S.useHubbard = 1;
+end
+
 end
 
 
@@ -1115,6 +1156,9 @@ Nelectron = 0;
 % n_typ: number of atom types
 n_typ = 0;
 
+% atom_solve_flag: single atom solutions to use individual atom densities/wavefunctions
+atom_solve_flag = 0;
+
 S = struct(...
 	'cell_typ',cell_typ,'lat_vec',lat_vec,'metric_T',metric_T,...
 	'grad_T',grad_T, 'lapc_T',lapc_T,'Jacb',Jacb,'L1',L1,'L2',L2,'L3',L3,...
@@ -1125,7 +1169,7 @@ S = struct(...
 	'Temp',Temp,'bet',bet,'npl',npl,'FDn',FDn,...
 	'rc_ref',rc_ref,'max_relax_it',max_relax_it,...
 	'dbg_switch',dbg_switch,'xc',xc,...
-	'Nelectron',Nelectron,'n_typ',n_typ);
+	'Nelectron',Nelectron,'n_typ',n_typ,'atom_solve_flag',atom_solve_flag);
 
 S.TimeRevSym = 1; 
 
@@ -1255,6 +1299,10 @@ S.ACEFlag = 1;
 S.EXXACEVal_state = 3;
 S.exx_downsampling = [1 1 1];
 S.ExxDivMethod = '';
+
+% Hubbard corrections
+S.hubbard_flag = 0;
+S.useHubbard = 0;
 end
 
 
@@ -1286,7 +1334,7 @@ end
 
 start_time = fix(clock);
 fprintf(fileID,'***************************************************************************\n');
-fprintf(fileID,'*                      M-SPARC (version Sep 08, 2023)                     *\n');
+fprintf(fileID,'*                      M-SPARC (version Nov 20, 2024)                     *\n');
 fprintf(fileID,'*   Copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech   *\n');
 fprintf(fileID,'*           Distributed under GNU General Public License 3 (GPL)          *\n');
 fprintf(fileID,'*                Date: %s  Start time: %02d:%02d:%02d                  *\n',date,start_time(4),start_time(5),start_time(6));

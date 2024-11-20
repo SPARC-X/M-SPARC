@@ -1,5 +1,5 @@
 function S = occupations(S)
-	
+
 FermiEnergyEvaluator = @(lambda_f_g) fermiCalc(lambda_f_g,S);
 
 S.lambda_f = fzero(FermiEnergyEvaluator,0);

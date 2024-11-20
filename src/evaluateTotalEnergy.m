@@ -1,4 +1,4 @@
-function [Etot,Eband,Exc,Exc_dc,Eelec_dc,Eent] = evaluateTotalEnergy(S)
+function [Etot,Eband,Exc,Exc_dc,Eelec_dc,Eent,E_Hub_HF,E_Hub] = evaluateTotalEnergy(S)
 % @brief    EVALUATETOTALENERGY calculates the total energy based on the
 %           output density at each SCF.
 %
@@ -13,10 +13,10 @@ function [Etot,Eband,Exc,Exc_dc,Eelec_dc,Eent] = evaluateTotalEnergy(S)
 Eband = 0;
 ks = 1;
 for spin = 1:S.nspin
-	for kpt = 1:S.tnkpt
-		Eband = Eband + S.occfac * S.wkpt(kpt) * sum(S.EigVal(:,ks).*S.occ(:,ks)) ;
-		ks = ks + 1;
-	end
+    for kpt = 1:S.tnkpt
+        Eband = Eband + S.occfac * S.wkpt(kpt) * sum(S.EigVal(:,ks).*S.occ(:,ks)) ;
+        ks = ks + 1;
+    end
 end
 
 % Exchange-correlation energy
@@ -28,20 +28,20 @@ rho(INDX_zerorho) = S.xc_rhotol;
 if S.spin_typ == 0
     Exc = sum(S.e_xc.*(rho+S.rho_Tilde_at).*S.W);
     if (S.vdWDFFlag == 1) || (S.vdWDFFlag == 2) % add vdW energy in Exc
-        Exc = Exc + S.vdWenergy; 
+        Exc = Exc + S.vdWenergy;
     end
-	% Exchange-correlation energy double counting correction
-	Exc_dc = sum(S.Vxc.*rho.*S.W) ;
+    % Exchange-correlation energy double counting correction
+    Exc_dc = sum(S.Vxc.*rho.*S.W) ;
     if (S.countPotential > 0) && (S.xc == 4) % S.xc == 4 SCAN functional
         Eext_scan_dc = sum(S.VxcScan3.*S.tau.*S.W);
         Exc_dc = Exc_dc + Eext_scan_dc;
     end
 else
-	Exc = sum(S.e_xc.*(rho(:,1)+S.rho_Tilde_at).*S.W);
-	% Exchange-correlation energy double counting correction
-	Exc_dc = sum(sum(S.Vxc.*rho(:,2:3),2).*S.W);
+    Exc = sum(S.e_xc.*(rho(:,1)+S.rho_Tilde_at).*S.W);
+    % Exchange-correlation energy double counting correction
+    Exc_dc = sum(sum(S.Vxc.*rho(:,2:3),2).*S.W);
     if (S.vdWDFFlag == 1) || (S.vdWDFFlag == 2) % add vdW energy in Exc
-		Exc = Exc + S.vdWenergy; 
+        Exc = Exc + S.vdWenergy;
     end
     if (S.countPotential > 0) && (S.xc == 4) % S.xc == 4 SCAN functional
         Eext_scan_dc = sum(sum(S.VxcScan3.*S.tau(:, 2:3).*S.W));
@@ -56,26 +56,43 @@ Eelec_dc = 0.5*sum((S.b-S.rho(:,1)).*S.phi.*S.W);
 Eent = 0 ;
 ks = 1;
 for spin = 1:S.nspin
-	for kpt = 1:S.tnkpt
-		if S.elec_T_type == 0 % fermi-dirac smearing
-			Eent_v = S.occfac*(1/S.bet)*(S.occ(:,ks).*log(S.occ(:,ks))+(1-S.occ(:,ks)).*log(1-S.occ(:,ks)));
-			Eent_v(isnan(Eent_v)) = 0.0 ;
-		elseif S.elec_T_type == 1 % gaussian smearing
-			Eent_v = -S.occfac*(1/S.bet)*1/(2*sqrt(pi)) .* exp(-(S.bet * (S.EigVal(:,ks)-S.lambda_f)).^2);
-		end
-		Eent = Eent + S.wkpt(kpt)*sum(Eent_v);
-		ks = ks + 1;
-	end
+    for kpt = 1:S.tnkpt
+        if S.elec_T_type == 0 % fermi-dirac smearing
+            Eent_v = S.occfac*(1/S.bet)*(S.occ(:,ks).*log(S.occ(:,ks))+(1-S.occ(:,ks)).*log(1-S.occ(:,ks)));
+            Eent_v(isnan(Eent_v)) = 0.0 ;
+        elseif S.elec_T_type == 1 % gaussian smearing
+            Eent_v = -S.occfac*(1/S.bet)*1/(2*sqrt(pi)) .* exp(-(S.bet * (S.EigVal(:,ks)-S.lambda_f)).^2);
+        end
+        Eent = Eent + S.wkpt(kpt)*sum(Eent_v);
+        ks = ks + 1;
+    end
+end
+
+% Hubbard correction
+E_Hub_HF = 0;
+E_Hub = 0;
+if (S.hubbard_flag == 1) && (S.useHubbard > 1)
+    for J = 1:S.n_atm_U
+        for spinor = 1 : S.nspinor
+            rho_mn = S.AtomU(J).rho_mn(:,:,spinor);
+
+            % Energy (Harris-Foulkes)
+            E_Hub_HF = E_Hub_HF + S.occfac*trace(0.5*S.AtomU(J).U .* (rho_mn * rho_mn));
+
+            % Energy
+            E_Hub = E_Hub + S.occfac*trace(0.5*S.AtomU(J).U .* (rho_mn - rho_mn * rho_mn));
+        end
+    end
 end
 
 % Total free energy
 if S.usefock < 2
     % Total free energy
-    Etot = Eband + Exc - Exc_dc + Eelec_dc - S.Eself + S.E_corr + Eent;
+    Etot = Eband + Exc - Exc_dc + Eelec_dc - S.Eself + S.E_corr + Eent + E_Hub_HF;
 else
     Exc = Exc + S.Eex;
     % Total free energy
-    Etot = Eband + Exc - Exc_dc + Eelec_dc - S.Eself + S.E_corr + Eent - 2*S.Eex;
+    Etot = Eband + Exc - Exc_dc + Eelec_dc - S.Eself + S.E_corr + Eent + E_Hub_HF - 2*S.Eex;
 end
 
 
@@ -89,6 +106,10 @@ fprintf(' E_corr = %.8f\n', S.E_corr);
 fprintf(' Eself = %.8f\n', S.Eself);
 if S.usefock > 1
     fprintf(' Eex = %.8f\n', S.Eex);
+end
+if (S.hubbard_flag == 1) && S.useHubbard > 1
+    fprintf(' Ehub (Harris-Foulkes) = %.8f\n', E_Hub_HF);
+    fprintf(' Ehub = %.8f\n', E_Hub);
 end
 fprintf(' Etot = %.8f\n', Etot);
 fprintf(2,' ------------------\n');
