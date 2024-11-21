@@ -290,7 +290,11 @@ end
 function S = initElectrondensity(S)
 if (S.ForceCount == 1)
 	% use sum of the atomic charge densities as rho_guess
-	S.rho = S.rho_at;
+    if S.spin_typ == 0
+        S.rho = S.rho_at;
+    else
+    	S.rho = [S.rho_at 0.5*(S.rho_at+S.mag(:,1)) 0.5*(S.rho_at-S.mag(:,1))];
+    end
 else
 	% perform charge extrapolation
 	if ((S.RelaxFlag == 1 || S.MDFlag) && S.ForceCount >= 4)

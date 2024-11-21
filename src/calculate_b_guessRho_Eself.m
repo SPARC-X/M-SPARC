@@ -198,14 +198,14 @@ fprintf(' Integration b_ref = %.12f\n\n',abs(dot(S.W,S.b_ref)));
 % Guess for electron density
 if S.spin_typ == 1
     S.mag = mz;
-	S.rho_at = [S.rho_at 0.5*(S.rho_at+mz) 0.5*(S.rho_at-mz)];
+	% S.rho_at = [S.rho_at 0.5*(S.rho_at+mz) 0.5*(S.rho_at-mz)];
 elseif S.spin_typ == 2
     magnorm = sqrt(mx.^2 + my.^2 + mz.^2);
     S.mag = [magnorm mx my mz];
-    S.rho_at = [S.rho_at 0.5*(S.rho_at+magnorm) 0.5*(S.rho_at-magnorm)];
+    % S.rho_at = [S.rho_at 0.5*(S.rho_at+magnorm) 0.5*(S.rho_at-magnorm)];
 end
 
-rho_scal = abs(S.NegCharge/dot(S.W,S.rho_at(:,1)));
+rho_scal = abs(S.NegCharge/dot(S.W,S.rho_at));
 S.rho_at = rho_scal*S.rho_at;
 
 if S.spin_typ ~= 0
