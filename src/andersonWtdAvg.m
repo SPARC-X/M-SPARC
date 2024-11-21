@@ -1,4 +1,4 @@
-function [x_wavg, f_wavg] = andersonWtdAvg(x_k, f_k, X, F,nspden,opt)
+function [x_wavg, f_wavg, Gamma] = andersonWtdAvg(x_k, f_k, X, F,nspden,opt)
 % @brief    ANDERSONWTDAVG finds the weighted averages
 %           x_wavg := x_k - X*Gamma
 %           f_wavg := f_k - F*Gamma

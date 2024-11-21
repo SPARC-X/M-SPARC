@@ -260,6 +260,18 @@ SYSTEMS["systemname"].append('MnAu_noncollinear')
 SYSTEMS["Tags"].append(['bulk', 'gga','noncollinear','spin'])
 SYSTEMS["Tols"].append([tols["E_tol"], tols["F_tol"], tols["stress_tol"]]) # E_tol(Ha/atom), F_tol(Ha/Bohr), stress_tol(%)
 ##################################################################################################################
+SYSTEMS["systemname"].append('MoO3_kpt_hubbard')
+SYSTEMS["Tags"].append(['surface', 'gga','kpt','hubbard'])
+SYSTEMS["Tols"].append([tols["E_tol"], tols["F_tol"], tols["stress_tol"]]) # E_tol(Ha/atom), F_tol(Ha/Bohr), stress_tol(%)
+##################################################################################################################
+SYSTEMS["systemname"].append('NiO_spin_non_ortho_hubbard')
+SYSTEMS["Tags"].append(['bulk', 'gga','spin','nonorth','hubbard'])
+SYSTEMS["Tols"].append([tols["E_tol"], tols["F_tol"], tols["stress_tol"]]) # E_tol(Ha/atom), F_tol(Ha/Bohr), stress_tol(%)
+##################################################################################################################
+SYSTEMS["systemname"].append('TiCrO4_hubbard')
+SYSTEMS["Tags"].append(['bulk', 'gga','orth','hubbard'])
+SYSTEMS["Tols"].append([tols["E_tol"], tols["F_tol"], tols["stress_tol"]]) # E_tol(Ha/atom), F_tol(Ha/Bohr), stress_tol(%)
+##################################################################################################################
 
 						# < Uncomment 3 lines below and fill in the details for the new systems>
 # SYSTEMS["systemname"].append('??type the system name??')

@@ -109,5 +109,10 @@ for spinor = 1:S.nspinor_eig
     if (S.xc == 4) && (S.countPotential > 0) % metaGGA, set a flag to seperate it from the 1st PBE SCF computation
         Hx(ndrange,:) = evaluateMggaPotential(S,X(ndrange,:),Hx(ndrange,:),kptvec,spin);
     end
+
+    % hubbard
+    if (S.hubbard_flag == 1) && (S.useHubbard > 1)
+        Hx = h_hubbard_vector_mult(Hx, X, S, kptvec, spin);
+    end
 end
 end

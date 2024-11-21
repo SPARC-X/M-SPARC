@@ -57,8 +57,10 @@ end
 
 % apply Anderson extrapolation every p iters
 if Pulay_mixing_flag
-	% find weighted averages x_wavg, f_wavg
-	[x_wavg, f_wavg] = andersonWtdAvg(x_k, f_k, S.X, S.F,S.nspden,S.MixingVariable);
+    % find weighted averages x_wavg, f_wavg, Gamma
+    [x_wavg, f_wavg, Gamma] = andersonWtdAvg(x_k(1:S.nspden*S.N), f_k(1:S.nspden*S.N), ...
+        S.X(1:S.nspden*S.N,:), S.F(1:S.nspden*S.N,:),S.nspden,S.MixingVariable);
+    S.mix_Gamma = Gamma; % store Gamma to use in Hubbard DFT if required
 else 
 	% simple mixing
 	x_wavg = x_k; f_wavg = f_k;
@@ -71,6 +73,7 @@ if S.spin_typ > 0
 end
 
 Pf = zeros(S.N,S.nspden);
+
 % apply preconditioner to the residual of rho
 if S.MixingPrecond > 0
     % precondition total density
@@ -106,6 +109,9 @@ if S.spin_typ > 0
     shift = (sum_f - sum_Pf)/S.N;
     Pf = Pf + shift;
 end
+
+% Flatten Pf
+Pf = reshape(Pf,[],1);
 
 % get x_kp1
 x_kp1 = x_wavg + reshape(Pf,[],1);

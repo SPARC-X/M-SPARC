@@ -1,0 +1,142 @@
+***************************************************************************
+*                      M-SPARC (version Sep 08, 2023)                     *
+*   Copyright (c) 2019 Material Physics & Mechanics Group, Georgia Tech   *
+*           Distributed under GNU General Public License 3 (GPL)          *
+*                Date: 20-Nov-2024  Start time: 13:44:25                  *
+***************************************************************************
+                           Input parameters                                
+***************************************************************************
+LATVEC_SCALE: 1.000000 1.000000 1.000000 
+LATVEC:
+5.527157893200000 0.000000000000000 0.000000000000000 
+-2.763578946600000 4.786657744050000 0.000000000000000 
+0.000000000000000 0.000000000000000 6.504945769260000 
+FD_GRID: 56 56 66
+FD_ORDER: 12
+BC: P P P
+KPOINT_GRID: 1 1 1
+KPOINT_SHIFT: 0 0 0
+SPIN_TYP: 1
+ELEC_TEMP_TYPE: gaussian
+SMEARING: 0.007349864
+CHEB_DEGREE: 50
+NSTATES: 19
+EXCHANGE_CORRELATION: GGA_PBE
+CALC_STRESS: 1
+MAXIT_SCF: 100
+TOL_SCF: 1.00E-06
+TOL_POISSON: 1.00E-08
+TOL_LANCZOS: 1.00E-02
+TOL_PSEUDOCHARGE: 1.00E-09
+MIXING_VARIABLE: density
+MIXING_PRECOND: kerker
+MIXING_PRECOND_MAG: none
+TOL_PRECOND: 9.73E-06
+PRECOND_KERKER_KTF: 1.00
+PRECOND_KERKER_THRESH: 0.10
+MIXING_PARAMETER: 0.30
+MIXING_PARAMETER_MAG: 0.30
+MIXING_HISTORY: 7
+PULAY_FREQUENCY: 1
+PULAY_RESTART: 0
+REFERENCE_CUTOFF: 0.50
+RHO_TRIGGER: 4
+NUM_CHEFSI: 1
+FIX_RAND: 0
+PRINT_FORCES: 1
+PRINT_ATOMS: 1
+PRINT_EIGEN: 0
+PRINT_DENSITY: 0
+OUTPUT_FILE: NiO_spin_non_ortho_hubbard.out
+***************************************************************************
+                                Cell                                       
+***************************************************************************
+Lattice vectors:
+5.527157893200000 0.000000000000000 0.000000000000000 
+-2.763578946600000 4.786657744050000 0.000000000000000 
+0.000000000000000 0.000000000000000 6.504945769260000 
+Volume :  1.7209883366E+02 (Bohr^3)
+Density :  4.3401107614E-01 (amu/Bohr^3),   4.8634730270E+00 (g/cc)
+***************************************************************************
+                             Initialization                                
+***************************************************************************
+Mesh spacing in x-direction        :  0.098699 (Bohr)
+Mesh spacing in y-direction        :  0.098699 (Bohr)
+Mesh spacing in z direction        :  0.098560 (Bohr)
+Number of symmetry adapted k-points:  1
+Output printed to                  :  NiO_spin_non_ortho_hubbard.out
+Total number of atom types         :  2
+Total number of atoms              :  2
+Total number of electrons          :  24
+Atom type 1  (valence electrons)   :  Ni 18
+Pseudopotential                    :  ../../../psps/28_Ni_18_1.7_2.2_pbe_n_v1.0.psp8
+lloc                               :  4
+Atomic mass                        :  58.693399999999997
+Pseudocharge radii of atom type 1  :  7.30 7.30 7.29
+Number of atoms of type 1          :  1
+Atom type 2  (valence electrons)   :  O 6
+Pseudopotential                    :  ../../../psps/08_O_6_1.2_1.4_pbe_n_v1.0.psp8
+lloc                               :  4
+Atomic mass                        :  15.999400000000000
+Pseudocharge radii of atom type 2  :  7.30 7.30 7.29
+Number of atoms of type 2          :  1
+Estimated total memory usage       :  937.99 MB
+========================================================================================
+                            Self Consistent Field (SCF#1)                     
+========================================================================================
+Iteration     Free Energy (Ha/atom)    Magnetization     SCF Error        Timing (sec)
+1            -8.6275394665E+01         2.0000E+00        1.072E-01        198.456
+2            -8.6293372219E+01         2.0000E+00        6.080E-02        54.174
+3            -8.6294000427E+01         2.0000E+00        4.299E-02        52.503
+4            -8.6296730716E+01         2.0000E+00        1.604E-02        51.556
+5            -8.6297130740E+01         2.0000E+00        9.213E-03        51.280
+6            -8.6297377974E+01         2.0000E+00        4.454E-03        51.966
+7            -8.6297467166E+01         2.0000E+00        2.271E-03        51.410
+8            -8.6297493457E+01         2.0000E+00        1.001E-03        50.287
+9            -8.6297498600E+01         2.0000E+00        3.155E-04        49.912
+10           -8.6297498885E+01         2.0000E+00        2.029E-04        50.274
+11           -8.6297498984E+01         2.0000E+00        6.645E-05        48.977
+12           -8.6297498992E+01         2.0000E+00        3.704E-05        48.841
+13           -8.6297498999E+01         2.0000E+00        1.121E-05        51.526
+14           -8.6297498983E+01         2.0000E+00        4.330E-06        53.576
+15           -8.6297498979E+01         2.0000E+00        2.599E-06        48.591
+16           -8.6297498952E+01         2.0000E+00        1.133E-06        47.626
+17           -8.6297498977E+01         2.0000E+00        7.268E-07        48.573
+Total number of SCF: 17    
+====================================================================
+                                Energy                              
+====================================================================
+Free energy per atom               : -8.6297498977E+01 (Ha/atom)
+Total free energy                  : -1.7259499795E+02 (Ha)
+Band structure energy              : -2.0466391769E+01 (Ha)
+Exchange correlation energy        : -2.2960760658E+01 (Ha)
+Hubbard energy                     :  2.1113166062E-02 (Ha)
+Self and correction energy         : -2.4714019112E+02 (Ha)
+Entropy*kb*T                       : -9.7648475093E-11 (Ha)
+Fermi level                        :  1.8947950681E-01 (Ha)
+Net Magnetization                  :  1.9999999969E+00 
+Average force                      :  2.4046840051E-01 (Ha/Bohr)
+Maximum force                      :  2.4046840051E-01 (Ha/Bohr)
+Time for force calculation         :  13.965 (sec)
+Stress (GPa):
+     -4.0664583115       2.2316726880       7.6029943611
+      2.2316726880      -6.5960358377     -13.1681934571
+      7.6029943611     -13.1681934571    -134.7889237652
+Pressure                           :  4.8483805971E+01 (GPa)
+Maximum stress                     :  1.3478892377E+02 (GPa)
+Time for stress calculation        :  34.306 (sec)
+***************************************************************************
+                               Timing info                                 
+***************************************************************************
+Total walltime                     :  1108.768 sec
+___________________________________________________________________________
+
+***************************************************************************
+*             Material Physics & Mechanics Group, Georgia Tech            *
+*                       PI: Phanish Suryanarayana                         *
+*               List of contributors: See the documentation               *
+*         Citation: See README.md or the documentation for details        *
+*               Acknowledgements: U.S. DOE SC (DE-SC0019410)              *
+*      {Preliminary developments: U.S. NSF (1333500,1553212)}             *
+***************************************************************************
+                                                                           

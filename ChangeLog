@@ -1,4 +1,11 @@
 --------------
+Nov 21, 2024
+Name: Sayan Bhowmik
+* release atom code and DFT+U, Dudarev version 
+* add testsuites for DFT+U
+* update documentation
+
+--------------
 Sep 08, 2023
 Name: Xin Jing
 * release non-collinear spin 

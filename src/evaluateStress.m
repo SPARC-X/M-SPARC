@@ -807,6 +807,33 @@ if (S.vdWDFFlag == 1) || (S.vdWDFFlag == 2) % add vdW stress in Exc
         end
 %     end
 end
+
+% Hubbard correction
+if S.hubbard_flag == 1
+    % addpath
+    [filepath, ~, ~] = fileparts(which('msparc'));
+
+    if ispc % Windows system
+        addpath(fullfile(filepath,'xc\hubbard\dudarev\'));
+        fprintf('Hubbard path added.\n')
+    else % Mac/Linux
+        addpath(fullfile(filepath,'xc/hubbard/dudarev/'));
+        fprintf('Hubbard path added.\n')
+    end
+    stress_U = evaluateHubbardStress(S);
+    stress = stress + stress_U;
+    % fprintf('Hubbard stress(GPa) of cell listed below\n');
+    % for i = 1:3
+    %     fprintf('% 16.12E % 16.12E % 16.12E\n', ...
+    %         stress_U(i,1)*2.94210119*(10^4), stress_U(i,2)*2.94210119*(10^4), stress_U(i,3)*2.94210119*(10^4));
+    % end
+    
+    fprintf('Hubbard stress(kbar) of cell listed below\n');
+    for i = 1:3
+        fprintf('% 6.2f % 6.2f % 6.2f\n', ...
+            stress_U(i,1)*2.94210119*(10^5), stress_U(i,2)*2.94210119*(10^5), stress_U(i,3)*2.94210119*(10^5));
+    end
+end
 end
 
 

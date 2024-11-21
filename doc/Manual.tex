@@ -114,11 +114,16 @@ Matlab-Simulation Package for Ab-initio Real-space Calculations (M-SPARC) is a r
   \item \textbf{Abhiraj Sharma}: Code infrastructure, k-points, PBE, Stress, Non-orthogonal, Relaxation, NLCC \\   
   \item \textbf{Boqin Zhang}: vdW-DF, DFT-D3, meta-GGA (SCAN) \\  
   \item \textbf{Xin Jing}: Hybrid functionals, SOC \\  
-  \item \textbf{Shashikant Kumar}: Testing framework, NLCC \\  
+  \item \textbf{Shashikant Kumar}: Testing framework, NLCC \\ 
+  \item \textbf{Sayan Bhowmik\footnotemark{}}: DFT+U (Dudarev)
+  \end{itemize}
+  \item \textbf{Andrew J. Medford} (co-PI)
+  \begin{itemize}
+      \item \textbf{Sayan Bhowmik\footnotemark[\value{footnote}]}: DFT+U (Dudarev)
   \end{itemize}
   \end{itemize}
 
-
+\footnotetext{co-advised}
   
 \end{frame}
 
@@ -270,7 +275,11 @@ Apart from the output structure returned, depending on the calculations performe
 \hyperlink{COORD}{\texttt{COORD}} $\vert$ 
 \hyperlink{COORD_FRAC}{\texttt{COORD\_FRAC}} $\vert$ 
 \hyperlink{RELAX}{\texttt{RELAX}} $\vert$ 
-\hyperlink{SPIN}{\texttt{SPIN}}
+\hyperlink{SPIN}{\texttt{SPIN}} $\vert$ 
+\hyperlink{HUBBARD}{\texttt{HUBBARD}} $\vert$ 
+\hyperlink{U_ATOM_TYPE}{\texttt{U\_ATOM\_TYPE}} $\vert$ 
+\hyperlink{U_VAL}{\texttt{U\_VAL}} $\vert$ 
+\hyperlink{CORE_FLAG}{\texttt{CORE\_FLAG}} 
 \end{block}
 
 \begin{block}{SCF}
@@ -1390,6 +1399,128 @@ No unit
 
 \begin{block}{Description}
 Specifies the net initial spin on each atom for a spin-polarized calculation. If collinear spin used, user could use either 1 column of data for z-direction of each atom, or 3 columns of data with 0 on the first 2 columns (x,y-directions). For noncollinear spin, use need to use 3 columns of data for all directions. 
+\end{block}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[allowframebreaks]{\texttt{HUBBARD}} \label{HUBBARD}
+\vspace*{-12pt}
+\begin{columns}
+\column{0.4\linewidth}
+\begin{block}{Type}
+None
+\end{block}
+
+\begin{block}{Default}
+None
+\end{block}
+
+\column{0.5\linewidth}
+\begin{block}{Unit}
+No unit
+\end{block}
+
+\begin{block}{Example}
+\texttt{HUBBARD: \\}
+\texttt{U\_ATOM\_TYPE: Ni \\}
+\texttt{U\_VAL:} 0 0 0.05 0 \\
+\end{block}
+\end{columns}
+
+\begin{block}{Description}
+Triggers a DFT+U calculation on top of the \hyperlink{EXCHANGE_CORRELATION}{\texttt{EXCHANGE\_CORRELATION}} specified in the \texttt{.inpt} file. Must be followed by specifying the atoms on which a U correction is desired along with value of U as per Dudarev's scheme.
+\end{block}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[allowframebreaks]{\texttt{U\_ATOM\_TYPE}} \label{U_ATOM_TYPE}
+\vspace*{-12pt}
+\begin{columns}
+\column{0.4\linewidth}
+\begin{block}{Type}
+String
+\end{block}
+
+\begin{block}{Default}
+None
+\end{block}
+
+\column{0.5\linewidth}
+\begin{block}{Unit}
+No unit
+\end{block}
+
+\begin{block}{Example}
+\texttt{U\_ATOM\_TYPE: Ni \\}
+\end{block}
+\end{columns}
+
+\begin{block}{Description}
+Atomic type symbol for which a U correction is desired. Must be specified within the \hyperlink{HUBBARD}{\texttt{HUBBARD}} block. The atomic type should already have been specified above in the \texttt{.ion} file.
+\end{block}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[allowframebreaks]{\texttt{U\_VAL}} \label{U_VAL}
+\vspace*{-12pt}
+\begin{columns}
+\column{0.4\linewidth}
+\begin{block}{Type}
+Double
+\end{block}
+
+\begin{block}{Default}
+None
+\end{block}
+
+\column{0.5\linewidth}
+\begin{block}{Unit}
+Hartree
+\end{block}
+
+\begin{block}{Example}
+\texttt{U\_VAL:} 0 0 0.1 0 \\
+\end{block}
+\end{columns}
+
+\begin{block}{Description}
+Value of effective \texttt{U} for every azimuthal quantum number (s p d f orbitals) of the atom on which the correction is applied per Dudarev's scheme. By default, the corrections will only be applied to the outermost states available in the corresponding \hyperlink{PSEUDO_POT}{\texttt{PSEUDO\_POT}}. Must be specified after specifying the \hyperlink{U_ATOM_TYPE}{\texttt{U\_ATOM\_TYPE}}.
+\end{block}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[allowframebreaks]{\texttt{CORE\_FLAG}} \label{CORE_FLAG}
+\vspace*{-12pt}
+\begin{columns}
+\column{0.4\linewidth}
+\begin{block}{Type}
+Integer
+\end{block}
+
+\begin{block}{Default}
+0
+\end{block}
+
+\column{0.5\linewidth}
+\begin{block}{Unit}
+No unit
+\end{block}
+
+\begin{block}{Example}
+\texttt{CORE\_FLAG:} 1 \\
+\end{block}
+\end{columns}
+
+\begin{block}{Description}
+Must be set to 1 if corrections are desired on all the inner states for each s/p/d/f orbitals available in the corresponding \hyperlink{PSEUDO_POT}{\texttt{PSEUDO\_POT}}. Must be specified after specifying the \hyperlink{U_ATOM_TYPE}{\texttt{U\_ATOM\_TYPE}}.
 \end{block}
 
 \end{frame}
