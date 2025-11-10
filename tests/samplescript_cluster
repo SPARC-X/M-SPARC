@@ -1,9 +1,9 @@
 #!/bin/bash
 #SBATCH -J MSPARC_testsuite
-#SBATCH -A hive-phanish6                    # Account name
-#SBATCH -p hive                             # Partition
+#SBATCH -A gts-phanish6-coda20                    # Account name
+#SBATCH -p inferno
 #SBATCH -N 1 --ntasks-per-node=1
-#SBATCH --mem-per-cpu=30G
+#SBATCH --mem-per-cpu=7G
 #SBATCH -t16:00:00
 
 
