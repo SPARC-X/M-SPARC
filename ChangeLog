@@ -1,4 +1,10 @@
 --------------
+Nov 9, 2025
+Name: Sayan Bhowmik
+* Update find_rc_loc_orbitals.m to match C implementation
+* Update the hubbard tests
+
+--------------
 Nov 21, 2024
 Name: Sayan Bhowmik
 * release atom code and DFT+U, Dudarev version 
